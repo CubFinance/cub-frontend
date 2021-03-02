@@ -1828,9 +1828,9 @@
     eslint-plugin-react "^7.21.5"
     eslint-plugin-react-hooks "^4.0.0"
 
-"@pancakeswap-libs/uikit@goosedefi/goose-uikit":
+"@pancakeswap-libs/uikit@CubFinance/cub-uikit":
   version "0.10.2"
-  resolved "https://codeload.github.com/goosedefi/goose-uikit/tar.gz/37301152887fef1f5e7016c043bad166ea5163b6"
+  resolved "https://codeload.github.com/CubFinance/cub-uikit/tar.gz/af9fbc0d582bf810035217394d286ee7ae86390b"
   dependencies:
     "@types/lodash" "^4.14.162"
     "@types/styled-system" "^5.1.10"

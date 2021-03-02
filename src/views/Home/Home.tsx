@@ -10,7 +10,6 @@ import TotalValueLockedCard from './components/TotalValueLockedCard'
 import TwitterCard from './components/TwitterCard'
 
 const Hero = styled.div`
-  align-items: center;
   background-image: url('/images/egg/3.png');
   background-repeat: no-repeat;
   background-position: top center;
@@ -21,9 +20,10 @@ const Hero = styled.div`
   margin-bottom: 32px;
   padding-top: 116px;
   text-align: center;
+  align-items: flex-end;
 
   ${({ theme }) => theme.mediaQueries.lg} {
-    background-image: url('/images/egg/3.png'), url('/images/egg/3b.png');
+    background-image: url('/images/cub/wide.svg');
     background-position: left center, right center;
     height: 165px;
     padding-top: 0;
