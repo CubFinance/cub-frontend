@@ -77,7 +77,7 @@ const config: MenuEntry[] = [
       // },
       {
         label: "Github",
-        href: "https://github.com/goosedefi/",
+        href: "https://github.com/CubFinance/",
       },
       // {
       //   label: "Docs",

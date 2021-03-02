@@ -20,11 +20,11 @@ const Hero = styled.div`
   margin-bottom: 32px;
   padding-top: 116px;
   text-align: center;
-  align-items: flex-end;
+  align-items: center;
 
   ${({ theme }) => theme.mediaQueries.lg} {
     background-image: url('/images/cub/wide.svg');
-    background-position: left center, right center;
+    background-position: right center, left center;
     height: 165px;
     padding-top: 0;
   }
