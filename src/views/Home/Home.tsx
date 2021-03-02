@@ -23,8 +23,8 @@ const Hero = styled.div`
   align-items: center;
 
   ${({ theme }) => theme.mediaQueries.lg} {
-    background-image: url('/images/cub/wide.svg');
-    background-position: right center, left center;
+    background-image: url('/images/cub/2logos.png') ,url('/images/cub/wide.svg');
+    background-position: left center, right center;
     height: 165px;
     padding-top: 0;
   }
@@ -60,7 +60,7 @@ const Home: React.FC = () => {
     <Page>
       <Hero>
         <Heading as="h1" size="xl" mb="24px" color="secondary">
-          {TranslateString(576, 'Lion Finance')}
+          {TranslateString(576, 'Cub Finance')}
         </Heading>
         <Text>{TranslateString(578, 'LeoFi on Binance Smart Chain.')}</Text>
       </Hero>
