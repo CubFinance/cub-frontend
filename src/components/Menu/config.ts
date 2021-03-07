@@ -62,10 +62,6 @@ const config: MenuEntry[] = [
         href: '#',
       },
       {
-        label: 'AstroTools',
-        href: 'https://app.astrotools.io/pancake-pair-explorer/0x0ef564d4f8d6c0ffe13348a32e21efd55e508e84',
-      },
-      {
         label: 'Docs',
         href: 'https://docs.cubdefi.com',
       },

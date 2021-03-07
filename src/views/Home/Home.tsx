@@ -10,7 +10,7 @@ import TotalValueLockedCard from './components/TotalValueLockedCard'
 import TwitterCard from './components/TwitterCard'
 
 const Hero = styled.div`
-  background-image: url('/images/egg/3.png');
+  background-image: url('/images/cub/wide.svg');
   background-repeat: no-repeat;
   background-position: top center;
   display: flex;
