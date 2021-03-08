@@ -33,9 +33,9 @@ const CakeStats = () => {
   const marketCap = cubPrice.times(circSupply);
 
   let cubPerBlock = 0;
-  console.log(farms, farms[0], farms[0].eggPerBlock)
-  if(farms && farms[0] && farms[0].eggPerBlock){
-    cubPerBlock = new BigNumber(farms[0].eggPerBlock).div(new BigNumber(10).pow(18)).toNumber();
+
+  if(farms && farms[0]){
+    cubPerBlock = new BigNumber(farms[0].cubPerBlock).div(new BigNumber(10).pow(18)).toNumber();
   }
 
   return (
