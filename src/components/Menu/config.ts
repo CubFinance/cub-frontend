@@ -12,11 +12,11 @@ const config: MenuEntry[] = [
     items: [
       {
         label: 'Exchange',
-        href: 'http://exchange.cubdefi.com/',
+        href: 'https://exchange.cubdefi.com/',
       },
       {
         label: 'Liquidity',
-        href: 'http://exchange.cubdefi.com/#/pool',
+        href: 'https://exchange.cubdefi.com/#/pool',
       },
     ],
   },
@@ -62,16 +62,8 @@ const config: MenuEntry[] = [
         href: '#',
       },
       {
-        label: 'Docs',
-        href: 'https://docs.cubdefi.com',
-      },
-      {
         label: 'Roadmap',
         href: 'https://docs.cubdefi.com/roadmap',
-      },
-      {
-        label: 'Discord',
-        href: 'https://discord.gg/E4jePHe',
       },
     ],
   },
@@ -96,6 +88,11 @@ const config: MenuEntry[] = [
         href: "https://leofinance.io/@leofinance",
       },
     ],
+  },
+  {
+    label: 'Docs',
+    icon: 'TicketIcon',
+    href: 'https://cubdefi.com/docs',
   },
   // {
   //   label: 'Audit by Hacken',
