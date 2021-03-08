@@ -211,23 +211,23 @@ const farms: FarmConfig[] = [
     quoteTokenSymbol: QuoteToken.BUSD,
     quoteTokenAdresses: contracts.busd,
   },
-  {
-    pid: 13,
-    risk: 1,
-    isTokenOnly: true,
-    lpSymbol: 'bLEO',
-    lpAddresses: {
-      97: '',
-      56: '0x243E060DEcA0499fCaE6ABe548C0115faaBa0ed4', // bLEO-WBNB LP
-    },
-    tokenSymbol: 'bLEO',
-    tokenAddresses: {
-      97: '',
-      56: '0x6421531AF54C7B14Ea805719035EBf1e3661c44A',
-    },
-    quoteTokenSymbol: QuoteToken.BNB,
-    quoteTokenAdresses: contracts.wbnb,
-  },
+  // {
+  //   pid: 13,
+  //   risk: 1,
+  //   isTokenOnly: true,
+  //   lpSymbol: 'bLEO',
+  //   lpAddresses: {
+  //     97: '',
+  //     56: '0x243E060DEcA0499fCaE6ABe548C0115faaBa0ed4', // bLEO-WBNB LP
+  //   },
+  //   tokenSymbol: 'bLEO',
+  //   tokenAddresses: {
+  //     97: '',
+  //     56: '0x6421531AF54C7B14Ea805719035EBf1e3661c44A',
+  //   },
+  //   quoteTokenSymbol: QuoteToken.BNB,
+  //   quoteTokenAdresses: contracts.wbnb,
+  // },
   {
     pid: 14,
     risk: 3,
