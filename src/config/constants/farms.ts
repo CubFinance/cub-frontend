@@ -83,22 +83,6 @@ const farms: FarmConfig[] = [
     quoteTokenAdresses: contracts.busd,
   },
   {
-    pid: 23,
-    risk: 5,
-    lpSymbol: 'DEC-BUSD LP',
-    lpAddresses: {
-      97: '',
-      56: '0x4c79edab89848f34084283bb1fe8eac2dca649c3',
-    },
-    tokenSymbol: 'DEC',
-    tokenAddresses: {
-      97: '',
-      56: '0xe9d7023f2132d55cbd4ee1f78273cb7a3e74f10a',
-    },
-    quoteTokenSymbol: QuoteToken.BUSD,
-    quoteTokenAdresses: contracts.busd,
-  },
-  {
     pid: 8,
     risk: 10,
     lpSymbol: 'BTCB-BNB LP',
@@ -142,6 +126,22 @@ const farms: FarmConfig[] = [
     tokenAddresses: {
       97: '',
       56: '0x1af3f329e8be154074d8769d1ffa4ee058b1dbc3',
+    },
+    quoteTokenSymbol: QuoteToken.BUSD,
+    quoteTokenAdresses: contracts.busd,
+  },
+  {
+    pid: 23,
+    risk: 5,
+    lpSymbol: 'DEC-BUSD LP',
+    lpAddresses: {
+      97: '',
+      56: '0x4c79edab89848f34084283bb1fe8eac2dca649c3',
+    },
+    tokenSymbol: 'DEC',
+    tokenAddresses: {
+      97: '',
+      56: '0xe9d7023f2132d55cbd4ee1f78273cb7a3e74f10a',
     },
     quoteTokenSymbol: QuoteToken.BUSD,
     quoteTokenAdresses: contracts.busd,
