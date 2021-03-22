@@ -58,8 +58,8 @@ const config: MenuEntry[] = [
         href: '#',
       },
       {
-        label: 'CoinMarketCap (Coming Soon)',
-        href: '#',
+        label: 'CoinMarketCap',
+        href: 'https://coinmarketcap.com/currencies/cub-finance/',
       },
       {
         label: 'Roadmap',
