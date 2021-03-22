@@ -4,7 +4,7 @@ const config: MenuEntry[] = [
   {
     label: 'Home',
     icon: 'HomeIcon',
-    href: '/',
+    href: 'http://cubdefi.com/',
   },
   {
     label: 'Trade',
@@ -23,28 +23,18 @@ const config: MenuEntry[] = [
   {
     label: 'Farms',
     icon: 'FarmIcon',
-    href: '/farms',
+    href: 'https://cubdefi.com/farms',
   },
   {
     label: 'Dens',
     icon: 'PoolIcon',
-    href: '/dens',
+    href: 'https://cubdefi.com/dens',
   },
-  // {
-  //   label: 'Pools',
-  //   icon: 'PoolIcon',
-  //   href: '/pools',
-  // },
-  // {
-  //   label: 'Lottery',
-  //   icon: 'TicketIcon',
-  //   href: '/lottery',
-  // },
-  // {
-  //   label: 'NFT',
-  //   icon: 'NftIcon',
-  //   href: '/nft',
-  // },
+  {
+    label: 'LeoBridge',
+    icon: 'NftIcon',
+    href: "https://bridge.cubdefi.com",
+  },
   {
     label: 'Info',
     icon: 'InfoIcon',
@@ -54,38 +44,8 @@ const config: MenuEntry[] = [
         href: 'https://pancakeswap.info/token/0x50d809c74e0b8e49e7b4c65bb3109abe3ff4c1c1',
       },
       {
-        label: 'CoinGecko (Coming Soon)',
-        href: '#',
-      },
-      {
         label: 'CoinMarketCap',
         href: 'https://coinmarketcap.com/currencies/cub-finance/',
-      },
-      {
-        label: 'Roadmap',
-        href: 'https://docs.cubdefi.com/roadmap',
-      },
-    ],
-  },
-  {
-    label: 'More',
-    icon: 'MoreIcon',
-    items: [
-      // {
-      //   label: 'Audit by Hacken',
-      //   href: 'https://www.goosedefi.com/files/hackenAudit.pdf',
-      // },
-      {
-        label: "Github",
-        href: "https://github.com/CubFinance/",
-      },
-      // {
-      //   label: "Docs",
-      //   href: "https://goosedefi.gitbook.io/goose-finance/",
-      // },
-      {
-        label: "Blog",
-        href: "https://leofinance.io/@leofinance",
       },
     ],
   },
@@ -94,11 +54,26 @@ const config: MenuEntry[] = [
     icon: 'TicketIcon',
     href: 'https://docs.cubdefi.com/',
   },
-  // {
-  //   label: 'Audit by Hacken',
-  //   icon: 'AuditIcon',
-  //   href: 'https://www.goosedefi.com/files/hackenAudit.pdf',
-  // },
+  {
+    label: 'Roadmap',
+    icon: 'MoreIcon',
+    href: 'https://docs.cubdefi.com/roadmap',
+  },
+  {
+    label: "Tokenized Blogging",
+    icon: "PawIcon",
+    href: "https://leofinance.io/",
+  },
+  {
+    label: "Blog",
+    icon: "BlogIcon",
+    href: "https://leofinance.io/@leofinance",
+  },
+  {
+    label: 'CertiK Audit (Coming Soon)',
+    icon: 'AuditIcon',
+    href: '#',
+  },
 ]
 
 export default config
