@@ -40,6 +40,10 @@ const config: MenuEntry[] = [
     icon: 'InfoIcon',
     items: [
       {
+        label: 'GitHub',
+        href: 'https://github.com/CubFinance',
+      },
+      {
         label: 'PancakeSwap',
         href: 'https://pancakeswap.info/token/0x50d809c74e0b8e49e7b4c65bb3109abe3ff4c1c1',
       },
