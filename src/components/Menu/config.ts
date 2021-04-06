@@ -31,6 +31,11 @@ const config: MenuEntry[] = [
     href: 'https://cubdefi.com/dens',
   },
   {
+    label: 'Kingdoms',
+    icon: 'PawIcon',
+    href: 'https://cubdefi.com/kingdoms',
+  },
+  {
     label: 'LeoBridge',
     icon: 'NftIcon',
     href: "https://bridge.cubdefi.com",
@@ -65,7 +70,7 @@ const config: MenuEntry[] = [
   },
   {
     label: "Tokenized Blogging",
-    icon: "PawIcon",
+    icon: "SunIcon",
     href: "https://leofinance.io/",
   },
   {
@@ -74,9 +79,9 @@ const config: MenuEntry[] = [
     href: "https://leofinance.io/@leofinance",
   },
   {
-    label: 'CertiK Audit (Coming Soon)',
+    label: 'CertiK Audit',
     icon: 'AuditIcon',
-    href: '#',
+    href: 'https://www.certik.org/projects/cubfinance',
   },
 ]
 
