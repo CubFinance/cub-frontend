@@ -25,6 +25,12 @@ BigNumber.config({
   DECIMAL_PLACES: 80,
 })
 
+const Soon = () => (
+  <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+    <div style={{ fontSize: '2rem', marginTop: '2rem' }}>Coming soon</div>
+  </div>
+)
+
 const App: React.FC = () => {
   const { account, connect } = useWallet()
   useEffect(() => {
@@ -50,6 +56,9 @@ const App: React.FC = () => {
             </Route>
             <Route path="/dens">
               <Farms tokenMode/>
+            </Route>
+            <Route path="/kingdoms">
+              <Soon />
             </Route>
             {/* <Route path="/pools"> */}
             {/*  <Pools /> */}
