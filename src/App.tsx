@@ -13,6 +13,7 @@ import NftGlobalNotification from './views/Nft/components/NftGlobalNotification'
 // Only pool is included in the main bundle because of it's the most visited page'
 const Home = lazy(() => import('./views/Home'))
 const Farms = lazy(() => import('./views/Farms'))
+const Kingdoms = lazy(() => import('./views/Kingdoms'))
 // const Lottery = lazy(() => import('./views/Lottery'))
 // const Pools = lazy(() => import('./views/Pools'))
 // const Ifos = lazy(() => import('./views/Ifos'))
@@ -25,11 +26,11 @@ BigNumber.config({
   DECIMAL_PLACES: 80,
 })
 
-const Soon = () => (
+/* const Soon = () => (
   <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
     <div style={{ fontSize: '2rem', marginTop: '2rem' }}>Coming soon</div>
   </div>
-)
+) */
 
 const App: React.FC = () => {
   const { account, connect } = useWallet()
@@ -55,10 +56,10 @@ const App: React.FC = () => {
               <Farms />
             </Route>
             <Route path="/dens">
-              <Farms tokenMode/>
+              <Farms tokenMode />
             </Route>
             <Route path="/kingdoms">
-              <Soon />
+              <Farms kingdomMode />
             </Route>
             {/* <Route path="/pools"> */}
             {/*  <Pools /> */}

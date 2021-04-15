@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from 'react'
+/* import React, { useEffect, useCallback } from 'react'
 import { Route, useRouteMatch } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import BigNumber from 'bignumber.js'
@@ -15,23 +15,94 @@ import { QuoteToken } from 'config/constants/types'
 import useI18n from 'hooks/useI18n'
 import FarmCard, { FarmWithStakedValue } from './components/FarmCard/FarmCard'
 import FarmTabButtons from './components/FarmTabButtons'
-import Divider from './components/Divider'
-import Kingdom from '../Kingdoms/components/Kingdom'
-import Kingdoms from '../Kingdoms'
+import Divider from './components/Divider' */
+import React from 'react'
+import Page from 'components/layout/Page'
+// import styled from 'styled-components'
+// import FlexLayout from 'components/layout/Flex'
 
-export interface FarmsProps{
+import { useTotalValue } from '../../state/hooks'
+import CardValue from './components/CardValue'
+// import KingdomDetail from './components/KingdomDetail'
+import './Kingdoms.css'
+
+/* const KHeader = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 100%;
+  position: relative;
+  text-align: center;
+`
+const TVLHeader = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+` */
+/* export interface KingdomsProps{
   tokenMode?: boolean
   kingdomMode?: boolean
-}
+} */
 
-const Farms: React.FC<FarmsProps> = (farmsProps) => {
-  const { path } = useRouteMatch()
+const Kingdoms: React.FC = (kingdomsPrps) => {
+  const totalValue = useTotalValue();
+  const { children } = kingdomsPrps;
+
+  return (
+    <Page className="k-container">
+      <div className='k-header'>
+        <div><h1>Kingdoms</h1></div>
+        <div className='tvl-header'>
+          <div>TVL</div>
+          <CardValue value={totalValue.toNumber()} prefix="$" decimals={2}/>
+        </div>
+      </div>
+      <div id="kingdoms">
+        <div id="content-header" className="k-content">
+          <div className="flex-grid k-grid">
+            <div className="col">
+              <div>Token</div>
+              <div>TVL</div>
+            </div>
+            <div className="col">
+              <div>APY</div>
+              <div>Daily APR</div>
+            </div>
+            <div className="col">
+              <div>Balance</div>
+              <div>Deposit</div>
+              <div>Rewards</div>
+            </div>
+            <div className="col" />
+          </div>
+        </div>
+        { children }
+        {/* <div className="flex-grid">
+          <div className="col">
+            <div>ETH</div>
+            <div>12.6x TVL $81.2M</div>
+          </div>
+          <div className="col">
+            <div>167.8%</div>
+            <div>0.46%</div>
+          </div>
+          <div className="col">
+            <div>-</div>
+            <div>-</div>
+            <div>-</div>
+          </div>
+        </div> */}
+      </div>
+    </Page>
+  )
+  /* const { path } = useRouteMatch()
   const TranslateString = useI18n()
   const farmsLP = useFarms()
   const cakePrice = usePriceCakeBusd()
   const bnbPrice = usePriceBnbBusd()
   const { account, ethereum }: { account: string; ethereum: provider } = useWallet()
-  const { tokenMode, kingdomMode } = farmsProps;
+  const {tokenMode} = farmsProps;
 
   const dispatch = useDispatch()
   const { fastRefresh } = useRefresh()
@@ -41,11 +112,8 @@ const Farms: React.FC<FarmsProps> = (farmsProps) => {
     }
   }, [account, dispatch, fastRefresh])
 
-  const activeFarms = farmsLP.filter(farm => {
-    if (kingdomMode) return !!farm.isKingdom === !!kingdomMode && farm.multiplier !== '0X'
-    return !!farm.isTokenOnly === !!tokenMode && farm.multiplier !== '0X'
-  })
-  const inactiveFarms = farmsLP.filter(farm => !!farm.isTokenOnly === !!tokenMode && farm.multiplier === '0X')
+  const activeFarms = farmsLP.filter((farm) => !!farm.isTokenOnly === !!tokenMode && farm.multiplier !== '0X')
+  const inactiveFarms = farmsLP.filter((farm) => !!farm.isTokenOnly === !!tokenMode && farm.multiplier === '0X')
 
   // /!\ This function will be removed soon
   // This function compute the APY for each farm and will be replaced when we have a reliable API
@@ -74,41 +142,20 @@ const Farms: React.FC<FarmsProps> = (farmsProps) => {
 
         return { ...farm, apy }
       })
-      return farmsToDisplayWithAPY.map((farm) => {
-        if (kingdomMode) return (
-          <Kingdom
-            key={farm.pid}
-            farm={farm}
-            removed={removed}
-            bnbPrice={bnbPrice}
-            cakePrice={cakePrice}
-            ethereum={ethereum}
-            account={account}
-          />
-        )
-
-        return (
-          <FarmCard
-            key={farm.pid}
-            farm={farm}
-            removed={removed}
-            bnbPrice={bnbPrice}
-            cakePrice={cakePrice}
-            ethereum={ethereum}
-            account={account}
-          />
-        )
-      })
+      return farmsToDisplayWithAPY.map((farm) => (
+        <FarmCard
+          key={farm.pid}
+          farm={farm}
+          removed={removed}
+          bnbPrice={bnbPrice}
+          cakePrice={cakePrice}
+          ethereum={ethereum}
+          account={account}
+        />
+      ))
     },
-    [bnbPrice, account, cakePrice, ethereum, kingdomMode],
+    [bnbPrice, account, cakePrice, ethereum],
   )
-
-  if (kingdomMode)
-    return (
-      <Kingdoms>
-        {farmsList(activeFarms, false)}
-      </Kingdoms>
-    )
 
   return (
     <Page>
@@ -137,7 +184,7 @@ const Farms: React.FC<FarmsProps> = (farmsProps) => {
       </div>
       <Image src="/images/cub/wide.svg" alt="illustration" width={1352} height={587} responsive />
     </Page>
-  )
+  ) */
 }
 
-export default Farms
+export default Kingdoms

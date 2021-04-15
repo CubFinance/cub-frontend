@@ -23,17 +23,17 @@ const config: MenuEntry[] = [
   {
     label: 'Farms',
     icon: 'FarmIcon',
-    href: 'https://cubdefi.com/farms',
+    href: '/farms',
   },
   {
     label: 'Dens',
     icon: 'PoolIcon',
-    href: 'https://cubdefi.com/dens',
+    href: '/dens',
   },
   {
     label: 'Kingdoms',
     icon: 'PawIcon',
-    href: 'https://cubdefi.com/kingdoms',
+    href: '/kingdoms',
   },
   {
     label: 'LeoBridge',

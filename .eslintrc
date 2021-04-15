@@ -25,7 +25,8 @@
     "@typescript-eslint/explicit-module-boundary-types": 0,
     "@typescript-eslint/no-explicit-any": 0,
     "radix": 0,
-    "import/no-extraneous-dependencies": 0
+    "import/no-extraneous-dependencies": 0,
+	  "react/jsx-filename-extension": [1, { "allow": "as-needed" }]
     // End temporary rules
   }
 }
