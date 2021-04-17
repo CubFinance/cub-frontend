@@ -14,10 +14,11 @@ import { fetchFarmUserDataAsync } from 'state/actions'
 import { QuoteToken } from 'config/constants/types'
 import useI18n from 'hooks/useI18n'
 import FarmCard, { FarmWithStakedValue } from './components/FarmCard/FarmCard'
+import KingdomCard from './components/KingdomCard/FarmCard'
 import FarmTabButtons from './components/FarmTabButtons'
 import Divider from './components/Divider'
-import Kingdom from '../Kingdoms/components/Kingdom'
-import Kingdoms from '../Kingdoms'
+// import Kingdom from '../Kingdoms/components/Kingdom'
+// import Kingdoms from '../Kingdoms'
 
 export interface FarmsProps{
   tokenMode?: boolean
@@ -42,10 +43,18 @@ const Farms: React.FC<FarmsProps> = (farmsProps) => {
   }, [account, dispatch, fastRefresh])
 
   const activeFarms = farmsLP.filter(farm => {
-    if (kingdomMode) return !!farm.isKingdom === !!kingdomMode && farm.multiplier !== '0X'
-    return !!farm.isTokenOnly === !!tokenMode && farm.multiplier !== '0X'
+    if (kingdomMode) {
+      return !!farm.isKingdom === !!kingdomMode && farm.multiplier !== '0X'
+    }
+    return !!farm.isTokenOnly === !!tokenMode && !!farm.isKingdom === !!kingdomMode && farm.multiplier !== '0X'
   })
-  const inactiveFarms = farmsLP.filter(farm => !!farm.isTokenOnly === !!tokenMode && farm.multiplier === '0X')
+
+  const inactiveFarms = farmsLP.filter(farm => {
+    if (kingdomMode) {
+      return !!farm.isKingdom === !!kingdomMode && farm.multiplier === '0X'
+    }
+    return !!farm.isTokenOnly === !!tokenMode && !!farm.isKingdom === !!kingdomMode && farm.multiplier === '0X'
+  })
 
   // /!\ This function will be removed soon
   // This function compute the APY for each farm and will be replaced when we have a reliable API
@@ -76,7 +85,7 @@ const Farms: React.FC<FarmsProps> = (farmsProps) => {
       })
       return farmsToDisplayWithAPY.map((farm) => {
         if (kingdomMode) return (
-          <Kingdom
+          <KingdomCard
             key={farm.pid}
             farm={farm}
             removed={removed}
@@ -103,22 +112,21 @@ const Farms: React.FC<FarmsProps> = (farmsProps) => {
     [bnbPrice, account, cakePrice, ethereum, kingdomMode],
   )
 
-  if (kingdomMode)
-    return (
-      <Kingdoms>
-        {farmsList(activeFarms, false)}
-      </Kingdoms>
-    )
+  // if (kingdomMode)
+  //   return (
+  //     <Kingdoms>
+  //       {farmsList(activeFarms, false)}
+  //     </Kingdoms>
+  //   )
+
+  let heading = TranslateString(320, 'Stake LP tokens to earn CUB')
+  if (tokenMode) heading = TranslateString(10002, 'Stake tokens to earn CUB')
+  else if (kingdomMode) heading = TranslateString(null, 'Stake into a Kingdom to earn CUB')
 
   return (
     <Page>
       <Heading as="h1" size="lg" color="primary" mb="50px" style={{ textAlign: 'center' }}>
-        {
-          tokenMode ?
-            TranslateString(10002, 'Stake tokens to earn CUB')
-            :
-          TranslateString(320, 'Stake LP tokens to earn CUB')
-        }
+        {heading}
       </Heading>
       <Heading as="h2" color="secondary" mb="50px" style={{ textAlign: 'center' }}>
         {TranslateString(10000, 'Deposit Fee will be used to buyback CUB and bLEO')}

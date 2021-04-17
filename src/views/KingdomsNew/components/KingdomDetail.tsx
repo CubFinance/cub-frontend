@@ -1,7 +1,9 @@
 import React from 'react'
+import BigNumber from 'bignumber.js'
 import styled from 'styled-components'
 import { Button as UiButton } from '@pancakeswap-libs/uikit'
 import KingdomCard from './KingdomCard'
+import { FarmWithStakedValue } from '../../Farms/components/FarmCard/FarmCard'
 
 const Button = styled(UiButton)`
   height: 36px;
@@ -31,11 +33,17 @@ const DHeader = styled.span`
   font-size: 1rem;
 `
 
-const KingdomDetail: React.FC = () => {
+interface KingdomDetailProps {
+  farm: FarmWithStakedValue
+}
+
+const KingdomDetail: React.FC<KingdomDetailProps> = ({ farm }) => {
 
   return (
     <>
-      <KingdomCard />
+      <KingdomCard
+        farm={farm}
+      />
       <Button mr="8px" variant="secondary">Farm Contract</Button>
       <Button mr="8px" variant="secondary">Vault Contract</Button>
       <Details>

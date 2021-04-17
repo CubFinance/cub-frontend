@@ -1,6 +1,10 @@
 import React from 'react'
+// import BigNumber from 'bignumber.js'
 import styled from 'styled-components'
+import { useFarmFromPid, useFarmUser } from 'state/hooks'
+import { getBalanceNumber } from 'utils/formatBalance'
 import { Flex, Text, Input, Button as UiButton } from '@pancakeswap-libs/uikit'
+import { FarmWithStakedValue } from '../../Farms/components/FarmCard/FarmCard'
 // import Input, { InputProps } from 'components/Input'
 import './KingdomCard.css'
 
@@ -22,7 +26,16 @@ const Button = styled(UiButton)`
   height: 40px;
 `
 
-const KingdomCard: React.FC = () => {
+interface KingdomCardProps {
+  farm: FarmWithStakedValue
+}
+
+const KingdomCard: React.FC<KingdomCardProps> = ({ farm }) => {
+  const { pid, lpAddresses, tokenAddresses, isTokenOnly, depositFeeBP } = useFarmFromPid(farm.pid)
+  const { allowance, tokenBalance, stakedBalance, earnings } = useFarmUser(pid)
+
+  const rawStakedBalance = getBalanceNumber(stakedBalance)
+  const displayBalance = rawStakedBalance.toLocaleString()
 
   return (
     <KCard>
@@ -31,17 +44,17 @@ const KingdomCard: React.FC = () => {
           <div className="col">
             <Flex justifyContent='space-between'>
               <Text>Balance</Text>
-              <Text>– ($–)</Text>
+              <Text>0.00000 ($0.00)</Text>
             </Flex>
           </div>
           <div className="col">
             <Flex justifyContent='space-between'>
               <Text>Deposit</Text>
-              <Text>– ($–)</Text>
+              <Text>{displayBalance} ($0.00)</Text>
             </Flex>
           </div>
           <div className="col">
-            <Text>AUTO Rewards</Text>
+            <Text>CUB Rewards</Text>
           </div>
         </div>
         <div className="flex-grid">
@@ -52,8 +65,8 @@ const KingdomCard: React.FC = () => {
             <Input />
           </div>
           <div className="col">
-            <div>–</div>
-            <div>$–</div>
+            <div>0.00000</div>
+            <div>$0.00</div>
           </div>
         </div>
         <div className="flex-grid">
