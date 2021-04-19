@@ -1,10 +1,10 @@
 import React, { useEffect, useCallback } from 'react'
-import { Route, useRouteMatch } from 'react-router-dom'
+import { Route, useRouteMatch, Link } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import BigNumber from 'bignumber.js'
 import { useWallet } from '@binance-chain/bsc-use-wallet'
 import { provider } from 'web3-core'
-import { Image, Heading } from '@pancakeswap-libs/uikit'
+import { Image, Heading, Button } from '@pancakeswap-libs/uikit'
 import { BLOCKS_PER_YEAR, CAKE_PER_BLOCK, CAKE_POOL_PID } from 'config'
 import FlexLayout from 'components/layout/Flex'
 import Page from 'components/layout/Page'
@@ -13,12 +13,22 @@ import useRefresh from 'hooks/useRefresh'
 import { fetchFarmUserDataAsync } from 'state/actions'
 import { QuoteToken } from 'config/constants/types'
 import useI18n from 'hooks/useI18n'
+import styled from 'styled-components'
 import FarmCard, { FarmWithStakedValue } from './components/FarmCard/FarmCard'
 import KingdomCard from './components/KingdomCard/FarmCard'
 import FarmTabButtons from './components/FarmTabButtons'
 import Divider from './components/Divider'
+import CardValue from './components/CardValue'
+import { useTotalValue } from '../../state/hooks'
 // import Kingdom from '../Kingdoms/components/Kingdom'
 // import Kingdoms from '../Kingdoms'
+
+const Wrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 32px;
+`
 
 export interface FarmsProps{
   tokenMode?: boolean
@@ -120,17 +130,37 @@ const Farms: React.FC<FarmsProps> = (farmsProps) => {
   //   )
 
   let heading = TranslateString(320, 'Stake LP tokens to earn CUB')
+  let subHeading = TranslateString(10000, 'Deposit Fee will be used to buyback CUB and bLEO')
+  let extra = null
+  const totalValue = useTotalValue();
+
   if (tokenMode) heading = TranslateString(10002, 'Stake tokens to earn CUB')
-  else if (kingdomMode) heading = TranslateString(null, 'Stake into a Kingdom to earn CUB')
+  else if (kingdomMode) {
+    heading = TranslateString(null, 'Kingdoms: Composable Auto-Compounding')
+    subHeading = TranslateString(null, 'Stake tokens for cross-platform farming plus CUB rewards')
+    extra = (
+      <Heading as="h3" color="secondary" mb="30px" style={{ textAlign: 'center', fontSize: '1rem' }}>
+        TVL <CardValue value={totalValue.toNumber()} prefix="$" decimals={2}/>
+      </Heading>
+    )
+  }
+
+  const tlvSpacing = kingdomMode ? '10px' : '30px'
 
   return (
     <Page>
-      <Heading as="h1" size="lg" color="primary" mb="50px" style={{ textAlign: 'center' }}>
+      <Heading as="h1" size="lg" color="primary" mb="20px" style={{ textAlign: 'center' }}>
         {heading}
       </Heading>
-      <Heading as="h2" color="secondary" mb="50px" style={{ textAlign: 'center' }}>
-        {TranslateString(10000, 'Deposit Fee will be used to buyback CUB and bLEO')}
+      <Heading as="h2" color="secondary" mb={tlvSpacing} style={{ textAlign: 'center' }}>
+        {subHeading}
       </Heading>
+      {extra}
+      <Wrapper>
+        <Button size="sm" variant="subtle">
+          <a href="https://docs.cubdefi.com">Learn More</a>
+        </Button>
+      </Wrapper>
       <FarmTabButtons />
       <div>
         <Divider />
