@@ -450,7 +450,7 @@ const farms: FarmConfig[] = [
     quoteTokenAdresses: contracts.busd,
   },
   {
-    pid: 22,
+    pid: 0,
     risk: 4,
     isKingdom: true,
     lpSymbol: 'CAKE',
