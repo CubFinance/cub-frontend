@@ -94,7 +94,7 @@ const Farms: React.FC<FarmsProps> = (farmsProps) => {
         return { ...farm, apy }
       })
       return farmsToDisplayWithAPY.map((farm) => {
-        if (kingdomMode) return (
+        /* if (kingdomMode) return (
           <KingdomCard
             key={farm.pid}
             farm={farm}
@@ -104,7 +104,7 @@ const Farms: React.FC<FarmsProps> = (farmsProps) => {
             ethereum={ethereum}
             account={account}
           />
-        )
+        ) */
 
         return (
           <FarmCard
@@ -119,7 +119,8 @@ const Farms: React.FC<FarmsProps> = (farmsProps) => {
         )
       })
     },
-    [bnbPrice, account, cakePrice, ethereum, kingdomMode],
+    [bnbPrice, account, cakePrice, ethereum],
+    // [bnbPrice, account, cakePrice, ethereum, kingdomMode],
   )
 
   // if (kingdomMode)
