@@ -18,8 +18,8 @@ export const farmsSlice = createSlice({
   reducers: {
     setFarmsPublicData: (state, action) => {
       const liveFarmsData: Farm[] = action.payload
-      state.data = state.data.map((farm) => {
-        const liveFarmData = liveFarmsData.find((f) => f.pid === farm.pid)
+      state.data = state.data.map(farm => {
+        const liveFarmData = liveFarmsData.find(f => f.pid === farm.pid && f.isKingdom === farm.isKingdom)
         return { ...farm, ...liveFarmData }
       })
     },

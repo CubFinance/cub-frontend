@@ -397,6 +397,109 @@ const farms: FarmConfig[] = [
     quoteTokenSymbol: QuoteToken.BUSD,
     quoteTokenAdresses: contracts.busd,
   },
+  // KINGDOMS
+  /* {
+    pid: 17,
+    risk: 2,
+    isKingdom: true,
+    lpSymbol: 'BTCB',
+    lpAddresses: {
+      97: '',
+      56: '0xb8875e207ee8096a929d543c9981c9586992eacb', // BTCB-BUSD LP
+    },
+    tokenSymbol: 'BTCB',
+    tokenAddresses: {
+      97: '',
+      56: '0x7130d2a12b9bcbfae4f2634d864a1ee1ce3ead9c',
+    },
+    quoteTokenSymbol: QuoteToken.BUSD,
+    quoteTokenAdresses: contracts.busd,
+  },
+  {
+    pid: 18,
+    risk: 2,
+    isKingdom: true,
+    lpSymbol: 'ETH',
+    lpAddresses: {
+      97: '',
+      56: '0xd9a0d1f5e02de2403f68bb71a15f8847a854b494', // ETH-BUSD LP
+    },
+    tokenSymbol: 'ETH',
+    tokenAddresses: {
+      97: '',
+      56: '0x2170ed0880ac9a755fd29b2688956bd959f933f8',
+    },
+    quoteTokenSymbol: QuoteToken.BUSD,
+    quoteTokenAdresses: contracts.busd,
+  },
+  {
+    pid: 21,
+    risk: 3,
+    isKingdom: true,
+    lpSymbol: 'DOT',
+    lpAddresses: {
+      97: '',
+      56: '0x54c1ec2f543966953f2f7564692606ea7d5a184e', // DOT-BUSD LP
+    },
+    tokenSymbol: 'DOT',
+    tokenAddresses: {
+      97: '',
+      56: '0x7083609fce4d1d8dc0c979aab8c869ea2c873402',
+    },
+    quoteTokenSymbol: QuoteToken.BUSD,
+    quoteTokenAdresses: contracts.busd,
+  }, */
+  {
+    pid: 0,
+    risk: 4,
+    isKingdom: true,
+    lpSymbol: 'CAKE',
+    lpAddresses: {
+      97: '',
+      56: '0x0ed8e0a2d99643e1e65cca22ed4424090b8b7458', // CAKE-BUSD LP
+    },
+    tokenSymbol: 'CAKE',
+    tokenAddresses: {
+      97: '',
+      56: '0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82',
+    },
+    quoteTokenSymbol: QuoteToken.BUSD,
+    quoteTokenAdresses: contracts.busd,
+  },
+  /* {
+    pid: 15,
+    risk: 1,
+    isKingdom: true,
+    lpSymbol: 'WBNB',
+    lpAddresses: {
+      97: '',
+      56: '0x1b96b92314c44b159149f7e0303511fb2fc4774f', // BNB-BUSD LP
+    },
+    tokenSymbol: 'WBNB',
+    tokenAddresses: {
+      97: '',
+      56: '0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c',
+    },
+    quoteTokenSymbol: QuoteToken.BNB,
+    quoteTokenAdresses: contracts.wbnb,
+  },
+  {
+    pid: 0,
+    risk: 5,
+    isKingdom: true,
+    lpSymbol: 'BNB-BUSD LP',
+    lpAddresses: {
+      97: '',
+      56: '0x1B96B92314C44b159149f7E0303511fB2Fc4774f',
+    },
+    tokenSymbol: 'WBNB',
+    tokenAddresses: {
+      97: '',
+      56: '0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c',
+    },
+    quoteTokenSymbol: QuoteToken.BUSD,
+    quoteTokenAdresses: contracts.busd,
+  }, */
 ]
 
 export default farms

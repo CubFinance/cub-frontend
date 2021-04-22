@@ -8,6 +8,10 @@ export default {
     56: '0x227e79c83065edb8b954848c46ca50b96cb33e16',
     97: '',
   },
+  kingdoms: {
+    56: '0x16fcb955082ce59ee7bea251c3038331f5ca56a1',
+    97: '',
+  },
   wbnb: {
     56: '0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c',
     97: '',

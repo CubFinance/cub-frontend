@@ -23,12 +23,17 @@ const config: MenuEntry[] = [
   {
     label: 'Farms',
     icon: 'FarmIcon',
-    href: 'https://cubdefi.com/farms',
+    href: '/farms',
   },
   {
     label: 'Dens',
     icon: 'PoolIcon',
-    href: 'https://cubdefi.com/dens',
+    href: '/dens',
+  },
+  {
+    label: 'Kingdoms',
+    icon: 'PawIcon',
+    href: '/kingdoms',
   },
   {
     label: 'LeoBridge',
@@ -65,7 +70,7 @@ const config: MenuEntry[] = [
   },
   {
     label: "Tokenized Blogging",
-    icon: "PawIcon",
+    icon: "SunIcon",
     href: "https://leofinance.io/",
   },
   {
@@ -74,9 +79,9 @@ const config: MenuEntry[] = [
     href: "https://leofinance.io/@leofinance",
   },
   {
-    label: 'CertiK Audit (Coming Soon)',
+    label: 'CertiK Audit',
     icon: 'AuditIcon',
-    href: '#',
+    href: 'https://www.certik.org/projects/cubfinance',
   },
 ]
 
