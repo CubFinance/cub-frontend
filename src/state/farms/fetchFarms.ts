@@ -1,6 +1,7 @@
 import BigNumber from 'bignumber.js'
 import erc20 from 'config/abi/erc20.json'
 import masterchefABI from 'config/abi/masterchef.json'
+import kingdomsABI from 'config/abi/kingdoms.json'
 import multicall from 'utils/multicall'
 import { getMasterChefAddress, getKingdomsAddress } from 'utils/addressHelpers'
 import farmsConfig from 'config/constants/farms'
@@ -11,11 +12,11 @@ const CHAIN_ID = process.env.REACT_APP_CHAIN_ID
 const fetchFarms = async () => {
   const data = await Promise.all(
     farmsConfig.map(async (farmConfig) => {
-      const lpAdress = farmConfig.lpAddresses[CHAIN_ID]
+      const lpAddress = farmConfig.lpAddresses[CHAIN_ID]
       // const params = (farmConfig.isTokenOnly ?? [getMasterChefAddress()]) || (farmConfig.isKingdom ?? [getKingdomsAddress()])
       // console.log('params',params)
       let tokenOrKingdom = {
-        address: farmConfig.isTokenOnly ? farmConfig.tokenAddresses[CHAIN_ID] : lpAdress,
+        address: farmConfig.isTokenOnly ? farmConfig.tokenAddresses[CHAIN_ID] : lpAddress,
         name: 'balanceOf',
         params: [getMasterChefAddress()],
       }
@@ -33,19 +34,19 @@ const fetchFarms = async () => {
         {
           address: farmConfig.tokenAddresses[CHAIN_ID],
           name: 'balanceOf',
-          params: [lpAdress],
+          params: [lpAddress],
         },
         // Balance of quote token on LP contract
         {
           address: farmConfig.quoteTokenAdresses[CHAIN_ID],
           name: 'balanceOf',
-          params: [lpAdress],
+          params: [lpAddress],
         },
         // Balance of LP tokens in the master chef contract
         tokenOrKingdom,
         // Total supply of LP tokens
         {
-          address: lpAdress,
+          address: lpAddress,
           name: 'totalSupply',
         },
         // Token decimals
@@ -60,10 +61,10 @@ const fetchFarms = async () => {
         },
       ]
 
-      if (farmConfig.isKingdom && farmConfig.lpSymbol === 'CAKE') {
-        // console.log('getKingdomsAddress()',getKingdomsAddress())
-        console.log('calls',calls)
-      }
+      // if (farmConfig.isKingdom && farmConfig.lpSymbol === 'CAKE') {
+      //   // console.log('getKingdomsAddress()',getKingdomsAddress())
+      //   console.log('calls',calls)
+      // }
       const [
         tokenBalanceLP,
         quoteTokenBlanceLP,
@@ -72,14 +73,14 @@ const fetchFarms = async () => {
         tokenDecimals,
         quoteTokenDecimals
       ] = await multicall(erc20, calls).catch(error => {
-        console.log('multicall:', error)
         throw new Error(error)
       })
 
       let tokenAmount;
       let lpTotalInQuoteToken;
       let tokenPriceVsQuote;
-      if(farmConfig.isTokenOnly || farmConfig.isKingdom){
+      // if (farmConfig.isTokenOnly || farmConfig.isKingdom) {
+      if (farmConfig.isTokenOnly) {
         tokenAmount = new BigNumber(lpTokenBalanceMC).div(new BigNumber(10).pow(tokenDecimals));
         if(farmConfig.tokenSymbol === QuoteToken.BUSD && farmConfig.quoteTokenSymbol === QuoteToken.BUSD){
           tokenPriceVsQuote = new BigNumber(1);
@@ -110,22 +111,37 @@ const fetchFarms = async () => {
         }
       }
 
-      const [info, totalAllocPoint, eggPerBlock] = await multicall(masterchefABI, [
-        {
-          address: getMasterChefAddress(),
+      let newCalls = [{
+        address: getMasterChefAddress(),
+        name: 'poolInfo',
+        params: [farmConfig.pid],
+      },
+      {
+        address: getMasterChefAddress(),
+        name: 'totalAllocPoint',
+      },
+      {
+        address: getMasterChefAddress(),
+        name: 'cubPerBlock',
+      }]
+
+      if (farmConfig.isKingdom) {
+        newCalls = [{
+          address: getKingdomsAddress(),
           name: 'poolInfo',
           params: [farmConfig.pid],
         },
         {
-          address: getMasterChefAddress(),
+          address: getKingdomsAddress(),
           name: 'totalAllocPoint',
         },
         {
-          address: getMasterChefAddress(),
-          name: 'cubPerBlock',
-        },
-      ]).catch(error => {
-        console.log('multicall nontoken:', error)
+          address: getKingdomsAddress(),
+          name: 'CubPerBlock',
+        }]
+      }
+
+      const [info, totalAllocPoint, eggPerBlock] = await multicall(farmConfig.isKingdom ? kingdomsABI : masterchefABI, newCalls).catch(error => {
         throw new Error(`multicall nontoken: ${error}`)
       })
 

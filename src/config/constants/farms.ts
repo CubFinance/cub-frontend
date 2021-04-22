@@ -398,7 +398,7 @@ const farms: FarmConfig[] = [
     quoteTokenAdresses: contracts.busd,
   },
   // KINGDOMS
-  {
+  /* {
     pid: 17,
     risk: 2,
     isKingdom: true,
@@ -448,7 +448,7 @@ const farms: FarmConfig[] = [
     },
     quoteTokenSymbol: QuoteToken.BUSD,
     quoteTokenAdresses: contracts.busd,
-  },
+  }, */
   {
     pid: 0,
     risk: 4,
@@ -466,7 +466,7 @@ const farms: FarmConfig[] = [
     quoteTokenSymbol: QuoteToken.BUSD,
     quoteTokenAdresses: contracts.busd,
   },
-  {
+  /* {
     pid: 15,
     risk: 1,
     isKingdom: true,
@@ -499,7 +499,7 @@ const farms: FarmConfig[] = [
     },
     quoteTokenSymbol: QuoteToken.BUSD,
     quoteTokenAdresses: contracts.busd,
-  },
+  }, */
 ]
 
 export default farms

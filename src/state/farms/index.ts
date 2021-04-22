@@ -18,8 +18,8 @@ export const farmsSlice = createSlice({
   reducers: {
     setFarmsPublicData: (state, action) => {
       const liveFarmsData: Farm[] = action.payload
-      state.data = state.data.map((farm) => {
-        const liveFarmData = liveFarmsData.find((f) => f.pid === farm.pid)
+      state.data = state.data.map(farm => {
+        const liveFarmData = liveFarmsData.find(f => f.pid === farm.pid && f.isKingdom === farm.isKingdom)
         return { ...farm, ...liveFarmData }
       })
     },
@@ -39,6 +39,7 @@ export const { setFarmsPublicData, setFarmUserData } = farmsSlice.actions
 // Thunks
 export const fetchFarmsPublicDataAsync = () => async (dispatch) => {
   const farms = await fetchFarms()
+  console.log('farms',farms)
   dispatch(setFarmsPublicData(farms))
 }
 export const fetchFarmUserDataAsync = (account) => async (dispatch) => {
