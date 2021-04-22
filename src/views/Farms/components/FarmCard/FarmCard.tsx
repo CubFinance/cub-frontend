@@ -100,7 +100,7 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm, removed, cakePrice, bnbPrice,
   let farmImage = `${farm.tokenSymbol.toLowerCase()}-${farm.quoteTokenSymbol.toLowerCase()}`
 
   if (farm.isTokenOnly || farm.isKingdom) farmImage = farm.tokenSymbol.toLowerCase()
-console.log('farmImage',farmImage)
+
   const totalValue: BigNumber = useMemo(() => {
     if (!farm.lpTotalInQuoteToken) {
       return null
