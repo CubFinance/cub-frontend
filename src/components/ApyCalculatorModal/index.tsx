@@ -157,7 +157,7 @@ const ApyCalculatorModal: React.FC<ApyCalculatorModalProps> = ({
       <Description fontSize="12px" color="textSubtle">
         {TranslateString(
           999,
-          `Calculated based on current rates. Compounding ${compoundFrequency.toLocaleString()}x daily. Rates are estimates provided for your convenience only, and by no means represent guaranteed returns.`,
+          `Calculated based on current rates. Compounding once daily. Rates are estimates provided for your convenience only, and by no means represent guaranteed returns.`,
         )}
       </Description>
       <Flex justifyContent="center">

@@ -7,7 +7,7 @@ import { Image, Heading, RowType, Toggle, Text } from '@pancakeswap-libs/uikit'
 import styled from 'styled-components'
 import FlexLayout from 'components/layout/Flex'
 import Page from 'components/layout/Page'
-import { MigrationV2 } from 'components/Banner'
+// import { MigrationV2 } from 'components/Banner'
 import { useFarms, usePriceCakeBusd, useGetApiPrices } from 'state/hooks'
 import useRefresh from 'hooks/useRefresh'
 import { fetchFarmUserDataAsync } from 'state/actions'
@@ -97,11 +97,12 @@ const ViewControls = styled.div`
   }
 `
 
-const StyledImage = styled(Image)`
+/* const StyledImage = styled(Image)`
   margin-left: auto;
   margin-right: auto;
   margin-top: 58px;
-`
+` */
+
 const NUMBER_OF_FARMS_VISIBLE = 12
 
 export interface FarmsProps{
@@ -156,8 +157,20 @@ const Farms: React.FC<FarmsProps> = ({ tokenMode, kingdomMode }) => {
     }
   }, [isArchived, dispatch, account])
 
-  const activeFarms = farmsLP.filter((farm) => farm.pid !== 0 && farm.multiplier !== '0X' && !isArchivedPid(farm.pid))
-  const inactiveFarms = farmsLP.filter((farm) => farm.pid !== 0 && farm.multiplier === '0X' && !isArchivedPid(farm.pid))
+  // const activeFarms = farmsLP.filter((farm) => farm.multiplier !== '0X' && !isArchivedPid(farm.pid))
+  const activeFarms = farmsLP.filter(farm => {
+    if (kingdomMode) {
+      return !!farm.isKingdom === !!kingdomMode && farm.multiplier !== '0X' && !isArchivedPid(farm.pid)
+    }
+    return !!farm.isTokenOnly === !!tokenMode && !!farm.isKingdom === !!kingdomMode && farm.multiplier !== '0X' && !isArchivedPid(farm.pid)
+  })
+  // const inactiveFarms = farmsLP.filter((farm) => farm.multiplier === '0X' && !isArchivedPid(farm.pid))
+  const inactiveFarms = farmsLP.filter(farm => {
+    if (kingdomMode) {
+      return !!farm.isKingdom === !!kingdomMode && farm.multiplier === '0X' && !isArchivedPid(farm.pid)
+    }
+    return !!farm.isTokenOnly === !!tokenMode && !!farm.isKingdom === !!kingdomMode && farm.multiplier === '0X' && !isArchivedPid(farm.pid)
+  })
   const archivedFarms = farmsLP.filter((farm) => isArchivedPid(farm.pid))
 
   const stakedOnlyFarms = activeFarms.filter(
@@ -377,7 +390,7 @@ const Farms: React.FC<FarmsProps> = ({ tokenMode, kingdomMode }) => {
           {TranslateString(999, 'Stake Liquidity Pool (LP) tokens to earn.')}
         </Heading>
       </PageHeader>
-      <MigrationV2 />
+      {/* <MigrationV2 /> */}
       <Page>
         <ControlContainer>
           <ViewControls>

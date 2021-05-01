@@ -184,10 +184,12 @@ export const usePriceBnbBusd = (): BigNumber => {
 }
 
 export const usePriceCakeBusd = (): BigNumber => {
-  const cakeBnbFarm = useFarmFromPid(1)
-  const bnbBusdPrice = usePriceBnbBusd()
+  const cakeBnbFarm = useFarmFromPid(10)
+  // const bnbBusdPrice = usePriceBnbBusd()
+  //
+  // const cakeBusdPrice = cakeBnbFarm.tokenPriceVsQuote ? bnbBusdPrice.times(cakeBnbFarm.tokenPriceVsQuote) : BIG_ZERO
 
-  const cakeBusdPrice = cakeBnbFarm.tokenPriceVsQuote ? bnbBusdPrice.times(cakeBnbFarm.tokenPriceVsQuote) : BIG_ZERO
+  const cakeBusdPrice = cakeBnbFarm.tokenPriceVsQuote ? new BigNumber(cakeBnbFarm.tokenPriceVsQuote) : BIG_ZERO
 
   return cakeBusdPrice
 }
