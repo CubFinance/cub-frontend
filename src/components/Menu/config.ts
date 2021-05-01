@@ -64,6 +64,14 @@ const config: MenuEntry[] = [
         label: 'CoinMarketCap',
         href: 'https://coinmarketcap.com/currencies/cub-finance/',
       },
+      {
+        label: 'CoinGecko',
+        href: 'https://www.coingecko.com/en/coins/cub-finance',
+      },
+      {
+        label: 'AstroTools',
+        href: 'https://app.astrotools.io/pancake-pair-explorer/0x50d809c74e0b8e49e7b4c65bb3109abe3ff4c1c1',
+      },
     ],
   },
   {

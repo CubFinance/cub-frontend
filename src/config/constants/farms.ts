@@ -133,17 +133,19 @@ const farms: FarmConfig[] = [
     token: tokens.cake,
     quoteToken: tokens.wbnb,
   },
-  {
-    pid: 12,
-    isTokenOnly: true,
-    lpSymbol: 'CUB',
-    lpAddresses: {
-      97: '',
-      56: '0x0EF564D4F8D6C0ffE13348A32e21EFd55e508e84', // CUB-BUSD LP
-    },
-    token: tokens.cub,
-    quoteToken: tokens.busd,
-  },
+
+  // {
+  //   pid: 12,
+  //   isTokenOnly: true,
+  //   lpSymbol: 'CUB',
+  //   lpAddresses: {
+  //     97: '',
+  //     56: '0x0EF564D4F8D6C0ffE13348A32e21EFd55e508e84', // CUB-BUSD LP
+  //   },
+  //   token: tokens.cub,
+  //   quoteToken: tokens.busd,
+  // },
+
   // {
   //   pid: 13,
   //   isTokenOnly: true,
@@ -160,105 +162,106 @@ const farms: FarmConfig[] = [
   //   quoteTokenSymbol: QuoteToken.BNB,
   //   quoteTokenAdresses: contracts.wbnb,
   // },
-  {
-    pid: 14,
-    isTokenOnly: true,
-    lpSymbol: 'BUSD',
-    lpAddresses: {
-      97: '',
-      56: '0x1b96b92314c44b159149f7e0303511fb2fc4774f', // BNB-BUSD LP
-    },
-    token: tokens.busd,
-    quoteToken: tokens.busd,
-  },
-  {
-    pid: 15,
-    isTokenOnly: true,
-    lpSymbol: 'WBNB',
-    lpAddresses: {
-      97: '',
-      56: '0x1b96b92314c44b159149f7e0303511fb2fc4774f', // BNB-BUSD LP
-    },
-    token: tokens.wbnb,
-    quoteToken: tokens.wbnb,
-  },
-  {
-    pid: 16,
-    isTokenOnly: true,
-    lpSymbol: 'USDT',
-    lpAddresses: {
-      97: '',
-      56: '0xc15fa3e22c912a276550f3e5fe3b0deb87b55acd', // USDT-BUSD LP
-    },
-    token: tokens.usdt,
-    quoteToken: tokens.busd,
-  },
-  {
-    pid: 17,
-    isTokenOnly: true,
-    lpSymbol: 'BTCB',
-    lpAddresses: {
-      97: '',
-      56: '0xb8875e207ee8096a929d543c9981c9586992eacb', // BTCB-BUSD LP
-    },
-    token: tokens.btcb,
-    quoteToken: tokens.busd,
-  },
-  {
-    pid: 18,
-    isTokenOnly: true,
-    lpSymbol: 'ETH',
-    lpAddresses: {
-      97: '',
-      56: '0xd9a0d1f5e02de2403f68bb71a15f8847a854b494', // ETH-BUSD LP
-    },
-    token: tokens.eth,
-    quoteToken: tokens.busd,
-  },
-  {
-    pid: 19,
-    isTokenOnly: true,
-    lpSymbol: 'DAI',
-    lpAddresses: {
-      97: '',
-      56: '0x3ab77e40340ab084c3e23be8e5a6f7afed9d41dc', // DAI-BUSD LP
-    },
-    token: tokens.dai,
-    quoteToken: tokens.busd,
-  },
-  {
-    pid: 20,
-    isTokenOnly: true,
-    lpSymbol: 'USDC',
-    lpAddresses: {
-      97: '',
-      56: '0x680dd100e4b394bda26a59dd5c119a391e747d18', // USDC-BUSD LP
-    },
-    token: tokens.usdc,
-    quoteToken: tokens.busd,
-  },
-  {
-    pid: 21,
-    isTokenOnly: true,
-    lpSymbol: 'DOT',
-    lpAddresses: {
-      97: '',
-      56: '0x54c1ec2f543966953f2f7564692606ea7d5a184e', // DOT-BUSD LP
-    },
-    token: tokens.dot,
-    quoteToken: tokens.busd,
-  },
-  {
-    pid: 22,
-    isTokenOnly: true,
-    lpSymbol: 'CAKE',
-    lpAddresses: {
-      97: '',
-      56: '0x0ed8e0a2d99643e1e65cca22ed4424090b8b7458', // CAKE-BUSD LP
-    },
-    token: tokens.cake,
-    quoteToken: tokens.busd,
-  },
+
+  // {
+  //   pid: 14,
+  //   isTokenOnly: true,
+  //   lpSymbol: 'BUSD',
+  //   lpAddresses: {
+  //     97: '',
+  //     56: '0x1b96b92314c44b159149f7e0303511fb2fc4774f', // BNB-BUSD LP
+  //   },
+  //   token: tokens.busd,
+  //   quoteToken: tokens.busd,
+  // },
+  // {
+  //   pid: 15,
+  //   isTokenOnly: true,
+  //   lpSymbol: 'WBNB',
+  //   lpAddresses: {
+  //     97: '',
+  //     56: '0x1b96b92314c44b159149f7e0303511fb2fc4774f', // BNB-BUSD LP
+  //   },
+  //   token: tokens.wbnb,
+  //   quoteToken: tokens.wbnb,
+  // },
+  // {
+  //   pid: 16,
+  //   isTokenOnly: true,
+  //   lpSymbol: 'USDT',
+  //   lpAddresses: {
+  //     97: '',
+  //     56: '0xc15fa3e22c912a276550f3e5fe3b0deb87b55acd', // USDT-BUSD LP
+  //   },
+  //   token: tokens.usdt,
+  //   quoteToken: tokens.busd,
+  // },
+  // {
+  //   pid: 17,
+  //   isTokenOnly: true,
+  //   lpSymbol: 'BTCB',
+  //   lpAddresses: {
+  //     97: '',
+  //     56: '0xb8875e207ee8096a929d543c9981c9586992eacb', // BTCB-BUSD LP
+  //   },
+  //   token: tokens.btcb,
+  //   quoteToken: tokens.busd,
+  // },
+  // {
+  //   pid: 18,
+  //   isTokenOnly: true,
+  //   lpSymbol: 'ETH',
+  //   lpAddresses: {
+  //     97: '',
+  //     56: '0xd9a0d1f5e02de2403f68bb71a15f8847a854b494', // ETH-BUSD LP
+  //   },
+  //   token: tokens.eth,
+  //   quoteToken: tokens.busd,
+  // },
+  // {
+  //   pid: 19,
+  //   isTokenOnly: true,
+  //   lpSymbol: 'DAI',
+  //   lpAddresses: {
+  //     97: '',
+  //     56: '0x3ab77e40340ab084c3e23be8e5a6f7afed9d41dc', // DAI-BUSD LP
+  //   },
+  //   token: tokens.dai,
+  //   quoteToken: tokens.busd,
+  // },
+  // {
+  //   pid: 20,
+  //   isTokenOnly: true,
+  //   lpSymbol: 'USDC',
+  //   lpAddresses: {
+  //     97: '',
+  //     56: '0x680dd100e4b394bda26a59dd5c119a391e747d18', // USDC-BUSD LP
+  //   },
+  //   token: tokens.usdc,
+  //   quoteToken: tokens.busd,
+  // },
+  // {
+  //   pid: 21,
+  //   isTokenOnly: true,
+  //   lpSymbol: 'DOT',
+  //   lpAddresses: {
+  //     97: '',
+  //     56: '0x54c1ec2f543966953f2f7564692606ea7d5a184e', // DOT-BUSD LP
+  //   },
+  //   token: tokens.dot,
+  //   quoteToken: tokens.busd,
+  // },
+  // {
+  //   pid: 22,
+  //   isTokenOnly: true,
+  //   lpSymbol: 'CAKE',
+  //   lpAddresses: {
+  //     97: '',
+  //     56: '0x0ed8e0a2d99643e1e65cca22ed4424090b8b7458', // CAKE-BUSD LP
+  //   },
+  //   token: tokens.cake,
+  //   quoteToken: tokens.busd,
+  // },
   // KINGDOMS
   /* {
     pid: 17,
@@ -308,17 +311,17 @@ const farms: FarmConfig[] = [
     quoteTokenSymbol: QuoteToken.BUSD,
     quoteTokenAdresses: contracts.busd,
   }, */
-  {
-    pid: 0,
-    isKingdom: true,
-    lpSymbol: 'CAKE',
-    lpAddresses: {
-      97: '',
-      56: '0x0ed8e0a2d99643e1e65cca22ed4424090b8b7458', // CAKE-BUSD LP
-    },
-    token: tokens.cake,
-    quoteToken: tokens.busd,
-  },
+  // {
+  //   pid: 0,
+  //   isKingdom: true,
+  //   lpSymbol: 'CAKE',
+  //   lpAddresses: {
+  //     97: '',
+  //     56: '0x0ed8e0a2d99643e1e65cca22ed4424090b8b7458', // CAKE-BUSD LP
+  //   },
+  //   token: tokens.cake,
+  //   quoteToken: tokens.busd,
+  // },
   /* {
     pid: 15,
     isKingdom: true,

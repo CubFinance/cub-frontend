@@ -37,7 +37,7 @@ const ApyCalculatorModal: React.FC<ApyCalculatorModalProps> = ({
   apr,
   linkLabel,
   linkHref,
-  earningTokenSymbol = 'CAKE',
+  earningTokenSymbol = 'CUB',
   roundingDecimals = 2,
   compoundFrequency = 1,
 }) => {
