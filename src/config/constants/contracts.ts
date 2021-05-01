@@ -24,7 +24,7 @@ export default {
     56: '',
     97: '',
   },
-  mulltiCall: {
+  multiCall: {
     56: '0x1ee38d535d541c55c9dae27b12edf090c608e6fb',
     97: '0x67ADCB4dF3931b0C5Da724058ADC2174a9844412',
   },
@@ -35,5 +35,51 @@ export default {
   cake_real: {
     56: '0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82',
     97: '',
-  }
+  },
+
+  sousChef: {
+    97: '',
+    56: '',
+  },
+  pancakeProfile: {
+    56: '',
+    97: '',
+  },
+  pancakeRabbits: {
+    56: '',
+    97: '',
+  },
+  bunnyFactory: {
+    56: '',
+    97: '',
+  },
+  claimRefund: {
+    56: '',
+    97: '',
+  },
+  pointCenterIfo: {
+    56: '',
+    97: '',
+  },
+  bunnySpecial: {
+    56: '',
+    97: '',
+  },
+  tradingCompetition: {
+    56: '',
+    97: '',
+  },
+  easterNft: {
+    56: '',
+    97: '',
+  },
+  cakeVault: {
+    56: '',
+    97: '',
+  },
+  predictions: {
+    56: '',
+    97: '',
+  },
+
 }

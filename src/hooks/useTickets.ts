@@ -41,7 +41,8 @@ export const useTotalRewards = () => {
 
   useEffect(() => {
     const fetchBalance = async () => {
-      const res = await getTotalRewards(lotteryContract)
+      // const res = await getTotalRewards(lotteryContract)
+      const res = 0
       setRewards(new BigNumber(res))
     }
 
