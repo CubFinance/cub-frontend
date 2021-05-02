@@ -19,6 +19,7 @@ const Action = styled.div`
 `
 export interface FarmWithStakedValue extends Farm {
   apr?: number
+  depositFeeBP?: number
 }
 
 interface FarmCardActionsProps {
@@ -26,6 +27,7 @@ interface FarmCardActionsProps {
   provider?: ProviderType
   account?: string
   addLiquidityUrl?: string
+  depositFeeBP?: number
 }
 
 const CardActions: React.FC<FarmCardActionsProps> = ({ farm, account, addLiquidityUrl }) => {

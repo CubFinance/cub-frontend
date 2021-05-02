@@ -392,7 +392,6 @@ const Farms: React.FC<FarmsProps> = ({ tokenMode, kingdomMode }) => {
   let subHeading = TranslateString(10000, 'Deposit Fee will be used to buyback CUB and bLEO')
   let extra = null
   const data = useGetStats()
-  console.log('data',data)
   const tvl = data ? data.total_value_locked_all.toLocaleString('en-US', { maximumFractionDigits: 0 }) : null
 
   if (tokenMode) heading = TranslateString(10002, 'Stake tokens to earn CUB')

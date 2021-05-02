@@ -16,6 +16,7 @@ import ApyButton from './ApyButton'
 export interface FarmWithStakedValue extends Farm {
   apr?: number
   liquidity?: BigNumber
+  depositFeeBP?: number
 }
 
 const RainbowLight = keyframes`
@@ -124,6 +125,7 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm, removed, cakePrice, account }
         isCommunityFarm={farm.isCommunity}
         farmImage={farmImage}
         tokenSymbol={farm.token.symbol}
+        depositFee={farm.depositFeeBP}
       />
       {!removed && (
         <Flex justifyContent="space-between" alignItems="center">

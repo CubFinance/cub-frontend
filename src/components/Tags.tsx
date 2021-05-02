@@ -37,4 +37,10 @@ const CompoundingPoolTag = (props) => (
   </Tag>
 )
 
-export { CoreTag, CommunityTag, BinanceTag, DualTag, ManualPoolTag, CompoundingPoolTag }
+const NoFeeTag = () => (
+  <Tag variant="success" outline startIcon={<VerifiedIcon />}>
+    No Fees
+  </Tag>
+)
+
+export { CoreTag, CommunityTag, BinanceTag, DualTag, ManualPoolTag, CompoundingPoolTag, NoFeeTag }
