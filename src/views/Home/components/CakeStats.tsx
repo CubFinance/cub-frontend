@@ -5,7 +5,10 @@ import { getBalanceNumber } from 'utils/formatBalance'
 import { useTotalSupply, useBurnedBalance } from 'hooks/useTokenBalance'
 import useI18n from 'hooks/useI18n'
 import { getCakeAddress } from 'utils/addressHelpers'
+import { CAKE_PER_BLOCK } from 'config'
+import BigNumber from 'bignumber.js/bignumber'
 import CardValue from './CardValue'
+import { usePriceCakeBusd } from '../../../state/hooks'
 
 const StyledCakeStats = styled(Card)`
   margin-left: auto;
@@ -23,8 +26,11 @@ const Row = styled.div`
 const CakeStats = () => {
   const TranslateString = useI18n()
   const totalSupply = useTotalSupply()
-  const burnedBalance = getBalanceNumber(useBurnedBalance(getCakeAddress()))
-  const cakeSupply = totalSupply ? getBalanceNumber(totalSupply) - burnedBalance : 0
+  const burnedBalance = useBurnedBalance(getCakeAddress())
+  const cubPrice = usePriceCakeBusd();
+  const circSupply = totalSupply ? totalSupply.minus(burnedBalance) : new BigNumber(0);
+  const cakeSupply = getBalanceNumber(circSupply);
+  const marketCap = cubPrice.times(circSupply);
 
   return (
     <StyledCakeStats>
@@ -34,15 +40,19 @@ const CakeStats = () => {
         </Heading>
         <Row>
           <Text fontSize="14px">{TranslateString(536, 'Total CUB Supply')}</Text>
-          {cakeSupply && <CardValue fontSize="14px" value={cakeSupply} />}
+          {cakeSupply && <CardValue fontSize="14px" value={cakeSupply} decimals={0} />}
+        </Row>
+        <Row>
+          <Text fontSize="14px">{TranslateString(999, 'Market Cap')}</Text>
+          <CardValue fontSize="14px" value={getBalanceNumber(marketCap)} decimals={0} prefix="$" />
         </Row>
         <Row>
           <Text fontSize="14px">{TranslateString(538, 'Total CUB Burned')}</Text>
-          <CardValue fontSize="14px" decimals={0} value={burnedBalance} />
+          <CardValue fontSize="14px" value={getBalanceNumber(burnedBalance)} decimals={0} />
         </Row>
         <Row>
           <Text fontSize="14px">{TranslateString(540, 'New CUB/block')}</Text>
-          <CardValue fontSize="14px" decimals={0} value={22} />
+          <CardValue fontSize="14px" decimals={0} value={CAKE_PER_BLOCK.toNumber()} />
         </Row>
       </CardBody>
     </StyledCakeStats>
