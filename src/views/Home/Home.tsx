@@ -7,6 +7,7 @@ import FarmStakingCard from 'views/Home/components/FarmStakingCard'
 // import LotteryCard from 'views/Home/components/LotteryCard'
 import CakeStats from 'views/Home/components/CakeStats'
 import TotalValueLockedCard from 'views/Home/components/TotalValueLockedCard'
+import TwitterCard from './components/TwitterCard'
 // import EarnAPRCard from 'views/Home/components/EarnAPRCard'
 // import EarnAssetCard from 'views/Home/components/EarnAssetCard'
 // import WinCard from 'views/Home/components/WinCard'
@@ -90,6 +91,7 @@ const Home: React.FC = () => {
       <div>
         <Cards>
           <FarmStakingCard />
+          <TwitterCard/>
           {/* <LotteryCard /> */}
         </Cards>
         {/* <CTACards>
