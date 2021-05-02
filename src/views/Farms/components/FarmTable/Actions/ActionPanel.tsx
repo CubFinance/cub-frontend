@@ -1,11 +1,10 @@
 import React from 'react'
 import styled, { keyframes, css } from 'styled-components'
 import useI18n from 'hooks/useI18n'
-import { LinkExternal, Text } from '@pancakeswap-libs/uikit'
+import { LinkExternal, Text, Flex } from '@pancakeswap-libs/uikit'
 import { FarmWithStakedValue } from 'views/Farms/components/FarmCard/FarmCard'
 import getLiquidityUrlPathParts from 'utils/getLiquidityUrlPathParts'
-import { CommunityTag, CoreTag, DualTag } from 'components/Tags'
-
+import { NoFeeTag, DualTag } from 'components/Tags'
 import HarvestAction from './HarvestAction'
 import StakedAction from './StakedAction'
 import Apr, { AprProps } from '../Apr'
@@ -163,9 +162,16 @@ const ActionPanel: React.FunctionComponent<ActionPanelProps> = ({
         <StyledLinkExternal href={bsc}>{TranslateString(999, 'View Contract')}</StyledLinkExternal>
         <StyledLinkExternal href={info}>{TranslateString(999, 'See Pair Info')}</StyledLinkExternal>
         <TagsContainer>
-          {farm.isCommunity ? <CommunityTag /> : <CoreTag />}
+          {/* farm.isCommunity ? <CommunityTag /> : <CoreTag /> */}
+          {farm.depositFeeBP === 0 ? <NoFeeTag /> : null}
           {dual ? <DualTag /> : null}
         </TagsContainer>
+        {farm.depositFeeBP !== 0 && (
+          <Flex justifyContent='flex-start'>
+            <Text style={{ fontSize: '16px' }}>{TranslateString(10001, 'Deposit Fee')}:&nbsp;</Text>
+            <Text bold style={{ fontSize: '16px' }}>{(farm.depositFeeBP / 100)}%</Text>
+          </Flex>
+        )}
       </InfoContainer>
       <ValueContainer>
         <ValueWrapper>
