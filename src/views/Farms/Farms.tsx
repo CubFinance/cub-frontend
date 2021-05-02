@@ -3,7 +3,7 @@ import { Route, useRouteMatch, useLocation } from 'react-router-dom'
 import { useAppDispatch } from 'state'
 import BigNumber from 'bignumber.js'
 import { useWeb3React } from '@web3-react/core'
-import { Image, Heading, RowType, Toggle, Text } from '@pancakeswap-libs/uikit'
+import { Image, Heading, RowType, Toggle, Text, Button } from '@pancakeswap-libs/uikit'
 import styled from 'styled-components'
 import FlexLayout from 'components/layout/Flex'
 import Page from 'components/layout/Page'
@@ -22,6 +22,7 @@ import isArchivedPid from 'utils/farmHelpers'
 import PageHeader from 'components/PageHeader'
 import { fetchFarmsPublicDataAsync, setLoadArchivedFarmsData } from 'state/farms'
 import Select, { OptionProps } from 'components/Select/Select'
+import { useGetStats } from 'hooks/api'
 import FarmCard, { FarmWithStakedValue } from './components/FarmCard/FarmCard'
 import Table from './components/FarmTable/FarmTable'
 import FarmTabButtons from './components/FarmTabButtons'
@@ -29,6 +30,7 @@ import SearchInput from './components/SearchInput'
 import { RowProps } from './components/FarmTable/Row'
 import ToggleView from './components/ToggleView/ToggleView'
 import { DesktopColumnSchema, ViewMode } from './components/types'
+import CardValue from '../Home/components/CardValue'
 
 const ControlContainer = styled.div`
   display: flex;
@@ -95,6 +97,12 @@ const ViewControls = styled.div`
       padding: 0;
     }
   }
+`
+
+const Wrapper = styled.div`
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
 `
 
 /* const StyledImage = styled(Image)`
@@ -380,15 +388,44 @@ const Farms: React.FC<FarmsProps> = ({ tokenMode, kingdomMode }) => {
     setSortOption(option.value)
   }
 
+  let heading = TranslateString(320, 'Stake LP tokens to earn CUB')
+  let subHeading = TranslateString(10000, 'Deposit Fee will be used to buyback CUB and bLEO')
+  let extra = null
+  const data = useGetStats()
+  console.log('data',data)
+  const tvl = data ? data.total_value_locked_all.toLocaleString('en-US', { maximumFractionDigits: 0 }) : null
+
+  if (tokenMode) heading = TranslateString(10002, 'Stake tokens to earn CUB')
+  else if (kingdomMode) {
+    heading = TranslateString(null, 'Kingdoms: Composable Auto-Compounding')
+    subHeading = TranslateString(null, 'Stake tokens for cross-platform farming plus CUB rewards')
+    extra = (
+      <Heading as="h3" color="secondary" mb="30px" style={{ textAlign: 'center', fontSize: '1rem' }}>
+        TVL <CardValue value={Number(tvl)} prefix="$" decimals={2}/>
+      </Heading>
+    )
+  }
+
+  const tlvSpacing = kingdomMode ? '10px' : '20px'
+
   return (
     <>
       <PageHeader>
-        <Heading as="h1" size="xxl" color="secondary" mb="24px">
+        <Heading as="h1" size="xxl" color="secondary" mb="15px">
           {TranslateString(674, 'Farms')}
         </Heading>
-        <Heading size="lg" color="text">
-          {TranslateString(999, 'Stake Liquidity Pool (LP) tokens to earn.')}
+        <Heading as="h1" size="lg" color="primary" mb="20px" style={{ textAlign: 'left' }}>
+          {heading}
         </Heading>
+        <Heading as="h2" color="secondary" mb={tlvSpacing} style={{ textAlign: 'left' }}>
+          {subHeading}
+        </Heading>
+        {extra}
+        <Wrapper>
+          <Button size="sm">
+            <a href="https://docs.cubdefi.com">Learn More</a>
+          </Button>
+        </Wrapper>
       </PageHeader>
       {/* <MigrationV2 /> */}
       <Page>
