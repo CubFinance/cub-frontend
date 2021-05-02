@@ -38,7 +38,7 @@ const Multiplier: React.FunctionComponent<MultiplierProps> = ({ multiplier }) =>
       <br />
       {TranslateString(
         999,
-        'For example, if a 1x farm was getting 1 CAKE per block, a 40x farm would be getting 40 CAKE per block.',
+        'For example, if a 1x farm was getting 1 CUB per block, a 40x farm would be getting 40 CUB per block.',
       )}
     </div>
   )
