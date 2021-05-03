@@ -315,3 +315,18 @@ export const useGetCollectibles = () => {
     nftsInWallet: Nfts.filter((nft) => identifiers.includes(nft.identifier)),
   }
 }
+
+export const useTotalValue = (): BigNumber => {
+  const farms = useFarms();
+  const prices = useGetApiPrices()
+  let value = new BigNumber(0);
+
+  if (prices)
+    value = farms.data.reduce((accu, farm) => {
+      const quoteTokenPriceUsd = prices[getAddress(farm.quoteToken.address).toLowerCase()]
+      const totalLiquidity = new BigNumber(farm.lpTotalInQuoteToken).times(quoteTokenPriceUsd)
+      return accu.plus(totalLiquidity)
+    }, value)
+
+  return value;
+}
