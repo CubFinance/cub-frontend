@@ -5,7 +5,7 @@
   "scripts": {
     "analyze": "source-map-explorer 'build/static/js/*.js'",
     "start": "react-scripts start",
-    "build": "CI=false react-scripts build",
+    "build": "react-scripts build",
     "test": "react-scripts test",
     "uikit": "npm i CubFinance/cub-uikit-v2#72029b7c8efa5bcc9c188961e3007dd2673f9a59",
     "eject": "react-scripts eject",
