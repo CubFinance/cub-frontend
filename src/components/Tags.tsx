@@ -1,5 +1,41 @@
 import React from 'react'
-import { Tag, VerifiedIcon, CommunityIcon, BinanceIcon } from '@pancakeswap-libs/uikit'
+import { Tag, VerifiedIcon, CommunityIcon, BinanceIcon, RefreshIcon, AutoRenewIcon } from '@pancakeswap-libs/uikit'
+
+const CoreTag = (props) => (
+  <Tag variant="secondary" outline startIcon={<VerifiedIcon width="18px" color="secondary" mr="4px" />} {...props}>
+    Core
+  </Tag>
+)
+
+const CommunityTag = (props) => (
+  <Tag variant="textSubtle" outline startIcon={<CommunityIcon width="18px" color="secondary" mr="4px" />} {...props}>
+    Community
+  </Tag>
+)
+
+const BinanceTag = (props) => (
+  <Tag variant="binance" outline startIcon={<BinanceIcon width="18px" color="secondary" mr="4px" />} {...props}>
+    Binance
+  </Tag>
+)
+
+const DualTag = (props) => (
+  <Tag variant="textSubtle" outline {...props}>
+    Dual
+  </Tag>
+)
+
+const ManualPoolTag = (props) => (
+  <Tag variant="secondary" outline startIcon={<RefreshIcon width="18px" color="secondary" mr="4px" />} {...props}>
+    Manual
+  </Tag>
+)
+
+const CompoundingPoolTag = (props) => (
+  <Tag variant="success" outline startIcon={<AutoRenewIcon width="18px" color="success" mr="4px" />} {...props}>
+    Auto
+  </Tag>
+)
 
 const NoFeeTag = () => (
   <Tag variant="success" outline startIcon={<VerifiedIcon />}>
@@ -7,28 +43,4 @@ const NoFeeTag = () => (
   </Tag>
 )
 
-const RiskTag = ({ risk }) => (
-  <Tag variant={risk >= 3 ? 'failure' : 'success'} outline startIcon={<VerifiedIcon />}>
-    Risk {risk}
-  </Tag>
-)
-
-const CoreTag = () => (
-  <Tag variant='secondary' outline startIcon={<VerifiedIcon />}>
-    Core
-  </Tag>
-)
-
-const CommunityTag = () => (
-  <Tag variant='textSubtle' outline startIcon={<CommunityIcon />}>
-    Community
-  </Tag>
-)
-
-const BinanceTag = () => (
-  <Tag variant='binance' outline startIcon={<BinanceIcon />}>
-    Binance
-  </Tag>
-)
-
-export { CoreTag, CommunityTag, BinanceTag, RiskTag, NoFeeTag }
+export { CoreTag, CommunityTag, BinanceTag, DualTag, ManualPoolTag, CompoundingPoolTag, NoFeeTag }

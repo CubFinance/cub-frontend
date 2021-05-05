@@ -15,6 +15,17 @@ const Wrapper = styled.div`
 const SearchWrapper = styled.div`
   position: relative;
 `
+const InputWrapper = styled.div`
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  /* Firefox */
+  input[type='number'] {
+    -moz-appearance: textfield;
+  }
+`
 
 const ButtonWrapper = styled.div`
   position: absolute;
@@ -35,29 +46,37 @@ const PastLotterySearcher: React.FC<PastLotterySearcherProps> = ({ initialLotter
   }
 
   const handleChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
-    const value = parseInt(evt.currentTarget.value, 10)
+    if (evt.currentTarget.value) {
+      const value = parseInt(evt.currentTarget.value, 10)
 
-    // The max value will always be the initialLotterNumber which equals
-    // the latest lottery round
-    setIsError(value > initialLotteryNumber)
-    setLotteryNumber(value)
+      // The max value will always be the initialLotteryNumber which equals
+      // the latest lottery round
+      setIsError(value > initialLotteryNumber)
+      setLotteryNumber(value)
+    } else {
+      setLotteryNumber(initialLotteryNumber)
+    }
   }
 
   return (
     <Wrapper>
-      <Text>{TranslateString(999, 'Select lottery number:')}</Text>
+      <Text>{TranslateString(742, 'Select lottery number:')}</Text>
       <form onSubmit={handleSubmit}>
         <SearchWrapper>
-          <Input
-            value={lotteryNumber}
-            type="number"
-            isWarning={isError}
-            max={initialLotteryNumber}
-            onChange={handleChange}
-          />
+          <InputWrapper>
+            <Input
+              value={lotteryNumber}
+              type="number"
+              inputMode="numeric"
+              min="0"
+              isWarning={isError}
+              max={initialLotteryNumber}
+              onChange={handleChange}
+            />
+          </InputWrapper>
           <ButtonWrapper>
-            <Button type="submit" size="sm" disabled={isError}>
-              {TranslateString(999, 'Search')}
+            <Button type="submit" scale="sm" disabled={isError}>
+              {TranslateString(744, 'Search')}
             </Button>
           </ButtonWrapper>
         </SearchWrapper>

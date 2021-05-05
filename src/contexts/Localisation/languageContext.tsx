@@ -31,11 +31,11 @@ const stringTranslationsApi = new StringTranslations({
 })
 
 const fetchTranslationsForSelectedLanguage = (selectedLanguage) => {
-  return stringTranslationsApi.listLanguageTranslations(projectId, selectedLanguage.code, undefined, fileId, 200)
+  return stringTranslationsApi.listLanguageTranslations(projectId, selectedLanguage.code, undefined, fileId, 400)
 }
 
 const LanguageContextProvider = ({ children }) => {
-  const [selectedLanguage, setSelectedLanguage] = useState<any>(EN)
+  const [selectedLanguage, setSelectedLanguage] = useState<any>(null)
   const [translatedLanguage, setTranslatedLanguage] = useState<any>(EN)
   const [translations, setTranslations] = useState<Array<any>>([])
 
@@ -57,25 +57,21 @@ const LanguageContextProvider = ({ children }) => {
 
   useEffect(() => {
     if (selectedLanguage) {
-      console.log(`import(\`../../../public/i18n/${selectedLanguage.code}.json\`)`);
-      fetch(`./i18n/${selectedLanguage.code}.json`)
-        .then(r=>r.json())
-      // fetchTranslationsForSelectedLanguage(selectedLanguage)
+      fetchTranslationsForSelectedLanguage(selectedLanguage)
         .then((translationApiResponse) => {
           if (translationApiResponse.data.length < 1) {
-            setTranslations(['error'])
+            setTranslations([])
           } else {
             setTranslations(translationApiResponse.data)
           }
         })
         .then(() => setTranslatedLanguage(selectedLanguage))
         .catch((e) => {
-          console.error("ERROR");
-          console.error(e);
-          setTranslations(['error'])
+          setTranslations([])
+          console.error('Error while loading translations', e)
         })
     }
-  }, [selectedLanguage, setTranslations])
+  }, [selectedLanguage])
 
   const handleLanguageSelect = (langObject: LangType) => {
     setSelectedLanguage(langObject)

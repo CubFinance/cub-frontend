@@ -38,7 +38,11 @@ const StyledButton = styled(Button)`
   margin-top: ${(props) => props.theme.spacing[1]}px;
 `
 
-const PrizesWonContent: React.FC = () => {
+interface PrizesWonContentProps {
+  onSuccess: () => void
+}
+
+const PrizesWonContent: React.FC<PrizesWonContentProps> = ({ onSuccess }) => {
   const [requestedClaim, setRequestedClaim] = useState(false)
   const TranslateString = useI18n()
   const { claimLoading, claimAmount } = useTotalClaim()
@@ -52,12 +56,13 @@ const PrizesWonContent: React.FC = () => {
       const txHash = await onMultiClaim()
       // user rejected tx or didn't go thru
       if (txHash) {
+        onSuccess()
         setRequestedClaim(false)
       }
     } catch (e) {
       console.error(e)
     }
-  }, [onMultiClaim, setRequestedClaim])
+  }, [onMultiClaim, setRequestedClaim, onSuccess])
 
   const winnings = getBalanceNumber(claimAmount).toFixed(2)
 
@@ -67,7 +72,7 @@ const PrizesWonContent: React.FC = () => {
         <Won />
       </IconWrapper>
       <Heading as="h3" size="lg" color="secondary">
-        {TranslateString(999, 'You won!')}
+        {TranslateString(660, 'You won!')}
       </Heading>
       {claimLoading && <Loading />}
       {!claimLoading && (
@@ -83,8 +88,8 @@ const PrizesWonContent: React.FC = () => {
         </>
       )}
       <StyledCardActions>
-        <Button fullWidth disabled={requestedClaim} onClick={handleClaim}>
-          {TranslateString(999, 'Collect')}
+        <Button width="100%" disabled={requestedClaim} onClick={handleClaim}>
+          {TranslateString(1056, 'Collect')}
         </Button>
       </StyledCardActions>
       <StyledButton variant="text" onClick={onPresentMyTickets}>

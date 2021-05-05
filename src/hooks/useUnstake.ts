@@ -1,18 +1,18 @@
 import { useCallback } from 'react'
-import { useWallet } from '@binance-chain/bsc-use-wallet'
-import { useDispatch } from 'react-redux'
+import { useWeb3React } from '@web3-react/core'
+import { useAppDispatch } from 'state'
 import {
   fetchFarmUserDataAsync,
   updateUserStakedBalance,
   updateUserBalance,
   updateUserPendingReward,
 } from 'state/actions'
-import { unstake, sousUnstake, sousEmegencyUnstake } from 'utils/callHelpers'
+import { unstake, sousUnstake, sousEmergencyUnstake } from 'utils/callHelpers'
 import { useMasterchef, useSousChef } from './useContract'
 
 const useUnstake = (pid: number) => {
-  const dispatch = useDispatch()
-  const { account } = useWallet()
+  const dispatch = useAppDispatch()
+  const { account } = useWeb3React()
   const masterChefContract = useMasterchef()
 
   const handleUnstake = useCallback(
@@ -27,25 +27,25 @@ const useUnstake = (pid: number) => {
   return { onUnstake: handleUnstake }
 }
 
-const SYRUPIDS = [5, 6, 3, 1, 22, 23]
+const SYRUPIDS = [5, 6, 3, 1, 22, 23, 78]
 
 export const useSousUnstake = (sousId) => {
-  const dispatch = useDispatch()
-  const { account } = useWallet()
+  const dispatch = useAppDispatch()
+  const { account } = useWeb3React()
   const masterChefContract = useMasterchef()
   const sousChefContract = useSousChef(sousId)
   const isOldSyrup = SYRUPIDS.includes(sousId)
 
   const handleUnstake = useCallback(
-    async (amount: string) => {
+    async (amount: string, decimals: number) => {
       if (sousId === 0) {
         const txHash = await unstake(masterChefContract, 0, amount, account)
         console.info(txHash)
       } else if (isOldSyrup) {
-        const txHash = await sousEmegencyUnstake(sousChefContract, amount, account)
+        const txHash = await sousEmergencyUnstake(sousChefContract, amount, account)
         console.info(txHash)
       } else {
-        const txHash = await sousUnstake(sousChefContract, amount, account)
+        const txHash = await sousUnstake(sousChefContract, amount, decimals, account)
         console.info(txHash)
       }
       dispatch(updateUserStakedBalance(sousId, account))

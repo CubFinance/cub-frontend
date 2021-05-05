@@ -14,7 +14,7 @@ const WarningModal: React.FC<{ onDismiss?: () => void }> = ({ onDismiss }) => {
         <br />
         {TranslateString(470, 'Your CAKE will not be returned to you after you spend it to buy tickets.')}
         <br />
-        {TranslateString(472, 'Tickets are only valid for one lottery draw, and will be burnedafter the draw.')}
+        {TranslateString(472, 'Tickets are only valid for one lottery draw, and will be burned after the draw.')}
         <br />
         {TranslateString(
           474,
@@ -22,7 +22,7 @@ const WarningModal: React.FC<{ onDismiss?: () => void }> = ({ onDismiss }) => {
         )}
       </TicketsList>
       <ModalActions>
-        <Button fullWidth onClick={onDismiss}>
+        <Button width="100%" onClick={onDismiss}>
           {TranslateString(476, 'I understand')}
         </Button>
       </ModalActions>

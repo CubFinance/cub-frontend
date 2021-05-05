@@ -1,79 +1,125 @@
-import { useEffect, useState } from 'react'
-import { AbiItem } from 'web3-utils'
-import { ContractOptions } from 'web3-eth-contract'
+import { useMemo } from 'react'
 import useWeb3 from 'hooks/useWeb3'
-import { getMasterChefAddress, getCakeAddress, getLotteryAddress, getLotteryTicketAddress } from 'utils/addressHelpers'
-import { poolsConfig } from 'config/constants'
-import { PoolCategory } from 'config/constants/types'
-import ifo from 'config/abi/ifo.json'
-import erc20 from 'config/abi/erc20.json'
-import rabbitmintingfarm from 'config/abi/rabbitmintingfarm.json'
-import pancakeRabbits from 'config/abi/pancakeRabbits.json'
-import lottery from 'config/abi/lottery.json'
-import lotteryTicket from 'config/abi/lotteryNft.json'
-import masterChef from 'config/abi/masterchef.json'
-import sousChef from 'config/abi/sousChef.json'
-import sousChefBnb from 'config/abi/sousChefBnb.json'
-
-const useContract = (abi: AbiItem, address: string, contractOptions?: ContractOptions) => {
-  const web3 = useWeb3()
-  const [contract, setContract] = useState(new web3.eth.Contract(abi, address, contractOptions))
-
-  useEffect(() => {
-    setContract(new web3.eth.Contract(abi, address, contractOptions))
-  }, [abi, address, contractOptions, web3])
-
-  return contract
-}
+import {
+  getBep20Contract,
+  getCakeContract,
+  getBunnyFactoryContract,
+  getBunnySpecialContract,
+  getPancakeRabbitContract,
+  getProfileContract,
+  getIfoV1Contract,
+  getIfoV2Contract,
+  getLotteryContract,
+  getLotteryTicketContract,
+  getMasterchefContract,
+  getPointCenterIfoContract,
+  getSouschefContract,
+  getClaimRefundContract,
+  getTradingCompetitionContract,
+  getEasterNftContract,
+  getErc721Contract,
+  getCakeVaultContract,
+  getPredictionsContract,
+} from 'utils/contractHelpers'
 
 /**
  * Helper hooks to get specific contracts (by ABI)
  */
 
-export const useIfoContract = (address: string) => {
-  const ifoAbi = (ifo as unknown) as AbiItem
-  return useContract(ifoAbi, address)
+export const useIfoV1Contract = (address: string) => {
+  const web3 = useWeb3()
+  return useMemo(() => getIfoV1Contract(address, web3), [address, web3])
+}
+
+export const useIfoV2Contract = (address: string) => {
+  const web3 = useWeb3()
+  return useMemo(() => getIfoV2Contract(address, web3), [address, web3])
 }
 
 export const useERC20 = (address: string) => {
-  const erc20Abi = (erc20 as unknown) as AbiItem
-  return useContract(erc20Abi, address)
+  const web3 = useWeb3()
+  return useMemo(() => getBep20Contract(address, web3), [address, web3])
+}
+
+/**
+ * @see https://docs.openzeppelin.com/contracts/3.x/api/token/erc721
+ */
+export const useERC721 = (address: string) => {
+  const web3 = useWeb3()
+  return useMemo(() => getErc721Contract(address, web3), [address, web3])
 }
 
 export const useCake = () => {
-  return useERC20(getCakeAddress())
+  const web3 = useWeb3()
+  return useMemo(() => getCakeContract(web3), [web3])
 }
 
-export const useRabbitMintingFarm = (address: string) => {
-  const rabbitMintingFarmAbi = (rabbitmintingfarm as unknown) as AbiItem
-  return useContract(rabbitMintingFarmAbi, address)
+export const useBunnyFactory = () => {
+  const web3 = useWeb3()
+  return useMemo(() => getBunnyFactoryContract(web3), [web3])
 }
 
-export const usePancakeRabbits = (address: string) => {
-  const pancakeRabbitsAbi = (pancakeRabbits as unknown) as AbiItem
-  return useContract(pancakeRabbitsAbi, address)
+export const usePancakeRabbits = () => {
+  const web3 = useWeb3()
+  return useMemo(() => getPancakeRabbitContract(web3), [web3])
+}
+
+export const useProfile = () => {
+  const web3 = useWeb3()
+  return useMemo(() => getProfileContract(web3), [web3])
 }
 
 export const useLottery = () => {
-  const abi = (lottery as unknown) as AbiItem
-  return useContract(abi, getLotteryAddress())
+  const web3 = useWeb3()
+  return useMemo(() => getLotteryContract(web3), [web3])
 }
 
 export const useLotteryTicket = () => {
-  const abi = (lotteryTicket as unknown) as AbiItem
-  return useContract(abi, getLotteryTicketAddress())
+  const web3 = useWeb3()
+  return useMemo(() => getLotteryTicketContract(web3), [web3])
 }
 
 export const useMasterchef = () => {
-  const abi = (masterChef as unknown) as AbiItem
-  return useContract(abi, getMasterChefAddress())
+  const web3 = useWeb3()
+  return useMemo(() => getMasterchefContract(web3), [web3])
 }
 
 export const useSousChef = (id) => {
-  const config = poolsConfig.find((pool) => pool.sousId === id)
-  const rawAbi = config.poolCategory === PoolCategory.BINANCE ? sousChefBnb : sousChef
-  const abi = (rawAbi as unknown) as AbiItem
-  return useContract(abi, config.contractAddress[process.env.REACT_APP_CHAIN_ID])
+  const web3 = useWeb3()
+  return useMemo(() => getSouschefContract(id, web3), [id, web3])
 }
 
-export default useContract
+export const usePointCenterIfoContract = () => {
+  const web3 = useWeb3()
+  return useMemo(() => getPointCenterIfoContract(web3), [web3])
+}
+
+export const useBunnySpecialContract = () => {
+  const web3 = useWeb3()
+  return useMemo(() => getBunnySpecialContract(web3), [web3])
+}
+
+export const useClaimRefundContract = () => {
+  const web3 = useWeb3()
+  return useMemo(() => getClaimRefundContract(web3), [web3])
+}
+
+export const useTradingCompetitionContract = () => {
+  const web3 = useWeb3()
+  return useMemo(() => getTradingCompetitionContract(web3), [web3])
+}
+
+export const useEasterNftContract = () => {
+  const web3 = useWeb3()
+  return useMemo(() => getEasterNftContract(web3), [web3])
+}
+
+export const useCakeVaultContract = () => {
+  const web3 = useWeb3()
+  return useMemo(() => getCakeVaultContract(web3), [web3])
+}
+
+export const usePredictionsContract = () => {
+  const web3 = useWeb3()
+  return useMemo(() => getPredictionsContract(web3), [web3])
+}

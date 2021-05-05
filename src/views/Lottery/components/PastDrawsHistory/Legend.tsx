@@ -5,7 +5,7 @@ import useI18n from 'hooks/useI18n'
 
 const Wrapper = styled.div`
   display: flex;
-  margin: 36px 0 28px;
+  margin: 24px 0 24px;
 `
 
 const LegendItem = styled.div`
@@ -29,11 +29,11 @@ const Legend = () => {
     <Wrapper>
       <LegendItem>
         <Circle isPoolSize />
-        <Text>{TranslateString(999, 'Pool Size')}</Text>
+        <Text>{TranslateString(748, 'Pool Size')}</Text>
       </LegendItem>
       <LegendItem>
         <Circle />
-        <Text>{TranslateString(999, 'Burned')}</Text>
+        <Text>{TranslateString(750, 'Burned')}</Text>
       </LegendItem>
     </Wrapper>
   )

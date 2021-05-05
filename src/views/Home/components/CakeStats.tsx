@@ -1,13 +1,14 @@
 import React from 'react'
 import { Card, CardBody, Heading, Text } from '@pancakeswap-libs/uikit'
-import BigNumber from 'bignumber.js/bignumber'
 import styled from 'styled-components'
 import { getBalanceNumber } from 'utils/formatBalance'
 import { useTotalSupply, useBurnedBalance } from 'hooks/useTokenBalance'
 import useI18n from 'hooks/useI18n'
 import { getCakeAddress } from 'utils/addressHelpers'
+import { CAKE_PER_BLOCK } from 'config'
+import BigNumber from 'bignumber.js/bignumber'
 import CardValue from './CardValue'
-import { useFarms, usePriceCakeBusd } from '../../../state/hooks'
+import { usePriceCakeBusd } from '../../../state/hooks'
 
 const StyledCakeStats = styled(Card)`
   margin-left: auto;
@@ -26,17 +27,10 @@ const CakeStats = () => {
   const TranslateString = useI18n()
   const totalSupply = useTotalSupply()
   const burnedBalance = useBurnedBalance(getCakeAddress())
-  const farms = useFarms();
   const cubPrice = usePriceCakeBusd();
   const circSupply = totalSupply ? totalSupply.minus(burnedBalance) : new BigNumber(0);
   const cakeSupply = getBalanceNumber(circSupply);
   const marketCap = cubPrice.times(circSupply);
-
-  let cubPerBlock = 0;
-
-  if(farms && farms[0]){
-    cubPerBlock = new BigNumber(farms[0].cubPerBlock).div(new BigNumber(10).pow(18)).toNumber();
-  }
 
   return (
     <StyledCakeStats>
@@ -58,7 +52,7 @@ const CakeStats = () => {
         </Row>
         <Row>
           <Text fontSize="14px">{TranslateString(540, 'New CUB/block')}</Text>
-          <Text bold fontSize="14px">{cubPerBlock}</Text>
+          <CardValue fontSize="14px" decimals={0} value={CAKE_PER_BLOCK.toNumber()} />
         </Row>
       </CardBody>
     </StyledCakeStats>

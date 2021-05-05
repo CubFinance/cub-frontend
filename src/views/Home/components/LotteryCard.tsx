@@ -1,6 +1,7 @@
 import React, { useState, useCallback } from 'react'
 import styled from 'styled-components'
 import { Heading, Card, CardBody, Button, useModal } from '@pancakeswap-libs/uikit'
+import { useWeb3React } from '@web3-react/core'
 import { getCakeAddress } from 'utils/addressHelpers'
 import { getBalanceNumber } from 'utils/formatBalance'
 import useI18n from 'hooks/useI18n'
@@ -8,7 +9,11 @@ import useGetLotteryHasDrawn from 'hooks/useGetLotteryHasDrawn'
 import useTokenBalance from 'hooks/useTokenBalance'
 import { useMultiClaimLottery } from 'hooks/useBuyLottery'
 import { useTotalClaim } from 'hooks/useTickets'
-import BuyModal from 'views/Lottery/components/TicketCard/BuyTicketModal'
+import { useLotteryAllowance } from 'hooks/useAllowance'
+import { useApproval } from 'hooks/useApproval'
+import PurchaseWarningModal from 'views/Lottery/components/TicketCard/PurchaseWarningModal'
+import BuyTicketModal from 'views/Lottery/components/TicketCard/BuyTicketModal'
+import UnlockButton from 'components/UnlockButton'
 import CakeWinnings from './CakeWinnings'
 import LotteryJackpot from './LotteryJackpot'
 
@@ -40,13 +45,17 @@ const Actions = styled.div`
   }
 `
 
-const FarmedStakingCard = () => {
+const LotteryCard = () => {
+  const { account } = useWeb3React()
   const lotteryHasDrawn = useGetLotteryHasDrawn()
-  const [requesteClaim, setRequestedClaim] = useState(false)
+  const [requestClaim, setRequestedClaim] = useState(false)
   const TranslateString = useI18n()
-  const { claimAmount } = useTotalClaim()
+  const allowance = useLotteryAllowance()
+  const [onPresentApprove] = useModal(<PurchaseWarningModal />)
+  const { claimAmount, setLastUpdated } = useTotalClaim()
   const { onMultiClaim } = useMultiClaimLottery()
   const cakeBalance = useTokenBalance(getCakeAddress())
+  const { handleApprove, requestedApproval } = useApproval(onPresentApprove)
 
   const handleClaim = useCallback(async () => {
     try {
@@ -55,13 +64,32 @@ const FarmedStakingCard = () => {
       // user rejected tx or didn't go thru
       if (txHash) {
         setRequestedClaim(false)
+        setLastUpdated()
       }
     } catch (e) {
       console.error(e)
     }
-  }, [onMultiClaim, setRequestedClaim])
+  }, [onMultiClaim, setRequestedClaim, setLastUpdated])
 
-  const [onPresentBuy] = useModal(<BuyModal max={cakeBalance} tokenName="CAKE" />)
+  const renderLotteryTicketButtonBuyOrApprove = () => {
+    if (!allowance.toNumber()) {
+      return (
+        <Button width="100%" disabled={requestedApproval} onClick={handleApprove}>
+          {TranslateString(494, 'Approve CAKE')}
+        </Button>
+      )
+    }
+    /* if (lotteryHasDrawn) {
+      return <Button disabled> {TranslateString(874, 'On sale soon')}</Button>
+    } */
+    return (
+      <Button id="dashboard-buy-tickets" variant="secondary" onClick={onPresentBuy}>
+        {TranslateString(558, 'Buy Tickets')}
+      </Button>
+    )
+  }
+
+  const [onPresentBuy] = useModal(<BuyTicketModal max={cakeBalance} />)
 
   return (
     <StyledLotteryCard>
@@ -71,29 +99,33 @@ const FarmedStakingCard = () => {
         </Heading>
         <CardImage src="/images/ticket.svg" alt="cake logo" width={64} height={64} />
         <Block>
-          <CakeWinnings />
-          <Label>{TranslateString(552, 'CAKE to Collect')}</Label>
+          <Label>{TranslateString(552, 'CAKE to Collect')}:</Label>
+          <CakeWinnings claimAmount={claimAmount} />
         </Block>
         <Block>
+          <Label>{TranslateString(554, 'Total jackpot this round')}:</Label>
           <LotteryJackpot />
-          <Label>{TranslateString(554, 'Total jackpot this round')}</Label>
         </Block>
-        <Actions>
-          <Button
-            id="dashboard-collect-winnings"
-            disabled={getBalanceNumber(claimAmount) === 0 || requesteClaim}
-            onClick={handleClaim}
-            style={{ marginRight: '8px' }}
-          >
-            {TranslateString(556, 'Collect Winnings')}
-          </Button>
-          <Button id="dashboard-buy-tickets" variant="secondary" onClick={onPresentBuy} disabled={lotteryHasDrawn}>
-            {TranslateString(558, 'Buy Tickets')}
-          </Button>
-        </Actions>
+        {account ? (
+          <Actions>
+            <Button
+              id="dashboard-collect-winnings"
+              disabled={getBalanceNumber(claimAmount) === 0 || requestClaim}
+              onClick={handleClaim}
+              style={{ marginRight: '8px' }}
+            >
+              {TranslateString(556, 'Collect Winnings')}
+            </Button>
+            {renderLotteryTicketButtonBuyOrApprove()}
+          </Actions>
+        ) : (
+          <Actions>
+            <UnlockButton width="100%" />
+          </Actions>
+        )}
       </CardBody>
     </StyledLotteryCard>
   )
 }
 
-export default FarmedStakingCard
+export default LotteryCard

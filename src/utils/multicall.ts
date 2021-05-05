@@ -1,17 +1,17 @@
 import { AbiItem } from 'web3-utils'
 import { Interface } from '@ethersproject/abi'
-import { getWeb3 } from 'utils/web3'
+import { getWeb3NoAccount } from 'utils/web3'
 import MultiCallAbi from 'config/abi/Multicall.json'
 import { getMulticallAddress } from 'utils/addressHelpers'
 
 interface Call {
   address: string // Address of the contract
-  name: string // Function name on the contract (exemple: balanceOf)
+  name: string // Function name on the contract (example: balanceOf)
   params?: any[] // Function params
 }
 
 const multicall = async (abi: any[], calls: Call[]) => {
-  const web3 = getWeb3()
+  const web3 = getWeb3NoAccount()
   const multi = new web3.eth.Contract((MultiCallAbi as unknown) as AbiItem, getMulticallAddress())
   const itf = new Interface(abi)
 

@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { Button, LinkExternal, useModal } from '@pancakeswap-libs/uikit'
 import useI18n from 'hooks/useI18n'
-import { useWallet } from '@binance-chain/bsc-use-wallet'
+import { useWeb3React } from '@web3-react/core'
 import useTickets from 'hooks/useTickets'
 import UnlockButton from 'components/UnlockButton'
 import MyTicketsModal from '../TicketCard/UserTicketsModal'
@@ -33,7 +33,7 @@ const TicketCard: React.FC<{ contractLink?: string; lotteryNumber?: number }> = 
   const tickets = useTickets(lotteryNumber)
   const ticketsLength = tickets.length
   const [onPresentMyTickets] = useModal(<MyTicketsModal myTicketNumbers={tickets} from="buy" />)
-  const { account } = useWallet()
+  const { account } = useWeb3React()
 
   if (!account) {
     return (
@@ -45,14 +45,10 @@ const TicketCard: React.FC<{ contractLink?: string; lotteryNumber?: number }> = 
 
   return (
     <Wrapper>
-      <div>
-        <Button disabled={ticketsLength === 0} onClick={onPresentMyTickets} fullWidth>
-          {TranslateString(999, 'View your tickets')}
-        </Button>
-      </div>
-      <div>
-        <ExternalLinkWrap href={contractLink}>{TranslateString(999, 'View on BscScan')}</ExternalLinkWrap>
-      </div>
+      <Button disabled={ticketsLength === 0} onClick={onPresentMyTickets} width="100%">
+        {TranslateString(432, 'View your tickets')}
+      </Button>
+      <ExternalLinkWrap href={contractLink}>{TranslateString(356, 'View on BscScan')}</ExternalLinkWrap>
     </Wrapper>
   )
 }

@@ -1,38 +1,32 @@
 import React from 'react'
 import { ModalProvider } from '@pancakeswap-libs/uikit'
-// import bsc, { UseWalletProvider } from '@binance-chain/bsc-use-wallet'
-import * as bsc from '@binance-chain/bsc-use-wallet'
+import { Web3ReactProvider } from '@web3-react/core'
+import { HelmetProvider } from 'react-helmet-async'
 import { Provider } from 'react-redux'
-import getRpcUrl from 'utils/getRpcUrl'
+import { getLibrary } from 'utils/web3React'
 import { LanguageContextProvider } from 'contexts/Localisation/languageContext'
 import { ThemeContextProvider } from 'contexts/ThemeContext'
-import { BlockContextProvider } from 'contexts/BlockContext'
 import { RefreshContextProvider } from 'contexts/RefreshContext'
+import { ToastsProvider } from 'contexts/ToastsContext'
 import store from 'state'
 
 const Providers: React.FC = ({ children }) => {
-  const rpcUrl = getRpcUrl()
-  const chainId = parseInt(process.env.REACT_APP_CHAIN_ID);
   return (
-    <Provider store={store}>
-      <ThemeContextProvider>
-        <LanguageContextProvider>
-          <bsc.UseWalletProvider
-            chainId={chainId}
-            connectors={{
-              walletconnect: { rpcUrl },
-              bsc,
-            }}
-          >
-            <BlockContextProvider>
-              <RefreshContextProvider>
-                <ModalProvider>{children}</ModalProvider>
-              </RefreshContextProvider>
-            </BlockContextProvider>
-          </bsc.UseWalletProvider>
-        </LanguageContextProvider>
-      </ThemeContextProvider>
-    </Provider>
+    <Web3ReactProvider getLibrary={getLibrary}>
+      <Provider store={store}>
+        <ToastsProvider>
+          <HelmetProvider>
+            <ThemeContextProvider>
+              <LanguageContextProvider>
+                <RefreshContextProvider>
+                  <ModalProvider>{children}</ModalProvider>
+                </RefreshContextProvider>
+              </LanguageContextProvider>
+            </ThemeContextProvider>
+          </HelmetProvider>
+        </ToastsProvider>
+      </Provider>
+    </Web3ReactProvider>
   )
 }
 
