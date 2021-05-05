@@ -48,7 +48,7 @@ const HarvestAction: React.FunctionComponent<HarvestActionProps> = ({ pid, userD
   return (
     <ActionContainer>
       <ActionTitles>
-        <Title>CAKE </Title>
+        <Title>CUB </Title>
         <Subtle>{TranslateString(1072, 'EARNED')}</Subtle>
       </ActionTitles>
       <ActionContent>
