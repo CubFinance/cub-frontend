@@ -388,14 +388,18 @@ const Farms: React.FC<FarmsProps> = ({ tokenMode, kingdomMode }) => {
     setSortOption(option.value)
   }
 
+  let header = TranslateString(674, 'Farms')
   let heading = TranslateString(320, 'Stake LP tokens to earn CUB')
   let subHeading = TranslateString(10000, 'Deposit Fee will be used to buyback CUB and bLEO')
   let extra = null
   const data = useGetStats()
   const tvl = data ? data.total_value_locked_all.toLocaleString('en-US', { maximumFractionDigits: 0 }) : null
 
-  if (tokenMode) heading = TranslateString(10002, 'Stake tokens to earn CUB')
-  else if (kingdomMode) {
+  if (tokenMode) {
+    header = TranslateString(674, 'Dens')
+    heading = TranslateString(10002, 'Stake tokens to earn CUB')
+  } else if (kingdomMode) {
+    header = TranslateString(674, 'Kingdoms')
     heading = TranslateString(null, 'Kingdoms: Composable Auto-Compounding')
     subHeading = TranslateString(null, 'Stake tokens for cross-platform farming plus CUB rewards')
     extra = (
@@ -411,7 +415,7 @@ const Farms: React.FC<FarmsProps> = ({ tokenMode, kingdomMode }) => {
     <>
       <PageHeader>
         <Heading as="h1" size="xxl" color="secondary" mb="15px">
-          {TranslateString(674, 'Farms')}
+          {header}
         </Heading>
         <Heading as="h1" size="lg" color="primary" mb="20px" style={{ textAlign: 'left' }}>
           {heading}
