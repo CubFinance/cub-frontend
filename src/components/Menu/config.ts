@@ -43,10 +43,6 @@ const config: MenuEntry[] = [
     label: 'LeoBridge',
     icon: 'NftIcon',
     href: "https://bridge.cubdefi.com",
-    status: {
-      text: 'SOON',
-      color: 'warning',
-    },
   },
   {
     label: 'Info',
