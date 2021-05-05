@@ -22,12 +22,11 @@ const StyledModalActions = styled.div`
   background-color: ${(props) => props.theme.colors.primaryDark}00;
   display: flex;
   margin: 0;
-  padding: ${(props) => props.theme.spacing[4]}px;
+  padding: ${(props) => props.theme.spacing[4]}px 0;
 `
 
 const StyledModalAction = styled.div`
   flex: 1;
-  text-align: center;
 `
 
 export default ModalActions

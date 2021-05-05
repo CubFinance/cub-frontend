@@ -4,7 +4,7 @@ const config: MenuEntry[] = [
   {
     label: 'Home',
     icon: 'HomeIcon',
-    href: 'http://cubdefi.com/',
+    href: 'https://cubdefi.com/',
   },
   {
     label: 'Trade',
@@ -23,17 +23,21 @@ const config: MenuEntry[] = [
   {
     label: 'Farms',
     icon: 'FarmIcon',
-    href: 'https://cubdefi.com/farms',
+    href: '/farms',
   },
   {
     label: 'Dens',
     icon: 'PoolIcon',
-    href: 'https://cubdefi.com/dens',
+    href: '/dens',
   },
   {
     label: 'Kingdoms',
     icon: 'PawIcon',
-    href: 'https://cubdefi.com/kingdoms',
+    href: '/kingdoms',
+    status: {
+      text: 'SOON',
+      color: 'warning',
+    },
   },
   {
     label: 'LeoBridge',
@@ -56,6 +60,14 @@ const config: MenuEntry[] = [
         label: 'CoinMarketCap',
         href: 'https://coinmarketcap.com/currencies/cub-finance/',
       },
+      {
+        label: 'CoinGecko',
+        href: 'https://www.coingecko.com/en/coins/cub-finance',
+      },
+      {
+        label: 'AstroTools',
+        href: 'https://app.astrotools.io/pancake-pair-explorer/0x50d809c74e0b8e49e7b4c65bb3109abe3ff4c1c1',
+      },
     ],
   },
   {
@@ -70,7 +82,7 @@ const config: MenuEntry[] = [
   },
   {
     label: "Tokenized Blogging",
-    icon: "SunIcon",
+    icon: "TokenizeIcon",
     href: "https://leofinance.io/",
   },
   {

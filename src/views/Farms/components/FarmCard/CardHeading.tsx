@@ -1,20 +1,20 @@
 import React from 'react'
 import styled from 'styled-components'
 import { Tag, Flex, Heading, Image } from '@pancakeswap-libs/uikit'
-import { CommunityTag, CoreTag, NoFeeTag, RiskTag } from 'components/Tags'
+import { NoFeeTag } from 'components/Tags'
 
 export interface ExpandableSectionProps {
   lpLabel?: string
   multiplier?: string
-  risk?: number
-  depositFee?: number
+  isCommunityFarm?: boolean
   farmImage?: string
   tokenSymbol?: string
+  depositFee?: number
 }
 
 const Wrapper = styled(Flex)`
   svg {
-    margin-right: 0.25rem;
+    margin-right: 4px;
   }
 `
 
@@ -25,20 +25,19 @@ const MultiplierTag = styled(Tag)`
 const CardHeading: React.FC<ExpandableSectionProps> = ({
   lpLabel,
   multiplier,
-  risk,
+  // isCommunityFarm,
   farmImage,
   tokenSymbol,
-  depositFee,
+  depositFee
 }) => {
   return (
     <Wrapper justifyContent="space-between" alignItems="center" mb="12px">
       <Image src={`/images/farms/${farmImage}.png`} alt={tokenSymbol} width={64} height={64} />
       <Flex flexDirection="column" alignItems="flex-end">
-        <Heading mb="4px">{lpLabel}</Heading>
+        <Heading mb="4px">{lpLabel.split(' ')[0]}</Heading>
         <Flex justifyContent="center">
+          {/* isCommunityFarm ? <CommunityTag /> : <CoreTag /> */}
           {depositFee === 0 ? <NoFeeTag /> : null}
-          {/* {isCommunityFarm ? <CommunityTag /> : <CoreTag />} */}
-          {/* <RiskTag risk={risk} /> */}
           <MultiplierTag variant="secondary">{multiplier}</MultiplierTag>
         </Flex>
       </Flex>

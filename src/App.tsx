@@ -1,23 +1,33 @@
-import React, { useEffect, Suspense, lazy } from 'react'
-import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom'
-import { useWallet } from '@binance-chain/bsc-use-wallet'
+import React, { useEffect, lazy } from 'react'
+// import { Router, Redirect, Route, Switch } from 'react-router-dom'
+import { Router, Route, Switch } from 'react-router-dom'
 import { ResetCSS } from '@pancakeswap-libs/uikit'
 import BigNumber from 'bignumber.js'
-import { useFetchPublicData } from 'state/hooks'
+import useEagerConnect from 'hooks/useEagerConnect'
+import { useFetchPriceList, useFetchProfile, useFetchPublicData } from 'state/hooks'
 import GlobalStyle from './style/Global'
 import Menu from './components/Menu'
+import SuspenseWithChunkError from './components/SuspenseWithChunkError'
+// import ToastListener from './components/ToastListener'
 import PageLoader from './components/PageLoader'
-import NftGlobalNotification from './views/Nft/components/NftGlobalNotification'
+// import EasterEgg from './components/EasterEgg'
+// import Pools from './views/Pools'
+import history from './routerHistory'
 
 // Route-based code splitting
-// Only pool is included in the main bundle because of it's the most visited page'
+// Only pool is included in the main bundle because of it's the most visited page
 const Home = lazy(() => import('./views/Home'))
 const Farms = lazy(() => import('./views/Farms'))
-// const Lottery = lazy(() => import('./views/Lottery'))
-// const Pools = lazy(() => import('./views/Pools'))
-// const Ifos = lazy(() => import('./views/Ifos'))
 const NotFound = lazy(() => import('./views/NotFound'))
-// const Nft = lazy(() => import('./views/Nft'))
+/* const Lottery = lazy(() => import('./views/Lottery'))
+const Ifos = lazy(() => import('./views/Ifos'))
+const NotFound = lazy(() => import('./views/NotFound'))
+const Collectibles = lazy(() => import('./views/Collectibles'))
+const Teams = lazy(() => import('./views/Teams'))
+const Team = lazy(() => import('./views/Teams/Team'))
+const Profile = lazy(() => import('./views/Profile'))
+const TradingCompetition = lazy(() => import('./views/TradingCompetition'))
+const Predictions = lazy(() => import('./views/Predictions')) */
 
 // This config is required for number formating
 BigNumber.config({
@@ -25,28 +35,24 @@ BigNumber.config({
   DECIMAL_PLACES: 80,
 })
 
-const Soon = () => (
-  <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-    <div style={{ fontSize: '2rem', marginTop: '2rem' }}>Coming soon</div>
-  </div>
-)
-
 const App: React.FC = () => {
-  const { account, connect } = useWallet()
+  // Monkey patch warn() because of web3 flood
+  // To be removed when web3 1.3.5 is released
   useEffect(() => {
-    if (!account && window.localStorage.getItem('accountStatus')) {
-      connect('injected')
-    }
-  }, [account, connect])
+    console.warn = () => null
+  }, [])
 
+  useEagerConnect()
   useFetchPublicData()
+  useFetchProfile()
+  useFetchPriceList()
 
   return (
-    <Router>
+    <Router history={history}>
       <ResetCSS />
       <GlobalStyle />
       <Menu>
-        <Suspense fallback={<PageLoader />}>
+        <SuspenseWithChunkError fallback={<PageLoader />}>
           <Switch>
             <Route path="/" exact>
               <Home />
@@ -55,36 +61,52 @@ const App: React.FC = () => {
               <Farms />
             </Route>
             <Route path="/dens">
-              <Farms tokenMode/>
+              <Farms tokenMode />
             </Route>
             <Route path="/kingdoms">
-              <Soon />
+              <Farms kingdomMode />
             </Route>
-            {/* <Route path="/pools"> */}
-            {/*  <Pools /> */}
-            {/* </Route> */}
-            {/* <Route path="/lottery"> */}
-            {/*  <Lottery /> */}
-            {/* </Route> */}
-            {/* <Route path="/ifo"> */}
-            {/*  <Ifos /> */}
-            {/* </Route> */}
-            {/* <Route path="/nft"> */}
-            {/*  <Nft /> */}
-            {/* </Route> */}
+            {/* <Route path="/lottery">
+              <Lottery />
+            </Route>
+            <Route path="/ifo">
+              <Ifos />
+            </Route>
+            <Route path="/collectibles">
+              <Collectibles />
+            </Route>
+            <Route exact path="/teams">
+              <Teams />
+            </Route>
+            <Route path="/teams/:id">
+              <Team />
+            </Route>
+            <Route path="/profile">
+              <Profile />
+            </Route>
+            <Route path="/competition">
+              <TradingCompetition />
+            </Route>
+            <Route path="/prediction">
+              <Predictions />
+            </Route> */}
             {/* Redirect */}
-            {/* <Route path="/staking"> */}
-            {/*  <Redirect to="/pools" /> */}
-            {/* </Route> */}
-            {/* <Route path="/syrup"> */}
-            {/*  <Redirect to="/pools" /> */}
-            {/* </Route> */}
+            {/* <Route path="/staking">
+              <Redirect to="/pools" />
+            </Route>
+            <Route path="/syrup">
+              <Redirect to="/pools" />
+            </Route>
+            <Route path="/nft">
+              <Redirect to="/collectibles" />
+            </Route> */}
             {/* 404 */}
             <Route component={NotFound} />
           </Switch>
-        </Suspense>
+        </SuspenseWithChunkError>
       </Menu>
-      <NftGlobalNotification />
+      {/* <EasterEgg iterations={2} />
+      <ToastListener /> */}
     </Router>
   )
 }
