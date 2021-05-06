@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useMemo } from 'react'
 import styled from 'styled-components'
 import { provider as ProviderType } from 'web3-core'
 import BigNumber from 'bignumber.js'
@@ -33,7 +33,7 @@ interface FarmCardActionsProps {
 const CardActions: React.FC<FarmCardActionsProps> = ({ farm, account, addLiquidityUrl }) => {
   const TranslateString = useI18n()
   const [requestedApproval, setRequestedApproval] = useState(false)
-  const { pid, lpAddresses } = farm
+  const { pid, lpAddresses, isTokenOnly, token: { address } } = farm
   const {
     allowance: allowanceAsString = 0,
     tokenBalance: tokenBalanceAsString = 0,
@@ -45,12 +45,19 @@ const CardActions: React.FC<FarmCardActionsProps> = ({ farm, account, addLiquidi
   const stakedBalance = new BigNumber(stakedBalanceAsString)
   const earnings = new BigNumber(earningsAsString)
   const lpAddress = getAddress(lpAddresses)
+  const tokenAddress = getAddress(address)
   const lpName = farm.lpSymbol.toUpperCase()
   const isApproved = account && allowance && allowance.isGreaterThan(0)
   const web3 = useWeb3()
   const location = useLocation()
 
-  const lpContract = getBep20Contract(lpAddress, web3)
+  // const lpContract = getBep20Contract(lpAddress, web3)
+  const lpContract = useMemo(() => {
+    if(isTokenOnly){
+      return getBep20Contract(tokenAddress, web3)
+    }
+    return getBep20Contract(lpAddress, web3)
+  }, [lpAddress, isTokenOnly, web3, tokenAddress])
 
   const { onApprove } = useApprove(lpContract)
 
