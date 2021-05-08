@@ -31,7 +31,7 @@ const EarnAPRCard = () => {
   const highestApr = useMemo(() => {
     const aprs = farmsLP
       // Filter inactive farms, because their theoretical APR is super high. In practice, it's 0.
-      .filter((farm) => farm.pid !== 0 && farm.multiplier !== '0X')
+      .filter((farm) => farm.multiplier !== '0X')
       .map((farm) => {
         if (farm.lpTotalInQuoteToken && prices) {
           const quoteTokenPriceUsd = prices[getAddress(farm.quoteToken.address).toLowerCase()]
@@ -51,7 +51,7 @@ const EarnAPRCard = () => {
         <Heading color="contrast" size="lg">
           Earn up to
         </Heading>
-        <CardMidContent color="#7645d9">
+        <CardMidContent color="#1993fb">
           {highestApr ? (
             `${highestApr}% ${TranslateString(736, 'APR')}`
           ) : (

@@ -7,10 +7,10 @@ import FarmStakingCard from 'views/Home/components/FarmStakingCard'
 // import LotteryCard from 'views/Home/components/LotteryCard'
 import CakeStats from 'views/Home/components/CakeStats'
 import TotalValueLockedCard from 'views/Home/components/TotalValueLockedCard'
-import TwitterCard from './components/TwitterCard'
-// import EarnAPRCard from 'views/Home/components/EarnAPRCard'
-// import EarnAssetCard from 'views/Home/components/EarnAssetCard'
-// import WinCard from 'views/Home/components/WinCard'
+import TwitterCard from 'views/Home/components/TwitterCard'
+import EarnAPRCard from 'views/Home/components/EarnAPRCard'
+import BridgeCard from 'views/Home/components/BridgeCard'
+import KingdomCard from 'views/Home/components/KingdomCard'
 
 const Hero = styled.div`
   align-items: center;
@@ -56,7 +56,7 @@ const Cards = styled(BaseLayout)`
   }
 `
 
-/* const CTACards = styled(BaseLayout)`
+const CTACards = styled(BaseLayout)`
   align-items: start;
   margin-bottom: 32px;
 
@@ -75,7 +75,7 @@ const Cards = styled(BaseLayout)`
       grid-column: span 4;
     }
   }
-` */
+`
 
 const Home: React.FC = () => {
   const TranslateString = useI18n()
@@ -94,11 +94,12 @@ const Home: React.FC = () => {
           <TwitterCard/>
           {/* <LotteryCard /> */}
         </Cards>
-        {/* <CTACards>
+        <CTACards>
           <EarnAPRCard />
-          <EarnAssetCard />
-          <WinCard />
-        </CTACards> */}
+          <BridgeCard />
+          <KingdomCard />
+          {/* <WinCard /> */}
+        </CTACards>
         <Cards>
           <CakeStats />
           <TotalValueLockedCard />
