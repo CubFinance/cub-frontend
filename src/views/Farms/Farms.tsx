@@ -22,7 +22,7 @@ import isArchivedPid from 'utils/farmHelpers'
 import PageHeader from 'components/PageHeader'
 import { fetchFarmsPublicDataAsync, setLoadArchivedFarmsData } from 'state/farms'
 import Select, { OptionProps } from 'components/Select/Select'
-import { useGetStats } from 'hooks/api'
+// import { useGetStats } from 'hooks/api'
 import FarmCard, { FarmWithStakedValue } from './components/FarmCard/FarmCard'
 import Table from './components/FarmTable/FarmTable'
 import FarmTabButtons from './components/FarmTabButtons'
@@ -30,7 +30,7 @@ import SearchInput from './components/SearchInput'
 import { RowProps } from './components/FarmTable/Row'
 import ToggleView from './components/ToggleView/ToggleView'
 import { DesktopColumnSchema, ViewMode } from './components/types'
-import CardValue from '../Home/components/CardValue'
+// import CardValue from '../Home/components/CardValue'
 
 const ControlContainer = styled.div`
   display: flex;
@@ -391,9 +391,9 @@ const Farms: React.FC<FarmsProps> = ({ tokenMode, kingdomMode }) => {
   let header = TranslateString(674, 'Farms')
   let heading = TranslateString(320, 'Stake LP tokens to earn CUB')
   let subHeading = TranslateString(10000, 'Deposit Fee will be used to buyback CUB and bLEO')
-  let extra = null
-  const data = useGetStats()
-  const tvl = data ? data.total_value_locked_all.toLocaleString('en-US', { maximumFractionDigits: 0 }) : null
+  // let extra = null
+  // const data = useGetStats()
+  // const tvl = data ? data.total_value_locked_all.toLocaleString('en-US', { maximumFractionDigits: 0 }) : null
 
   if (tokenMode) {
     header = TranslateString(674, 'Dens')
@@ -402,11 +402,11 @@ const Farms: React.FC<FarmsProps> = ({ tokenMode, kingdomMode }) => {
     header = TranslateString(674, 'Kingdoms')
     heading = TranslateString(null, 'Kingdoms: Composable Auto-Compounding')
     subHeading = TranslateString(null, 'Stake tokens for cross-platform farming plus CUB rewards')
-    extra = (
-      <Heading as="h3" color="secondary" mb="30px" style={{ textAlign: 'center', fontSize: '1rem' }}>
+    /* extra = (
+      <Heading as="h3" color="secondary" mb="30px" style={{ textAlign: 'left', fontSize: '1rem' }}>
         TVL <CardValue value={Number(tvl)} prefix="$" decimals={2}/>
       </Heading>
-    )
+    ) */
   }
 
   const tlvSpacing = kingdomMode ? '10px' : '20px'
@@ -423,7 +423,7 @@ const Farms: React.FC<FarmsProps> = ({ tokenMode, kingdomMode }) => {
         <Heading as="h2" color="secondary" mb={tlvSpacing} style={{ textAlign: 'left' }}>
           {subHeading}
         </Heading>
-        {extra}
+        {/* extra */}
         <Wrapper>
           <Button size="sm">
             <a href="https://docs.cubdefi.com">Learn More</a>
