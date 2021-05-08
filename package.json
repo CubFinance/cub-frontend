@@ -30,7 +30,7 @@
     "@binance-chain/bsc-connector": "^1.0.0",
     "@crowdin/crowdin-api-client": "^1.10.4",
     "@ethersproject/abi": "^5.0.7",
-    "@pancakeswap-libs/uikit": "CubFinance/cub-uikit#829925b7662d4982d236cfd8b2458ec3dd654f25",
+    "@pancakeswap-libs/uikit": "CubFinance/cub-uikit#b53897945138e573b33466ecd0b1cf8d8c3e6ad7",
     "@reduxjs/toolkit": "^1.5.0",
     "@types/react": "^17.0.2",
     "@types/react-dom": "^17.0.1",
