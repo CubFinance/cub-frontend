@@ -14,6 +14,9 @@ export const getCakeAddress = () => {
 export const getMasterChefAddress = () => {
   return getAddress(addresses.masterChef)
 }
+export const getKingdomsAddress = () => {
+  return getAddress(addresses.kingdoms)
+}
 export const getMulticallAddress = () => {
   return getAddress(addresses.multiCall)
 }

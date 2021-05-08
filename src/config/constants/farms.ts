@@ -262,7 +262,7 @@ const farms: FarmConfig[] = [
     token: tokens.cake,
     quoteToken: tokens.busd,
   },
-  
+
   // KINGDOMS
   /* {
     pid: 17,
@@ -312,17 +312,17 @@ const farms: FarmConfig[] = [
     quoteTokenSymbol: QuoteToken.BUSD,
     quoteTokenAdresses: contracts.busd,
   }, */
-  // {
-  //   pid: 0,
-  //   isKingdom: true,
-  //   lpSymbol: 'CAKE',
-  //   lpAddresses: {
-  //     97: '',
-  //     56: '0x0ed8e0a2d99643e1e65cca22ed4424090b8b7458', // CAKE-BUSD LP
-  //   },
-  //   token: tokens.cake,
-  //   quoteToken: tokens.busd,
-  // },
+  {
+    pid: 0,
+    isKingdom: true,
+    lpSymbol: 'CAKE',
+    lpAddresses: {
+      97: '',
+      56: '0x0ed8e0a2d99643e1e65cca22ed4424090b8b7458', // CAKE-BUSD LP
+    },
+    token: tokens.cake,
+    quoteToken: tokens.busd,
+  },
   /* {
     pid: 15,
     isKingdom: true,
