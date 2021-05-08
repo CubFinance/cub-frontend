@@ -409,7 +409,8 @@ const Farms: React.FC<FarmsProps> = ({ tokenMode, kingdomMode }) => {
     ) */
   }
 
-  const tlvSpacing = kingdomMode ? '10px' : '20px'
+  // const tlvSpacing = kingdomMode ? '10px' : '20px'
+  const tlvSpacing = '20px'
 
   return (
     <>
