@@ -13,7 +13,7 @@ const farms: FarmConfig[] = [
     token: tokens.cub,
     quoteToken: tokens.busd,
   },
-  {
+  /* {
     pid: 11,
     lpSymbol: 'CUB-BNB LP',
     lpAddresses: {
@@ -144,7 +144,7 @@ const farms: FarmConfig[] = [
     },
     token: tokens.cub,
     quoteToken: tokens.busd,
-  },
+  }, */
 
   // {
   //   pid: 13,
@@ -163,7 +163,7 @@ const farms: FarmConfig[] = [
   //   quoteTokenAdresses: contracts.wbnb,
   // },
 
-  {
+  /* {
     pid: 14,
     isTokenOnly: true,
     lpSymbol: 'BUSD',
@@ -195,8 +195,8 @@ const farms: FarmConfig[] = [
     },
     token: tokens.usdt,
     quoteToken: tokens.busd,
-  },
-  {
+  }, */
+  /* {
     pid: 17,
     isTokenOnly: true,
     lpSymbol: 'BTCB',
@@ -206,8 +206,8 @@ const farms: FarmConfig[] = [
     },
     token: tokens.btcb,
     quoteToken: tokens.busd,
-  },
-  {
+  }, */
+  /* {
     pid: 18,
     isTokenOnly: true,
     lpSymbol: 'ETH',
@@ -261,7 +261,7 @@ const farms: FarmConfig[] = [
     },
     token: tokens.cake,
     quoteToken: tokens.busd,
-  },
+  }, */
 
   // KINGDOMS
   /* {
@@ -315,6 +315,7 @@ const farms: FarmConfig[] = [
   {
     pid: 0,
     isKingdom: true,
+    isKingdomToken: true,
     lpSymbol: 'CAKE',
     lpAddresses: {
       97: '',
@@ -338,23 +339,18 @@ const farms: FarmConfig[] = [
     },
     quoteTokenSymbol: QuoteToken.BNB,
     quoteTokenAdresses: contracts.wbnb,
-  },
+  }, */
   {
-    pid: 0,
+    pid: 1,
     isKingdom: true,
     lpSymbol: 'BNB-BUSD LP',
     lpAddresses: {
       97: '',
-      56: '0x1B96B92314C44b159149f7E0303511fB2Fc4774f',
+      56: '0x58f876857a02d6762e0101bb5c46a8c1ed44dc16',
     },
-    tokenSymbol: 'WBNB',
-    tokenAddresses: {
-      97: '',
-      56: '0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c',
-    },
-    quoteTokenSymbol: QuoteToken.BUSD,
-    quoteTokenAdresses: contracts.busd,
-  }, */
+    token: tokens.wbnb,
+    quoteToken: tokens.busd,
+  },
 ]
 
 export default farms

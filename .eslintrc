@@ -13,6 +13,7 @@
   },
   "extends": "@pancakeswap-libs/eslint-config-pancake",
   "rules": {
+    "no-debugger":"off",
     "no-console": ["warn", { "allow": ["info", "warn", "error"] }],
     "no-plusplus": 0,
     "prefer-destructuring": ["warn", { "object": true, "array": false }],
@@ -26,7 +27,8 @@
     "@typescript-eslint/no-explicit-any": 0,
     "radix": 0,
     "import/no-extraneous-dependencies": 0,
-    "jsx-a11y/media-has-caption": 0
+    "jsx-a11y/media-has-caption": 0,
+    "@typescript-eslint/no-var-requires": 0,
     // End temporary rules
   }
 }

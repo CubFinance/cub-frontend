@@ -64,6 +64,7 @@ export interface FarmConfig {
   }
   isKingdom?: boolean
   isTokenOnly?: boolean
+  isKingdomToken?: boolean
 }
 
 export interface PoolConfig {

@@ -7,6 +7,7 @@ import { getAddress, getMasterChefAddress, getKingdomsAddress } from 'utils/addr
 import { FarmConfig } from 'config/constants/types'
 import { DEFAULT_TOKEN_DECIMAL } from 'config'
 import kingdomsABI from 'config/abi/kingdoms.json'
+// import { getCAKEamount, getWBNBBUSDAmount } from 'utils/kingdomScripts'
 
 const fetchFarms = async (farmsToFetch: FarmConfig[]) => {
   const data = await Promise.all(
@@ -14,22 +15,7 @@ const fetchFarms = async (farmsToFetch: FarmConfig[]) => {
       const lpAddress = getAddress(farmConfig.lpAddresses)
       const tokenAddress = getAddress(farmConfig.token.address)
 
-      let tokenOrKingdom = {
-        address: farmConfig.isTokenOnly ? tokenAddress : lpAddress,
-        name: 'balanceOf',
-        params: [getMasterChefAddress()],
-      }
-
-      if (farmConfig.isKingdom) {
-        tokenOrKingdom = {
-          address: getAddress(farmConfig.token.address),
-          name: 'balanceOf',
-          params: [getKingdomsAddress()],
-        }
-      }
-
-
-      const calls = [
+      let calls = [
         // Balance of token in the LP contract
         {
           address: getAddress(farmConfig.token.address),
@@ -43,13 +29,11 @@ const fetchFarms = async (farmsToFetch: FarmConfig[]) => {
           params: [lpAddress],
         },
         // Balance of LP tokens in the master chef contract
-        tokenOrKingdom,
-        /* {
-          // address: lpAddress,
+        {
           address: farmConfig.isTokenOnly ? tokenAddress : lpAddress,
           name: 'balanceOf',
           params: [getMasterChefAddress()],
-        }, */
+        },
         // Total supply of LP tokens
         {
           address: lpAddress,
@@ -67,6 +51,33 @@ const fetchFarms = async (farmsToFetch: FarmConfig[]) => {
         },
       ]
 
+      if (farmConfig.isKingdom) {
+        calls = [
+          // Balance of token in the LP contract
+          {
+            address: getAddress(farmConfig.token.address),
+            name: 'balanceOf',
+            params: [lpAddress],
+          },
+          // Balance of quote token on LP contract
+          {
+            address: getAddress(farmConfig.quoteToken.address),
+            name: 'balanceOf',
+            params: [lpAddress],
+          },
+          // Token decimals
+          {
+            address: getAddress(farmConfig.token.address),
+            name: 'decimals',
+          },
+          // Quote token decimals
+          {
+            address: getAddress(farmConfig.quoteToken.address),
+            name: 'decimals',
+          },
+        ]
+      }
+
       const [
         tokenBalanceLP,
         quoteTokenBalanceLP,
@@ -74,9 +85,7 @@ const fetchFarms = async (farmsToFetch: FarmConfig[]) => {
         lpTotalSupply,
         tokenDecimals,
         quoteTokenDecimals,
-      ] = await multicall(erc20, calls).catch(error => {
-        throw new Error(error)
-      })
+      ] = await multicall(erc20, calls)
 
       let tokenAmount
       let lpTotalInQuoteToken
@@ -84,6 +93,7 @@ const fetchFarms = async (farmsToFetch: FarmConfig[]) => {
       let quoteTokenAmount
 
       // if (farmConfig.isTokenOnly || farmConfig.isKingdom) {
+      // if (farmConfig.isTokenOnly || farmConfig.isKingdomToken) {
       if (farmConfig.isTokenOnly) {
         tokenAmount = new BigNumber(lpTokenBalanceMC).div(new BigNumber(10).pow(tokenDecimals));
         if(farmConfig.token.symbol === 'BUSD' && farmConfig.quoteToken.symbol === 'BUSD') {
@@ -143,7 +153,7 @@ const fetchFarms = async (farmsToFetch: FarmConfig[]) => {
         },
         {
           address: getKingdomsAddress(),
-          name: 'CubPerBlock',
+          name: 'cubPerBlock',
         }]
       }
 
@@ -169,6 +179,10 @@ const fetchFarms = async (farmsToFetch: FarmConfig[]) => {
       }
     }),
   )
+  // const aCake = await getCAKEamount()
+  // const aBnb = await getWBNBBUSDAmount()
+  // console.log('aCake',aCake)
+  // console.log('aBnb',aBnb)
   return data
 }
 
