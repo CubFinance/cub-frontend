@@ -7,7 +7,7 @@ import { getAddress, getMasterChefAddress, getKingdomsAddress } from 'utils/addr
 import { FarmConfig } from 'config/constants/types'
 import { DEFAULT_TOKEN_DECIMAL } from 'config'
 import kingdomsABI from 'config/abi/kingdoms.json'
-// import { getCAKEamount, getWBNBBUSDAmount } from 'utils/kingdomScripts'
+import { getCAKEamount, getWBNBBUSDAmount } from 'utils/kingdomScripts'
 
 const fetchFarms = async (farmsToFetch: FarmConfig[]) => {
   const data = await Promise.all(
@@ -78,15 +78,46 @@ const fetchFarms = async (farmsToFetch: FarmConfig[]) => {
         ]
       }
 
+      const multiResult = await multicall(erc20, calls)
+
       const [
         tokenBalanceLP,
         quoteTokenBalanceLP,
+      ] = multiResult
+
+      let [
         lpTokenBalanceMC,
         lpTotalSupply,
         tokenDecimals,
         quoteTokenDecimals,
-      ] = await multicall(erc20, calls)
+      ] = multiResult
 
+      let kingdomAmount
+      if (farmConfig.isKingdom) {
+        tokenDecimals = lpTokenBalanceMC
+        quoteTokenDecimals = lpTotalSupply
+        lpTokenBalanceMC = 0
+        lpTotalSupply = 0
+
+        switch (farmConfig.lpSymbol) {
+          case 'CAKE':
+            kingdomAmount = await getCAKEamount()
+            break
+          case 'BNB-BUSD LP':
+            kingdomAmount = await getWBNBBUSDAmount()
+            break
+          default:
+            break
+        }
+      }
+      console.log('kingdomAmount',kingdomAmount)
+console.log('farmConfig.lpSymbol',farmConfig.lpSymbol)
+console.log('tokenBalanceLP',new BigNumber(tokenBalanceLP).div(DEFAULT_TOKEN_DECIMAL).toFixed(2))
+console.log('quoteTokenBalanceLP',new BigNumber(quoteTokenBalanceLP).div(DEFAULT_TOKEN_DECIMAL).toFixed(2))
+console.log('lpTokenBalanceMC',new BigNumber(lpTokenBalanceMC).div(DEFAULT_TOKEN_DECIMAL).toFixed(2))
+console.log('lpTotalSupply',new BigNumber(lpTotalSupply).div(DEFAULT_TOKEN_DECIMAL).toFixed(2))
+// console.log('tokenDecimals',new BigNumber(tokenDecimals).toFixed(2))
+// console.log('quoteTokenDecimals',new BigNumber(quoteTokenDecimals).toFixed(2))
       let tokenAmount
       let lpTotalInQuoteToken
       let tokenPriceVsQuote
@@ -94,8 +125,8 @@ const fetchFarms = async (farmsToFetch: FarmConfig[]) => {
 
       // if (farmConfig.isTokenOnly || farmConfig.isKingdom) {
       // if (farmConfig.isTokenOnly || farmConfig.isKingdomToken) {
-      if (farmConfig.isTokenOnly) {
-        tokenAmount = new BigNumber(lpTokenBalanceMC).div(new BigNumber(10).pow(tokenDecimals));
+      if (farmConfig.isTokenOnly || farmConfig.isKingdomToken) {
+        tokenAmount = farmConfig.isKingdomToken ? new BigNumber(kingdomAmount).div(DEFAULT_TOKEN_DECIMAL) : new BigNumber(lpTokenBalanceMC).div(new BigNumber(10).pow(tokenDecimals));
         if(farmConfig.token.symbol === 'BUSD' && farmConfig.quoteToken.symbol === 'BUSD') {
           tokenPriceVsQuote = new BigNumber(1)
         }else{
@@ -105,7 +136,7 @@ const fetchFarms = async (farmsToFetch: FarmConfig[]) => {
       } else {
         // Ratio in % a LP tokens that are in staking, vs the total number in circulation
         const lpTokenRatio = new BigNumber(lpTokenBalanceMC).div(new BigNumber(lpTotalSupply))
-
+console.log('lpTokenRatio',lpTokenRatio.toNumber())
         // Total value in staking in quote token value
         lpTotalInQuoteToken = new BigNumber(quoteTokenBalanceLP)
           .div(DEFAULT_TOKEN_DECIMAL)
@@ -124,6 +155,10 @@ const fetchFarms = async (farmsToFetch: FarmConfig[]) => {
             tokenPriceVsQuote = new BigNumber(quoteTokenBalanceLP).div(new BigNumber(tokenBalanceLP))
           }
       }
+
+      console.log('tokenAmount',tokenAmount.toFixed(2))
+      console.log('lpTotalInQuoteToken',lpTotalInQuoteToken.toFixed(2))
+      console.log('tokenPriceVsQuote',tokenPriceVsQuote.toFixed(2))
 
       let newCalls = [
         {
