@@ -16,6 +16,7 @@ interface FarmCardActionsProps {
   tokenName?: string
   pid?: number
   addLiquidityUrl?: string
+  isKingdom?: boolean
 }
 
 const IconButtonWrapper = styled.div`
@@ -31,10 +32,11 @@ const StakeAction: React.FC<FarmCardActionsProps> = ({
   tokenName,
   pid,
   addLiquidityUrl,
+  isKingdom,
 }) => {
   const TranslateString = useI18n()
-  const { onStake } = useStake(pid)
-  const { onUnstake } = useUnstake(pid)
+  const { onStake } = useStake(pid, isKingdom)
+  const { onUnstake } = useUnstake(pid, isKingdom)
   const location = useLocation()
 
   const displayBalance = useCallback(() => {

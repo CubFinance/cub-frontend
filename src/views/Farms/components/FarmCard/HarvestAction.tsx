@@ -11,13 +11,14 @@ import CardBusdValue from '../../../Home/components/CardBusdValue'
 interface FarmCardActionsProps {
   earnings?: BigNumber
   pid?: number
+  isKingdom?: boolean
 }
 
-const HarvestAction: React.FC<FarmCardActionsProps> = ({ earnings, pid }) => {
+const HarvestAction: React.FC<FarmCardActionsProps> = ({ earnings, pid, isKingdom }) => {
   const { account } = useWeb3React()
   const TranslateString = useI18n()
   const [pendingTx, setPendingTx] = useState(false)
-  const { onReward } = useHarvest(pid)
+  const { onReward } = useHarvest(pid, isKingdom)
   const cakePrice = usePriceCakeBusd()
 
   const rawEarningsBalance = account ? getBalanceNumber(earnings) : 0
