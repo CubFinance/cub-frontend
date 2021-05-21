@@ -29,7 +29,8 @@ export const fetchFarmUserTokenBalances = async (account: string, farmsToFetch: 
     const lpContractAddress = farm.isTokenOnly ? getAddress(farm.token.address) : getAddress(farm.lpAddresses)
     return {
       address: lpContractAddress,
-      name: farm.isKingdom ? 'stakedWantTokens' : 'balanceOf',
+      name: 'balanceOf',
+      // name: farm.isKingdom ? 'stakedWantTokens' : 'balanceOf',
       params: [account],
     }
   })
@@ -66,7 +67,8 @@ export const fetchFarmUserEarnings = async (account: string, farmsToFetch: FarmC
 
   const calls = farmsToFetch.map((farm) => {
     return {
-      address: farm.isKingdom ? kingdomAddress : masterChefAddress,
+      // address: farm.isKingdom ? kingdomAddress : masterChefAddress,
+      address: masterChefAddress,
       name: 'pendingCub',
       params: [farm.pid, account],
     }
