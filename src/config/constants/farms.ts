@@ -13,7 +13,7 @@ const farms: FarmConfig[] = [
     token: tokens.cub,
     quoteToken: tokens.busd,
   },
-  /* {
+  {
     pid: 11,
     lpSymbol: 'CUB-BNB LP',
     lpAddresses: {
@@ -23,7 +23,7 @@ const farms: FarmConfig[] = [
     token: tokens.cub,
     quoteToken: tokens.wbnb,
   },
-  {
+  /* {
     pid: 9,
     lpSymbol: 'bLEO-BNB LP',
     lpAddresses: {
@@ -312,7 +312,7 @@ const farms: FarmConfig[] = [
     quoteTokenSymbol: QuoteToken.BUSD,
     quoteTokenAdresses: contracts.busd,
   }, */
-  {
+  /* {
     pid: 0,
     isKingdom: true,
     isKingdomToken: true,
@@ -323,7 +323,7 @@ const farms: FarmConfig[] = [
     },
     token: tokens.cake,
     quoteToken: tokens.busd,
-  },
+  }, */
   /* {
     pid: 15,
     isKingdom: true,

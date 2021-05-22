@@ -27,6 +27,7 @@ export const fetchFarmUserTokenBalances = async (account: string, farmsToFetch: 
   const calls = farmsToFetch.map((farm) => {
     // const lpContractAddress = getAddress(farm.lpAddresses)
     const lpContractAddress = farm.isTokenOnly ? getAddress(farm.token.address) : getAddress(farm.lpAddresses)
+    console.log('lpContractAddress',lpContractAddress)
     return {
       address: lpContractAddress,
       name: 'balanceOf',
