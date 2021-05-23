@@ -65,6 +65,10 @@ const fetchFarms = async (farmsToFetch: FarmConfig[]) => {
             name: 'balanceOf',
             params: [lpAddress],
           },
+          {
+            address: lpAddress,
+            name: 'totalSupply',
+          },
           // Token decimals
           {
             address: getAddress(farmConfig.token.address),
@@ -94,26 +98,29 @@ const fetchFarms = async (farmsToFetch: FarmConfig[]) => {
         quoteTokenDecimals,
       ] = multiResult
 
-      let kingdomAmount
+      let kingdomSupply:string
+
+      // Reorder some values since one is missing from the kingdom calls
       if (farmConfig.isKingdom) {
-        tokenDecimals = lpTokenBalanceMC
-        quoteTokenDecimals = lpTotalSupply
+        quoteTokenDecimals = tokenDecimals
+        tokenDecimals = lpTotalSupply
+        lpTotalSupply = lpTokenBalanceMC
         lpTokenBalanceMC = 0
-        lpTotalSupply = 0
+
 
         switch (farmConfig.lpSymbol) {
           case 'CAKE':
-            kingdomAmount = await getCAKEamount()
+            kingdomSupply = await getCAKEamount()
             break
           case 'BNB-BUSD LP':
-            kingdomAmount = await getWBNBBUSDAmount()
+            kingdomSupply = await getWBNBBUSDAmount()
             break
           default:
             break
         }
       }
       // console.log('kingdomAmount',kingdomAmount)
-      console.log('kingdomAmountDec',kingdomAmount && new BigNumber(kingdomAmount).div(DEFAULT_TOKEN_DECIMAL).toFixed(6))
+      console.log('kingdomAmountDec',kingdomSupply && new BigNumber(kingdomSupply).div(DEFAULT_TOKEN_DECIMAL).toFixed(6))
 console.log('farmConfig.lpSymbol',farmConfig.lpSymbol)
 console.log('tokenBalanceLP',new BigNumber(tokenBalanceLP).div(DEFAULT_TOKEN_DECIMAL).toFixed(2))
 console.log('quoteTokenBalanceLP',new BigNumber(quoteTokenBalanceLP).div(DEFAULT_TOKEN_DECIMAL).toNumber())
@@ -129,7 +136,7 @@ console.log('lpTotalSupply',new BigNumber(lpTotalSupply).div(DEFAULT_TOKEN_DECIM
       // if (farmConfig.isTokenOnly || farmConfig.isKingdom) {
       // if (farmConfig.isTokenOnly || farmConfig.isKingdomToken) {
       if (farmConfig.isTokenOnly || farmConfig.isKingdomToken) {
-        tokenAmount = farmConfig.isKingdomToken ? new BigNumber(kingdomAmount).div(DEFAULT_TOKEN_DECIMAL) : new BigNumber(lpTokenBalanceMC).div(new BigNumber(10).pow(tokenDecimals));
+        tokenAmount = farmConfig.isKingdomToken ? new BigNumber(kingdomSupply).div(DEFAULT_TOKEN_DECIMAL) : new BigNumber(lpTokenBalanceMC).div(new BigNumber(10).pow(tokenDecimals));
         if(farmConfig.token.symbol === 'BUSD' && farmConfig.quoteToken.symbol === 'BUSD') {
           tokenPriceVsQuote = new BigNumber(1)
         }else{
@@ -139,33 +146,34 @@ console.log('lpTotalSupply',new BigNumber(lpTotalSupply).div(DEFAULT_TOKEN_DECIM
       } else {
         // Ratio in % a LP tokens that are in staking, vs the total number in circulation
         let lpTokenRatio = new BigNumber(lpTokenBalanceMC).div(new BigNumber(lpTotalSupply))
-console.log('lpTokenRatio',lpTokenRatio.toNumber())
+
         // Total value in staking in quote token value
         lpTotalInQuoteToken = new BigNumber(quoteTokenBalanceLP)
           .div(DEFAULT_TOKEN_DECIMAL)
           .times(new BigNumber(2))
-          .times(lpTokenRatio)
+          // .times(lpTokenRatio)
+
+        tokenPriceVsQuote = new BigNumber(quoteTokenBalanceLP).div(new BigNumber(tokenBalanceLP))
 
         if (farmConfig.isKingdom) {
-          lpTokenRatio = new BigNumber(tokenBalanceLP).div(new BigNumber(quoteTokenBalanceLP))
-          console.log('lpTokenRatio',lpTokenRatio.toNumber())
+          const ratioPCStoKingdom = new BigNumber(lpTotalSupply).div(new BigNumber(kingdomSupply))
 
-          const quoteTokenBalanceKingdom = new BigNumber(kingdomAmount).div(lpTokenRatio)
-// console.log('quoteTokenBalanceKingdom',quoteTokenBalanceKingdom.div(DEFAULT_TOKEN_DECIMAL).toNumber())
+          const kingdomTokenSupply = new BigNumber(tokenBalanceLP).div(new BigNumber(ratioPCStoKingdom))
 
-          lpTotalInQuoteToken = new BigNumber(quoteTokenBalanceLP)
+          const kingdomQuoteTokenSupply = new BigNumber(quoteTokenBalanceLP).div(new BigNumber(ratioPCStoKingdom))
+
+          lpTokenRatio = new BigNumber(kingdomTokenSupply).div(new BigNumber(kingdomQuoteTokenSupply))
+
+          lpTotalInQuoteToken = new BigNumber(kingdomQuoteTokenSupply)
             .div(DEFAULT_TOKEN_DECIMAL)
             .times(new BigNumber(2))
-            .times(lpTokenRatio)
-          // Ratio for PCS LP
-          /* tokenPriceVsQuote = new BigNumber(quoteTokenBalanceLP).div(new BigNumber(tokenBalanceLP)) */
+            // .times(lpTokenRatio)
 
-          /* lpTotalInQuoteToken = new BigNumber(kingdomAmount)
-            .div(DEFAULT_TOKEN_DECIMAL)
-            .times(new BigNumber(2))
-            .times(tokenPriceVsQuote) */
+console.log('kingdomTokenSupply',kingdomTokenSupply.div(DEFAULT_TOKEN_DECIMAL).toNumber())
+console.log('kingdomQuoteTokenSupply',kingdomQuoteTokenSupply.div(DEFAULT_TOKEN_DECIMAL).toNumber())
+console.log('lpTotalInQuoteToken',lpTotalInQuoteToken.toFixed(2))
         }
-
+// console.log('lpTokenRatio',lpTokenRatio.toNumber())
         // Amount of token in the LP that are considered staking (i.e amount of token * lp ratio)
         tokenAmount = new BigNumber(tokenBalanceLP).div(BIG_TEN.pow(tokenDecimals)).times(lpTokenRatio)
         quoteTokenAmount = new BigNumber(quoteTokenBalanceLP)
