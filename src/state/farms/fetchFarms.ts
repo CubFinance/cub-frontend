@@ -119,15 +119,7 @@ const fetchFarms = async (farmsToFetch: FarmConfig[]) => {
             break
         }
       }
-      // console.log('kingdomAmount',kingdomAmount)
-      console.log('kingdomAmountDec',kingdomSupply && new BigNumber(kingdomSupply).div(DEFAULT_TOKEN_DECIMAL).toFixed(6))
-console.log('farmConfig.lpSymbol',farmConfig.lpSymbol)
-console.log('tokenBalanceLP',new BigNumber(tokenBalanceLP).div(DEFAULT_TOKEN_DECIMAL).toFixed(2))
-console.log('quoteTokenBalanceLP',new BigNumber(quoteTokenBalanceLP).div(DEFAULT_TOKEN_DECIMAL).toNumber())
-console.log('lpTokenBalanceMC',new BigNumber(lpTokenBalanceMC).div(DEFAULT_TOKEN_DECIMAL).toFixed(2))
-console.log('lpTotalSupply',new BigNumber(lpTotalSupply).div(DEFAULT_TOKEN_DECIMAL).toFixed(2))
-// console.log('tokenDecimals',new BigNumber(tokenDecimals).toFixed(2))
-// console.log('quoteTokenDecimals',new BigNumber(quoteTokenDecimals).toFixed(2))
+
       let tokenAmount
       let lpTotalInQuoteToken
       let tokenPriceVsQuote
@@ -168,12 +160,7 @@ console.log('lpTotalSupply',new BigNumber(lpTotalSupply).div(DEFAULT_TOKEN_DECIM
             .div(DEFAULT_TOKEN_DECIMAL)
             .times(new BigNumber(2))
             // .times(lpTokenRatio)
-
-console.log('kingdomTokenSupply',kingdomTokenSupply.div(DEFAULT_TOKEN_DECIMAL).toNumber())
-console.log('kingdomQuoteTokenSupply',kingdomQuoteTokenSupply.div(DEFAULT_TOKEN_DECIMAL).toNumber())
-console.log('lpTotalInQuoteToken',lpTotalInQuoteToken.toFixed(2))
         }
-// console.log('lpTokenRatio',lpTokenRatio.toNumber())
         // Amount of token in the LP that are considered staking (i.e amount of token * lp ratio)
         tokenAmount = new BigNumber(tokenBalanceLP).div(BIG_TEN.pow(tokenDecimals)).times(lpTokenRatio)
         quoteTokenAmount = new BigNumber(quoteTokenBalanceLP)
@@ -186,10 +173,6 @@ console.log('lpTotalInQuoteToken',lpTotalInQuoteToken.toFixed(2))
             tokenPriceVsQuote = new BigNumber(quoteTokenBalanceLP).div(new BigNumber(tokenBalanceLP))
           }
       }
-
-      console.log('tokenAmount',tokenAmount.toFixed(2))
-      console.log('lpTotalInQuoteToken',lpTotalInQuoteToken.toFixed(2))
-      console.log('tokenPriceVsQuote',tokenPriceVsQuote.toFixed(2))
 
       let newCalls = [
         {
@@ -245,10 +228,6 @@ console.log('lpTotalInQuoteToken',lpTotalInQuoteToken.toFixed(2))
       }
     }),
   )
-  // const aCake = await getCAKEamount()
-  // const aBnb = await getWBNBBUSDAmount()
-  // console.log('aCake',aCake)
-  // console.log('aBnb',aBnb)
   return data
 }
 
