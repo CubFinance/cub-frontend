@@ -23,7 +23,7 @@ const farms: FarmConfig[] = [
     token: tokens.cub,
     quoteToken: tokens.wbnb,
   },
-  /* {
+  {
     pid: 9,
     lpSymbol: 'bLEO-BNB LP',
     lpAddresses: {
@@ -144,7 +144,7 @@ const farms: FarmConfig[] = [
     },
     token: tokens.cub,
     quoteToken: tokens.busd,
-  }, */
+  },
 
   // {
   //   pid: 13,
@@ -163,7 +163,7 @@ const farms: FarmConfig[] = [
   //   quoteTokenAdresses: contracts.wbnb,
   // },
 
-  /* {
+  {
     pid: 14,
     isTokenOnly: true,
     lpSymbol: 'BUSD',
@@ -195,8 +195,8 @@ const farms: FarmConfig[] = [
     },
     token: tokens.usdt,
     quoteToken: tokens.busd,
-  }, */
-  /* {
+  },
+  {
     pid: 17,
     isTokenOnly: true,
     lpSymbol: 'BTCB',
@@ -206,8 +206,8 @@ const farms: FarmConfig[] = [
     },
     token: tokens.btcb,
     quoteToken: tokens.busd,
-  }, */
-  /* {
+  },
+  {
     pid: 18,
     isTokenOnly: true,
     lpSymbol: 'ETH',
@@ -261,7 +261,7 @@ const farms: FarmConfig[] = [
     },
     token: tokens.cake,
     quoteToken: tokens.busd,
-  }, */
+  },
 
   // KINGDOMS
   /* {
@@ -312,7 +312,7 @@ const farms: FarmConfig[] = [
     quoteTokenSymbol: QuoteToken.BUSD,
     quoteTokenAdresses: contracts.busd,
   }, */
-  /* {
+  {
     pid: 0,
     isKingdom: true,
     isKingdomToken: true,
@@ -323,7 +323,7 @@ const farms: FarmConfig[] = [
     },
     token: tokens.cake,
     quoteToken: tokens.busd,
-  }, */
+  },
   /* {
     pid: 15,
     isKingdom: true,

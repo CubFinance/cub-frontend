@@ -30,7 +30,8 @@ export const getPoolApr = (
  */
 export const getFarmApr = (poolWeight: BigNumber, cakePriceUsd: BigNumber, poolLiquidityUsd: BigNumber): number => {
   const yearlyCakeRewardAllocation = CAKE_PER_BLOCK.times(BLOCKS_PER_YEAR).times(poolWeight)
-  const apr = yearlyCakeRewardAllocation.times(cakePriceUsd).div(poolLiquidityUsd).times(100)
+  const liquidity = poolLiquidityUsd.toNumber() ? poolLiquidityUsd : new BigNumber(1)
+  const apr = yearlyCakeRewardAllocation.times(cakePriceUsd).div(liquidity).times(100)
   return apr.isNaN() || !apr.isFinite() ? null : apr.toNumber()
 }
 

@@ -14,20 +14,11 @@ const multicall = async (abi: any[], calls: Call[]) => {
   const web3 = getWeb3NoAccount()
   const multi = new web3.eth.Contract((MultiCallAbi as unknown) as AbiItem, getMulticallAddress())
   const itf = new Interface(abi)
+
   const calldata = calls.map((call) => [call.address.toLowerCase(), itf.encodeFunctionData(call.name, call.params)])
-  // console.log('calldata',calldata)
-  // console.log('multi.methods',multi.methods)
-  // const { returnData } = await multi.methods.aggregate(calldata).call()
-  const mm = await multi.methods.aggregate(calldata).call().catch(error => console.error(`ret error: ${error}`))
-  console.log('calls',calls)
-  // console.log('multi',multi)
-  // console.log('itf',itf)
-  // console.log('calldata',calldata)
-  console.log('mm',mm)
-  const { returnData } = mm
-  // console.log('returnData',returnData)
+  const { returnData } = await multi.methods.aggregate(calldata).call()
   const res = returnData.map((call, i) => itf.decodeFunctionResult(calls[i].name, call))
-// console.log('res',res)
+
   return res
 }
 
