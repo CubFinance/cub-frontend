@@ -343,7 +343,7 @@ const farms: FarmConfig[] = [
   {
     pid: 1,
     isKingdom: true,
-    lpSymbol: 'BNB-BUSD LP',
+    lpSymbol: 'WBNB-BUSD LP',
     lpAddresses: {
       97: '',
       56: '0x58f876857a02d6762e0101bb5c46a8c1ed44dc16',
