@@ -391,6 +391,7 @@ const Farms: React.FC<FarmsProps> = ({ tokenMode, kingdomMode }) => {
   let header = TranslateString(674, 'Farms')
   let heading = TranslateString(320, 'Stake LP tokens to earn CUB')
   let subHeading = TranslateString(10000, 'Deposit Fee will be used to buyback CUB and bLEO')
+  let subHeading2 = null
   // let extra = null
   // const data = useGetStats()
   // const tvl = data ? data.total_value_locked_all.toLocaleString('en-US', { maximumFractionDigits: 0 }) : null
@@ -402,6 +403,11 @@ const Farms: React.FC<FarmsProps> = ({ tokenMode, kingdomMode }) => {
     header = TranslateString(674, 'Kingdoms')
     heading = TranslateString(null, 'Kingdoms: Composable Auto-Compounding')
     subHeading = TranslateString(null, 'Stake tokens for cross-platform farming plus CUB rewards')
+    subHeading2 = (
+      <Heading as="h2" color="warning" mb="20px" style={{ textAlign: 'left' }}>
+        IMPORTANT: Must use <a target="_blank" rel="noreferrer" href="https://exchange.pancakeswap.finance/#/pool">Pancakeswap V2 Exchange</a> for V2 Kingdom LP tokens until we add a V2 exchange for Cub Finance
+      </Heading>
+    )
     /* extra = (
       <Heading as="h3" color="secondary" mb="30px" style={{ textAlign: 'left', fontSize: '1rem' }}>
         TVL <CardValue value={Number(tvl)} prefix="$" decimals={2}/>
@@ -424,6 +430,7 @@ const Farms: React.FC<FarmsProps> = ({ tokenMode, kingdomMode }) => {
         <Heading as="h2" color="secondary" mb={tlvSpacing} style={{ textAlign: 'left' }}>
           {subHeading}
         </Heading>
+        {subHeading2}
         {/* extra */}
         <Wrapper>
           <Button size="sm">
