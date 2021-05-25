@@ -46,7 +46,40 @@ export const fetchFarmUserStakedBalances = async (account: string, farmsToFetch:
   const masterChefAddress = getMasterChefAddress()
   const kingdomAddress = getKingdomsAddress()
 
-  const calls = farmsToFetch.map((farm) => {
+  const callsMC = farmsToFetch.map((farm) => {
+    if (!farm.isKingdom)
+      return {
+        address: masterChefAddress,
+        name: 'userInfo',
+        params: [farm.pid, account],
+      }
+    return null
+  })
+
+  const callsK = farmsToFetch.map((farm) => {
+    if (farm.isKingdom)
+      return {
+        address: kingdomAddress,
+        name: 'userInfo',
+        params: [farm.pid, account],
+      }
+    return null
+  })
+
+  // Get rid of nulls
+  const masterCalls = callsMC.filter(call => call)
+  const kingdomCalls = callsK.filter(call => call)
+
+  const rawStakedBalancesMC = await multicall(masterchefABI, masterCalls)
+  const rawStakedBalancesK = await multicall(kingdomsABI, kingdomCalls)
+
+  const rawStakedBalances = [...rawStakedBalancesMC, ...rawStakedBalancesK]
+  const parsedStakedBalances = rawStakedBalances.map((stakedBalance) => {
+    return new BigNumber(stakedBalance[0]._hex).toJSON()
+  })
+  return parsedStakedBalances
+
+  /* const calls = farmsToFetch.map((farm) => {
     return {
       address: farm.isKingdom ? kingdomAddress : masterChefAddress,
       name: 'userInfo',
@@ -58,26 +91,12 @@ export const fetchFarmUserStakedBalances = async (account: string, farmsToFetch:
   const parsedStakedBalances = rawStakedBalances.map((stakedBalance) => {
     return new BigNumber(stakedBalance[0]._hex).toJSON()
   })
-  return parsedStakedBalances
+  return parsedStakedBalances */
 }
 
 export const fetchFarmUserEarnings = async (account: string, farmsToFetch: FarmConfig[]) => {
   const masterChefAddress = getMasterChefAddress()
   const kingdomAddress = getKingdomsAddress()
-
-  /* const calls = farmsToFetch.map((farm) => {
-    return {
-      address: masterChefAddress,
-      name: 'pendingCub',
-      params: [farm.pid, account],
-    }
-  })
-
-  const rawEarnings = await multicall(masterchefABI, calls)
-  const parsedEarnings = rawEarnings.map((earnings) => {
-    return new BigNumber(earnings).toJSON()
-  })
-  return parsedEarnings */
 
   const callsMasterChef = farmsToFetch.map((farm) => {
     if (!farm.isKingdom)
