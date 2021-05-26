@@ -1,6 +1,16 @@
 import Web3 from 'web3'
+import BigNumber from 'bignumber.js'
+import erc20 from 'config/abi/erc20.json'
+import multicall from 'utils/multicall'
+import { DEFAULT_TOKEN_DECIMAL } from 'config'
+// import { BIG_TEN } from 'utils/bigNumber'
+import { getAddress, getMasterChefAddress, getKingdomsAddress } from 'utils/addressHelpers'
+// import { FarmConfig } from 'config/constants/types'
 
 const PCS_ABI = require('../config/abi/PCS.json')
+const PCS_V2_ABI = require('../config/abi/PCS-v2-masterchef.json')
+
+
 
 const web3 = new Web3(new Web3.providers.HttpProvider('https://bsc-dataseed.binance.org/'));
 
@@ -18,4 +28,91 @@ export const getWBNBBUSDAmount = async () => {
   const contract = new web3.eth.Contract(PCS_ABI, '0x73feaa1ee314f8c655e354234017be2193c9e24e');
   const call = await contract.methods.userInfo(252, '0x701d4f8168b00abbd948d36e11added4e1cac742').call();
   return call.amount
+}
+
+const cakeToken = {
+  symbol: 'CAKE',
+  address: {
+    56: '0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82',
+    97: '0xa35062141Fa33BCA92Ce69FeD37D0E8908868AAe',
+  },
+  decimals: 18,
+  projectLink: 'https://pancakeswap.finance/',
+}
+
+const syrup = {
+  symbol: 'SYRUP',
+  address: {
+    56: '0x009cF7bC57584b7998236eff51b98A168DceA9B0',
+    97: '0xfE1e507CeB712BDe086f3579d2c03248b2dB77f9',
+  },
+  decimals: 18,
+  projectLink: 'https://pancakeswap.finance/',
+}
+
+const busd = {
+  symbol: 'BUSD',
+  address: {
+    56: '0xe9e7cea3dedca5984780bafc599bd69add087d56',
+    97: '',
+  },
+  decimals: 18,
+  projectLink: 'https://www.paxos.com/busd/',
+}
+
+const cakeFarm = {
+  pid: 0,
+  lpSymbol: 'CAKE',
+  lpAddresses: {
+    97: '0x9C21123D94b93361a29B2C2EFB3d5CD8B17e0A9e',
+    56: '0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82',
+  },
+  token: cakeToken,
+  quoteToken: busd,
+}
+
+const lpAddress = getAddress(cakeFarm.lpAddresses)
+const tokenAddress = getAddress(cakeFarm.token.address)
+
+const calls = [
+  // Balance of token in the LP contract
+  {
+    address: tokenAddress,
+    name: 'balanceOf',
+    params: [lpAddress],
+  },
+  // Balance of quote token on LP contract
+  {
+    address: getAddress(cakeFarm.quoteToken.address),
+    name: 'balanceOf',
+    params: [lpAddress],
+  },
+  // Balance of LP tokens in the master chef contract
+  {
+    address: tokenAddress, // ?
+    name: 'balanceOf',
+    params: ['0x73feaa1ee314f8c655e354234017be2193c9e24e'],
+  },
+  // Total supply of LP tokens
+  {
+    address: lpAddress,
+    name: 'totalSupply',
+  },
+]
+
+export const getCakeFarmValues = async () => {
+  // const contract = new web3.eth.Contract(PCS_V2_ABI, cakeFarm.lpAddresses['56']);
+  const multiResult = await multicall(erc20, calls)
+
+  const [
+    tokenBalanceLP,
+    quoteTokenBalanceLP,
+    lpTokenBalanceMC,
+    lpTotalSupply,
+  ] = multiResult
+
+  console.log('tokenBalanceLP', new BigNumber(tokenBalanceLP).div(DEFAULT_TOKEN_DECIMAL).toNumber())
+  console.log('quoteTokenBalanceLP', new BigNumber(quoteTokenBalanceLP).div(DEFAULT_TOKEN_DECIMAL).toNumber())
+  console.log('lpTokenBalanceMC', new BigNumber(lpTokenBalanceMC).div(DEFAULT_TOKEN_DECIMAL).toNumber())
+  console.log('lpTotalSupply', new BigNumber(lpTotalSupply).div(DEFAULT_TOKEN_DECIMAL).toNumber())
 }
