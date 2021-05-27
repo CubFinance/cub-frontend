@@ -8,6 +8,7 @@ import { getPoolApr } from 'utils/apr'
 import { getBalanceNumber } from 'utils/formatBalance'
 import { useGetApiPrice } from 'state/hooks'
 import Balance from 'components/Balance'
+import BigNumber from 'bignumber.js'
 
 export interface ExpandableSectionProps {
   bscScanAddress?: string
@@ -17,6 +18,7 @@ export interface ExpandableSectionProps {
   lpLabel?: string
   addLiquidityUrl?: string
   isKingdom?: boolean
+  cubAPR?: number
 }
 
 const Wrapper = styled.div`
@@ -35,6 +37,7 @@ const DetailsSection: React.FC<ExpandableSectionProps> = ({
   lpLabel,
   addLiquidityUrl,
   isKingdom,
+  cubAPR,
 }) => {
   const TranslateString = useI18n()
 
@@ -51,6 +54,56 @@ const DetailsSection: React.FC<ExpandableSectionProps> = ({
     )
   }
 
+  let extra = null
+  if (isKingdom) {
+    const dailyAPR = new BigNumber(apr).div(new BigNumber(365)).toNumber()
+    // const one = new BigNumber(1)
+    // const r = new BigNumber(apr).div(100)
+    // console.log('r',r.toNumber())
+    // const rDivN = r.div(4500)
+    // console.log('rDivN',rDivN.toNumber())
+    // const bracket = one.plus(rDivN)
+    // console.log('bracket',bracket.toNumber())
+    // const expo = Math.pow(bracket.toNumber(), 4500)
+    // console.log('expo',expo)
+    // const farmAPY = new BigNumber(expo).minus(1).times(100).toFixed(2)
+    const farmAPY = ((((apr / 100 / 4500) + 1) ** 4500) - 1) * 100
+    const totalAPY = cubAPR + farmAPY
+    const totalAPYString = cubAPR && totalAPY.toLocaleString('en-US', { maximumFractionDigits: 2 })
+    console.log('cubAPR',cubAPR)
+    console.log('farmAPY',farmAPY)
+console.log('totalAPY',totalAPY)
+    extra = (
+      <>
+        <Flex justifyContent="space-between">
+          <Text>{TranslateString(354, 'Farm APR')}:</Text>
+          <Text>{`${new BigNumber(apr).toFixed(2)}% (${new BigNumber(dailyAPR).toFixed(2)}%)`}</Text>
+        </Flex>
+        <Flex justifyContent="space-between">
+          <Text>{TranslateString(354, 'Compound per year')}:</Text>
+          <Text>~4,500</Text>
+        </Flex>
+        <Flex justifyContent="space-between">
+          <Text>{TranslateString(354, 'Farm APY')}:</Text>
+          <Balance
+            fontSize="16px"
+            value={farmAPY}
+            decimals={2}
+            unit="%"
+          />
+        </Flex>
+        <Flex justifyContent="space-between">
+          <Text>{TranslateString(354, 'CUB APR')}:</Text>
+          <Text>{cubAPR && cubAPR.toLocaleString('en-US', { maximumFractionDigits: 2 })}%</Text>
+        </Flex>
+        <Flex justifyContent="space-between">
+          <Text>{TranslateString(354, 'Total APY')}:</Text>
+          <Text>{totalAPYString}%</Text>
+        </Flex>
+      </>
+    )
+  }
+
   return (
     <Wrapper>
       <Flex justifyContent="space-between">
@@ -64,19 +117,7 @@ const DetailsSection: React.FC<ExpandableSectionProps> = ({
       )}
       <StyledLinkExternal href={bscScanAddress}>{TranslateString(999, 'View Contract')}</StyledLinkExternal>
       <StyledLinkExternal href={infoAddress}>{TranslateString(999, 'See Pair Info')}</StyledLinkExternal>
-      <Flex justifyContent="space-between">
-        <Text>{TranslateString(354, 'CAKE APR')}:</Text>
-        <Text>
-          <Balance
-            fontSize="16px"
-            value={apr}
-            decimals={2}
-            unit="%"
-            bold
-          />
-        </Text>
-      </Flex>
-
+      {extra}
     </Wrapper>
   )
 }
