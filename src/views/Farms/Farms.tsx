@@ -444,14 +444,8 @@ const Farms: React.FC<FarmsProps> = ({ tokenMode, kingdomMode }) => {
         </Flex>
       </FeeWrapper>
     )
-    /* extra = (
-      <Heading as="h3" color="secondary" mb="30px" style={{ textAlign: 'left', fontSize: '1rem' }}>
-        TVL <CardValue value={Number(tvl)} prefix="$" decimals={2}/>
-      </Heading>
-    ) */
   }
 
-  // const tlvSpacing = kingdomMode ? '10px' : '20px'
   const tlvSpacing = '20px'
 
   return (

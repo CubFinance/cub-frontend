@@ -10,8 +10,6 @@ import kingdomsABI from 'config/abi/kingdoms.json'
 import { getCAKEamount, getWBNBBUSDAmount } from 'utils/kingdomScripts'
 
 const fetchFarms = async (farmsToFetch: FarmConfig[]) => {
-  // const cakeV = await getCakeFarmValues();
-  // console.log('cakeV',cakeV)
   const data = await Promise.all(
     farmsToFetch.map(async (farmConfig) => {
       const lpAddress = getAddress(farmConfig.lpAddresses)
@@ -145,7 +143,7 @@ const fetchFarms = async (farmsToFetch: FarmConfig[]) => {
         lpTotalInQuoteToken = new BigNumber(quoteTokenBalanceLP)
           .div(DEFAULT_TOKEN_DECIMAL)
           .times(new BigNumber(2))
-          // .times(lpTokenRatio)
+          .times(lpTokenRatio)
 
         tokenPriceVsQuote = new BigNumber(quoteTokenBalanceLP).div(new BigNumber(tokenBalanceLP))
 
