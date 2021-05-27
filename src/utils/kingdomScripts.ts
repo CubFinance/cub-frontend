@@ -1,8 +1,14 @@
 import Web3 from 'web3'
 import BigNumber from 'bignumber.js'
 import erc20 from 'config/abi/erc20.json'
+import cakeABI from 'config/abi/cake.json'
 import multicall from 'utils/multicall'
 import { DEFAULT_TOKEN_DECIMAL } from 'config'
+import { convertSharesToCake } from 'views/Pools/helpers'
+import { getCakeVaultContract } from 'utils/contractHelpers'
+import makeBatchRequest from 'utils/makeBatchRequest'
+
+
 // import { BIG_TEN } from 'utils/bigNumber'
 import { getAddress, getMasterChefAddress, getKingdomsAddress } from 'utils/addressHelpers'
 // import { FarmConfig } from 'config/constants/types'
@@ -10,7 +16,7 @@ import { getAddress, getMasterChefAddress, getKingdomsAddress } from 'utils/addr
 const PCS_ABI = require('../config/abi/PCS.json')
 const PCS_V2_ABI = require('../config/abi/PCS-v2-masterchef.json')
 
-
+const cakeVaultContract = getCakeVaultContract()
 
 const web3 = new Web3(new Web3.providers.HttpProvider('https://bsc-dataseed.binance.org/'));
 
@@ -67,7 +73,7 @@ const cakeFarm = {
     97: '0x9C21123D94b93361a29B2C2EFB3d5CD8B17e0A9e',
     56: '0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82',
   },
-  token: syrup,
+  token: cakeToken,
   quoteToken: busd,
 }
 
@@ -102,7 +108,7 @@ const calls = [
 
 export const getCakeFarmValues = async () => {
   // const contract = new web3.eth.Contract(PCS_V2_ABI, cakeFarm.lpAddresses['56']);
-  const multiResult = await multicall(erc20, calls)
+  /* const multiResult = await multicall(erc20, calls)
 
   const [
     tokenBalanceLP,
@@ -114,5 +120,53 @@ export const getCakeFarmValues = async () => {
   console.log('tokenBalanceLP', new BigNumber(tokenBalanceLP).div(DEFAULT_TOKEN_DECIMAL).toNumber())
   console.log('quoteTokenBalanceLP', new BigNumber(quoteTokenBalanceLP).div(DEFAULT_TOKEN_DECIMAL).toNumber())
   console.log('lpTokenBalanceMC', new BigNumber(lpTokenBalanceMC).div(DEFAULT_TOKEN_DECIMAL).toNumber())
-  console.log('lpTotalSupply', new BigNumber(lpTotalSupply).div(DEFAULT_TOKEN_DECIMAL).toNumber())
+  console.log('lpTotalSupply', new BigNumber(lpTotalSupply).div(DEFAULT_TOKEN_DECIMAL).toNumber()) */
+
+  // const nonBnbPools = poolsConfig.filter((p) => p.stakingToken.symbol !== 'BNB')
+  //
+  // const callsNonBnbPools = nonBnbPools.map((poolConfig) => {
+  //   return {
+  //     address: getAddress(poolConfig.stakingToken.address),
+  //     name: 'balanceOf',
+  //     params: [getAddress(poolConfig.contractAddress)],
+  //   }
+  // })
+
+
+  const callsNonBnbPools = [
+    {
+      address: '0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82',
+      name: 'balanceOf',
+      params: ['0x73feaa1eE314F8c655E354234017bE2193C9E24E'],
+    },
+  ]
+
+  const [balanceMaster] = await multicall(cakeABI, callsNonBnbPools)
+  // return balanceMaster
+
+  const [sharePrice, shares] = await makeBatchRequest([
+    cakeVaultContract.methods.getPricePerFullShare().call,
+    cakeVaultContract.methods.totalShares().call,
+  ])
+
+  const totalSharesAsBigNumber = new BigNumber(shares as string)
+  const sharePriceAsBigNumber = new BigNumber(sharePrice as string)
+  const totalCakeInVaultEstimate = convertSharesToCake(totalSharesAsBigNumber, sharePriceAsBigNumber)
+  const totalCakeInVault = totalCakeInVaultEstimate.cakeAsBigNumber.toJSON()
+
+  const totalManualCake = new BigNumber(balanceMaster).minus(new BigNumber(totalCakeInVault))
+
+  console.log('totalManualCake', new BigNumber(totalManualCake).div(DEFAULT_TOKEN_DECIMAL).toNumber())
+  // console.log('totalCakeInVault',new BigNumber(totalCakeInVault).div(DEFAULT_TOKEN_DECIMAL).toNumber())
+  // console.log('balanceMaster', new BigNumber(balanceMaster).div(DEFAULT_TOKEN_DECIMAL).toNumber())
+  // console.log('balanceAutoCake', new BigNumber(balanceAutoCake).div(DEFAULT_TOKEN_DECIMAL).toNumber())
+  //
+  // const cakeManual =  new BigNumber(balanceMaster).div(DEFAULT_TOKEN_DECIMAL).minus(new BigNumber(balanceAutoCake).div(DEFAULT_TOKEN_DECIMAL))
+  //
+  // console.log('cakeManual', new BigNumber(cakeManual).toNumber())
+  // const tokenAmount = farmConfig.isKingdomToken ? new BigNumber(kingdomSupply).div(DEFAULT_TOKEN_DECIMAL) : new BigNumber(lpTokenBalanceMC).div(new BigNumber(10).pow(tokenDecimals));
+  //
+  // const tokenPriceVsQuote = new BigNumber(quoteTokenBalanceLP).div(new BigNumber(tokenBalanceLP))
+  //
+  // const lpTotalInQuoteToken = tokenAmount.times(tokenPriceVsQuote)
 }

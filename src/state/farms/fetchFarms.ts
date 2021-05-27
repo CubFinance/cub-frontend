@@ -7,11 +7,11 @@ import { getAddress, getMasterChefAddress, getKingdomsAddress } from 'utils/addr
 import { FarmConfig } from 'config/constants/types'
 import { DEFAULT_TOKEN_DECIMAL } from 'config'
 import kingdomsABI from 'config/abi/kingdoms.json'
-import { getCAKEamount, getWBNBBUSDAmount, getCakeFarmValues } from 'utils/kingdomScripts'
+import { getCAKEamount, getWBNBBUSDAmount } from 'utils/kingdomScripts'
 
 const fetchFarms = async (farmsToFetch: FarmConfig[]) => {
-  const cakeV = await getCakeFarmValues();
-  console.log('cakeV',cakeV)
+  // const cakeV = await getCakeFarmValues();
+  // console.log('cakeV',cakeV)
   const data = await Promise.all(
     farmsToFetch.map(async (farmConfig) => {
       const lpAddress = getAddress(farmConfig.lpAddresses)
