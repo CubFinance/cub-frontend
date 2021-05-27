@@ -344,7 +344,10 @@ export const useTotalValue = (): BigNumber => {
     value = farms.data.reduce((accu, farm) => {
       const quoteTokenPriceUsd = prices[getAddress(farm.quoteToken.address).toLowerCase()]
       const totalLiquidity = new BigNumber(farm.lpTotalInQuoteToken).times(quoteTokenPriceUsd)
-      return accu.plus(totalLiquidity)
+      let newAccu = accu
+      if (!totalLiquidity.isNaN() && !totalLiquidity.isZero())
+        newAccu = accu.plus(totalLiquidity)
+      return newAccu
     }, value)
 
   return value;

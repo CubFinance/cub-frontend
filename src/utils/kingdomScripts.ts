@@ -1,6 +1,4 @@
 import Web3 from 'web3'
-import BigNumber from 'bignumber.js'
-import erc20 from 'config/abi/erc20.json'
 
 const PCS_ABI = require('../config/abi/PCS.json')
 
