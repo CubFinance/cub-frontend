@@ -11,6 +11,7 @@ import { getAddress } from 'utils/addressHelpers'
 import { getBalanceNumber } from 'utils/formatBalance'
 import { BIG_ZERO } from 'utils/bigNumber'
 import useRefresh from 'hooks/useRefresh'
+import { filterFarmsByQuoteToken } from 'utils/farmsPriceHelpers'
 import { fetchFarmsPublicDataAsync, fetchPoolsPublicDataAsync, fetchPoolsUserDataAsync, setBlock } from './actions'
 import { State, Farm, Pool, ProfileState, TeamsState, AchievementState, PriceState, FarmsState } from './types'
 import { fetchProfile } from './profile'
@@ -93,6 +94,24 @@ export const usePools = (account): Pool[] => {
 export const usePoolFromPid = (sousId): Pool => {
   const pool = useSelector((state: State) => state.pools.data.find((p) => p.sousId === sousId))
   return pool
+}
+
+export const useFarmFromTokenSymbol = (tokenSymbol: string, preferredQuoteTokens?: string[]): Farm => {
+  const farms = useSelector((state: State) => state.farms.data.filter((farm) => farm.token.symbol === tokenSymbol))
+  const filteredFarm = filterFarmsByQuoteToken(farms, preferredQuoteTokens)
+  return filteredFarm
+}
+
+// Return the base token price for a farm, from a given pid
+export const useBusdPriceFromPid = (pid: number): BigNumber => {
+  const farm = useFarmFromPid(pid)
+  return farm && new BigNumber(farm.token.busdPrice)
+}
+
+export const useBusdPriceFromToken = (tokenSymbol: string): BigNumber => {
+  const tokenFarm = useFarmFromTokenSymbol(tokenSymbol)
+  const tokenPrice = useBusdPriceFromPid(tokenFarm?.pid)
+  return tokenPrice
 }
 
 // Profile

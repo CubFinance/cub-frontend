@@ -6,13 +6,10 @@ import { Farm } from 'state/types'
 import { provider as ProviderType } from 'web3-core'
 import useI18n from 'hooks/useI18n'
 import ExpandableSectionButton from 'components/ExpandableSectionButton'
-import { BASE_ADD_LIQUIDITY_URL, PCS_ADD_LIQUIDITY_URL, DEFAULT_TOKEN_DECIMAL } from 'config'
+import { BASE_ADD_LIQUIDITY_URL, PCS_ADD_LIQUIDITY_URL } from 'config'
 import getLiquidityUrlPathParts from 'utils/getLiquidityUrlPathParts'
-import cakeABI from 'config/abi/cake.json'
-import multicall from 'utils/multicall'
-import { convertSharesToCake } from 'views/Pools/helpers'
-import { getCakeVaultContract } from 'utils/contractHelpers'
-import makeBatchRequest from 'utils/makeBatchRequest'
+
+
 import DetailsSection from './DetailsSection'
 import CardHeading from './CardHeading'
 import CardActionsContainer from './CardActionsContainer'
@@ -96,8 +93,6 @@ interface FarmCardProps {
   account?: string
 }
 
-const cakeVaultContract = getCakeVaultContract()
-
 const FarmCard: React.FC<FarmCardProps> = ({ farm, removed, cakePrice, account }) => {
   const TranslateString = useI18n()
 
@@ -123,39 +118,6 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm, removed, cakePrice, account }
   const exchangeUrl = farm.isKingdom ? PCS_ADD_LIQUIDITY_URL : BASE_ADD_LIQUIDITY_URL
   const addLiquidityUrl = `${exchangeUrl}/${liquidityUrlPathParts}`
   const lpAddress = farm.lpAddresses[process.env.REACT_APP_CHAIN_ID]
-
-  /* const getManualCake = async () => {
-    const callsNonBnbPools = [
-      {
-        address: '0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82',
-        name: 'balanceOf',
-        params: ['0x73feaa1eE314F8c655E354234017bE2193C9E24E'],
-      },
-    ]
-
-    const [balanceMaster] = await multicall(cakeABI, callsNonBnbPools)
-    // return balanceMaster
-
-    const [sharePrice, shares] = await makeBatchRequest([
-      cakeVaultContract.methods.getPricePerFullShare().call,
-      cakeVaultContract.methods.totalShares().call,
-    ])
-
-    const totalSharesAsBigNumber = new BigNumber(shares as string)
-    const sharePriceAsBigNumber = new BigNumber(sharePrice as string)
-    const totalCakeInVaultEstimate = convertSharesToCake(totalSharesAsBigNumber, sharePriceAsBigNumber)
-    const totalCakeInVault = totalCakeInVaultEstimate.cakeAsBigNumber.toJSON()
-
-    const totalManualCake = new BigNumber(balanceMaster).minus(new BigNumber(totalCakeInVault))
-
-    // console.log('totalManualCake', new BigNumber(totalManualCake).div(DEFAULT_TOKEN_DECIMAL).toNumber())
-
-    return totalManualCake
-  }
-
-  const tc = getManualCake();
-  console.log('tc',tc)
-  */
 
   return (
     <FCard>
@@ -211,6 +173,7 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm, removed, cakePrice, account }
           totalValueFormatted={totalValueFormatted}
           lpLabel={lpLabel}
           addLiquidityUrl={addLiquidityUrl}
+          isKingdom={farm.isKingdom}
         />
       </ExpandingWrapper>
     </FCard>
