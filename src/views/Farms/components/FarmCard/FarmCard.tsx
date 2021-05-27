@@ -105,7 +105,6 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm, removed, cakePrice, account }
   const totalValueFormatted = farm.liquidity.toNumber()
     ? `$${farm.liquidity.toNumber().toLocaleString(undefined, { maximumFractionDigits: 0 })}`
     : '-'
-  // const totalValueFormatted = farm.liquidity && Number.isNaN(farm.liquidity.toNumber()) && farm.liquidity.toString() !== "NaN" ? `$${farm.liquidity.toNumber().toLocaleString(undefined, { maximumFractionDigits: 0 })}` : '-'
 
   const lpLabel = farm.lpSymbol && farm.lpSymbol.toUpperCase().replace('PANCAKE', '')
   const earnLabel = farm.dual ? farm.dual.earnLabel : 'CUB'
