@@ -105,6 +105,10 @@ const Wrapper = styled.div`
   align-items: flex-start;
 `
 
+const FeeWrapper = styled.div`
+  max-width: 400px;
+`
+
 /* const StyledImage = styled(Image)`
   margin-left: auto;
   margin-right: auto;
@@ -410,32 +414,35 @@ const Farms: React.FC<FarmsProps> = ({ tokenMode, kingdomMode }) => {
       </Heading>
     )
     kingdomFees = (
-      <>
-        <Flex>
+      <FeeWrapper>
+      <Heading as="h2" color="secondary" mb="5px" style={{ textAlign: 'left' }}>
+        Fees
+      </Heading>
+        <Flex justifyContent="space-between">
           <Text>Controller fee:</Text>
           <Text>0.4% on profits to controller</Text>
         </Flex>
-        <Flex>
+        <Flex justifyContent="space-between">
           <Text>Platform fee:</Text>
           <Text>0.5% on profits to platform</Text>
         </Flex>
-        <Flex>
+        <Flex justifyContent="space-between">
           <Text>CUB buyback rate:</Text>
           <Text>1.5% on profits</Text>
         </Flex>
-        <Flex>
+        <Flex justifyContent="space-between">
           <Text>Entrance fee:</Text>
           <Text>{`< 0.1% on capital to pool`}</Text>
         </Flex>
-        <Flex>
+        <Flex justifyContent="space-between">
           <Text>Withdrawal fee:</Text>
           <Text>none</Text>
         </Flex>
-        <Flex>
+        <Flex justifyContent="space-between">
           <Text>Fee to CUB staking kingdom:</Text>
           <Text>1% on profits</Text>
         </Flex>
-      </>
+      </FeeWrapper>
     )
     /* extra = (
       <Heading as="h3" color="secondary" mb="30px" style={{ textAlign: 'left', fontSize: '1rem' }}>
