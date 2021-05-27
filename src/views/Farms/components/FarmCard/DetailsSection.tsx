@@ -57,22 +57,11 @@ const DetailsSection: React.FC<ExpandableSectionProps> = ({
   let extra = null
   if (isKingdom) {
     const dailyAPR = new BigNumber(apr).div(new BigNumber(365)).toNumber()
-    // const one = new BigNumber(1)
-    // const r = new BigNumber(apr).div(100)
-    // console.log('r',r.toNumber())
-    // const rDivN = r.div(4500)
-    // console.log('rDivN',rDivN.toNumber())
-    // const bracket = one.plus(rDivN)
-    // console.log('bracket',bracket.toNumber())
-    // const expo = Math.pow(bracket.toNumber(), 4500)
-    // console.log('expo',expo)
-    // const farmAPY = new BigNumber(expo).minus(1).times(100).toFixed(2)
+
     const farmAPY = ((((apr / 100 / 4500) + 1) ** 4500) - 1) * 100
     const totalAPY = cubAPR + farmAPY
     const totalAPYString = cubAPR && totalAPY.toLocaleString('en-US', { maximumFractionDigits: 2 })
-    console.log('cubAPR',cubAPR)
-    console.log('farmAPY',farmAPY)
-console.log('totalAPY',totalAPY)
+
     extra = (
       <>
         <Flex justifyContent="space-between">
@@ -80,7 +69,7 @@ console.log('totalAPY',totalAPY)
           <Text>{`${new BigNumber(apr).toFixed(2)}% (${new BigNumber(dailyAPR).toFixed(2)}%)`}</Text>
         </Flex>
         <Flex justifyContent="space-between">
-          <Text>{TranslateString(354, 'Compound per year')}:</Text>
+          <Text>{TranslateString(354, 'Compounds per year')}:</Text>
           <Text>~4,500</Text>
         </Flex>
         <Flex justifyContent="space-between">
