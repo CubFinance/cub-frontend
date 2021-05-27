@@ -3,7 +3,7 @@ import { Route, useRouteMatch, useLocation } from 'react-router-dom'
 import { useAppDispatch } from 'state'
 import BigNumber from 'bignumber.js'
 import { useWeb3React } from '@web3-react/core'
-import { Image, Heading, RowType, Toggle, Text, Button } from '@pancakeswap-libs/uikit'
+import { Image, Heading, RowType, Toggle, Text, Button, Flex } from '@pancakeswap-libs/uikit'
 import styled from 'styled-components'
 import FlexLayout from 'components/layout/Flex'
 import Page from 'components/layout/Page'
@@ -392,6 +392,7 @@ const Farms: React.FC<FarmsProps> = ({ tokenMode, kingdomMode }) => {
   let heading = TranslateString(320, 'Stake LP tokens to earn CUB')
   let subHeading = TranslateString(10000, 'Deposit Fee will be used to buyback CUB and bLEO')
   let subHeading2 = null
+  let kingdomFees = null
   // let extra = null
   // const data = useGetStats()
   // const tvl = data ? data.total_value_locked_all.toLocaleString('en-US', { maximumFractionDigits: 0 }) : null
@@ -407,6 +408,34 @@ const Farms: React.FC<FarmsProps> = ({ tokenMode, kingdomMode }) => {
       <Heading as="h2" color="warning" mb="20px" style={{ textAlign: 'left' }}>
         IMPORTANT: Must use <a target="_blank" rel="noreferrer" href="https://exchange.pancakeswap.finance/#/pool">Pancakeswap V2 Exchange</a> for V2 Kingdom LP tokens until we add a V2 exchange for Cub Finance
       </Heading>
+    )
+    kingdomFees = (
+      <>
+        <Flex>
+          <Text>Controller fee:</Text>
+          <Text>0.4% on profits to controller</Text>
+        </Flex>
+        <Flex>
+          <Text>Platform fee:</Text>
+          <Text>0.5% on profits to platform</Text>
+        </Flex>
+        <Flex>
+          <Text>CUB buyback rate:</Text>
+          <Text>1.5% on profits</Text>
+        </Flex>
+        <Flex>
+          <Text>Entrance fee:</Text>
+          <Text>{`< 0.1% on capital to pool`}</Text>
+        </Flex>
+        <Flex>
+          <Text>Withdrawal fee:</Text>
+          <Text>none</Text>
+        </Flex>
+        <Flex>
+          <Text>Fee to CUB staking kingdom:</Text>
+          <Text>1% on profits</Text>
+        </Flex>
+      </>
     )
     /* extra = (
       <Heading as="h3" color="secondary" mb="30px" style={{ textAlign: 'left', fontSize: '1rem' }}>
@@ -431,6 +460,8 @@ const Farms: React.FC<FarmsProps> = ({ tokenMode, kingdomMode }) => {
           {subHeading}
         </Heading>
         {subHeading2}
+        {kingdomFees}
+        <br/>
         {/* extra */}
         <Wrapper>
           <Button size="sm">
