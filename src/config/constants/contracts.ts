@@ -9,7 +9,11 @@ export default {
     97: '',
   },
   kingdoms: {
-    56: '0x16fcb955082ce59ee7bea251c3038331f5ca56a1',
+    56: '0x2e72f4b196b9e5b89c29579cc135756a00e6cbbd',
+    97: '',
+  },
+  pcsV2masterChef: {
+    56: '0x73feaa1eE314F8c655E354234017bE2193C9E24E',
     97: '',
   },
   wbnb: {
@@ -74,7 +78,7 @@ export default {
     97: '',
   },
   cakeVault: {
-    56: '',
+    56: '0xa80240Eb5d7E05d3F250cF000eEc0891d00b51CC',
     97: '',
   },
   predictions: {

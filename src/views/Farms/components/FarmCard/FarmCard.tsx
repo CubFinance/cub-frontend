@@ -6,8 +6,10 @@ import { Farm } from 'state/types'
 import { provider as ProviderType } from 'web3-core'
 import useI18n from 'hooks/useI18n'
 import ExpandableSectionButton from 'components/ExpandableSectionButton'
-import { BASE_ADD_LIQUIDITY_URL } from 'config'
+import { BASE_ADD_LIQUIDITY_URL, PCS_ADD_LIQUIDITY_URL } from 'config'
 import getLiquidityUrlPathParts from 'utils/getLiquidityUrlPathParts'
+
+
 import DetailsSection from './DetailsSection'
 import CardHeading from './CardHeading'
 import CardActionsContainer from './CardActionsContainer'
@@ -17,6 +19,10 @@ export interface FarmWithStakedValue extends Farm {
   apr?: number
   liquidity?: BigNumber
   depositFeeBP?: number
+  lpTokenBalancePCSv2?: number
+  lpTotalInQuoteTokenPCS?: number
+  poolWeightPCS?: string
+  pcsCompounding?: number
 }
 
 const RainbowLight = keyframes`
@@ -100,7 +106,7 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm, removed, cakePrice, account }
   // NAR-CAKE LP. The images should be cake-bnb.svg, link-bnb.svg, nar-cake.svg
   const farmImage = farm.lpSymbol.split(' ')[0].toLocaleLowerCase()
 
-  const totalValueFormatted = farm.liquidity
+  const totalValueFormatted = farm.liquidity && farm.liquidity.toNumber()
     ? `$${farm.liquidity.toNumber().toLocaleString(undefined, { maximumFractionDigits: 0 })}`
     : '-'
 
@@ -113,7 +119,8 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm, removed, cakePrice, account }
     quoteTokenAddress: farm.quoteToken.address,
     tokenAddress: farm.token.address,
   })
-  const addLiquidityUrl = `${BASE_ADD_LIQUIDITY_URL}/${liquidityUrlPathParts}`
+  const exchangeUrl = farm.isKingdom ? PCS_ADD_LIQUIDITY_URL : BASE_ADD_LIQUIDITY_URL
+  const addLiquidityUrl = `${exchangeUrl}/${liquidityUrlPathParts}`
   const lpAddress = farm.lpAddresses[process.env.REACT_APP_CHAIN_ID]
 
   return (
@@ -148,7 +155,13 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm, removed, cakePrice, account }
       </Flex>
       <Flex justifyContent='space-between'>
         <Text style={{ fontSize: '16px' }}>{TranslateString(10001, 'Deposit Fee')}:</Text>
-        <Text bold style={{ fontSize: '16px' }}>{(farm.depositFeeBP / 100)}%</Text>
+        {
+          farm.depositFeeBP ? (
+            <Text bold style={{ fontSize: '16px' }}>{(farm.depositFeeBP / 100)}%</Text>
+          ) : (
+            <Skeleton height={24} width={80} />
+          )
+        }
       </Flex>
       <CardActionsContainer farm={farm} account={account} addLiquidityUrl={addLiquidityUrl} />
       <Divider />
@@ -170,6 +183,14 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm, removed, cakePrice, account }
           totalValueFormatted={totalValueFormatted}
           lpLabel={lpLabel}
           addLiquidityUrl={addLiquidityUrl}
+          isKingdom={farm.isKingdom}
+          isKingdomToken={farm.isKingdomToken}
+          tokenPriceVsQuote={Number(farm.tokenPriceVsQuote)}
+          poolWeightPCS={farm.poolWeightPCS}
+          pcsCompounding={farm.pcsCompounding}
+          cubAPR={farm.apr}
+          lpTokenBalancePCSv2={farm.lpTokenBalancePCSv2 ? farm.lpTokenBalancePCSv2 : 0}
+          lpTotalInQuoteTokenPCS={farm.lpTotalInQuoteTokenPCS ? farm.lpTotalInQuoteTokenPCS : 0}
         />
       </ExpandingWrapper>
     </FCard>

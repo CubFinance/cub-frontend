@@ -13,6 +13,7 @@ import useStake from '../../../../hooks/useStake'
 interface FarmCardActionsProps {
   earnings?: BigNumber
   pid?: number
+  isKingdom?: boolean
 }
 
 const BalanceAndCompound = styled.div`
@@ -22,11 +23,11 @@ const BalanceAndCompound = styled.div`
   flex-direction: column;
 `
 
-const HarvestAction: React.FC<FarmCardActionsProps> = ({ earnings, pid }) => {
+const HarvestAction: React.FC<FarmCardActionsProps> = ({ earnings, pid, isKingdom }) => {
   const { account } = useWeb3React()
   const TranslateString = useI18n()
   const [pendingTx, setPendingTx] = useState(false)
-  const { onReward } = useHarvest(pid)
+  const { onReward } = useHarvest(pid, isKingdom)
   const cakePrice = usePriceCakeBusd()
   const { onStake } = useStake(pid)
 

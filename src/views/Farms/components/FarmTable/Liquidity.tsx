@@ -30,10 +30,10 @@ const Container = styled.div`
 `
 
 const Liquidity: React.FunctionComponent<LiquidityProps> = ({ liquidity }) => {
-  const displayLiquidity = liquidity ? (
+  const displayLiquidity = liquidity.toNumber() ? (
     `$${Number(liquidity).toLocaleString(undefined, { maximumFractionDigits: 0 })}`
   ) : (
-    <Skeleton width={60} />
+    '-'
   )
   const TranslateString = useI18n()
   const { targetRef, tooltip, tooltipVisible } = useTooltip(

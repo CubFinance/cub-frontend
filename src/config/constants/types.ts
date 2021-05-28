@@ -10,6 +10,7 @@ export interface Token {
   address?: Address
   decimals?: number
   projectLink?: string
+  busdPrice?: string
 }
 
 export enum PoolIds {
@@ -64,6 +65,9 @@ export interface FarmConfig {
   }
   isKingdom?: boolean
   isTokenOnly?: boolean
+  isKingdomToken?: boolean
+  pcsPid?: number
+  pcsCompounding?: number
 }
 
 export interface PoolConfig {

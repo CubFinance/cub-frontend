@@ -33,7 +33,7 @@ interface FarmCardActionsProps {
 const CardActions: React.FC<FarmCardActionsProps> = ({ farm, account, addLiquidityUrl }) => {
   const TranslateString = useI18n()
   const [requestedApproval, setRequestedApproval] = useState(false)
-  const { pid, lpAddresses, isTokenOnly, token: { address } } = farm
+  const { pid, lpAddresses, isTokenOnly, token: { address }, isKingdom } = farm
   const {
     allowance: allowanceAsString = 0,
     tokenBalance: tokenBalanceAsString = 0,
@@ -59,7 +59,7 @@ const CardActions: React.FC<FarmCardActionsProps> = ({ farm, account, addLiquidi
     return getBep20Contract(lpAddress, web3)
   }, [lpAddress, isTokenOnly, web3, tokenAddress])
 
-  const { onApprove } = useApprove(lpContract)
+  const { onApprove } = useApprove(lpContract, isKingdom)
 
   const handleApprove = useCallback(async () => {
     try {
@@ -79,6 +79,7 @@ const CardActions: React.FC<FarmCardActionsProps> = ({ farm, account, addLiquidi
         tokenName={lpName}
         pid={pid}
         addLiquidityUrl={addLiquidityUrl}
+        isKingdom={isKingdom}
       />
     ) : (
       <Button
@@ -103,7 +104,7 @@ const CardActions: React.FC<FarmCardActionsProps> = ({ farm, account, addLiquidi
           {TranslateString(1072, 'Earned')}
         </Text>
       </Flex>
-      <HarvestAction earnings={earnings} pid={pid} />
+      <HarvestAction earnings={earnings} pid={pid} isKingdom={isKingdom} />
       <Flex>
         <Text bold textTransform="uppercase" color="secondary" fontSize="12px" pr="3px">
           {lpName}

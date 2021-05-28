@@ -35,7 +35,7 @@ const config: MenuEntry[] = [
     icon: 'PawIcon',
     href: '/kingdoms',
     status: {
-      text: 'SOON',
+      text: 'AUTO',
       color: 'warning',
     },
   },
