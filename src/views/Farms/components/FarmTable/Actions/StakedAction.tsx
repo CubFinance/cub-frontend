@@ -141,7 +141,7 @@ const Staked: React.FunctionComponent<StackedActionProps> = ({
             variant="secondary"
             disabled={location.pathname.includes('archived')}
           >
-            {TranslateString(999, 'Stake LP')}
+            {TranslateString(999, isTokenOnly ? 'Stake Token' : 'Stake LP')}
           </Button>
         </ActionContent>
       </ActionContainer>

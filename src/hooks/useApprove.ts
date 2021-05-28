@@ -16,9 +16,6 @@ export const useApprove = (lpContract: Contract, isKingdom?: boolean) => {
 
   const handleApprove = useCallback(async () => {
     try {
-      console.log('lpContract',lpContract)
-      console.log('isKingdom',isKingdom)
-      console.log('account',account)
       const tx = await approve(lpContract, isKingdom ? kingdomContract : masterChefContract, account)
       dispatch(fetchFarmUserDataAsync(account))
       return tx

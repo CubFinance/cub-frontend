@@ -8,10 +8,9 @@ import { FarmConfig } from 'config/constants/types'
 import { DEFAULT_TOKEN_DECIMAL } from 'config'
 import kingdomsABI from 'config/abi/kingdoms.json'
 import pcsv2ABI from 'config/abi/PCS-v2-masterchef.json'
-import { getCAKEamount, getWBNBBUSDAmount, getKingdomPCSBalance } from 'utils/kingdomScripts'
+import { getCAKEamount, getWBNBBUSDAmount } from 'utils/kingdomScripts'
 
 const fetchFarms = async (farmsToFetch: FarmConfig[]) => {
-  // getKingdomPCSBalance()
   const data = await Promise.all(
     farmsToFetch.map(async (farmConfig) => {
       const lpAddress = getAddress(farmConfig.lpAddresses)
