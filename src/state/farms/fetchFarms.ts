@@ -144,11 +144,11 @@ const fetchFarms = async (farmsToFetch: FarmConfig[]) => {
         // lpTotalSupply = lpTokenBalanceMC
         // lpTokenBalanceMC = 0
 // console.log('lpTokenBalancePCSv2',new BigNumber(lpTokenBalancePCSv2).div(DEFAULT_TOKEN_DECIMAL).toNumber())
-        switch (farmConfig.lpSymbol) {
-          case 'CAKE':
+        switch (farmConfig.pid) {
+          case 0:
             kingdomSupply = await getCAKEamount()
             break
-          case 'BNB-BUSD LP':
+          case 1:
             kingdomSupply = await getWBNBBUSDAmount()
             break
           default:
@@ -201,8 +201,6 @@ const fetchFarms = async (farmsToFetch: FarmConfig[]) => {
             .div(DEFAULT_TOKEN_DECIMAL)
             .times(new BigNumber(2))
             // .times(lpTokenRatio)
-
-
         }
         // Amount of token in the LP that are considered staking (i.e amount of token * lp ratio)
         tokenAmount = new BigNumber(tokenBalanceLP).div(BIG_TEN.pow(tokenDecimals)).times(lpTokenRatio)
