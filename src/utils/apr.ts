@@ -1,5 +1,5 @@
 import BigNumber from 'bignumber.js'
-import { BLOCKS_PER_YEAR, CAKE_PER_BLOCK } from 'config'
+import { BLOCKS_PER_YEAR, CAKE_PER_BLOCK, PCSCAKE_PER_YEAR } from 'config'
 
 /**
  * Get the APR value in %
@@ -9,18 +9,6 @@ import { BLOCKS_PER_YEAR, CAKE_PER_BLOCK } from 'config'
  * @param tokenPerBlock Amount of new cake allocated to the pool for each new block
  * @returns Null if the APR is NaN or infinite.
  */
-// export const getPoolApr = (
-//   stakingTokenPrice: number,
-//   rewardTokenPrice: number,
-//   totalStaked: number,
-//   tokenPerBlock: number,
-// ): number => {
-//   const totalRewardPricePerYear = new BigNumber(rewardTokenPrice).times(tokenPerBlock).times(PCS_BLOCKS_PER_YEAR)
-//   const totalStakingTokenInPool = new BigNumber(stakingTokenPrice).times(totalStaked)
-//   const apr = totalRewardPricePerYear.div(totalStakingTokenInPool).times(100)
-//   return apr.isNaN() || !apr.isFinite() ? null : apr.toNumber()
-// }
-
 export const getPoolApr = (
   stakingTokenPrice: number,
   rewardTokenPrice: number,
@@ -40,7 +28,12 @@ export const getPoolApr = (
  * @param poolLiquidityUsd Total pool liquidity in USD
  * @returns
  */
-export const getFarmApr = (poolWeight: BigNumber, cakePriceUsd: BigNumber, poolLiquidityUsd: BigNumber): number => {
+export const getFarmApr = (poolWeight: BigNumber, cakePriceUsd: BigNumber, poolLiquidityUsd: BigNumber, isKingdom?: boolean): number => {
+  if (isKingdom) {
+    const yearlyCakeRewardAllocation = PCSCAKE_PER_YEAR.times(poolWeight)
+    const apr = yearlyCakeRewardAllocation.times(cakePriceUsd).div(poolLiquidityUsd).times(100)
+    return apr.isNaN() || !apr.isFinite() ? null : apr.toNumber()
+  }
   const yearlyCakeRewardAllocation = CAKE_PER_BLOCK.times(BLOCKS_PER_YEAR).times(poolWeight)
   const liquidity = poolLiquidityUsd.toNumber() ? poolLiquidityUsd : new BigNumber(0)
   const apr = yearlyCakeRewardAllocation.times(cakePriceUsd).div(liquidity).times(100)

@@ -18,6 +18,9 @@ export const BSC_BLOCK_TIME = 3
 
 export const CAKE_PER_BLOCK = new BigNumber(1)
 export const BLOCKS_PER_YEAR = new BigNumber(10512000)
+export const PCSCAKE_PER_BLOCK = new BigNumber(40)
+export const PCSBLOCKS_PER_YEAR = new BigNumber((60 / BSC_BLOCK_TIME) * 60 * 24 * 365) // 10512000
+export const PCSCAKE_PER_YEAR = PCSCAKE_PER_BLOCK.times(PCSBLOCKS_PER_YEAR)
 // export const PCS_BLOCKS_PER_YEAR = new BigNumber((60 / BSC_BLOCK_TIME) * 60 * 24 * 365) // 10512000
 export const BASE_URL = 'https://cubdefi.com'
 export const BASE_EXCHANGE_URL = 'https://exchange.cubdefi.com'

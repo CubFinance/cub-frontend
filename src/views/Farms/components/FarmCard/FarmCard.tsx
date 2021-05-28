@@ -19,6 +19,10 @@ export interface FarmWithStakedValue extends Farm {
   apr?: number
   liquidity?: BigNumber
   depositFeeBP?: number
+  lpTokenBalancePCSv2?: number
+  lpTotalInQuoteTokenPCS?: number
+  poolWeightPCS?: string
+  pcsCompounding?: number
 }
 
 const RainbowLight = keyframes`
@@ -180,7 +184,13 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm, removed, cakePrice, account }
           lpLabel={lpLabel}
           addLiquidityUrl={addLiquidityUrl}
           isKingdom={farm.isKingdom}
+          isKingdomToken={farm.isKingdomToken}
+          tokenPriceVsQuote={Number(farm.tokenPriceVsQuote)}
+          poolWeightPCS={farm.poolWeightPCS}
+          pcsCompounding={farm.pcsCompounding}
           cubAPR={farm.apr}
+          lpTokenBalancePCSv2={farm.lpTokenBalancePCSv2 ? farm.lpTokenBalancePCSv2 : 0}
+          lpTotalInQuoteTokenPCS={farm.lpTotalInQuoteTokenPCS ? farm.lpTotalInQuoteTokenPCS : 0}
         />
       </ExpandingWrapper>
     </FCard>

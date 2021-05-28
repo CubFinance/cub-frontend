@@ -264,8 +264,10 @@ const farms: FarmConfig[] = [
   // },
 
   // KINGDOMS
-  /* {
+  {
     pid: 0,
+    pcsPid: 0,
+    pcsCompounding: 4500,
     isKingdom: true,
     isKingdomToken: true,
     lpSymbol: 'CAKE',
@@ -275,9 +277,11 @@ const farms: FarmConfig[] = [
     },
     token: tokens.cake,
     quoteToken: tokens.busd,
-  }, */
+  },
   {
     pid: 1,
+    pcsPid: 252,
+    pcsCompounding: 420,
     isKingdom: true,
     lpSymbol: 'WBNB-BUSD LP',
     lpAddresses: {
