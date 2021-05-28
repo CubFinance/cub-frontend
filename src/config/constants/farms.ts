@@ -3,6 +3,16 @@ import tokens from './tokens'
 import { FarmConfig } from './types'
 
 const farms: FarmConfig[] = [
+  // {
+  //   pid: 0,
+  //   lpSymbol: 'BNB-BUSD LP',
+  //   lpAddresses: {
+  //     97: '',
+  //     56: '0x1B96B92314C44b159149f7E0303511fB2Fc4774f',
+  //   },
+  //   token: tokens.wbnb,
+  //   quoteToken: tokens.busd,
+  // },
   {
     pid: 10,
     lpSymbol: 'CUB-BUSD LP',
@@ -13,7 +23,7 @@ const farms: FarmConfig[] = [
     token: tokens.cub,
     quoteToken: tokens.busd,
   },
-  {
+  /* {
     pid: 11,
     lpSymbol: 'CUB-BNB LP',
     lpAddresses: {
@@ -33,16 +43,6 @@ const farms: FarmConfig[] = [
     token: tokens.bleo,
     quoteToken: tokens.wbnb,
   },
-  // {
-  //   pid: 0,
-  //   lpSymbol: 'BNB-BUSD LP',
-  //   lpAddresses: {
-  //     97: '',
-  //     56: '0x1B96B92314C44b159149f7E0303511fB2Fc4774f',
-  //   },
-  //   token: tokens.wbnb,
-  //   quoteToken: tokens.busd,
-  // },
   {
     pid: 6,
     lpSymbol: 'USDT-BUSD LP',
@@ -92,7 +92,7 @@ const farms: FarmConfig[] = [
     },
     token: tokens.dec,
     quoteToken: tokens.busd,
-  },
+  }, */
   // {
   //   pid: 4,
   //   lpSymbol: 'USDC-BUSD LP',
@@ -133,18 +133,6 @@ const farms: FarmConfig[] = [
   //   token: tokens.cake,
   //   quoteToken: tokens.wbnb,
   // },
-
-  {
-    pid: 12,
-    isTokenOnly: true,
-    lpSymbol: 'CUB',
-    lpAddresses: {
-      97: '',
-      56: '0x0EF564D4F8D6C0ffE13348A32e21EFd55e508e84', // CUB-BUSD LP
-    },
-    token: tokens.cub,
-    quoteToken: tokens.busd,
-  },
 
   // {
   //   pid: 13,
@@ -196,6 +184,17 @@ const farms: FarmConfig[] = [
   //   token: tokens.usdt,
   //   quoteToken: tokens.busd,
   // },
+  /* {
+    pid: 12,
+    isTokenOnly: true,
+    lpSymbol: 'CUB',
+    lpAddresses: {
+      97: '',
+      56: '0x0EF564D4F8D6C0ffE13348A32e21EFd55e508e84', // CUB-BUSD LP
+    },
+    token: tokens.cub,
+    quoteToken: tokens.busd,
+  },
   {
     pid: 17,
     isTokenOnly: true,
@@ -218,6 +217,17 @@ const farms: FarmConfig[] = [
     token: tokens.eth,
     quoteToken: tokens.busd,
   },
+  {
+    pid: 21,
+    isTokenOnly: true,
+    lpSymbol: 'DOT',
+    lpAddresses: {
+      97: '',
+      56: '0x54c1ec2f543966953f2f7564692606ea7d5a184e', // DOT-BUSD LP
+    },
+    token: tokens.dot,
+    quoteToken: tokens.busd,
+  }, */
   // {
   //   pid: 19,
   //   isTokenOnly: true,
@@ -240,17 +250,7 @@ const farms: FarmConfig[] = [
   //   token: tokens.usdc,
   //   quoteToken: tokens.busd,
   // },
-  {
-    pid: 21,
-    isTokenOnly: true,
-    lpSymbol: 'DOT',
-    lpAddresses: {
-      97: '',
-      56: '0x54c1ec2f543966953f2f7564692606ea7d5a184e', // DOT-BUSD LP
-    },
-    token: tokens.dot,
-    quoteToken: tokens.busd,
-  },
+
   // {
   //   pid: 22,
   //   isTokenOnly: true,
@@ -264,6 +264,29 @@ const farms: FarmConfig[] = [
   // },
 
   // KINGDOMS
+  /* {
+    pid: 0,
+    isKingdom: true,
+    isKingdomToken: true,
+    lpSymbol: 'CAKE',
+    lpAddresses: {
+      97: '',
+      56: '0x0ed8e0a2d99643e1e65cca22ed4424090b8b7458', // CAKE-BUSD LP
+    },
+    token: tokens.cake,
+    quoteToken: tokens.busd,
+  }, */
+  {
+    pid: 1,
+    isKingdom: true,
+    lpSymbol: 'WBNB-BUSD LP',
+    lpAddresses: {
+      97: '',
+      56: '0x58f876857a02d6762e0101bb5c46a8c1ed44dc16',
+    },
+    token: tokens.wbnb,
+    quoteToken: tokens.busd,
+  },
   /* {
     pid: 17,
     isKingdom: true,
@@ -311,20 +334,8 @@ const farms: FarmConfig[] = [
     },
     quoteTokenSymbol: QuoteToken.BUSD,
     quoteTokenAdresses: contracts.busd,
-  }, */
-  {
-    pid: 0,
-    isKingdom: true,
-    isKingdomToken: true,
-    lpSymbol: 'CAKE',
-    lpAddresses: {
-      97: '',
-      56: '0x0ed8e0a2d99643e1e65cca22ed4424090b8b7458', // CAKE-BUSD LP
-    },
-    token: tokens.cake,
-    quoteToken: tokens.busd,
   },
-  /* {
+  {
     pid: 15,
     isKingdom: true,
     lpSymbol: 'WBNB',
@@ -340,17 +351,6 @@ const farms: FarmConfig[] = [
     quoteTokenSymbol: QuoteToken.BNB,
     quoteTokenAdresses: contracts.wbnb,
   }, */
-  {
-    pid: 1,
-    isKingdom: true,
-    lpSymbol: 'WBNB-BUSD LP',
-    lpAddresses: {
-      97: '',
-      56: '0x58f876857a02d6762e0101bb5c46a8c1ed44dc16',
-    },
-    token: tokens.wbnb,
-    quoteToken: tokens.busd,
-  },
 ]
 
 export default farms

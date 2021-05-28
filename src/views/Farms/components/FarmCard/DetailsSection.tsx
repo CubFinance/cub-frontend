@@ -59,9 +59,8 @@ const DetailsSection: React.FC<ExpandableSectionProps> = ({
     const dailyAPR = new BigNumber(apr).div(new BigNumber(365)).toNumber()
 
     const farmAPY = ((((apr / 100 / 4500) + 1) ** 4500) - 1) * 100
-    const totalAPY = cubAPR + farmAPY
-    const totalAPYString = cubAPR && totalAPY.toLocaleString('en-US', { maximumFractionDigits: 2 })
-
+    const totalAPY = cubAPR ? cubAPR + farmAPY : farmAPY
+    const totalAPYString = totalAPY && totalAPY.toLocaleString('en-US', { maximumFractionDigits: 2 })
     extra = (
       <>
         <Flex justifyContent="space-between">
@@ -83,7 +82,7 @@ const DetailsSection: React.FC<ExpandableSectionProps> = ({
         </Flex>
         <Flex justifyContent="space-between">
           <Text>{TranslateString(354, 'CUB APR')}:</Text>
-          <Text>{cubAPR && cubAPR.toLocaleString('en-US', { maximumFractionDigits: 2 })}%</Text>
+          <Text>{cubAPR ? `${cubAPR.toLocaleString('en-US', { maximumFractionDigits: 2 })}%` : '-'}</Text>
         </Flex>
         <Flex justifyContent="space-between">
           <Text>{TranslateString(354, 'Total APY')}:</Text>

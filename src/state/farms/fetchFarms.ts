@@ -125,8 +125,6 @@ const fetchFarms = async (farmsToFetch: FarmConfig[]) => {
       let tokenPriceVsQuote
       let quoteTokenAmount
 
-      // if (farmConfig.isTokenOnly || farmConfig.isKingdom) {
-      // if (farmConfig.isTokenOnly || farmConfig.isKingdomToken) {
       if (farmConfig.isTokenOnly || farmConfig.isKingdomToken) {
         tokenAmount = farmConfig.isKingdomToken ? new BigNumber(kingdomSupply).div(DEFAULT_TOKEN_DECIMAL) : new BigNumber(lpTokenBalanceMC).div(new BigNumber(10).pow(tokenDecimals));
         if(farmConfig.token.symbol === 'BUSD' && farmConfig.quoteToken.symbol === 'BUSD') {
@@ -174,7 +172,7 @@ const fetchFarms = async (farmsToFetch: FarmConfig[]) => {
           }
       }
 
-      let newCalls = [
+      const mCalls = [
         {
           address: getMasterChefAddress(),
           name: 'poolInfo',
@@ -190,25 +188,46 @@ const fetchFarms = async (farmsToFetch: FarmConfig[]) => {
         }
       ]
 
-      if (farmConfig.isKingdom) {
-        newCalls = [{
-          address: getKingdomsAddress(),
-          name: 'poolInfo',
-          params: [farmConfig.pid],
-        },
-        {
-          address: getKingdomsAddress(),
-          name: 'totalAllocPoint',
-        },
-        {
-          address: getKingdomsAddress(),
-          name: 'cubPerBlock',
-        }]
-      }
-
-      const [info, totalAllocPoint, cubPerBlock] = await multicall(farmConfig.isKingdom ? kingdomsABI : masterchefABI, newCalls).catch(error => {
+      const [info, totalAllocPoint, cubPerBlock] = await multicall(masterchefABI, mCalls).catch(error => {
         throw new Error(`multicall nontoken: ${error}`)
       })
+
+      if (farmConfig.isKingdom) {
+        const kCalls = [
+          {
+            address: getKingdomsAddress(),
+            name: 'poolInfo',
+            params: [farmConfig.pid],
+          },
+          {
+            address: getKingdomsAddress(),
+            name: 'totalAllocPoint',
+          }
+        ]
+
+        const [kInfo, kTotalAllocPoint] = await multicall(kingdomsABI, kCalls).catch(error => {
+          throw new Error(`multicall nontoken: ${error}`)
+        })
+
+        const allocPoint = new BigNumber(kInfo.allocPoint._hex)
+        const kingdomTotalAlloc = new BigNumber(600)
+
+        const kingdomCorrectAlloc = allocPoint.times(new BigNumber(kingdomTotalAlloc)).div(new BigNumber(kTotalAllocPoint))
+
+        const kingdomPoolWeight = kingdomCorrectAlloc.div(new BigNumber(totalAllocPoint))
+
+        return {
+          ...farmConfig,
+          tokenAmount: tokenAmount.toJSON(),
+          lpTotalSupply: new BigNumber(lpTotalSupply).toJSON(),
+          lpTotalInQuoteToken: lpTotalInQuoteToken.toJSON(),
+          tokenPriceVsQuote: tokenPriceVsQuote.toJSON(),
+          poolWeight: kingdomPoolWeight.toJSON(),
+          multiplier: `${kingdomCorrectAlloc.div(100).toString()}X`,
+          depositFeeBP: info.depositFeeBP,
+          cubPerBlock: new BigNumber(cubPerBlock).toNumber(),
+        }
+      }
 
       const allocPoint = new BigNumber(info.allocPoint._hex)
       const poolWeight = allocPoint.div(new BigNumber(totalAllocPoint))

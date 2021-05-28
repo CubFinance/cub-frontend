@@ -22,6 +22,7 @@ import isArchivedPid from 'utils/farmHelpers'
 import PageHeader from 'components/PageHeader'
 import { fetchFarmsPublicDataAsync, setLoadArchivedFarmsData } from 'state/farms'
 import Select, { OptionProps } from 'components/Select/Select'
+import { DEFAULT_TOKEN_DECIMAL } from 'config'
 // import { useGetStats } from 'hooks/api'
 import FarmCard, { FarmWithStakedValue } from './components/FarmCard/FarmCard'
 import Table from './components/FarmTable/FarmTable'
@@ -31,6 +32,7 @@ import { RowProps } from './components/FarmTable/Row'
 import ToggleView from './components/ToggleView/ToggleView'
 import { DesktopColumnSchema, ViewMode } from './components/types'
 // import CardValue from '../Home/components/CardValue'
+
 
 const ControlContainer = styled.div`
   display: flex;

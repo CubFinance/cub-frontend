@@ -1,5 +1,5 @@
 import BigNumber from 'bignumber.js'
-import { BLOCKS_PER_YEAR, PCS_BLOCKS_PER_YEAR, CAKE_PER_BLOCK } from 'config'
+import { BLOCKS_PER_YEAR, CAKE_PER_BLOCK } from 'config'
 
 /**
  * Get the APR value in %
@@ -27,7 +27,7 @@ export const getPoolApr = (
   totalStaked: number,
   tokenPerBlock: number,
 ): number => {
-  const totalRewardPricePerYear = new BigNumber(rewardTokenPrice).times(tokenPerBlock).times(PCS_BLOCKS_PER_YEAR)
+  const totalRewardPricePerYear = new BigNumber(rewardTokenPrice).times(tokenPerBlock).times(BLOCKS_PER_YEAR)
   const totalStakingTokenInPool = new BigNumber(stakingTokenPrice).times(totalStaked)
   const apr = totalRewardPricePerYear.div(totalStakingTokenInPool).times(100)
   return apr.isNaN() || !apr.isFinite() ? null : apr.toNumber()
@@ -42,7 +42,7 @@ export const getPoolApr = (
  */
 export const getFarmApr = (poolWeight: BigNumber, cakePriceUsd: BigNumber, poolLiquidityUsd: BigNumber): number => {
   const yearlyCakeRewardAllocation = CAKE_PER_BLOCK.times(BLOCKS_PER_YEAR).times(poolWeight)
-  const liquidity = poolLiquidityUsd.toNumber() ? poolLiquidityUsd : new BigNumber(1)
+  const liquidity = poolLiquidityUsd.toNumber() ? poolLiquidityUsd : new BigNumber(0)
   const apr = yearlyCakeRewardAllocation.times(cakePriceUsd).div(liquidity).times(100)
   return apr.isNaN() || !apr.isFinite() ? null : apr.toNumber()
 }
