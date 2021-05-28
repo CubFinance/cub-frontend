@@ -2053,9 +2053,9 @@
     eslint-plugin-react "^7.21.5"
     eslint-plugin-react-hooks "^4.0.0"
 
-"@pancakeswap-libs/uikit@KrNel/krnel-uikit#6ac45dfb71702435f15ac8eec11eb769343171fa":
+"@pancakeswap-libs/uikit@CubFinance/cub-uikit#b53897945138e573b33466ecd0b1cf8d8c3e6ad7":
   version "0.29.2"
-  resolved "https://codeload.github.com/KrNel/krnel-uikit/tar.gz/6ac45dfb71702435f15ac8eec11eb769343171fa"
+  resolved "https://codeload.github.com/CubFinance/cub-uikit/tar.gz/b53897945138e573b33466ecd0b1cf8d8c3e6ad7"
   dependencies:
     "@popperjs/core" "^2.9.2"
     "@types/lodash" "^4.14.168"
@@ -9154,6 +9154,11 @@ loader-utils@^1.1.0, loader-utils@^1.2.3, loader-utils@^1.4.0:
     emojis-list "^3.0.0"
     json5 "^1.0.1"
 
+loadjs@^4.2.0:
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/loadjs/-/loadjs-4.2.0.tgz#2a0336376397a6a43edf98c9ec3229ddd5abb6f6"
+  integrity sha512-AgQGZisAlTPbTEzrHPb6q+NYBMD+DP9uvGSIjSUM5uG+0jG15cb8axWpxuOIqrmQjn6scaaH8JwloiP27b2KXA==
+
 locate-path@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/locate-path/-/locate-path-2.0.0.tgz#2b568b265eec944c6d9c0de9c3dbbbca0354cd8e"
@@ -11753,7 +11758,7 @@ react-router@5.2.0:
     tiny-invariant "^1.0.2"
     tiny-warning "^1.0.0"
 
-react-scripts@^4.0.1:
+react-scripts@^4.0.3:
   version "4.0.3"
   resolved "https://registry.yarnpkg.com/react-scripts/-/react-scripts-4.0.3.tgz#b1cafed7c3fa603e7628ba0f187787964cb5d345"
   integrity sha512-S5eO4vjUzUisvkIPB7jVsKtuH2HhWcASREYWHAQ1FP5HyCv3xgn+wpILAEWkmy+A+tTNbSZClhxjT3qz6g4L1A==
@@ -11828,6 +11833,13 @@ react-transition-group@^4.4.1:
     dom-helpers "^5.0.1"
     loose-envify "^1.4.0"
     prop-types "^15.6.2"
+
+react-twitter-widgets@^1.10.0:
+  version "1.10.0"
+  resolved "https://registry.yarnpkg.com/react-twitter-widgets/-/react-twitter-widgets-1.10.0.tgz#f5395c25b954631b5a2532cdb48005f7db61d370"
+  integrity sha512-K7MAREhkKJxrhoiNWricKs1O++NyElnVpcplLzZ67gDrmeIsD3E4TUzlt0/nTZAHPOPPc86V4kEd4KIg4de7cQ==
+  dependencies:
+    loadjs "^4.2.0"
 
 react@^17.0.1:
   version "17.0.2"

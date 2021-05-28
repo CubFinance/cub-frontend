@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useMemo } from 'react'
 import styled from 'styled-components'
 import { Button, useModal, IconButton, AddIcon, MinusIcon, Skeleton } from '@pancakeswap-libs/uikit'
 import { useLocation } from 'react-router-dom'
@@ -15,6 +15,7 @@ import { getBalanceNumber, getFullDisplayBalance } from 'utils/formatBalance'
 import useStake from 'hooks/useStake'
 import useUnstake from 'hooks/useUnstake'
 import useWeb3 from 'hooks/useWeb3'
+import { getAddress } from 'utils/addressHelpers'
 
 import DepositModal from '../../DepositModal'
 import WithdrawModal from '../../WithdrawModal'
@@ -35,6 +36,7 @@ const Staked: React.FunctionComponent<StackedActionProps> = ({
   quoteToken,
   token,
   userDataReady,
+  isTokenOnly,
 }) => {
   const TranslateString = useI18n()
   const { account } = useWeb3React()
@@ -44,6 +46,7 @@ const Staked: React.FunctionComponent<StackedActionProps> = ({
   const { onUnstake } = useUnstake(pid)
   const web3 = useWeb3()
   const location = useLocation()
+  const tokenAddress = getAddress(token.address)
 
   const isApproved = account && allowance && allowance.isGreaterThan(0)
 
@@ -67,7 +70,13 @@ const Staked: React.FunctionComponent<StackedActionProps> = ({
   )
   const [onPresentWithdraw] = useModal(<WithdrawModal max={stakedBalance} onConfirm={onUnstake} tokenName={lpSymbol} />)
 
-  const lpContract = getBep20Contract(lpAddress, web3)
+  // const lpContract = getBep20Contract(lpAddress, web3)
+  const lpContract = useMemo(() => {
+    if(isTokenOnly){
+      return getBep20Contract(tokenAddress, web3)
+    }
+    return getBep20Contract(lpAddress, web3)
+  }, [lpAddress, isTokenOnly, web3, tokenAddress])
 
   const { onApprove } = useApprove(lpContract)
 
