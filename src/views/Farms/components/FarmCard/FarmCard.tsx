@@ -151,7 +151,13 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm, removed, cakePrice, account }
       </Flex>
       <Flex justifyContent='space-between'>
         <Text style={{ fontSize: '16px' }}>{TranslateString(10001, 'Deposit Fee')}:</Text>
-        <Text bold style={{ fontSize: '16px' }}>{(farm.depositFeeBP / 100)}%</Text>
+        {
+          farm.depositFeeBP ? (
+            <Text bold style={{ fontSize: '16px' }}>{(farm.depositFeeBP / 100)}%</Text>
+          ) : (
+            <Skeleton height={24} width={80} />
+          )
+        }
       </Flex>
       <CardActionsContainer farm={farm} account={account} addLiquidityUrl={addLiquidityUrl} />
       <Divider />

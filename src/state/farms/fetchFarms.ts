@@ -224,7 +224,7 @@ const fetchFarms = async (farmsToFetch: FarmConfig[]) => {
           tokenPriceVsQuote: tokenPriceVsQuote.toJSON(),
           poolWeight: kingdomPoolWeight.toJSON(),
           multiplier: `${kingdomCorrectAlloc.div(100).toString()}X`,
-          depositFeeBP: info.depositFeeBP,
+          depositFeeBP: kInfo.depositFeeBP,
           cubPerBlock: new BigNumber(cubPerBlock).toNumber(),
         }
       }
