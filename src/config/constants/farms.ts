@@ -23,7 +23,7 @@ const farms: FarmConfig[] = [
     token: tokens.cub,
     quoteToken: tokens.busd,
   },
-  /* {
+  {
     pid: 11,
     lpSymbol: 'CUB-BNB LP',
     lpAddresses: {
@@ -92,7 +92,7 @@ const farms: FarmConfig[] = [
     },
     token: tokens.dec,
     quoteToken: tokens.busd,
-  }, */
+  },
   // {
   //   pid: 4,
   //   lpSymbol: 'USDC-BUSD LP',
@@ -184,7 +184,7 @@ const farms: FarmConfig[] = [
   //   token: tokens.usdt,
   //   quoteToken: tokens.busd,
   // },
-  /* {
+  {
     pid: 12,
     isTokenOnly: true,
     lpSymbol: 'CUB',
@@ -227,7 +227,7 @@ const farms: FarmConfig[] = [
     },
     token: tokens.dot,
     quoteToken: tokens.busd,
-  }, */
+  },
   // {
   //   pid: 19,
   //   isTokenOnly: true,

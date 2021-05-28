@@ -338,7 +338,7 @@ const Farms: React.FC<FarmsProps> = ({ tokenMode, kingdomMode }) => {
   })
 
   const renderContent = (): JSX.Element => {
-    if (viewMode === ViewMode.TABLE && rowData.length) {
+    if (!kingdomMode && viewMode === ViewMode.TABLE && rowData.length) {
       const columnSchema = DesktopColumnSchema
 
       const columns = columnSchema.map((column) => ({
@@ -397,7 +397,8 @@ const Farms: React.FC<FarmsProps> = ({ tokenMode, kingdomMode }) => {
   let header = TranslateString(674, 'Farms')
   let heading = TranslateString(320, 'Stake LP tokens to earn CUB')
   let subHeading = TranslateString(10000, 'Deposit Fee will be used to buyback CUB and bLEO')
-  let subHeading2 = null
+  let subHeadingPCS = null
+  let subHeadingCertik = null
   let kingdomFees = null
   // let extra = null
   // const data = useGetStats()
@@ -410,9 +411,14 @@ const Farms: React.FC<FarmsProps> = ({ tokenMode, kingdomMode }) => {
     header = TranslateString(674, 'Kingdoms')
     heading = TranslateString(null, 'Kingdoms: Composable Auto-Compounding')
     subHeading = TranslateString(null, 'Stake tokens for cross-platform farming plus CUB rewards')
-    subHeading2 = (
+    subHeadingPCS = (
       <Heading as="h2" color="warning" mb="20px" style={{ textAlign: 'left' }}>
         IMPORTANT: Must use <a target="_blank" rel="noreferrer" href="https://exchange.pancakeswap.finance/#/pool">Pancakeswap V2 Exchange</a> for V2 Kingdom LP tokens until we add a V2 exchange for Cub Finance
+      </Heading>
+    )
+    subHeadingCertik = (
+      <Heading as="h2" color="warning" mb="20px" style={{ textAlign: 'left' }}>
+        CertiK Audit is Pending: Our other contracts have been audited by CertiK and Kingdoms are currently under review. Please use at your own discretion until the audit has been published
       </Heading>
     )
     kingdomFees = (
@@ -421,28 +427,20 @@ const Farms: React.FC<FarmsProps> = ({ tokenMode, kingdomMode }) => {
         Fees
       </Heading>
         <Flex justifyContent="space-between">
-          <Text>Controller fee:</Text>
-          <Text>0.4% on profits to controller</Text>
+          <Text>Management Fee:</Text>
+          <Text>0.9%</Text>
         </Flex>
         <Flex justifyContent="space-between">
-          <Text>Platform fee:</Text>
-          <Text>0.5% on profits to platform</Text>
+          <Text>Withdrawal Fee:</Text>
+          <Text>None</Text>
         </Flex>
         <Flex justifyContent="space-between">
-          <Text>CUB buyback rate:</Text>
-          <Text>1.5% on profits</Text>
+          <Text>Fee to CUB Staking Kingdom:</Text>
+          <Text>1%</Text>
         </Flex>
         <Flex justifyContent="space-between">
-          <Text>Entrance fee:</Text>
-          <Text>{`< 0.1% on capital to pool`}</Text>
-        </Flex>
-        <Flex justifyContent="space-between">
-          <Text>Withdrawal fee:</Text>
-          <Text>none</Text>
-        </Flex>
-        <Flex justifyContent="space-between">
-          <Text>Fee to CUB staking kingdom:</Text>
-          <Text>1% on profits</Text>
+          <Text>CUB Burn Rate:</Text>
+          <Text>100% of Fees Buyback and Burn CUB</Text>
         </Flex>
       </FeeWrapper>
     )
@@ -462,7 +460,8 @@ const Farms: React.FC<FarmsProps> = ({ tokenMode, kingdomMode }) => {
         <Heading as="h2" color="secondary" mb={tlvSpacing} style={{ textAlign: 'left' }}>
           {subHeading}
         </Heading>
-        {subHeading2}
+        {subHeadingPCS}
+        {subHeadingCertik}
         {kingdomFees}
         <br/>
         {/* extra */}
@@ -475,17 +474,21 @@ const Farms: React.FC<FarmsProps> = ({ tokenMode, kingdomMode }) => {
       {/* <MigrationV2 /> */}
       <Page>
         <ControlContainer>
-          <ViewControls>
-            <ToggleView viewMode={viewMode} onToggle={(mode: ViewMode) => setViewMode(mode)} />
-            <ToggleWrapper>
-              <Toggle checked={stakedOnly} onChange={() => setStakedOnly(!stakedOnly)} scale="sm" />
-              <Text> {TranslateString(1116, 'Staked only')}</Text>
-            </ToggleWrapper>
-            <FarmTabButtons
-              hasStakeInFinishedFarms={stakedInactiveFarms.length > 0}
-              hasStakeInArchivedFarms={stakedArchivedFarms.length > 0}
-            />
-          </ViewControls>
+          {
+            !kingdomMode && (
+              <ViewControls>
+                <ToggleView viewMode={viewMode} onToggle={(mode: ViewMode) => setViewMode(mode)} />
+                <ToggleWrapper>
+                  <Toggle checked={stakedOnly} onChange={() => setStakedOnly(!stakedOnly)} scale="sm" />
+                  <Text> {TranslateString(1116, 'Staked only')}</Text>
+                </ToggleWrapper>
+                <FarmTabButtons
+                  hasStakeInFinishedFarms={stakedInactiveFarms.length > 0}
+                  hasStakeInArchivedFarms={stakedArchivedFarms.length > 0}
+                />
+              </ViewControls>
+            )
+          }
           <FilterContainer>
             <LabelWrapper>
               <Text>SORT BY</Text>
