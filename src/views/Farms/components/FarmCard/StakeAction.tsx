@@ -17,6 +17,8 @@ interface FarmCardActionsProps {
   pid?: number
   addLiquidityUrl?: string
   isKingdom?: boolean
+  isTokenOnly?: boolean
+  isKingdomToken?: boolean
 }
 
 const IconButtonWrapper = styled.div`
@@ -33,6 +35,8 @@ const StakeAction: React.FC<FarmCardActionsProps> = ({
   pid,
   addLiquidityUrl,
   isKingdom,
+  isTokenOnly,
+  isKingdomToken,
 }) => {
   const TranslateString = useI18n()
   const { onStake } = useStake(pid, isKingdom)
@@ -48,7 +52,7 @@ const StakeAction: React.FC<FarmCardActionsProps> = ({
   }, [stakedBalance])
 
   const [onPresentDeposit] = useModal(
-    <DepositModal max={tokenBalance} onConfirm={onStake} tokenName={tokenName} addLiquidityUrl={addLiquidityUrl} />,
+    <DepositModal max={tokenBalance} onConfirm={onStake} tokenName={tokenName} addLiquidityUrl={addLiquidityUrl} isTokenOnly={isTokenOnly} isKingdomToken={isKingdomToken} />,
   )
   const [onPresentWithdraw] = useModal(
     <WithdrawModal max={stakedBalance} onConfirm={onUnstake} tokenName={tokenName} />,
@@ -57,7 +61,7 @@ const StakeAction: React.FC<FarmCardActionsProps> = ({
   const renderStakingButtons = () => {
     return stakedBalance.eq(0) ? (
       <Button onClick={onPresentDeposit} disabled={location.pathname.includes('archived')}>
-        {TranslateString(999, 'Stake LP')}
+        {TranslateString(999, isTokenOnly || isKingdomToken ? 'Stake Token' : 'Stake LP')}
       </Button>
     ) : (
       <IconButtonWrapper>

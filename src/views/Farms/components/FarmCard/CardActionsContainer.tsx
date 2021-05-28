@@ -80,6 +80,8 @@ const CardActions: React.FC<FarmCardActionsProps> = ({ farm, account, addLiquidi
         pid={pid}
         addLiquidityUrl={addLiquidityUrl}
         isKingdom={isKingdom}
+        isTokenOnly={farm.isTokenOnly}
+        isKingdomToken={farm.isKingdomToken}
       />
     ) : (
       <Button
