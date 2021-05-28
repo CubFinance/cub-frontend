@@ -6,7 +6,9 @@ import { useHarvest } from 'hooks/useHarvest'
 import { getBalanceNumber } from 'utils/formatBalance'
 import { useWeb3React } from '@web3-react/core'
 import { usePriceCakeBusd } from 'state/hooks'
+import styled from 'styled-components'
 import CardBusdValue from '../../../Home/components/CardBusdValue'
+import useStake from '../../../../hooks/useStake'
 
 interface FarmCardActionsProps {
   earnings?: BigNumber
@@ -20,6 +22,7 @@ const HarvestAction: React.FC<FarmCardActionsProps> = ({ earnings, pid, isKingdo
   const [pendingTx, setPendingTx] = useState(false)
   const { onReward } = useHarvest(pid, isKingdom)
   const cakePrice = usePriceCakeBusd()
+  const { onStake } = useStake(pid)
 
   const rawEarningsBalance = account ? getBalanceNumber(earnings) : 0
   const displayBalance = rawEarningsBalance.toLocaleString()
@@ -31,16 +34,33 @@ const HarvestAction: React.FC<FarmCardActionsProps> = ({ earnings, pid, isKingdo
         {displayBalance}
         {earningsBusd > 0 && <CardBusdValue value={earningsBusd} />}
       </Heading>
-      <Button
-        disabled={rawEarningsBalance === 0 || pendingTx}
-        onClick={async () => {
-          setPendingTx(true)
-          await onReward()
-          setPendingTx(false)
-        }}
-      >
-        {TranslateString(562, 'Harvest')}
-      </Button>
+      <BalanceAndCompound>
+        {pid === 12 ?
+          <Button
+            disabled={rawEarningsBalance === 0 || pendingTx}
+            size='sm'
+            variant='secondary'
+            marginBottom='15px'
+            onClick={async () => {
+              setPendingTx(true)
+              await onStake(rawEarningsBalance.toString())
+              setPendingTx(false)
+            }}
+          >
+            {TranslateString(999, 'Compound')}
+          </Button>
+          : null}
+        <Button
+          disabled={rawEarningsBalance === 0 || pendingTx}
+          onClick={async () => {
+            setPendingTx(true)
+            await onReward()
+            setPendingTx(false)
+          }}
+        >
+          {TranslateString(562, 'Harvest')}
+        </Button>
+      </BalanceAndCompound>
     </Flex>
   )
 }
