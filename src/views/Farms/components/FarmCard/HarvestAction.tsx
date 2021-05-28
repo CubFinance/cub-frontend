@@ -16,6 +16,13 @@ interface FarmCardActionsProps {
   isKingdom?: boolean
 }
 
+const BalanceAndCompound = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: column;
+`
+
 const HarvestAction: React.FC<FarmCardActionsProps> = ({ earnings, pid, isKingdom }) => {
   const { account } = useWeb3React()
   const TranslateString = useI18n()
