@@ -33,7 +33,7 @@ interface FarmCardActionsProps {
 const CardActions: React.FC<FarmCardActionsProps> = ({ farm, account, addLiquidityUrl }) => {
   const TranslateString = useI18n()
   const [requestedApproval, setRequestedApproval] = useState(false)
-  const { pid, lpAddresses, isTokenOnly, token: { address }, isKingdom } = farm
+  const { pid, lpAddresses, isTokenOnly, isKingdomToken, isKingdom, token: { address } } = farm
   const {
     allowance: allowanceAsString = 0,
     tokenBalance: tokenBalanceAsString = 0,
@@ -53,11 +53,11 @@ const CardActions: React.FC<FarmCardActionsProps> = ({ farm, account, addLiquidi
 
   // const lpContract = getBep20Contract(lpAddress, web3)
   const lpContract = useMemo(() => {
-    if(isTokenOnly){
+    if(isTokenOnly || isKingdomToken){
       return getBep20Contract(tokenAddress, web3)
     }
     return getBep20Contract(lpAddress, web3)
-  }, [lpAddress, isTokenOnly, web3, tokenAddress])
+  }, [lpAddress, isTokenOnly, web3, tokenAddress, isKingdomToken])
 
   const { onApprove } = useApprove(lpContract, isKingdom)
 

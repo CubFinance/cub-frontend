@@ -12,7 +12,7 @@ export const fetchFarmUserAllowances = async (account: string, farmsToFetch: Far
 
   const calls = farmsToFetch.map((farm) => {
     // const lpContractAddress = getAddress(farm.lpAddresses)
-    const lpContractAddress = farm.isTokenOnly ? getAddress(farm.token.address) : getAddress(farm.lpAddresses)
+    const lpContractAddress = farm.isTokenOnly || farm.isKingdomToken ? getAddress(farm.token.address) : getAddress(farm.lpAddresses)
     const mainAddress = farm.isKingdom ? kingdomAddress : masterChefAddress
     return { address: lpContractAddress, name: 'allowance', params: [account, mainAddress] }
   })
