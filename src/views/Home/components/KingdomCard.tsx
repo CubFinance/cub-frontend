@@ -25,7 +25,7 @@ const KingdomCard = () => {
           CUB&apos;s First Composable Yield Farming Contract
         </Heading>
         <Flex justifyContent="space-between">
-          <CardMidContent color="primary">Soon</CardMidContent>
+          <CardMidContent color="primary">LIVE</CardMidContent>
           <NavLink exact activeClassName="active" to="/kingdoms">
             <ArrowForwardIcon mt={30} color="primary" />
           </NavLink>

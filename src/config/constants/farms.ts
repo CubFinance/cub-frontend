@@ -267,7 +267,7 @@ const farms: FarmConfig[] = [
   {
     pid: 0,
     pcsPid: 0,
-    pcsCompounding: 4300,
+    pcsCompounding: 4200,
     isKingdom: true,
     isKingdomToken: true,
     lpSymbol: 'CAKE',

@@ -8,12 +8,14 @@ import useI18n from 'hooks/useI18n'
 import ExpandableSectionButton from 'components/ExpandableSectionButton'
 import { BASE_ADD_LIQUIDITY_URL, PCS_ADD_LIQUIDITY_URL } from 'config'
 import getLiquidityUrlPathParts from 'utils/getLiquidityUrlPathParts'
-
+import useKingdomAPRAPY from 'hooks/useKingdomAPRAPY'
+// import Balance from 'components/Balance'
 
 import DetailsSection from './DetailsSection'
 import CardHeading from './CardHeading'
 import CardActionsContainer from './CardActionsContainer'
 import ApyButton from './ApyButton'
+import AprApy from './AprApy'
 
 export interface FarmWithStakedValue extends Farm {
   apr?: number
@@ -123,6 +125,19 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm, removed, cakePrice, account }
   const addLiquidityUrl = `${exchangeUrl}/${liquidityUrlPathParts}`
   const lpAddress = farm.lpAddresses[process.env.REACT_APP_CHAIN_ID]
 
+  let aprApy = useKingdomAPRAPY(
+    farm.isKingdom,
+    farm.isKingdomToken,
+    Number(farm.tokenPriceVsQuote),
+    farm.poolWeightPCS,
+    farm.pcsCompounding,
+    farm.apr,
+    farm.lpTokenBalancePCSv2 ? farm.lpTokenBalancePCSv2 : 0,
+    farm.lpTotalInQuoteTokenPCS ? farm.lpTotalInQuoteTokenPCS : 0,
+  )
+
+  aprApy = { ...aprApy, pcsCompounding: farm.pcsCompounding, farmAPR, apr: farm.apr, cakePrice }
+
   return (
     <FCard>
       {farm.token.symbol === 'CUB' && <StyledCardAccent />}
@@ -134,21 +149,28 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm, removed, cakePrice, account }
         tokenSymbol={farm.token.symbol}
         depositFee={farm.depositFeeBP}
       />
-      {!removed && (
-        <Flex justifyContent="space-between" alignItems="center">
-          <Text>{TranslateString(736, 'APR')}:</Text>
-          <Text bold style={{ display: 'flex', alignItems: 'center' }}>
-            {farm.apr ? (
-              <>
-                <ApyButton lpLabel={lpLabel} addLiquidityUrl={addLiquidityUrl} cakePrice={cakePrice} apr={farm.apr} />
-                {farmAPR}%
-              </>
-            ) : (
-              <Skeleton height={24} width={80} />
-            )}
-          </Text>
-        </Flex>
-      )}
+      {!removed && farm.isKingdom ? (
+        <AprApy
+          aprApy={aprApy}
+          lpLabel={lpLabel}
+          addLiquidityUrl={addLiquidityUrl}
+        />
+        ) : (
+          <Flex justifyContent="space-between" alignItems="center">
+            <Text>{TranslateString(736, 'APR')}:</Text>
+            <Text bold style={{ display: 'flex', alignItems: 'center' }}>
+              {farm.apr ? (
+                <>
+                  <ApyButton lpLabel={lpLabel} addLiquidityUrl={addLiquidityUrl} cakePrice={cakePrice} apr={farm.apr} />
+                  {farmAPR}%
+                </>
+              ) : (
+                <Skeleton height={24} width={80} />
+              )}
+            </Text>
+          </Flex>
+        )
+      }
       <Flex justifyContent="space-between">
         <Text>{TranslateString(318, 'Earn')}:</Text>
         <Text bold>{earnLabel}</Text>
@@ -183,14 +205,7 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm, removed, cakePrice, account }
           totalValueFormatted={totalValueFormatted}
           lpLabel={lpLabel}
           addLiquidityUrl={addLiquidityUrl}
-          isKingdom={farm.isKingdom}
-          isKingdomToken={farm.isKingdomToken}
-          tokenPriceVsQuote={Number(farm.tokenPriceVsQuote)}
-          poolWeightPCS={farm.poolWeightPCS}
-          pcsCompounding={farm.pcsCompounding}
-          cubAPR={farm.apr}
-          lpTokenBalancePCSv2={farm.lpTokenBalancePCSv2 ? farm.lpTokenBalancePCSv2 : 0}
-          lpTotalInQuoteTokenPCS={farm.lpTotalInQuoteTokenPCS ? farm.lpTotalInQuoteTokenPCS : 0}
+          aprApy={aprApy}
         />
       </ExpandingWrapper>
     </FCard>
