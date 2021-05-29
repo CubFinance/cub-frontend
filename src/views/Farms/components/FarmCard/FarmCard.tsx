@@ -159,7 +159,7 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm, removed, cakePrice, account }
           farm.depositFeeBP ? (
             <Text bold style={{ fontSize: '16px' }}>{(farm.depositFeeBP / 100)}%</Text>
           ) : (
-            <Skeleton height={24} width={80} />
+            '0%'
           )
         }
       </Flex>
