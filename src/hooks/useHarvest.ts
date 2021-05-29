@@ -20,17 +20,19 @@ export const useHarvest = (farmPid: number, isKingdom?: boolean) => {
   return { onReward: handleHarvest }
 }
 
-export const useAllHarvest = (farmPids: number[]) => {
+export const useAllHarvest = (farms: any[]) => {
   const { account } = useWeb3React()
   const masterChefContract = useMasterchef()
+  const kingdomContract = useKingdom()
 
   const handleHarvest = useCallback(async () => {
-    const harvestPromises = farmPids.reduce((accum, pid) => {
-      return [...accum, harvest(masterChefContract, pid, account)]
+    const harvestPromises = farms.reduce((accum, farm) => {
+      if (farm.isKingdom) return [...accum, harvest(kingdomContract, farm.pid, account)]
+      return [...accum, harvest(masterChefContract, farm.pid, account)]
     }, [])
 
     return Promise.all(harvestPromises)
-  }, [account, farmPids, masterChefContract])
+  }, [account, farms, masterChefContract, kingdomContract])
 
   return { onReward: handleHarvest }
 }

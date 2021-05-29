@@ -108,14 +108,14 @@ export const sousEmergencyUnstake = async (sousChefContract, amount, account) =>
 }
 
 export const harvest = async (masterChefContract, pid, account) => {
-  if (pid === 0) {
-    return masterChefContract.methods
-      .leaveStaking('0')
-      .send({ from: account })
-      .on('transactionHash', (tx) => {
-        return tx.transactionHash
-      })
-  }
+  // if (pid === 0) {
+  //   return masterChefContract.methods
+  //     .leaveStaking('0')
+  //     .send({ from: account })
+  //     .on('transactionHash', (tx) => {
+  //       return tx.transactionHash
+  //     })
+  // }
 
   return masterChefContract.methods
     .deposit(pid, '0')
