@@ -53,19 +53,6 @@ const fetchFarms = async (farmsToFetch: FarmConfig[]) => {
       ]
 
       if (farmConfig.isKingdom) {
-        // console.log('farm',farmConfig.lpSymbol)
-        // await getKingdomPCSBalance(farmConfig.isKingdomToken ? tokenAddress : lpAddress, getPCSv2MasterChefAddress())
-        /* const calls2 = [
-          {
-            address: farmConfig.isKingdomToken ? tokenAddress : lpAddress,
-            name: 'balanceOf',
-            params: [getPCSv2MasterChefAddress()],
-          }
-        ]
-
-        const [lpTokenBalancePCSv2] = await multicall(erc20, calls2)
-        console.log('lpTokenBalancePCSv2', new BigNumber(lpTokenBalancePCSv2).div(DEFAULT_TOKEN_DECIMAL).toNumber()) */
-
         calls = [
           // Balance of token in the LP contract
           {
@@ -118,32 +105,10 @@ const fetchFarms = async (farmsToFetch: FarmConfig[]) => {
         quoteTokenDecimals,
         lpTokenBalancePCSv2
       ] = multiResult
-      // console.log('farmConfig',farmConfig.lpSymbol)
-      // console.log('tokenBalanceLP',new BigNumber(tokenBalanceLP).div(DEFAULT_TOKEN_DECIMAL).toNumber())
-      // console.log('quoteTokenBalanceLP',new BigNumber(quoteTokenBalanceLP).div(DEFAULT_TOKEN_DECIMAL).toNumber())
-      // console.log('lpTokenBalanceMC',new BigNumber(lpTokenBalanceMC).div(DEFAULT_TOKEN_DECIMAL).toNumber())
-      // console.log('lpTotalSupply',new BigNumber(lpTotalSupply).div(DEFAULT_TOKEN_DECIMAL).toNumber())
-      // console.log('lpTokenBalancePCSv2',new BigNumber(lpTokenBalancePCSv2).div(DEFAULT_TOKEN_DECIMAL).toNumber())
-
-      // let [
-      //   ,
-      //   ,
-      //   lpTokenBalanceMC,
-      //   lpTotalSupply,
-      //   tokenDecimals,
-      //   quoteTokenDecimals,
-      // ] = multiResult
 
       let kingdomSupply:string
-      // let lpTokenBalancePCSv2
-      // Reorder some values since one is missing from the kingdom calls
+
       if (farmConfig.isKingdom) {
-        // lpTokenBalancePCSv2 = new BigNumber(quoteTokenDecimals).div(DEFAULT_TOKEN_DECIMAL).toNumber()
-        // quoteTokenDecimals = tokenDecimals
-        // tokenDecimals = lpTotalSupply
-        // lpTotalSupply = lpTokenBalanceMC
-        // lpTokenBalanceMC = 0
-// console.log('lpTokenBalancePCSv2',new BigNumber(lpTokenBalancePCSv2).div(DEFAULT_TOKEN_DECIMAL).toNumber())
         switch (farmConfig.pid) {
           case 0:
             kingdomSupply = await getCAKEamount()
@@ -234,10 +199,6 @@ const fetchFarms = async (farmsToFetch: FarmConfig[]) => {
       const [info, totalAllocPoint, cubPerBlock] = await multicall(masterchefABI, mCalls).catch(error => {
         throw new Error(`multicall nontoken: ${error}`)
       })
-// console.log('farmConfig',farmConfig.lpSymbol)
-// console.log('lpTotalInQuoteToken',lpTotalInQuoteToken.toNumber())
-// console.log('tokenPriceVsQuote',tokenPriceVsQuote.toNumber())
-// console.log('lpTotalInQuoteTokenPCS',lpTotalInQuoteTokenPCS.toNumber())
 
       if (farmConfig.isKingdom) {
         const kCalls = [

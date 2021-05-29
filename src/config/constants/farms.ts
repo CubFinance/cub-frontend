@@ -267,7 +267,7 @@ const farms: FarmConfig[] = [
   {
     pid: 0,
     pcsPid: 0,
-    pcsCompounding: 4500,
+    pcsCompounding: 4300,
     isKingdom: true,
     isKingdomToken: true,
     lpSymbol: 'CAKE',
@@ -283,7 +283,7 @@ const farms: FarmConfig[] = [
     pcsPid: 252,
     pcsCompounding: 420,
     isKingdom: true,
-    lpSymbol: 'WBNB-BUSD LP',
+    lpSymbol: 'BNB-BUSD LP',
     lpAddresses: {
       97: '',
       56: '0x58f876857a02d6762e0101bb5c46a8c1ed44dc16',
