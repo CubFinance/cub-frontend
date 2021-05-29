@@ -29,7 +29,7 @@ const HarvestAction: React.FC<FarmCardActionsProps> = ({ earnings, pid, isKingdo
   const [pendingTx, setPendingTx] = useState(false)
   const { onReward } = useHarvest(pid, isKingdom)
   const cakePrice = usePriceCakeBusd()
-  const { onStake } = useStake(pid)
+  const { onStake } = useStake(pid, isKingdom)
 
   const rawEarningsBalance = account ? getBalanceNumber(earnings) : 0
   const displayBalance = rawEarningsBalance.toLocaleString()
