@@ -77,7 +77,7 @@ const DetailsSection: React.FC<ExpandableSectionProps> = ({
       <>
         <Flex justifyContent="space-between">
           <Text>{TranslateString(354, 'Farm APR')}:</Text>
-          <Text>{`${new BigNumber(apr).toFixed(2)}% (${new BigNumber(dailyAPR).toFixed(2)}%)`}</Text>
+          <Text>{`${new BigNumber(apr).toFixed(2)}% (${new BigNumber(dailyAPR).toFixed(3)}%)`}</Text>
         </Flex>
         <Flex justifyContent="space-between">
           <Text>{TranslateString(354, 'Compounds per year')}:</Text>
