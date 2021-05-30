@@ -14,6 +14,7 @@ export interface ExpandableSectionProps {
   addLiquidityUrl?: string
   aprApy?: any
   farmAPR?: string
+  isKingdom?: boolean
 }
 
 const Wrapper = styled.div`
@@ -32,6 +33,7 @@ const DetailsSection: React.FC<ExpandableSectionProps> = ({
   lpLabel,
   addLiquidityUrl,
   aprApy,
+  isKingdom,
 }) => {
   const TranslateString = useI18n()
 
@@ -42,12 +44,14 @@ const DetailsSection: React.FC<ExpandableSectionProps> = ({
         <Text>{TranslateString(354, 'Total Liquidity')}:</Text>
         <Text>{totalValueFormatted}</Text>
       </Flex>
-      <AprApy
-        aprApy={aprApy}
-        lpLabel={lpLabel}
-        addLiquidityUrl={addLiquidityUrl}
-        isDetails
-      />
+      {isKingdom && (
+        <AprApy
+          aprApy={aprApy}
+          lpLabel={lpLabel}
+          addLiquidityUrl={addLiquidityUrl}
+          isDetails
+        />
+      )}
       {!removed && (
         <StyledLinkExternal href={addLiquidityUrl}>
           {TranslateString(999, `Get ${lpLabel}`, { name: lpLabel })}

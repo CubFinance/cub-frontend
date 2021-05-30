@@ -206,6 +206,7 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm, removed, cakePrice, account }
           lpLabel={lpLabel}
           addLiquidityUrl={addLiquidityUrl}
           aprApy={aprApy}
+          isKingdom={farm.isKingdom}
         />
       </ExpandingWrapper>
     </FCard>
