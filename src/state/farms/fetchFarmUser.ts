@@ -57,7 +57,7 @@ export const fetchFarmUserStakedBalances = async (account: string, farmsToFetch:
 
   const callsK = kingdomFarms.map((farm) => ({
     address: kingdomAddress,
-    name: 'userInfo',
+    name: 'stakedWantTokens',
     params: [farm.pid, account],
   }))
 
