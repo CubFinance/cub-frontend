@@ -1,12 +1,12 @@
 {
-  "short_name": "PancakeSwap",
-  "name": "PancakeSwap",
-  "description": "Farm CAKE with Pancake LP Tokens",
+  "short_name": "CubFinance",
+  "name": "CubFinance",
+  "description": "Farm CUB with Pancake LP Tokens",
   "icons": [
     {
       "src": "favicon.ico",
       "type": "image/x-icon",
-      "sizes": "256x256"
+      "sizes": "64x64"
     }
   ],
   "start_url": ".",
