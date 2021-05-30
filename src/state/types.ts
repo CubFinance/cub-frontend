@@ -10,6 +10,21 @@ export type TranslatableText =
         [key: string]: string | number
       }
     }
+//
+// export interface Kingdom extends KingdomConfig {
+//   tokenAmount?: BigNumber
+//   quoteTokenAmount?: BigNumber
+//   lpTotalInQuoteToken?: BigNumber
+//   lpTotalSupply?: BigNumber
+//   tokenPriceVsQuote?: BigNumber
+//   poolWeight?: BigNumber
+//   userData?: {
+//     allowance: string
+//     tokenBalance: string
+//     stakedBalance: string
+//     earnings: string
+//   }
+// }
 
 export interface Farm extends FarmConfig {
   tokenAmount?: BigNumber

@@ -50,6 +50,26 @@ export enum PoolCategory {
   'AUTO' = 'Auto',
 }
 
+// export interface KingdomConfig {
+//   pid: number
+//   lpSymbol: string
+//   lpAddresses: Address
+//   token: Token
+//   quoteToken: Token
+//   multiplier?: string
+//   isCommunity?: boolean
+//   dual?: {
+//     rewardPerBlock: number
+//     earnLabel: string
+//     endBlock: number
+//   }
+//   isKingdom?: boolean
+//   isTokenOnly?: boolean
+//   isKingdomToken?: boolean
+//   pcsPid?: number
+//   pcsCompounding?: number
+// }
+
 export interface FarmConfig {
   pid: number
   lpSymbol: string

@@ -352,3 +352,23 @@ export const useTotalValue = (): BigNumber => {
 
   return value;
 }
+
+export const useTotalValueKingdoms = (): BigNumber => {
+  const farms = useFarms();
+  const prices = useGetApiPrices()
+  let value = new BigNumber(0);
+
+  const kingdoms = farms.data.filter(farm => farm.isKingdom)
+
+  if (prices)
+    value = kingdoms.reduce((accu, farm) => {
+      const quoteTokenPriceUsd = prices[getAddress(farm.quoteToken.address).toLowerCase()]
+      const totalLiquidity = new BigNumber(farm.lpTotalInQuoteToken).times(quoteTokenPriceUsd)
+      let newAccu = accu
+      if (!totalLiquidity.isNaN() && !totalLiquidity.isZero())
+        newAccu = accu.plus(totalLiquidity)
+      return newAccu
+    }, value)
+
+  return value;
+}
