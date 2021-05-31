@@ -11,7 +11,7 @@ interface CardValueProps {
 }
 
 const StyledText = styled(Text)`
-  line-height: 1;
+  line-height: 1.5;
 `
 
 const CardValue: React.FC<CardValueProps> = ({ value, decimals, prefix }) => {

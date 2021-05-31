@@ -1,11 +1,14 @@
 import React from 'react'
 // import BigNumber from 'bignumber.js'
 import styled from 'styled-components'
-import { useFarmFromPid, useFarmUser } from 'state/hooks'
-import { getBalanceNumber } from 'utils/formatBalance'
+import BigNumber from 'bignumber.js'
+import { usePriceCakeBusd } from 'state/hooks'
+// import { getBalanceNumber } from 'utils/formatBalance'
 import { Flex, Text, Input, Button as UiButton } from '@pancakeswap-libs/uikit'
+import Balance from 'components/Balance'
+import CardBusdValue from 'views/Home/components/CardBusdValue'
+import CardValue from './CardValue'
 import { FarmWithStakedValue } from '../../Farms/components/FarmCard/FarmCard'
-// import Input, { InputProps } from 'components/Input'
 import './KingdomCard.css'
 
 const KCard = styled.div`
@@ -20,24 +23,27 @@ const KCard = styled.div`
   position: relative;
   margin-top: 0.5rem;
   margin-bottom: 1rem;
-  /*margin-left: 0.2rem;
-  margin-right: 0.2rem;*/
 `
 
 const Button = styled(UiButton)`
   height: 40px;
+  margin-top: 0;
+`
+
+const Values = styled.div`
+  display: inline-flex
 `
 
 interface KingdomCardProps {
   farm: FarmWithStakedValue
+  walletBalance: number
+  depositBalance: number
+  rewardBalance: number
 }
 
-const KingdomCard: React.FC<KingdomCardProps> = ({ farm }) => {
-  const { pid } = useFarmFromPid(farm.pid)
-  const { stakedBalance } = useFarmUser(pid)
-
-  const rawStakedBalance = getBalanceNumber(stakedBalance)
-  const displayBalance = rawStakedBalance.toLocaleString()
+const KingdomCard: React.FC<KingdomCardProps> = ({ farm, walletBalance, depositBalance, rewardBalance }) => {
+  const cakePrice = usePriceCakeBusd()
+  const earningsBusd = rewardBalance ? new BigNumber(rewardBalance).multipliedBy(cakePrice).toNumber() : 0
 
   return (
     <KCard>
@@ -46,13 +52,29 @@ const KingdomCard: React.FC<KingdomCardProps> = ({ farm }) => {
           <div className="col">
             <Flex justifyContent='space-between'>
               <Text>Balance</Text>
-              <Text>0.00000 ($0.00)</Text>
+              <Values>
+                <Balance
+                  fontSize="16px"
+                  value={walletBalance}
+                  decimals={walletBalance ? 3 : 2}
+                  unit=""
+                />
+                &nbsp;(<CardValue value={0} prefix="$" decimals={2}/>)
+              </Values>
             </Flex>
           </div>
           <div className="col">
             <Flex justifyContent='space-between'>
               <Text>Deposit</Text>
-              <Text>{displayBalance} ($0.00)</Text>
+              <Values>
+                <Balance
+                  fontSize="16px"
+                  value={depositBalance}
+                  decimals={depositBalance ? 3 : 2}
+                  unit=""
+                />
+                &nbsp;(<CardValue value={0} prefix="$" decimals={2}/>)
+              </Values>
             </Flex>
           </div>
           <div className="col">
@@ -67,8 +89,13 @@ const KingdomCard: React.FC<KingdomCardProps> = ({ farm }) => {
             <Input />
           </div>
           <div className="col">
-            <Text>0.00000</Text>
-            <Text>$0.00</Text>
+            <Balance
+              fontSize="16px"
+              value={rewardBalance}
+              decimals={rewardBalance ? 3 : 2}
+              unit=""
+            />
+            <CardBusdValue value={earningsBusd} />
           </div>
         </div>
         <div className="flex-grid">

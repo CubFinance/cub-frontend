@@ -66,7 +66,7 @@ const Kingdom: React.FC<KingdomProps> = ({ farm, removed, cakePrice, bnbPrice, e
 
   const { farmAPR, apr, pcsCompounding, pcsApr, dailyAPR, farmAPY, totalAPYString, cakePrice } = aprApy */
 
-  const { dailyAPR, totalAPYString } = useKingdomAPRAPY(
+  const aprApy = useKingdomAPRAPY(
     farm.isKingdom,
     farm.isKingdomToken,
     Number(farm.tokenPriceVsQuote),
@@ -76,18 +76,19 @@ const Kingdom: React.FC<KingdomProps> = ({ farm, removed, cakePrice, bnbPrice, e
     farm.lpTokenBalancePCSv2 ? farm.lpTokenBalancePCSv2 : 0,
     farm.lpTotalInQuoteTokenPCS ? farm.lpTotalInQuoteTokenPCS : 0,
   )
+  const { dailyAPR, totalAPYString } = aprApy
 // console.log('dailyAPR',dailyAPR)
 // console.log('totalAPYString',totalAPYString)
   const { tokenBalance, stakedBalance, earnings } = useFarmUser(farm.pid)
 
+  const rawTokenBalance = getBalanceNumber(tokenBalance)
+  // const displayBalance = rawTokenBalance.toLocaleString()
+
   const rawStakedBalance = getBalanceNumber(stakedBalance)
-  const displayDeposit = rawStakedBalance.toLocaleString()
+  // const displayDeposit = rawStakedBalance.toLocaleString()
 
   const rawEarningsBalance = getBalanceNumber(earnings)
-  const displayEarnings = rawEarningsBalance.toLocaleString()
-
-  const rawTokenBalance = getBalanceNumber(tokenBalance)
-  const displayRewards = rawTokenBalance.toLocaleString()
+  // const displayEarnings = rawEarningsBalance.toLocaleString()
 
   return (
     <>
@@ -115,9 +116,24 @@ const Kingdom: React.FC<KingdomProps> = ({ farm, removed, cakePrice, bnbPrice, e
               <Text>{farm.multiplier}</Text>
           </div>
           <div className="col">
-            <Text>{displayRewards}</Text>
-            <Text>{displayDeposit}</Text>
-            <Text>{displayEarnings}</Text>
+            <Balance
+              fontSize="16px"
+              value={rawTokenBalance}
+              decimals={rawTokenBalance ? 2 : 1}
+              unit=""
+            />
+            <Balance
+              fontSize="16px"
+              value={rawStakedBalance}
+              decimals={rawStakedBalance ? 2 : 1}
+              unit=""
+            />
+            <Balance
+              fontSize="16px"
+              value={rawEarningsBalance}
+              decimals={rawEarningsBalance ? 2 : 1}
+              unit=""
+            />
           </div>
           <div className="col">
             <ExpandableSectionButton
@@ -130,6 +146,9 @@ const Kingdom: React.FC<KingdomProps> = ({ farm, removed, cakePrice, bnbPrice, e
         <ExpandingWrapper expanded={showExpandableSection}>
           <KingdomDetail
             farm={farm}
+            walletBalance={rawTokenBalance}
+            depositBalance={rawStakedBalance}
+            rewardBalance={rawEarningsBalance}
           />
         </ExpandingWrapper>
       </div>

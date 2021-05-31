@@ -1,5 +1,5 @@
 import React from 'react'
-import BigNumber from 'bignumber.js'
+// import BigNumber from 'bignumber.js'
 import styled from 'styled-components'
 import { Button as UiButton } from '@pancakeswap-libs/uikit'
 import KingdomCard from './KingdomCard'
@@ -35,14 +35,20 @@ const DHeader = styled.span`
 
 interface KingdomDetailProps {
   farm: FarmWithStakedValue
+  walletBalance: number
+  depositBalance: number
+  rewardBalance: number
 }
 
-const KingdomDetail: React.FC<KingdomDetailProps> = ({ farm }) => {
+const KingdomDetail: React.FC<KingdomDetailProps> = ({ farm, walletBalance, depositBalance, rewardBalance }) => {
 
   return (
     <>
       <KingdomCard
         farm={farm}
+        walletBalance={walletBalance}
+        depositBalance={depositBalance}
+        rewardBalance={rewardBalance}
       />
       <Button mr="8px" variant="secondary">Farm Contract</Button>
       <Button mr="8px" variant="secondary">Vault Contract</Button>
