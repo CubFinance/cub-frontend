@@ -12,7 +12,7 @@ const KCard = styled.div`
   align-self: baseline;
   background: ${(props) => props.theme.card.background};
   border-radius: 8px;
-  box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1),0 4px 6px -2px rgba(0,0,0,0.05);
+  box-shadow: 0 3px 4px -3px rgba(0,0,0,0.1),0 4px 6px -2px rgba(0,0,0,0.05);
   display: flex;
   flex-direction: column;
   justify-content: space-around;
@@ -20,6 +20,8 @@ const KCard = styled.div`
   position: relative;
   margin-top: 0.5rem;
   margin-bottom: 1rem;
+  /*margin-left: 0.2rem;
+  margin-right: 0.2rem;*/
 `
 
 const Button = styled(UiButton)`
@@ -65,8 +67,8 @@ const KingdomCard: React.FC<KingdomCardProps> = ({ farm }) => {
             <Input />
           </div>
           <div className="col">
-            <div>0.00000</div>
-            <div>$0.00</div>
+            <Text>0.00000</Text>
+            <Text>$0.00</Text>
           </div>
         </div>
         <div className="flex-grid">

@@ -112,7 +112,7 @@ const Kingdoms: React.FC = () => {
               <div>TVL</div>
             </div>
             <div className="col">
-              <div>APY</div>
+              <div>Total APY</div>
               <div>Daily APR</div>
               <div>AUTOx</div>
             </div>

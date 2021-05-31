@@ -3,8 +3,8 @@
 }
 
 .k-card .col > * {
-  display: flex;
-  padding: 4px 0;
+  /* display: flex; */
+  /* padding: 4px 0; */
 }
 
 .k-card .col:nth-of-type(1) {

@@ -6,6 +6,7 @@ import useI18n from 'hooks/useI18n'
 export interface ExpandableSectionButtonProps {
   onClick?: () => void
   expanded?: boolean
+  onlyArrow?: boolean
 }
 
 const Wrapper = styled.div`
@@ -19,14 +20,20 @@ const Wrapper = styled.div`
   }
 `
 
-const ExpandableSectionButton: React.FC<ExpandableSectionButtonProps> = ({ onClick, expanded }) => {
+const ExpandableSectionButton: React.FC<ExpandableSectionButtonProps> = ({ onClick, expanded, onlyArrow }) => {
   const TranslateString = useI18n()
+
+  let extra = null
+  if (!onlyArrow)
+    extra = (
+      <Text color="primary" bold>
+        {expanded ? 'Hide' : 'Details'}
+      </Text>
+  )
 
   return (
     <Wrapper aria-label="Hide or show expandable content" role="button" onClick={() => onClick()}>
-      <Text color="primary" bold>
-        {expanded ? TranslateString(1066, 'Hide') : TranslateString(658, 'Details')}
-      </Text>
+      {extra}
       {expanded ? <ChevronUpIcon /> : <ChevronDownIcon />}
     </Wrapper>
   )
