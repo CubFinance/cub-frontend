@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react'
-import { Text } from '@pancakeswap-libs/uikit'
+import { Text, Image, Flex } from '@pancakeswap-libs/uikit'
 import BigNumber from 'bignumber.js'
 import { provider } from 'web3-core'
 import styled from 'styled-components'
@@ -39,6 +39,7 @@ interface KingdomProps {
 
 const Kingdom: React.FC<KingdomProps> = ({ farm, removed, cakePrice, bnbPrice, ethereum, account }) => {
   const [showExpandableSection, setShowExpandableSection] = useState(false)
+  const farmImage = farm.lpSymbol.split(' ')[0].toLocaleLowerCase()
 
   const { apr } = farm
 
@@ -77,18 +78,10 @@ const Kingdom: React.FC<KingdomProps> = ({ farm, removed, cakePrice, bnbPrice, e
     farm.lpTotalInQuoteTokenPCS ? farm.lpTotalInQuoteTokenPCS : 0,
   )
   const { dailyAPR, totalAPYString } = aprApy
-// console.log('dailyAPR',dailyAPR)
-// console.log('totalAPYString',totalAPYString)
   const { tokenBalance, stakedBalance, earnings } = useFarmUser(farm.pid)
-
   const rawTokenBalance = getBalanceNumber(tokenBalance)
-  // const displayBalance = rawTokenBalance.toLocaleString()
-
   const rawStakedBalance = getBalanceNumber(stakedBalance)
-  // const displayDeposit = rawStakedBalance.toLocaleString()
-
   const rawEarningsBalance = getBalanceNumber(earnings)
-  // const displayEarnings = rawEarningsBalance.toLocaleString()
 
   return (
     <>
@@ -96,7 +89,10 @@ const Kingdom: React.FC<KingdomProps> = ({ farm, removed, cakePrice, bnbPrice, e
       <div className="k-content">
         <div className="flex-grid k-grid">
           <div className="col">
-            <Text className="token">{farm.lpSymbol}</Text>
+            <Flex justifyContent="flex-start" alignItems="center">
+              <Text className="token">{farm.lpSymbol}</Text>
+              <Image src={`/images/farms/${farmImage}.png`} alt={farm.lpSymbol} width={24} height={24} />
+            </Flex>
             <Text>{(farm.pcsPid || farm.pcsPid === 0) && 'Pancake v2'}</Text>
             <Text> TVL {totalValueFormated}</Text>
           </div>
