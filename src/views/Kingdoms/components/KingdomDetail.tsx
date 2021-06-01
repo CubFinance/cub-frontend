@@ -38,10 +38,11 @@ interface KingdomDetailProps {
   walletBalance: number
   depositBalance: number
   rewardBalance: number
-  walletBalanceQuoteValue?: number
+  walletBalanceQuoteValue: number
+  depositBalanceQuoteValue: number
 }
 
-const KingdomDetail: React.FC<KingdomDetailProps> = ({ walletBalance, depositBalance, rewardBalance, walletBalanceQuoteValue }) => {
+const KingdomDetail: React.FC<KingdomDetailProps> = ({ walletBalance, depositBalance, rewardBalance, walletBalanceQuoteValue, depositBalanceQuoteValue }) => {
 
   return (
     <>
@@ -50,6 +51,7 @@ const KingdomDetail: React.FC<KingdomDetailProps> = ({ walletBalance, depositBal
         depositBalance={depositBalance}
         rewardBalance={rewardBalance}
         walletBalanceQuoteValue={walletBalanceQuoteValue}
+        depositBalanceQuoteValue={depositBalanceQuoteValue}
       />
       <Button mr="8px" variant="secondary">Farm Contract</Button>
       <Button mr="8px" variant="secondary">Vault Contract</Button>
@@ -72,11 +74,10 @@ const KingdomDetail: React.FC<KingdomDetailProps> = ({ walletBalance, depositBal
         </Detail>
         <Detail>
           <DHeader>Fees</DHeader>
-          <div>Controller fee: 0.2% on profits to controller</div>
-          <div>Platform fee: 0.5% on profits to platform</div>
-          <div>AUTO buyback rate: 1.5% on profits</div>
-          <div>{`Entrance fee: < 0.1% on capital to pool`}</div>
-          <div>Withdrawal fee: none</div>
+          <div>Management Fee: 0.9%</div>
+          <div>Withdrawal Fee: None</div>
+          <div>Fee to CUB Staking Kingdom: 1%</div>
+          <div>CUB Burn Rate: 100% of Fees Buyback and Burn CUB</div>
         </Detail>
       </Details>
     </>

@@ -42,31 +42,6 @@ const Kingdom: React.FC<KingdomProps> = ({ farm, removed, cakePrice, bnbPrice, e
   const farmImage = farm.lpSymbol.split(' ')[0].toLocaleLowerCase()
 
   const { apr, lpTotalInQuoteToken, kingdomSupply } = farm
-
-  const totalValueFormated = farm.lpTotalInQuoteToken
-    ? `$${Number(farm.lpTotalInQuoteToken).toLocaleString(undefined, { maximumFractionDigits: 0 })}`
-    : '-'
-  const farmAPR = apr && apr.toLocaleString('en-US', { maximumFractionDigits: 2 })
-  // const farmApy = farm.apy.times(new BigNumber(100)).toNumber()
-  // const oneThousandDollarsWorthOfCake = 1000 / cakePrice.toNumber()
-  // const cakeEarnedPerThousand365D = tokenEarnedPerThousandDollarsCompounding({ numberOfDays: 365, farmAPR, cakePrice })
-  // const cakeEarnedPerThousand1D = tokenEarnedPerThousandDollarsCompounding({ numberOfDays: 1, farmAPR, cakePrice })
-
-  /* let aprApy = useKingdomAPRAPY(
-    farm.isKingdom,
-    farm.isKingdomToken,
-    Number(farm.tokenPriceVsQuote),
-    farm.poolWeightPCS,
-    farm.pcsCompounding,
-    farm.apr,
-    farm.lpTokenBalancePCSv2 ? farm.lpTokenBalancePCSv2 : 0,
-    farm.lpTotalInQuoteTokenPCS ? farm.lpTotalInQuoteTokenPCS : 0,
-  )
-
-  aprApy = { ...aprApy, pcsCompounding: farm.pcsCompounding, farmAPR, apr: farm.apr, cakePrice }
-
-  const { farmAPR, apr, pcsCompounding, pcsApr, dailyAPR, farmAPY, totalAPYString, cakePrice } = aprApy */
-
   const aprApy = useKingdomAPRAPY(
     farm.isKingdom,
     farm.isKingdomToken,
@@ -83,7 +58,37 @@ const Kingdom: React.FC<KingdomProps> = ({ farm, removed, cakePrice, bnbPrice, e
   const rawStakedBalance = getBalanceNumber(new BigNumber(stakedBalance))
   const rawEarningsBalance = getBalanceNumber(new BigNumber(earnings))
 
-  const walletBalanceQuoteValue = new BigNumber(tokenBalance).times(lpTotalInQuoteToken).div(new BigNumber(kingdomSupply)).toNumber()
+  // to get usd value of liquiidty when not USD quote token
+  /* const quoteTokenPriceUsd = prices[getAddress(farm.quoteToken.address).toLowerCase()]
+  const totalLiquidity = new BigNumber(farm.lpTotalInQuoteToken).times(quoteTokenPriceUsd) */
+
+  const oneTokenQuoteValue = new BigNumber(1).times(lpTotalInQuoteToken).div(new BigNumber(kingdomSupply)).toNumber()
+  console.log('oneTokenQuoteValue',oneTokenQuoteValue)
+  const walletBalanceQuoteValue = new BigNumber(tokenBalance).times(oneTokenQuoteValue).toNumber()
+
+  const depositBalanceQuoteValue = new BigNumber(stakedBalance).times(oneTokenQuoteValue).toNumber()
+console.log('walletBalanceQuoteValue',walletBalanceQuoteValue)
+console.log('depositBalanceQuoteValue',depositBalanceQuoteValue)
+  const totalValueFormated = farm.lpTotalInQuoteToken
+    ? `$${Number(farm.lpTotalInQuoteToken).toLocaleString(undefined, { maximumFractionDigits: 0 })}`
+    : '-'
+  const farmAPR = apr && apr.toLocaleString('en-US', { maximumFractionDigits: 2 })
+
+  /* let aprApy = useKingdomAPRAPY(
+    farm.isKingdom,
+    farm.isKingdomToken,
+    Number(farm.tokenPriceVsQuote),
+    farm.poolWeightPCS,
+    farm.pcsCompounding,
+    farm.apr,
+    farm.lpTokenBalancePCSv2 ? farm.lpTokenBalancePCSv2 : 0,
+    farm.lpTotalInQuoteTokenPCS ? farm.lpTotalInQuoteTokenPCS : 0,
+  )
+
+  aprApy = { ...aprApy, pcsCompounding: farm.pcsCompounding, farmAPR, apr: farm.apr, cakePrice }
+
+  const { farmAPR, apr, pcsCompounding, pcsApr, dailyAPR, farmAPY, totalAPYString, cakePrice } = aprApy */
+
 
   return (
     <>
@@ -147,6 +152,7 @@ const Kingdom: React.FC<KingdomProps> = ({ farm, removed, cakePrice, bnbPrice, e
             depositBalance={rawStakedBalance}
             rewardBalance={rawEarningsBalance}
             walletBalanceQuoteValue={walletBalanceQuoteValue}
+            depositBalanceQuoteValue={depositBalanceQuoteValue}
           />
         </ExpandingWrapper>
       </div>

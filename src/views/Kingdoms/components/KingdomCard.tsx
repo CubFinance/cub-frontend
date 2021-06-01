@@ -39,14 +39,14 @@ interface KingdomCardProps {
   walletBalance: number
   depositBalance: number
   rewardBalance: number
-  walletBalanceQuoteValue?: number
+  walletBalanceQuoteValue: number
+  depositBalanceQuoteValue: number
 }
 
-const KingdomCard: React.FC<KingdomCardProps> = ({ walletBalance, depositBalance, rewardBalance, walletBalanceQuoteValue }) => {
+const KingdomCard: React.FC<KingdomCardProps> = ({ walletBalance, depositBalance, rewardBalance, walletBalanceQuoteValue, depositBalanceQuoteValue }) => {
   const cakePrice = usePriceCakeBusd()
   const earningsBusd = rewardBalance ? new BigNumber(rewardBalance).multipliedBy(cakePrice).toNumber() : 0
 
-// console.log('walletBalance',walletBalance)
   return (
     <KCard>
       <div className="k-card">
@@ -61,7 +61,7 @@ const KingdomCard: React.FC<KingdomCardProps> = ({ walletBalance, depositBalance
                   decimals={walletBalance ? 3 : 2}
                   unit=""
                 />
-                &nbsp;(<CardValue value={walletBalanceQuoteValue} prefix="$" decimals={2}/>)
+                &nbsp;(<CardBusdValue value={walletBalanceQuoteValue} />)
               </Values>
             </Flex>
           </div>
@@ -75,7 +75,7 @@ const KingdomCard: React.FC<KingdomCardProps> = ({ walletBalance, depositBalance
                   decimals={depositBalance ? 3 : 2}
                   unit=""
                 />
-                &nbsp;(<CardValue value={0} prefix="$" decimals={2}/>)
+                &nbsp;(<CardBusdValue value={depositBalanceQuoteValue} />)
               </Values>
             </Flex>
           </div>

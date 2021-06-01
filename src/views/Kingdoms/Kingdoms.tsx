@@ -1,12 +1,14 @@
 import React, { useEffect, useCallback, useState, useMemo, useRef } from 'react'
 import { Route, useRouteMatch, useLocation } from 'react-router-dom'
+import { Heading, Flex, Text } from '@pancakeswap-libs/uikit'
 import { useAppDispatch } from 'state'
 import BigNumber from 'bignumber.js'
 import { useWeb3React } from '@web3-react/core'
 // import { Image, Heading, RowType, Toggle, Text, Button, Flex } from '@pancakeswap-libs/uikit'
-// import styled from 'styled-components'
+import styled from 'styled-components'
 // import FlexLayout from 'components/layout/Flex'
 import Page from 'components/layout/Page'
+import PageHeader from 'components/PageHeader'
 // import { MigrationV2 } from 'components/Banner'
 import { useFarms, usePriceCakeBusd, useGetApiPrices, useTotalValueKingdoms } from 'state/hooks'
 import useRefresh from 'hooks/useRefresh'
@@ -30,6 +32,10 @@ import { FarmWithStakedValue } from 'views/Farms/components/FarmCard/FarmCard'
 import Kingdom from './components/Kingdom'
 import CardValue from './components/CardValue'
 import './Kingdoms.css'
+
+const FeeWrapper = styled.div`
+  max-width: 400px;
+`
 
 const NUMBER_OF_FARMS_VISIBLE = 12
 
@@ -95,40 +101,79 @@ const Kingdoms: React.FC = () => {
   ])
 
   return (
-    <Page className="k-container">
-      <div className='k-header'>
-        <div><h1>Kingdoms</h1></div>
-        <div className='tvl-header'>
-          <div>TVL</div>
-          <CardValue value={totalValue.toNumber()} prefix="$" decimals={2}/>
-        </div>
-      </div>
-      <div id="kingdoms">
-        <div id="content-header" className="k-content">
-          <div className="flex-grid k-grid">
-            <div className="col">
-              <div>Token</div>
-              <div>Farm</div>
-              <div>TVL</div>
-            </div>
-            <div className="col">
-              <div>Total APY</div>
-              <div>Daily APR</div>
-              <div>AUTOx</div>
-            </div>
-            <div className="col">
-              <div>Balance</div>
-              <div>Deposit</div>
-              <div>Rewards</div>
-            </div>
-            <div className="col" />
+    <>
+      <PageHeader>
+        <div className='k-header'>
+          <Heading as="h1" size="xxl" color="secondary" mb="10px">
+            Kingdoms
+          </Heading>
+          <div className='tvl-header'>
+            <div>TVL</div>
+            <CardValue value={totalValue.toNumber()} prefix="$" decimals={2}/>
           </div>
         </div>
-        {farmsStakedMemoized.map((farm) => (
-          <Kingdom key={farm.pid} farm={farm} cakePrice={cakePrice} account={account} removed={false} />
-        ))}
-      </div>
-    </Page>
+        <Heading as="h1" size="lg" color="primary" mb="10px" style={{ textAlign: 'left' }}>
+          Kingdoms: Composable Auto-Compounding
+        </Heading>
+        <Heading as="h2" color="secondary" mb="10px" style={{ textAlign: 'left' }}>
+          Stake tokens for cross-platform farming plus CUB rewards
+        </Heading>
+        <Heading as="h2" color="warning" mb="10px" style={{ textAlign: 'left' }}>
+          IMPORTANT: Must use <a target="_blank" rel="noreferrer" href="https://exchange.pancakeswap.finance/#/pool">Pancakeswap V2 Exchange</a> for V2 Kingdom LP tokens until we add a V2 exchange for Cub Finance
+        </Heading>
+        <Heading as="h2" color="warning" mb="10px" style={{ textAlign: 'left' }}>
+          CertiK Audit is Pending: Our other contracts have been audited by CertiK and Kingdoms are currently under review. Please use at your own discretion until the audit has been published
+        </Heading>
+        <FeeWrapper>
+          <Heading as="h2" color="secondary" mb="5px" style={{ textAlign: 'left' }}>
+            Fees
+          </Heading>
+          <Flex justifyContent="space-between">
+            <Text>Management Fee:</Text>
+            <Text>0.9%</Text>
+          </Flex>
+          <Flex justifyContent="space-between">
+            <Text>Withdrawal Fee:</Text>
+            <Text>None</Text>
+          </Flex>
+          <Flex justifyContent="space-between">
+            <Text>Fee to CUB Staking Kingdom:</Text>
+            <Text>1%</Text>
+          </Flex>
+          <Flex justifyContent="space-between">
+            <Text>CUB Burn Rate:</Text>
+            <Text>100% of Fees Buyback and Burn CUB</Text>
+          </Flex>
+        </FeeWrapper>
+      </PageHeader>
+      <Page className="k-container">
+        <div id="kingdoms">
+          <div id="content-header" className="k-content">
+            <div className="flex-grid k-grid">
+              <div className="col">
+                <div>Token</div>
+                <div>Farm</div>
+                <div>TVL</div>
+              </div>
+              <div className="col">
+                <div>Total APY</div>
+                <div>Daily APR</div>
+                <div>Multiplier</div>
+              </div>
+              <div className="col">
+                <div>Balance</div>
+                <div>Deposit</div>
+                <div>Rewards</div>
+              </div>
+              <div className="col" />
+            </div>
+          </div>
+          {farmsStakedMemoized.map((farm) => (
+            <Kingdom key={farm.pid} farm={farm} cakePrice={cakePrice} account={account} removed={false} />
+          ))}
+        </div>
+      </Page>
+    </>
   )
 }
 
