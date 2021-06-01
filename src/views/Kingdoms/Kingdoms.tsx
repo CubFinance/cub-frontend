@@ -155,6 +155,7 @@ const Kingdoms: React.FC = () => {
         <div id="kingdoms">
           <div id="content-header" className="k-content">
             <div className="flex-grid k-grid">
+              <div className="col" />
               <div className="col">
                 <Text>Token</Text>
                 <Text>Farm</Text>

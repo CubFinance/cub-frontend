@@ -47,8 +47,18 @@ interface KingdomDetailProps {
   oneTokenQuoteValue: BigNumber
 }
 
-const KingdomDetail: React.FC<KingdomDetailProps> = ({ walletBalance, depositBalance, rewardBalance, walletBalanceQuoteValue, depositBalanceQuoteValue, lpSymbol, multiplier, farmName, oneTokenQuoteValue }) => {
-// console.log('oneTokenQuoteValue',oneTokenQuoteValue.toFixed(2))
+const KingdomDetail: React.FC<KingdomDetailProps> = ({
+  walletBalance,
+  depositBalance,
+  rewardBalance,
+  walletBalanceQuoteValue,
+  depositBalanceQuoteValue,
+  lpSymbol, 
+  multiplier,
+  farmName,
+  oneTokenQuoteValue
+}) => {
+
   const tokenValueFormated = oneTokenQuoteValue
     ? `~$${oneTokenQuoteValue.times(DEFAULT_TOKEN_DECIMAL).toFixed(2)}`
     : '-'

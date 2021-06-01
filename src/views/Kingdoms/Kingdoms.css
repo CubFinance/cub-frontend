@@ -55,21 +55,24 @@ h1 {
 }
 
 .k-grid > .col:nth-of-type(1) {
-  flex: 12;
+  flex: 2;
 }
 .k-grid > .col:nth-of-type(2) {
-  flex: 4;
-  text-align: right;
+  flex: 10;
 }
 .k-grid > .col:nth-of-type(3) {
   flex: 4;
   text-align: right;
 }
 .k-grid > .col:nth-of-type(4) {
+  flex: 4;
+  text-align: right;
+}
+.k-grid > .col:nth-of-type(5) {
   flex: 1;
 
 }
-.k-grid > .col:nth-of-type(4) > * {
+.k-grid > .col:nth-of-type(5) > * {
   display: flex;
   flex-direction: row;
   align-items: flex-end;

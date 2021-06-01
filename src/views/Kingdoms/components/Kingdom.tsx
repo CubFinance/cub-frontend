@@ -63,7 +63,7 @@ const Kingdom: React.FC<KingdomProps> = ({ farm, removed, cakePrice, bnbPrice, e
   const totalLiquidity = new BigNumber(farm.lpTotalInQuoteToken).times(quoteTokenPriceUsd) */
 
   const oneTokenQuoteValue = new BigNumber(1).times(lpTotalInQuoteToken).div(new BigNumber(kingdomSupply))
-// console.log('oneTokenQuoteValue',oneTokenQuoteValue.toString())
+
   const walletBalanceQuoteValue = new BigNumber(tokenBalance).times(oneTokenQuoteValue).toNumber()
 
   const depositBalanceQuoteValue = new BigNumber(stakedBalance).times(oneTokenQuoteValue).toNumber()
@@ -96,10 +96,10 @@ const Kingdom: React.FC<KingdomProps> = ({ farm, removed, cakePrice, bnbPrice, e
       <Divider />
       <div className="k-content">
         <div className="flex-grid k-grid">
+          <div className="col"><Image src={`/images/farms/${farmImage}.png`} alt={lpSymbol} width={64} height={64} /></div>
           <div className="col">
             <Flex justifyContent="flex-start" alignItems="center">
               <Text className="token">{lpSymbol}</Text>
-              <Image src={`/images/farms/${farmImage}.png`} alt={lpSymbol} width={24} height={24} />
             </Flex>
             <Text>{farmName}</Text>
             <Text> TVL {totalValueFormated}</Text>
