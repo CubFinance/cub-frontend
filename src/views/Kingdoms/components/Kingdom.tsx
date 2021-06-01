@@ -15,7 +15,7 @@ import Balance from 'components/Balance'
 
 import KingdomDetail from './KingdomDetail'
 // import ExpandIcon from './ExpandIcon'
-import Divider from './Divider'
+import Divider from './DividerBlue'
 // import LinkButton from './LinkButton'
 // import CardValue from './CardValue'
 
@@ -63,12 +63,11 @@ const Kingdom: React.FC<KingdomProps> = ({ farm, removed, cakePrice, bnbPrice, e
   const totalLiquidity = new BigNumber(farm.lpTotalInQuoteToken).times(quoteTokenPriceUsd) */
 
   const oneTokenQuoteValue = new BigNumber(1).times(lpTotalInQuoteToken).div(new BigNumber(kingdomSupply)).toNumber()
-  console.log('oneTokenQuoteValue',oneTokenQuoteValue)
+
   const walletBalanceQuoteValue = new BigNumber(tokenBalance).times(oneTokenQuoteValue).toNumber()
 
   const depositBalanceQuoteValue = new BigNumber(stakedBalance).times(oneTokenQuoteValue).toNumber()
-console.log('walletBalanceQuoteValue',walletBalanceQuoteValue)
-console.log('depositBalanceQuoteValue',depositBalanceQuoteValue)
+
   const totalValueFormated = farm.lpTotalInQuoteToken
     ? `$${Number(farm.lpTotalInQuoteToken).toLocaleString(undefined, { maximumFractionDigits: 0 })}`
     : '-'

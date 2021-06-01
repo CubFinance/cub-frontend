@@ -41,6 +41,9 @@ const NUMBER_OF_FARMS_VISIBLE = 12
 
 const Kingdoms: React.FC = () => {
   const totalValue = useTotalValueKingdoms();
+  // const tvl = totalValue
+  //   ? `$${Number(totalValue).toLocaleString(undefined, { maximumFractionDigits: 0 })}`
+  //   : '-'
   // const { path } = useRouteMatch()
   const { pathname } = useLocation()
   // const TranslateString = useI18n()
@@ -107,10 +110,12 @@ const Kingdoms: React.FC = () => {
           <Heading as="h1" size="xxl" color="secondary" mb="10px">
             Kingdoms
           </Heading>
-          <div className='tvl-header'>
-            <div>TVL</div>
-            <CardValue value={totalValue.toNumber()} prefix="$" decimals={2}/>
-          </div>
+          <Flex>
+            <Text bold fontSize="24px">
+              TVL&nbsp;
+            </Text>
+            <CardValue fontSize="24px" value={totalValue.toNumber()} prefix="$" decimals={2}/>
+          </Flex>
         </div>
         <Heading as="h1" size="lg" color="primary" mb="10px" style={{ textAlign: 'left' }}>
           Kingdoms: Composable Auto-Compounding
@@ -151,19 +156,19 @@ const Kingdoms: React.FC = () => {
           <div id="content-header" className="k-content">
             <div className="flex-grid k-grid">
               <div className="col">
-                <div>Token</div>
-                <div>Farm</div>
-                <div>TVL</div>
+                <Text>Token</Text>
+                <Text>Farm</Text>
+                <Text>TVL</Text>
               </div>
               <div className="col">
-                <div>Total APY</div>
-                <div>Daily APR</div>
-                <div>Multiplier</div>
+                <Text>Total APY</Text>
+                <Text>Daily APR</Text>
+                <Text>Multiplier</Text>
               </div>
               <div className="col">
-                <div>Balance</div>
-                <div>Deposit</div>
-                <div>Rewards</div>
+                <Text>Balance</Text>
+                <Text>Deposit</Text>
+                <Text>Rewards</Text>
               </div>
               <div className="col" />
             </div>

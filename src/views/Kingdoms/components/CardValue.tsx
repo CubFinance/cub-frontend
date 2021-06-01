@@ -12,9 +12,10 @@ interface CardValueProps {
 
 const StyledText = styled(Text)`
   line-height: 1.5;
+
 `
 
-const CardValue: React.FC<CardValueProps> = ({ value, decimals, prefix }) => {
+const CardValue: React.FC<CardValueProps> = ({ value, decimals, prefix, fontSize = '16px', }) => {
   const { countUp, update } = useCountUp({
     start: 0,
     end: value,
@@ -32,7 +33,7 @@ const CardValue: React.FC<CardValueProps> = ({ value, decimals, prefix }) => {
   }, [value, updateValue])
 
   return (
-    <StyledText>
+    <StyledText fontSize={fontSize} >
       {prefix}{countUp}
     </StyledText>
   )

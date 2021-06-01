@@ -34,6 +34,10 @@ const Values = styled.div`
   display: inline-flex
 `
 
+const Brackets = styled.span`
+  color: ${(props) => props.theme.colors.text};
+`
+
 interface KingdomCardProps {
   farm?: FarmWithStakedValue
   walletBalance: number
@@ -61,7 +65,7 @@ const KingdomCard: React.FC<KingdomCardProps> = ({ walletBalance, depositBalance
                   decimals={walletBalance ? 3 : 2}
                   unit=""
                 />
-                &nbsp;(<CardBusdValue value={walletBalanceQuoteValue} />)
+                &nbsp;<Brackets>(</Brackets><CardBusdValue value={walletBalanceQuoteValue} /><Brackets>)</Brackets>
               </Values>
             </Flex>
           </div>
@@ -75,7 +79,7 @@ const KingdomCard: React.FC<KingdomCardProps> = ({ walletBalance, depositBalance
                   decimals={depositBalance ? 3 : 2}
                   unit=""
                 />
-                &nbsp;(<CardBusdValue value={depositBalanceQuoteValue} />)
+                &nbsp;<Brackets>(</Brackets><CardBusdValue value={depositBalanceQuoteValue} /><Brackets>)</Brackets>
               </Values>
             </Flex>
           </div>
