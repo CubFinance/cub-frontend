@@ -25,6 +25,7 @@ export interface FarmWithStakedValue extends Farm {
   lpTotalInQuoteTokenPCS?: number
   poolWeightPCS?: string
   pcsCompounding?: number
+  kingdomSupply?: string
 }
 
 const RainbowLight = keyframes`

@@ -34,21 +34,22 @@ const DHeader = styled.span`
 `
 
 interface KingdomDetailProps {
-  farm: FarmWithStakedValue
+  farm?: FarmWithStakedValue
   walletBalance: number
   depositBalance: number
   rewardBalance: number
+  walletBalanceQuoteValue?: number
 }
 
-const KingdomDetail: React.FC<KingdomDetailProps> = ({ farm, walletBalance, depositBalance, rewardBalance }) => {
+const KingdomDetail: React.FC<KingdomDetailProps> = ({ walletBalance, depositBalance, rewardBalance, walletBalanceQuoteValue }) => {
 
   return (
     <>
       <KingdomCard
-        farm={farm}
         walletBalance={walletBalance}
         depositBalance={depositBalance}
         rewardBalance={rewardBalance}
+        walletBalanceQuoteValue={walletBalanceQuoteValue}
       />
       <Button mr="8px" variant="secondary">Farm Contract</Button>
       <Button mr="8px" variant="secondary">Vault Contract</Button>

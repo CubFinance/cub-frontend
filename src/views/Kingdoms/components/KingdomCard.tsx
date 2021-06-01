@@ -35,16 +35,18 @@ const Values = styled.div`
 `
 
 interface KingdomCardProps {
-  farm: FarmWithStakedValue
+  farm?: FarmWithStakedValue
   walletBalance: number
   depositBalance: number
   rewardBalance: number
+  walletBalanceQuoteValue?: number
 }
 
-const KingdomCard: React.FC<KingdomCardProps> = ({ farm, walletBalance, depositBalance, rewardBalance }) => {
+const KingdomCard: React.FC<KingdomCardProps> = ({ walletBalance, depositBalance, rewardBalance, walletBalanceQuoteValue }) => {
   const cakePrice = usePriceCakeBusd()
   const earningsBusd = rewardBalance ? new BigNumber(rewardBalance).multipliedBy(cakePrice).toNumber() : 0
 
+// console.log('walletBalance',walletBalance)
   return (
     <KCard>
       <div className="k-card">
@@ -59,7 +61,7 @@ const KingdomCard: React.FC<KingdomCardProps> = ({ farm, walletBalance, depositB
                   decimals={walletBalance ? 3 : 2}
                   unit=""
                 />
-                &nbsp;(<CardValue value={0} prefix="$" decimals={2}/>)
+                &nbsp;(<CardValue value={walletBalanceQuoteValue} prefix="$" decimals={2}/>)
               </Values>
             </Flex>
           </div>

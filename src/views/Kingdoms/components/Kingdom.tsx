@@ -41,7 +41,7 @@ const Kingdom: React.FC<KingdomProps> = ({ farm, removed, cakePrice, bnbPrice, e
   const [showExpandableSection, setShowExpandableSection] = useState(false)
   const farmImage = farm.lpSymbol.split(' ')[0].toLocaleLowerCase()
 
-  const { apr } = farm
+  const { apr, lpTotalInQuoteToken, kingdomSupply } = farm
 
   const totalValueFormated = farm.lpTotalInQuoteToken
     ? `$${Number(farm.lpTotalInQuoteToken).toLocaleString(undefined, { maximumFractionDigits: 0 })}`
@@ -78,10 +78,12 @@ const Kingdom: React.FC<KingdomProps> = ({ farm, removed, cakePrice, bnbPrice, e
     farm.lpTotalInQuoteTokenPCS ? farm.lpTotalInQuoteTokenPCS : 0,
   )
   const { dailyAPR, totalAPYString } = aprApy
-  const { tokenBalance, stakedBalance, earnings } = useFarmUser(farm.pid)
-  const rawTokenBalance = getBalanceNumber(tokenBalance)
-  const rawStakedBalance = getBalanceNumber(stakedBalance)
-  const rawEarningsBalance = getBalanceNumber(earnings)
+  const { tokenBalance, stakedBalance, earnings } = farm.userData
+  const rawTokenBalance = getBalanceNumber(new BigNumber(tokenBalance))
+  const rawStakedBalance = getBalanceNumber(new BigNumber(stakedBalance))
+  const rawEarningsBalance = getBalanceNumber(new BigNumber(earnings))
+
+  const walletBalanceQuoteValue = new BigNumber(tokenBalance).times(lpTotalInQuoteToken).div(new BigNumber(kingdomSupply)).toNumber()
 
   return (
     <>
@@ -141,10 +143,10 @@ const Kingdom: React.FC<KingdomProps> = ({ farm, removed, cakePrice, bnbPrice, e
         </div>
         <ExpandingWrapper expanded={showExpandableSection}>
           <KingdomDetail
-            farm={farm}
             walletBalance={rawTokenBalance}
             depositBalance={rawStakedBalance}
             rewardBalance={rawEarningsBalance}
+            walletBalanceQuoteValue={walletBalanceQuoteValue}
           />
         </ExpandingWrapper>
       </div>
