@@ -41,7 +41,7 @@ const Kingdom: React.FC<KingdomProps> = ({ farm, removed, cakePrice, bnbPrice, e
   const [showExpandableSection, setShowExpandableSection] = useState(false)
   const farmImage = farm.lpSymbol.split(' ')[0].toLocaleLowerCase()
 
-  const { apr, lpTotalInQuoteToken, kingdomSupply } = farm
+  const { apr, lpTotalInQuoteToken, kingdomSupply, lpSymbol, pcsPid, multiplier } = farm
   const aprApy = useKingdomAPRAPY(
     farm.isKingdom,
     farm.isKingdomToken,
@@ -62,16 +62,18 @@ const Kingdom: React.FC<KingdomProps> = ({ farm, removed, cakePrice, bnbPrice, e
   /* const quoteTokenPriceUsd = prices[getAddress(farm.quoteToken.address).toLowerCase()]
   const totalLiquidity = new BigNumber(farm.lpTotalInQuoteToken).times(quoteTokenPriceUsd) */
 
-  const oneTokenQuoteValue = new BigNumber(1).times(lpTotalInQuoteToken).div(new BigNumber(kingdomSupply)).toNumber()
-
+  const oneTokenQuoteValue = new BigNumber(1).times(lpTotalInQuoteToken).div(new BigNumber(kingdomSupply))
+// console.log('oneTokenQuoteValue',oneTokenQuoteValue.toString())
   const walletBalanceQuoteValue = new BigNumber(tokenBalance).times(oneTokenQuoteValue).toNumber()
 
   const depositBalanceQuoteValue = new BigNumber(stakedBalance).times(oneTokenQuoteValue).toNumber()
 
-  const totalValueFormated = farm.lpTotalInQuoteToken
-    ? `$${Number(farm.lpTotalInQuoteToken).toLocaleString(undefined, { maximumFractionDigits: 0 })}`
+  const totalValueFormated = lpTotalInQuoteToken
+    ? `$${Number(lpTotalInQuoteToken).toLocaleString(undefined, { maximumFractionDigits: 0 })}`
     : '-'
   const farmAPR = apr && apr.toLocaleString('en-US', { maximumFractionDigits: 2 })
+
+  const farmName = (pcsPid || pcsPid === 0) ? 'Pancake v2' : ''
 
   /* let aprApy = useKingdomAPRAPY(
     farm.isKingdom,
@@ -96,10 +98,10 @@ const Kingdom: React.FC<KingdomProps> = ({ farm, removed, cakePrice, bnbPrice, e
         <div className="flex-grid k-grid">
           <div className="col">
             <Flex justifyContent="flex-start" alignItems="center">
-              <Text className="token">{farm.lpSymbol}</Text>
-              <Image src={`/images/farms/${farmImage}.png`} alt={farm.lpSymbol} width={24} height={24} />
+              <Text className="token">{lpSymbol}</Text>
+              <Image src={`/images/farms/${farmImage}.png`} alt={lpSymbol} width={24} height={24} />
             </Flex>
-            <Text>{(farm.pcsPid || farm.pcsPid === 0) && 'Pancake v2'}</Text>
+            <Text>{farmName}</Text>
             <Text> TVL {totalValueFormated}</Text>
           </div>
           <div className="col">
@@ -115,7 +117,7 @@ const Kingdom: React.FC<KingdomProps> = ({ farm, removed, cakePrice, bnbPrice, e
                 decimals={2}
                 unit="%"
               />
-              <Text>{farm.multiplier}</Text>
+              <Text>{multiplier}</Text>
           </div>
           <div className="col">
             <Balance
@@ -152,6 +154,10 @@ const Kingdom: React.FC<KingdomProps> = ({ farm, removed, cakePrice, bnbPrice, e
             rewardBalance={rawEarningsBalance}
             walletBalanceQuoteValue={walletBalanceQuoteValue}
             depositBalanceQuoteValue={depositBalanceQuoteValue}
+            lpSymbol={lpSymbol}
+            multiplier={multiplier}
+            farmName={farmName}
+            oneTokenQuoteValue={oneTokenQuoteValue}
           />
         </ExpandingWrapper>
       </div>

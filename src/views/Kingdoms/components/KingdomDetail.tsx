@@ -1,7 +1,8 @@
 import React from 'react'
-// import BigNumber from 'bignumber.js'
+import BigNumber from 'bignumber.js'
 import styled from 'styled-components'
 import { Button as UiButton } from '@pancakeswap-libs/uikit'
+import { DEFAULT_TOKEN_DECIMAL } from 'config'
 import KingdomCard from './KingdomCard'
 import { FarmWithStakedValue } from '../../Farms/components/FarmCard/FarmCard'
 
@@ -40,9 +41,17 @@ interface KingdomDetailProps {
   rewardBalance: number
   walletBalanceQuoteValue: number
   depositBalanceQuoteValue: number
+  lpSymbol: string
+  multiplier: string
+  farmName: string
+  oneTokenQuoteValue: BigNumber
 }
 
-const KingdomDetail: React.FC<KingdomDetailProps> = ({ walletBalance, depositBalance, rewardBalance, walletBalanceQuoteValue, depositBalanceQuoteValue }) => {
+const KingdomDetail: React.FC<KingdomDetailProps> = ({ walletBalance, depositBalance, rewardBalance, walletBalanceQuoteValue, depositBalanceQuoteValue, lpSymbol, multiplier, farmName, oneTokenQuoteValue }) => {
+// console.log('oneTokenQuoteValue',oneTokenQuoteValue.toFixed(2))
+  const tokenValueFormated = oneTokenQuoteValue
+    ? `~$${oneTokenQuoteValue.times(DEFAULT_TOKEN_DECIMAL).toFixed(2)}`
+    : '-'
 
   return (
     <>
@@ -57,12 +66,12 @@ const KingdomDetail: React.FC<KingdomDetailProps> = ({ walletBalance, depositBal
       <Button mr="8px" variant="secondary">Vault Contract</Button>
       <Details>
         <Detail>
-          <DHeader>Vault Details</DHeader>
-          <div>Asset: BTC</div>
-          <div>($3,019.33)</div>
-          <div>AUTO multiplier: 0.05x </div>
+          <DHeader>Kingdom Details</DHeader>
+          <div>Asset: {lpSymbol}</div>
+          <div>({tokenValueFormated})</div>
+          <div>Multiplier: {multiplier}</div>
           <div>Type: auto-compounding</div>
-          <div>Farm name: Bakery</div>
+          <div>Farm name: {farmName}</div>
         </Detail>
         <Detail>
           <DHeader>APY Calculations</DHeader>
