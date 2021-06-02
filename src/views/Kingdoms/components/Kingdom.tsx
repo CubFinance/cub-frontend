@@ -9,11 +9,9 @@ import styled from 'styled-components'
 import ExpandableSectionButton from 'components/ExpandableSectionButton'
 import { getBalanceNumber, getFullDisplayBalance } from 'utils/formatBalance'
 // import { useFarmUser } from 'state/hooks'
-import getLiquidityUrlPathParts from 'utils/getLiquidityUrlPathParts'
 import { FarmWithStakedValue } from 'views/Farms/components/FarmCard/FarmCard'
 import useKingdomAPRAPY from 'hooks/useKingdomAPRAPY'
 import Balance from 'components/Balance'
-import { BASE_ADD_LIQUIDITY_URL, PCS_ADD_LIQUIDITY_URL } from 'config'
 
 import KingdomDetail from './KingdomDetail'
 // import ExpandIcon from './ExpandIcon'
@@ -47,18 +45,17 @@ interface KingdomProps {
 
 const Kingdom: React.FC<KingdomProps> = ({ farm, removed, cakePrice, bnbPrice, ethereum, account }) => {
   const [showExpandableSection, setShowExpandableSection] = useState(false)
-  const farmImage = farm.lpSymbol.split(' ')[0].toLocaleLowerCase()
-
-  const { apr, lpTotalInQuoteToken, kingdomSupply, lpSymbol, pcsPid, multiplier } = farm
+  const { apr, lpTotalInQuoteToken, kingdomSupply, lpSymbol, pcsPid, multiplier, isKingdom, isKingdomToken, tokenPriceVsQuote, poolWeightPCS, pcsCompounding, lpTokenBalancePCSv2 = 0, lpTotalInQuoteTokenPCS = 0 } = farm
+  const farmImage = lpSymbol.split(' ')[0].toLocaleLowerCase()
   let aprApy = useKingdomAPRAPY(
-    farm.isKingdom,
-    farm.isKingdomToken,
-    Number(farm.tokenPriceVsQuote),
-    farm.poolWeightPCS,
-    farm.pcsCompounding,
-    farm.apr,
-    farm.lpTokenBalancePCSv2 ? farm.lpTokenBalancePCSv2 : 0,
-    farm.lpTotalInQuoteTokenPCS ? farm.lpTotalInQuoteTokenPCS : 0,
+    isKingdom,
+    isKingdomToken,
+    Number(tokenPriceVsQuote),
+    poolWeightPCS,
+    pcsCompounding,
+    apr,
+    lpTokenBalancePCSv2,
+    lpTotalInQuoteTokenPCS,
   )
   const { dailyAPR, totalAPYString } = aprApy
   const { tokenBalance, stakedBalance, earnings } = farm.userData
@@ -84,22 +81,6 @@ const Kingdom: React.FC<KingdomProps> = ({ farm, removed, cakePrice, bnbPrice, e
   const farmName = (pcsPid || pcsPid === 0) ? 'Pancake v2' : ''
 
   aprApy = { ...aprApy, pcsCompounding: farm.pcsCompounding, farmAPR, apr: farm.apr, cakePrice }
-
-  const lpLabel = farm.lpSymbol && farm.lpSymbol.toUpperCase().replace('PANCAKE', '')
-  const liquidityUrlPathParts = getLiquidityUrlPathParts({
-    quoteTokenAddress: farm.quoteToken.address,
-    tokenAddress: farm.token.address,
-  })
-  const exchangeUrl = farm.isKingdom ? PCS_ADD_LIQUIDITY_URL : BASE_ADD_LIQUIDITY_URL
-  const addLiquidityUrl = `${exchangeUrl}/${liquidityUrlPathParts}`
-  const lpAddress = farm.lpAddresses[process.env.REACT_APP_CHAIN_ID]
-  const tokenAddress = farm.token.address[process.env.REACT_APP_CHAIN_ID]
-  const isTokenOnly = farm.isTokenOnly || farm.isKingdomToken
-  const farmContract= isTokenOnly ?
-    `https://bscscan.com/token/${tokenAddress}`
-    : `https://bscscan.com/token/${lpAddress}`
-  const vaultContract = `https://bscscan.com/token/${farm.kingdomContract}`
-  const infoAddress = `https://pancakeswap.info/pair/${isTokenOnly ? tokenAddress : lpAddress}`
 
   return (
     <>
@@ -159,22 +140,16 @@ const Kingdom: React.FC<KingdomProps> = ({ farm, removed, cakePrice, bnbPrice, e
         </div>
         <ExpandingWrapper expanded={showExpandableSection}>
           <KingdomDetail
+            farm={farm}
             walletBalance={rawTokenBalance}
             depositBalance={rawStakedBalance}
             rewardBalance={rawEarningsBalance}
             walletBalanceQuoteValue={walletBalanceQuoteValue}
             depositBalanceQuoteValue={depositBalanceQuoteValue}
-            lpSymbol={lpSymbol}
-            multiplier={multiplier}
             farmName={farmName}
             oneTokenQuoteValue={oneTokenQuoteValue}
             removed={removed}
             aprApy={aprApy}
-            farmContract={farmContract}
-            vaultContract={vaultContract}
-            lpLabel={lpLabel}
-            infoAddress={infoAddress}
-            addLiquidityUrl={addLiquidityUrl}
           />
         </ExpandingWrapper>
       </K>

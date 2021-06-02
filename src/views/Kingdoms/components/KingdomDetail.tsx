@@ -2,12 +2,11 @@ import React from 'react'
 import BigNumber from 'bignumber.js'
 import styled from 'styled-components'
 import { Button as UiButton, LinkExternal, Flex, Text } from '@pancakeswap-libs/uikit'
-import { DEFAULT_TOKEN_DECIMAL } from 'config'
+import { DEFAULT_TOKEN_DECIMAL, BASE_ADD_LIQUIDITY_URL, PCS_ADD_LIQUIDITY_URL } from 'config'
 import AprApy from 'views/Farms/components/FarmCard/AprApy'
 import { FarmWithStakedValue } from 'views/Farms/components/FarmCard/FarmCard'
+import getLiquidityUrlPathParts from 'utils/getLiquidityUrlPathParts'
 import KingdomCard from './KingdomCard'
-
-
 
 const Button = styled(UiButton)`
   height: 36px;
@@ -52,56 +51,61 @@ const StyledLinkExternal = styled(LinkExternal)`
 `
 
 interface KingdomDetailProps {
-  farm?: FarmWithStakedValue
+  farm: FarmWithStakedValue
   walletBalance: number
   depositBalance: number
   rewardBalance: number
   walletBalanceQuoteValue: number
   depositBalanceQuoteValue: number
-  lpSymbol: string
-  multiplier: string
   farmName: string
   oneTokenQuoteValue: BigNumber
   removed?: boolean
   aprApy?: any
-  farmContract?: string
-  vaultContract?: string
-  lpLabel?: string
-  infoAddress?: string
-  addLiquidityUrl?: string
 }
 
 const KingdomDetail: React.FC<KingdomDetailProps> = ({
+  farm,
   walletBalance,
   depositBalance,
   rewardBalance,
   walletBalanceQuoteValue,
   depositBalanceQuoteValue,
-  lpSymbol,
-  multiplier,
   farmName,
   oneTokenQuoteValue,
   removed,
   aprApy,
-  farmContract,
-  vaultContract,
-  lpLabel,
-  infoAddress,
-  addLiquidityUrl
 }) => {
-
   const tokenValueFormated = oneTokenQuoteValue
     ? `~$${oneTokenQuoteValue.times(DEFAULT_TOKEN_DECIMAL).toFixed(2)}`
     : '-'
 
+  const { lpSymbol, multiplier, quoteToken, token, isKingdom, lpAddresses, isTokenOnly, isKingdomToken, kingdomContract } = farm
+  const lpLabel = lpSymbol && lpSymbol.toUpperCase().replace('PANCAKE', '')
+  const liquidityUrlPathParts = getLiquidityUrlPathParts({
+    quoteTokenAddress: quoteToken.address,
+    tokenAddress: token.address,
+  })
+  const exchangeUrl = isKingdom ? PCS_ADD_LIQUIDITY_URL : BASE_ADD_LIQUIDITY_URL
+  const addLiquidityUrl = `${exchangeUrl}/${liquidityUrlPathParts}`
+  const lpAddress = lpAddresses[process.env.REACT_APP_CHAIN_ID]
+  const tokenAddress = token.address[process.env.REACT_APP_CHAIN_ID]
+  const isToken = isTokenOnly || isKingdomToken
+  const farmContract= isToken ?
+    `https://bscscan.com/token/${tokenAddress}`
+    : `https://bscscan.com/token/${lpAddress}`
+  const vaultContract = `https://bscscan.com/token/${kingdomContract}`
+  const infoAddress = `https://pancakeswap.info/pair/${isTokenOnly ? tokenAddress : lpAddress}`
+
   return (
     <KDetail>
       <KingdomCard
+        farm={farm}
         walletBalance={walletBalance}
         depositBalance={depositBalance}
         rewardBalance={rewardBalance}
         walletBalanceQuoteValue={walletBalanceQuoteValue}
         depositBalanceQuoteValue={depositBalanceQuoteValue}
+        addLiquidityUrl={addLiquidityUrl}
       />
       <Details>
         <Detail>
