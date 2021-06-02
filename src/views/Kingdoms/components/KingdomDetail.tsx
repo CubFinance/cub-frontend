@@ -1,10 +1,13 @@
 import React from 'react'
 import BigNumber from 'bignumber.js'
 import styled from 'styled-components'
-import { Button as UiButton } from '@pancakeswap-libs/uikit'
+import { Button as UiButton, LinkExternal, Flex, Text } from '@pancakeswap-libs/uikit'
 import { DEFAULT_TOKEN_DECIMAL } from 'config'
+import AprApy from 'views/Farms/components/FarmCard/AprApy'
+import { FarmWithStakedValue } from 'views/Farms/components/FarmCard/FarmCard'
 import KingdomCard from './KingdomCard'
-import { FarmWithStakedValue } from '../../Farms/components/FarmCard/FarmCard'
+
+
 
 const Button = styled(UiButton)`
   height: 36px;
@@ -16,22 +19,36 @@ const Details = styled.div`
   margin-top: 1rem;
   margin-bottom: 2rem;
   display: flex;
-  font-size: 1rem;
-  font-size: 0.95rem
+  justify-content: space-between;
+  padding-left: 0.8rem;
+  padding-right: 0.8rem;
+  /*font-size: 0.95rem*/
 `
 
 const Detail = styled.div`
-  display: inline;
-  margin-right: 1rem;
-  & div {
+  /*display: inline;
+  margin-right: 1rem;*/
+  /*& div {
     font-family: Arial;
     font-size: 0.8rem;
     padding: 2px;
+  }*/
+  &:nth-child(1) {
+    width: 25%
+  }
+  &:nth-child(2) {
+    width: 33%
   }
 `
 
-const DHeader = styled.span`
-  font-size: 1rem;
+const KDetail = styled.div`
+  /*background: ${(props) => props.theme.card.background};
+  border-radius: 8px;
+  box-shadow: 0 3px 4px -3px rgba(0,0,0,0.1),0 4px 6px -2px rgba(0,0,0,0.05);*/
+`
+
+const StyledLinkExternal = styled(LinkExternal)`
+  font-weight: 400;
 `
 
 interface KingdomDetailProps {
@@ -45,6 +62,13 @@ interface KingdomDetailProps {
   multiplier: string
   farmName: string
   oneTokenQuoteValue: BigNumber
+  removed?: boolean
+  aprApy?: any
+  farmContract?: string
+  vaultContract?: string
+  lpLabel?: string
+  infoAddress?: string
+  addLiquidityUrl?: string
 }
 
 const KingdomDetail: React.FC<KingdomDetailProps> = ({
@@ -53,10 +77,17 @@ const KingdomDetail: React.FC<KingdomDetailProps> = ({
   rewardBalance,
   walletBalanceQuoteValue,
   depositBalanceQuoteValue,
-  lpSymbol, 
+  lpSymbol,
   multiplier,
   farmName,
-  oneTokenQuoteValue
+  oneTokenQuoteValue,
+  removed,
+  aprApy,
+  farmContract,
+  vaultContract,
+  lpLabel,
+  infoAddress,
+  addLiquidityUrl
 }) => {
 
   const tokenValueFormated = oneTokenQuoteValue
@@ -64,7 +95,7 @@ const KingdomDetail: React.FC<KingdomDetailProps> = ({
     : '-'
 
   return (
-    <>
+    <KDetail>
       <KingdomCard
         walletBalance={walletBalance}
         depositBalance={depositBalance}
@@ -72,34 +103,45 @@ const KingdomDetail: React.FC<KingdomDetailProps> = ({
         walletBalanceQuoteValue={walletBalanceQuoteValue}
         depositBalanceQuoteValue={depositBalanceQuoteValue}
       />
-      <Button mr="8px" variant="secondary">Farm Contract</Button>
-      <Button mr="8px" variant="secondary">Vault Contract</Button>
       <Details>
         <Detail>
-          <DHeader>Kingdom Details</DHeader>
-          <div>Asset: {lpSymbol}</div>
-          <div>({tokenValueFormated})</div>
-          <div>Multiplier: {multiplier}</div>
-          <div>Type: auto-compounding</div>
-          <div>Farm name: {farmName}</div>
+          <Flex justifyContent="space-between">
+            <Text>{lpSymbol}:</Text>
+            <Text>({tokenValueFormated})</Text>
+          </Flex>
+          <Flex justifyContent="space-between">
+            <Text>Multiplier:</Text>
+            <Text>{multiplier}</Text>
+          </Flex>
+          <Flex justifyContent="space-between">
+            <Text>Type:</Text>
+            <Text>Auto-compound</Text>
+          </Flex>
+          <Flex justifyContent="space-between">
+            <Text>Farm:</Text>
+            <Text>{farmName}</Text>
+          </Flex>
         </Detail>
         <Detail>
-          <DHeader>APY Calculations</DHeader>
-          <div>Farm APR: 72.8% (0.20% daily)</div>
-          <div>Optimal compounds per year: 365</div>
-          <div>Farm APY: 103.7%</div>
-          <div>AUTO APR: 76.1% (0.21% daily)</div>
-          <div>Total APY: 179.8%</div>
+          <AprApy
+            aprApy={aprApy}
+            lpLabel={lpLabel}
+            addLiquidityUrl={addLiquidityUrl}
+            isDetails
+          />
         </Detail>
         <Detail>
-          <DHeader>Fees</DHeader>
-          <div>Management Fee: 0.9%</div>
-          <div>Withdrawal Fee: None</div>
-          <div>Fee to CUB Staking Kingdom: 1%</div>
-          <div>CUB Burn Rate: 100% of Fees Buyback and Burn CUB</div>
+          <StyledLinkExternal href={farmContract}>Farm Contract</StyledLinkExternal>
+          <StyledLinkExternal href={vaultContract}>Kingdom Contract</StyledLinkExternal>
+          {!removed && (
+            <StyledLinkExternal href={addLiquidityUrl}>
+              {`Get ${lpLabel}`}
+            </StyledLinkExternal>
+          )}
+          <StyledLinkExternal href={infoAddress}>See Token Info</StyledLinkExternal>
         </Detail>
       </Details>
-    </>
+    </KDetail>
   )
 }
 

@@ -29,7 +29,7 @@ const AprApy: React.FC<AprApyProps> = ({ aprApy,  lpLabel, addLiquidityUrl, isDe
           <Text>{`${new BigNumber(pcsApr).toFixed(2)}% (${new BigNumber(dailyAPR).toFixed(3)}%)`}</Text>
         </Flex>
         <Flex justifyContent="space-between">
-          <Text>{TranslateString(354, 'Compounds per year')}:</Text>
+          <Text>{TranslateString(354, 'Compounds/year')}:</Text>
           <Text>~{pcsCompounding}</Text>
         </Flex>
         <Flex justifyContent="space-between">

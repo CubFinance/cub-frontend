@@ -88,6 +88,7 @@ export interface FarmConfig {
   isKingdomToken?: boolean
   pcsPid?: number
   pcsCompounding?: number
+  kingdomContract?: string
 }
 
 export interface PoolConfig {
