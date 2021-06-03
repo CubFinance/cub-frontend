@@ -57,11 +57,11 @@ const Kingdom: React.FC<KingdomProps> = ({ farm, removed, cakePrice, bnbPrice, e
     lpTokenBalancePCSv2,
     lpTotalInQuoteTokenPCS,
   )
-  const { dailyAPR, totalAPYString } = aprApy
+  const { dailyAPR, totalAPY } = aprApy
   const { tokenBalance, stakedBalance, earnings } = farm.userData
-  const rawTokenBalance = getBalanceNumber(new BigNumber(tokenBalance))
-  const rawStakedBalance = getBalanceNumber(new BigNumber(stakedBalance))
-  const rawEarningsBalance = getBalanceNumber(new BigNumber(earnings))
+  const rawTokenBalance = tokenBalance ? getBalanceNumber(new BigNumber(tokenBalance)) : 0
+  const rawStakedBalance = stakedBalance ? getBalanceNumber(new BigNumber(stakedBalance)) : 0
+  const rawEarningsBalance = earnings ? getBalanceNumber(new BigNumber(earnings)) : 0
 
   // to get usd value of liquiidty when not USD quote token
   /* const quoteTokenPriceUsd = prices[getAddress(farm.quoteToken.address).toLowerCase()]
@@ -98,7 +98,7 @@ const Kingdom: React.FC<KingdomProps> = ({ farm, removed, cakePrice, bnbPrice, e
           <div className="col">
               <Balance
                 fontSize="16px"
-                value={totalAPYString}
+                value={totalAPY}
                 decimals={2}
                 unit="%"
               />
