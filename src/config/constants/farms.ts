@@ -277,6 +277,7 @@ const farms: FarmConfig[] = [
     },
     token: tokens.cake,
     quoteToken: tokens.busd,
+    kingdomContract: '0x77440f4dc7b4ef591e78d460374bd12d3d6bdad8',
   },
   {
     pid: 1,
@@ -290,6 +291,7 @@ const farms: FarmConfig[] = [
     },
     token: tokens.wbnb,
     quoteToken: tokens.busd,
+    kingdomContract: '0x701d4f8168b00abbd948d36e11added4e1cac742',
   },
   /* {
     pid: 17,

@@ -1,0 +1,85 @@
+.k-container {
+  max-width: 825px;
+  margin: 0 auto;
+}
+
+.k-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+  /* margin-bottom: 2rem; */
+  /* margin-left: 1rem; */
+  margin-right: 1rem;
+}
+
+h1 {
+  font-size: 3rem;
+}
+
+.tvl-header {
+  display: flex;
+  max-width: 400px;
+  line-height: 1.5;
+}
+
+.tvl-header > * {
+  flex: 50%;
+  margin: 5px;
+}
+
+.flex-grid {
+  display: flex;
+  align-items: center;
+}
+
+.col {
+  flex: 1;
+}
+
+.col > * {
+  line-height: 1.5;
+}
+
+#content-header {
+  padding: 0rem 0.8rem;
+}
+
+#content-header .col > * {
+  line-height: 1;
+  padding: 2px;
+}
+
+#content-header .flex-grid {
+  align-items: flex-end;
+  opacity: 0.7;
+  /* font-size: 0.95rem; */
+}
+
+.k-grid > .col:nth-of-type(1) {
+  flex: 2;
+}
+.k-grid > .col:nth-of-type(2) {
+  flex: 10;
+}
+.k-grid > .col:nth-of-type(3) {
+  flex: 4;
+  text-align: right;
+}
+.k-grid > .col:nth-of-type(4) {
+  flex: 4;
+  text-align: right;
+}
+.k-grid > .col:nth-of-type(5) {
+  flex: 1;
+
+}
+.k-grid > .col:nth-of-type(5) > * {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+}
+
+.token {
+  font-size: 1.2rem;
+}

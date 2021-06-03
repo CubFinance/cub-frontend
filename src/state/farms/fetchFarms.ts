@@ -128,7 +128,7 @@ const fetchFarms = async (farmsToFetch: FarmConfig[]) => {
       let lpTotalInQuoteTokenPCS = new BigNumber(0)
 
       if (farmConfig.isTokenOnly || farmConfig.isKingdomToken) {
-        tokenAmount = farmConfig.isKingdomToken ? new BigNumber(kingdomSupply).div(DEFAULT_TOKEN_DECIMAL) : new BigNumber(lpTokenBalanceMC).div(new BigNumber(10).pow(tokenDecimals));
+        tokenAmount = farmConfig.isKingdomToken ? new BigNumber(kingdomSupply).div(new BigNumber(10).pow(tokenDecimals)) : new BigNumber(lpTokenBalanceMC).div(new BigNumber(10).pow(tokenDecimals));
         if(farmConfig.token.symbol === 'BUSD' && farmConfig.quoteToken.symbol === 'BUSD') {
           tokenPriceVsQuote = new BigNumber(1)
         }else{
@@ -256,6 +256,7 @@ const fetchFarms = async (farmsToFetch: FarmConfig[]) => {
           lpTokenBalancePCSv2: new BigNumber(lpTokenBalancePCSv2).div(DEFAULT_TOKEN_DECIMAL).toNumber(),
           lpTotalInQuoteTokenPCS: lpTotalInQuoteTokenPCS.toNumber(),
           poolWeightPCS: poolWeightPCS.toJSON(),
+          kingdomSupply,
         }
       }
 
