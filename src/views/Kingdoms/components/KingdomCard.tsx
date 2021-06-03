@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 // import BigNumber from 'bignumber.js'
 import styled from 'styled-components'
 import BigNumber from 'bignumber.js'
@@ -12,6 +12,7 @@ import DepositModal from 'views/Farms/components/DepositModal'
 import WithdrawModal from 'views/Farms/components/WithdrawModal'
 import useStake from 'hooks/useStake'
 import useUnstake from 'hooks/useUnstake'
+import { useHarvest } from 'hooks/useHarvest'
 // import CardValue from './CardValue'
 
 import './KingdomCard.css'
@@ -62,6 +63,7 @@ const KingdomCard: React.FC<KingdomCardProps> = ({
   depositBalanceQuoteValue ,
   addLiquidityUrl
 }) => {
+  const [pendingTx, setPendingTx] = useState(false)
   const { pid, isTokenOnly, isKingdom, isKingdomToken, lpSymbol } = farm
   const tokenName = lpSymbol.toUpperCase()
   const {
@@ -75,6 +77,7 @@ const KingdomCard: React.FC<KingdomCardProps> = ({
 
   const { onStake } = useStake(pid, isKingdom)
   const { onUnstake } = useUnstake(pid, isKingdom)
+  const { onReward } = useHarvest(pid, isKingdom)
 
   const [onPresentDeposit] = useModal(
     <DepositModal max={tokenBalance} onConfirm={onStake} tokenName={tokenName} addLiquidityUrl={addLiquidityUrl} isTokenOnly={isTokenOnly} isKingdomToken={isKingdomToken} />,
@@ -144,7 +147,17 @@ const KingdomCard: React.FC<KingdomCardProps> = ({
             <Button mt="8px" fullWidth onClick={onPresentWithdraw}>Withdraw</Button>
           </div>
           <div className="col">
-            <Button mt="8px" fullWidth variant="tertiary">Harvest</Button>
+            {/* <Button mt="8px" fullWidth variant="tertiary">Harvest</Button> */}
+            <Button
+              disabled={rewardBalance === 0 || pendingTx}
+              onClick={async () => {
+                setPendingTx(true)
+                await onReward()
+                setPendingTx(false)
+              }}
+            >
+              Harvest
+            </Button>
           </div>
         </div>
       </div>
