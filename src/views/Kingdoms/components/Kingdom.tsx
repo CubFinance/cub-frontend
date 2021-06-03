@@ -25,9 +25,10 @@ const ExpandingWrapper = styled.div<{ expanded: boolean }>`
 `
 
 const K = styled.div`
-  /*background: ${(props) => props.theme.card.background};
+  background: ${(props) => props.theme.card.background};
   border-radius: 8px;
-  box-shadow: 0 3px 4px -3px rgba(0,0,0,0.1),0 4px 6px -2px rgba(0,0,0,0.05);*/
+  box-shadow: 0 3px 4px -3px rgba(0,0,0,0.1),0 4px 6px -2px rgba(0,0,0,0.05);
+  padding: 0.4rem 0.8rem;
 `
 
 // export interface FarmWithStakedValue extends Farm {
@@ -85,7 +86,7 @@ const Kingdom: React.FC<KingdomProps> = ({ farm, removed, cakePrice, bnbPrice, e
   return (
     <>
       <Divider />
-      <K className="k-content">
+      <K>
         <div className="flex-grid k-grid">
           <div className="col"><Image src={`/images/farms/${farmImage}.png`} alt={lpSymbol} width={64} height={64} /></div>
           <div className="col">
@@ -96,19 +97,19 @@ const Kingdom: React.FC<KingdomProps> = ({ farm, removed, cakePrice, bnbPrice, e
             <Text> TVL {totalValueFormated}</Text>
           </div>
           <div className="col">
-              <Balance
-                fontSize="16px"
-                value={totalAPY}
-                decimals={2}
-                unit="%"
-              />
-              <Balance
-                fontSize="16px"
-                value={dailyAPR}
-                decimals={2}
-                unit="%"
-              />
-              <Text>{multiplier}</Text>
+            <Balance
+              fontSize="16px"
+              value={totalAPY}
+              decimals={2}
+              unit="%"
+            />
+            <Balance
+              fontSize="16px"
+              value={dailyAPR}
+              decimals={2}
+              unit="%"
+            />
+            <Text>{multiplier}</Text>
           </div>
           <div className="col">
             <Balance

@@ -25,7 +25,7 @@ const KCard = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-around;
-  padding: 6px 12px;
+  /*padding: 6px 12px;*/
   position: relative;
   margin-top: 0.5rem;
   margin-bottom: 1rem;

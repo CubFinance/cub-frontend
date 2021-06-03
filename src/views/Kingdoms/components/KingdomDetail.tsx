@@ -16,11 +16,10 @@ const Button = styled(UiButton)`
 
 const Details = styled.div`
   margin-top: 1rem;
-  margin-bottom: 2rem;
   display: flex;
   justify-content: space-between;
-  padding-left: 0.8rem;
-  padding-right: 0.8rem;
+  /*padding-left: 0.8rem;
+  padding-right: 0.8rem;*/
   /*font-size: 0.95rem*/
 `
 
