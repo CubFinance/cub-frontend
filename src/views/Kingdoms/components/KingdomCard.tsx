@@ -34,6 +34,10 @@ const KCard = styled.div`
 const Button = styled(UiButton)`
   height: 40px;
   margin-top: 0;
+  display: block;
+  &:last-child {
+    align-self: right;
+  }
 `
 
 const Values = styled.div`
@@ -94,18 +98,6 @@ const KingdomCard: React.FC<KingdomCardProps> = ({
             <Flex justifyContent='space-between'>
               <Text>Balance (Wallet)</Text>
             </Flex>
-          </div>
-          <div className="col">
-            <Flex justifyContent='space-between'>
-              <Text>Deposit (Staked)</Text>
-            </Flex>
-          </div>
-          <div className="col">
-            <Text>CUB Rewards</Text>
-          </div>
-        </div>
-        <div className="flex-grid">
-          <div className="col">
             <Values>
               <Balance
                 fontSize="16px"
@@ -115,8 +107,12 @@ const KingdomCard: React.FC<KingdomCardProps> = ({
               />
               &nbsp;<Brackets>(</Brackets><CardBusdValue value={walletBalanceQuoteValue} /><Brackets>)</Brackets>
             </Values>
+            <Button mt="8px" fullWidth onClick={onPresentDeposit}>Deposit</Button>
           </div>
           <div className="col">
+            <Flex justifyContent='space-between'>
+              <Text>Deposit (Staked)</Text>
+            </Flex>
             <Values>
               <Balance
                 fontSize="16px"
@@ -126,8 +122,10 @@ const KingdomCard: React.FC<KingdomCardProps> = ({
               />
               &nbsp;<Brackets>(</Brackets><CardBusdValue value={depositBalanceQuoteValue} /><Brackets>)</Brackets>
             </Values>
+            <Button mt="8px" fullWidth onClick={onPresentWithdraw}>Withdraw</Button>
           </div>
           <div className="col">
+            <Text>CUB Rewards</Text>
             <Values>
               <Balance
                 fontSize="16px"
@@ -137,17 +135,6 @@ const KingdomCard: React.FC<KingdomCardProps> = ({
               />
               &nbsp;<Brackets>(</Brackets><CardBusdValue value={earningsBusd} /><Brackets>)</Brackets>
             </Values>
-          </div>
-        </div>
-        <div className="flex-grid">
-          <div className="col">
-            <Button mt="8px" fullWidth onClick={onPresentDeposit}>Deposit</Button>
-          </div>
-          <div className="col">
-            <Button mt="8px" fullWidth onClick={onPresentWithdraw}>Withdraw</Button>
-          </div>
-          <div className="col">
-            {/* <Button mt="8px" fullWidth variant="tertiary">Harvest</Button> */}
             <Button
               disabled={rewardBalance === 0 || pendingTx}
               onClick={async () => {

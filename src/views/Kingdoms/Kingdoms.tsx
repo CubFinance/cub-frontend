@@ -118,7 +118,7 @@ const Kingdoms: React.FC = () => {
           </Flex>
         </div>
         <Heading as="h1" size="lg" color="primary" mb="10px" style={{ textAlign: 'left' }}>
-          Kingdoms: Composable Auto-Compounding
+          Composable Auto-Compounding
         </Heading>
         <Heading as="h2" color="secondary" mb="10px" style={{ textAlign: 'left' }}>
           Stake tokens for cross-platform farming plus CUB rewards

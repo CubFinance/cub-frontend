@@ -1,7 +1,7 @@
 import React from 'react'
 import BigNumber from 'bignumber.js'
 import styled from 'styled-components'
-import { Button as UiButton, LinkExternal, Flex, Text } from '@pancakeswap-libs/uikit'
+import { Button as UiButton, Link, Flex, Text } from '@pancakeswap-libs/uikit'
 import { DEFAULT_TOKEN_DECIMAL, BASE_ADD_LIQUIDITY_URL, PCS_ADD_LIQUIDITY_URL } from 'config'
 import AprApy from 'views/Farms/components/FarmCard/AprApy'
 import { FarmWithStakedValue } from 'views/Farms/components/FarmCard/FarmCard'
@@ -45,7 +45,7 @@ const KDetail = styled.div`
   box-shadow: 0 3px 4px -3px rgba(0,0,0,0.1),0 4px 6px -2px rgba(0,0,0,0.05);*/
 `
 
-const StyledLinkExternal = styled(LinkExternal)`
+const StyledLinkExternal = styled(Link)`
   font-weight: 400;
 `
 
@@ -106,7 +106,7 @@ const KingdomDetail: React.FC<KingdomDetailProps> = ({
         depositBalanceQuoteValue={depositBalanceQuoteValue}
         addLiquidityUrl={addLiquidityUrl}
       />
-      <Details>
+      <Details className="k-details">
         <Detail>
           <Flex justifyContent="space-between">
             <Text>{lpSymbol}:</Text>
@@ -134,14 +134,14 @@ const KingdomDetail: React.FC<KingdomDetailProps> = ({
           />
         </Detail>
         <Detail>
-          <StyledLinkExternal href={farmContract}>Farm Contract</StyledLinkExternal>
-          <StyledLinkExternal href={vaultContract}>Kingdom Contract</StyledLinkExternal>
+          <StyledLinkExternal external href={farmContract}>Farm Contract</StyledLinkExternal>
+          <StyledLinkExternal external href={vaultContract}>Kingdom Contract</StyledLinkExternal>
           {!removed && (
-            <StyledLinkExternal href={addLiquidityUrl}>
+            <StyledLinkExternal external href={addLiquidityUrl}>
               {`Get ${lpLabel}`}
             </StyledLinkExternal>
           )}
-          <StyledLinkExternal href={infoAddress}>See Token Info</StyledLinkExternal>
+          <StyledLinkExternal external href={infoAddress}>See Token Info</StyledLinkExternal>
         </Detail>
       </Details>
     </KDetail>

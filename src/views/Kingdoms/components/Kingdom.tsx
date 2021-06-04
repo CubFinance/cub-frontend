@@ -31,6 +31,10 @@ const K = styled.div`
   padding: 0.4rem 0.8rem;
 `
 
+const KImage = styled(Image)`
+  width: 64px;
+`
+
 // export interface FarmWithStakedValue extends Farm {
 //   apy?: BigNumber
 // }
@@ -88,7 +92,7 @@ const Kingdom: React.FC<KingdomProps> = ({ farm, removed, cakePrice, bnbPrice, e
       <Divider />
       <K>
         <div className="flex-grid k-grid">
-          <div className="col"><Image src={`/images/farms/${farmImage}.png`} alt={lpSymbol} width={64} height={64} /></div>
+          <div className="col"><KImage src={`/images/farms/${farmImage}.png`} alt={lpSymbol} width={64} height={64} /></div>
           <div className="col">
             <Flex justifyContent="flex-start" alignItems="center">
               <Text className="token">{lpSymbol}</Text>

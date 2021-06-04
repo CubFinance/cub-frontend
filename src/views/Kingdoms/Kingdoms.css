@@ -83,3 +83,36 @@ h1 {
 .token {
   font-size: 1.2rem;
 }
+
+@media only screen and (max-width: 768px) {
+  .k-header {
+    flex-direction: column;
+  }
+  .k-details > div > div {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .k-details > div:nth-child(2) > div:last-child > div:nth-child(2) {
+    align-self: left;
+  }
+
+  .k-card > .flex-grid {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .k-card .flex-grid .col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin: 0;
+  }
+
+  .k-card .flex-grid .col {
+    margin-top: 10px;
+  }
+
+  /*.k-card .flex-grid .col:nth-child(1), .k-card .flex-grid .col:nth-child(2), .k-card .flex-grid .col:last-child {*/
+}
