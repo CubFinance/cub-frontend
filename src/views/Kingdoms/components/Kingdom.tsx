@@ -155,6 +155,7 @@ const Kingdom: React.FC<KingdomProps> = ({ farm, removed, cakePrice, bnbPrice, e
             oneTokenQuoteValue={oneTokenQuoteValue}
             removed={removed}
             aprApy={aprApy}
+            account={account}
           />
         </ExpandingWrapper>
       </K>

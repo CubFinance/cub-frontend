@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React, { useState, useCallback, useMemo } from 'react'
+import { useLocation } from 'react-router-dom'
 // import BigNumber from 'bignumber.js'
 import styled from 'styled-components'
 import BigNumber from 'bignumber.js'
@@ -13,6 +14,10 @@ import WithdrawModal from 'views/Farms/components/WithdrawModal'
 import useStake from 'hooks/useStake'
 import useUnstake from 'hooks/useUnstake'
 import { useHarvest } from 'hooks/useHarvest'
+import { useApprove } from 'hooks/useApprove'
+import { getBep20Contract } from 'utils/contractHelpers'
+import { getAddress } from 'utils/addressHelpers'
+import useWeb3 from 'hooks/useWeb3'
 // import CardValue from './CardValue'
 
 import './KingdomCard.css'
@@ -56,6 +61,7 @@ interface KingdomCardProps {
   walletBalanceQuoteValue: number
   depositBalanceQuoteValue: number
   addLiquidityUrl: string
+  account?: string
 }
 
 const KingdomCard: React.FC<KingdomCardProps> = ({
@@ -65,29 +71,69 @@ const KingdomCard: React.FC<KingdomCardProps> = ({
   rewardBalance,
   walletBalanceQuoteValue,
   depositBalanceQuoteValue ,
-  addLiquidityUrl
+  addLiquidityUrl,
+  account
 }) => {
+  const location = useLocation()
+  const [requestedApproval, setRequestedApproval] = useState(false)
   const [pendingTx, setPendingTx] = useState(false)
-  const { pid, isTokenOnly, isKingdom, isKingdomToken, lpSymbol } = farm
+  const { pid, isTokenOnly, isKingdom, isKingdomToken, lpSymbol, lpAddresses, token: { address } } = farm
+
   const tokenName = lpSymbol.toUpperCase()
   const {
+    allowance: allowanceAsString = 0,
     tokenBalance: tokenBalanceAsString = 0,
     stakedBalance: stakedBalanceAsString = 0,
   } = farm.userData || {}
+  const allowance = new BigNumber(allowanceAsString)
   const tokenBalance = new BigNumber(tokenBalanceAsString)
   const stakedBalance = new BigNumber(stakedBalanceAsString)
   const cakePrice = usePriceCakeBusd()
   const earningsBusd = rewardBalance ? new BigNumber(rewardBalance).multipliedBy(cakePrice).toNumber() : 0
 
+  const web3 = useWeb3()
   const { onStake } = useStake(pid, isKingdom)
   const { onUnstake } = useUnstake(pid, isKingdom)
   const { onReward } = useHarvest(pid, isKingdom)
+
+  const isApproved = account && allowance && allowance.isGreaterThan(0)
 
   const [onPresentDeposit] = useModal(
     <DepositModal max={tokenBalance} onConfirm={onStake} tokenName={tokenName} addLiquidityUrl={addLiquidityUrl} isTokenOnly={isTokenOnly} isKingdomToken={isKingdomToken} />,
   )
   const [onPresentWithdraw] = useModal(
     <WithdrawModal max={stakedBalance} onConfirm={onUnstake} tokenName={tokenName} isTokenOnly={isTokenOnly} isKingdomToken={isKingdomToken} />,
+  )
+
+  const lpAddress = getAddress(lpAddresses)
+  const tokenAddress = getAddress(address)
+  const lpContract = useMemo(() => {
+    if(isTokenOnly || isKingdomToken){
+      return getBep20Contract(tokenAddress, web3)
+    }
+    return getBep20Contract(lpAddress, web3)
+  }, [lpAddress, isTokenOnly, web3, tokenAddress, isKingdomToken])
+
+  const { onApprove } = useApprove(lpContract, isKingdom)
+
+  const handleApprove = useCallback(async () => {
+    try {
+      setRequestedApproval(true)
+      await onApprove()
+      setRequestedApproval(false)
+    } catch (e) {
+      console.error(e)
+    }
+  }, [onApprove])
+
+  const approvedButton = (
+    <Button
+      mt="8px"
+      disabled={requestedApproval || location.pathname.includes('archived')}
+      onClick={handleApprove}
+    >
+      Approve Contract
+    </Button>
   )
 
   return (
@@ -107,7 +153,11 @@ const KingdomCard: React.FC<KingdomCardProps> = ({
               />
               &nbsp;<Brackets>(</Brackets><CardBusdValue value={walletBalanceQuoteValue} /><Brackets>)</Brackets>
             </Values>
-            <Button mt="8px" fullWidth onClick={onPresentDeposit}>Deposit</Button>
+            { isApproved ? (
+              <Button mt="8px" fullWidth onClick={onPresentDeposit}>Deposit</Button>
+            ) : (
+              approvedButton
+            )}
           </div>
           <div className="col">
             <Flex justifyContent='space-between'>
@@ -122,7 +172,11 @@ const KingdomCard: React.FC<KingdomCardProps> = ({
               />
               &nbsp;<Brackets>(</Brackets><CardBusdValue value={depositBalanceQuoteValue} /><Brackets>)</Brackets>
             </Values>
-            <Button mt="8px" fullWidth onClick={onPresentWithdraw}>Withdraw</Button>
+            { isApproved ? (
+              <Button mt="8px" fullWidth onClick={onPresentWithdraw}>Withdraw</Button>
+            ) : (
+              approvedButton
+            )}
           </div>
           <div className="col">
             <Text>CUB Rewards</Text>
@@ -136,7 +190,7 @@ const KingdomCard: React.FC<KingdomCardProps> = ({
               &nbsp;<Brackets>(</Brackets><CardBusdValue value={earningsBusd} /><Brackets>)</Brackets>
             </Values>
             <Button
-              disabled={rewardBalance === 0 || pendingTx}
+              disabled={rewardBalance === 0 || pendingTx || !isApproved}
               onClick={async () => {
                 setPendingTx(true)
                 await onReward()
