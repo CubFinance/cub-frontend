@@ -259,6 +259,7 @@ const fetchFarms = async (farmsToFetch: FarmConfig[]) => {
 
         const allocPointPCS = new BigNumber(infoPCS.allocPoint._hex)
         const poolWeightPCS = allocPointPCS.div(new BigNumber(totalAllocPointPCS))
+//         console.log('farmConfig.lpSymbol',farmConfig.lpSymbol)
 // console.log('tokenPriceVsQuote',tokenPriceVsQuote.toNumber())
 // console.log('poolWeightPCS',poolWeightPCS.toNumber())
         return {

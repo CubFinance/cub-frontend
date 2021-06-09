@@ -51,7 +51,6 @@ const Kingdoms: React.FC = () => {
   const cakePrice = usePriceCakeBusd()
   // const [query, setQuery] = useState('')
   const { account } = useWeb3React()
-  const prices = useGetApiPrices()
 
   const dispatch = useAppDispatch()
   const { fastRefresh } = useRefresh()
@@ -74,20 +73,19 @@ const Kingdoms: React.FC = () => {
   const farmsList = useCallback(
     (farmsToDisplay: Farm[]): FarmWithStakedValue[] => {
       const farmsToDisplayWithAPR: FarmWithStakedValue[] = farmsToDisplay.map((farm) => {
-        if (!farm.lpTotalInQuoteToken || !prices) {
+        if (!farm.lpTotalInQuoteToken) {
           return farm
         }
 
-        const quoteTokenPriceUsd = prices[getAddress(farm.quoteToken.address).toLowerCase()]
-        const totalLiquidity = new BigNumber(farm.lpTotalInQuoteToken).times(quoteTokenPriceUsd)
+        const totalLiquidity = new BigNumber(farm.lpTotalInQuoteToken).times(farm.quoteToken.busdPrice)
         const apr = isActive ? getFarmApr(farm.poolWeight, cakePrice, totalLiquidity) : 0
-
+// console.log('quoteTokenPriceUsd',quoteTokenPriceUsd)
         return { ...farm, apr, liquidity: totalLiquidity }
       })
 
       return farmsToDisplayWithAPR
     },
-    [cakePrice, prices, isActive],
+    [cakePrice, isActive],
   )
 
   const farmsStakedMemoized = useMemo(() => {

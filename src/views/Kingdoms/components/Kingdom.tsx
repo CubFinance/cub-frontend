@@ -52,11 +52,9 @@ interface KingdomProps {
 
 const Kingdom: React.FC<KingdomProps> = ({ farm, removed, cakePrice, bnbPrice, ethereum, account }) => {
   const [showExpandableSection, setShowExpandableSection] = useState(false)
-  const { apr, lpTotalInQuoteToken, kingdomSupply, lpSymbol, pcsPid, multiplier, isKingdom, isKingdomToken, tokenPriceVsQuote, poolWeightPCS, pcsCompounding, lpTokenBalancePCSv2 = 0, lpTotalInQuoteTokenPCS = 0 } = farm
+  const { apr, lpTotalInQuoteToken, kingdomSupply, lpSymbol, pcsPid, multiplier, isKingdom, isKingdomToken, tokenPriceVsQuote, poolWeightPCS, pcsCompounding, lpTokenBalancePCSv2 = 0, lpTotalInQuoteTokenPCS = 0, quoteToken: { busdPrice: quoteTokenPriceUsd } } = farm
   const farmImage = lpSymbol.split(' ')[0].toLocaleLowerCase()
   // console.log('farm',farm.lpSymbol)
-  const prices = useGetApiPrices()
-  const quoteTokenPriceUsd = prices[getAddress(farm.quoteToken.address).toLowerCase()]
 
   let aprApy = useKingdomAPRAPY(
     isKingdom,
@@ -67,17 +65,13 @@ const Kingdom: React.FC<KingdomProps> = ({ farm, removed, cakePrice, bnbPrice, e
     apr,
     lpTokenBalancePCSv2,
     lpTotalInQuoteTokenPCS,
-    quoteTokenPriceUsd,
+    Number(quoteTokenPriceUsd),
   )
   const { dailyAPR, totalAPY } = aprApy
   const { tokenBalance, stakedBalance, earnings } = farm.userData
   const rawTokenBalance = tokenBalance ? getBalanceNumber(new BigNumber(tokenBalance)) : 0
   const rawStakedBalance = stakedBalance ? getBalanceNumber(new BigNumber(stakedBalance)) : 0
   const rawEarningsBalance = earnings ? getBalanceNumber(new BigNumber(earnings)) : 0
-
-  // to get usd value of liquiidty when not USD quote token
-  /* const quoteTokenPriceUsd = prices[getAddress(farm.quoteToken.address).toLowerCase()]
-  const totalLiquidity = new BigNumber(farm.lpTotalInQuoteToken).times(quoteTokenPriceUsd) */
 
   const oneTokenQuoteValue = lpTotalInQuoteToken && kingdomSupply ? new BigNumber(1).times(lpTotalInQuoteToken).div(new BigNumber(kingdomSupply)) : new BigNumber(0)
 
@@ -92,7 +86,7 @@ const Kingdom: React.FC<KingdomProps> = ({ farm, removed, cakePrice, bnbPrice, e
 
   const farmName = (pcsPid || pcsPid === 0) ? 'Pancake v2' : ''
 
-  aprApy = { ...aprApy, pcsCompounding: farm.pcsCompounding, farmAPR, apr: farm.apr, cakePrice, quoteTokenPriceUsd }
+  aprApy = { ...aprApy, pcsCompounding: farm.pcsCompounding, farmAPR, apr: farm.apr, cakePrice, quoteTokenPriceUsd: Number(quoteTokenPriceUsd) }
 
   return (
     <>

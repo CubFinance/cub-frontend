@@ -28,6 +28,7 @@ export interface FarmWithStakedValue extends Farm {
   poolWeightPCS?: string
   pcsCompounding?: number
   kingdomSupply?: string
+  quoteTokenPriceUsd?: number
 }
 
 const RainbowLight = keyframes`

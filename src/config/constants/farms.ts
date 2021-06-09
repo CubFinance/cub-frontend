@@ -264,49 +264,49 @@ const farms: FarmConfig[] = [
   // },
 
   // KINGDOMS
-  // {
-  //   pid: 0,
-  //   pcsPid: 0,
-  //   pcsCompounding: 4200,
-  //   isKingdom: true,
-  //   isKingdomToken: true,
-  //   lpSymbol: 'CAKE',
-  //   lpAddresses: {
-  //     97: '',
-  //     56: '0x0ed8e0a2d99643e1e65cca22ed4424090b8b7458', // CAKE-BUSD LP
-  //   },
-  //   token: tokens.cake,
-  //   quoteToken: tokens.busd,
-  //   kingdomContract: '0x77440f4dc7b4ef591e78d460374bd12d3d6bdad8',
-  // },
-  // {
-  //   pid: 1,
-  //   pcsPid: 252,
-  //   pcsCompounding: 420,
-  //   isKingdom: true,
-  //   lpSymbol: 'BNB-BUSD LP',
-  //   lpAddresses: {
-  //     97: '',
-  //     56: '0x58f876857a02d6762e0101bb5c46a8c1ed44dc16',
-  //   },
-  //   token: tokens.wbnb,
-  //   quoteToken: tokens.busd,
-  //   kingdomContract: '0x701d4f8168b00abbd948d36e11added4e1cac742',
-  // },
-  // {
-  //   pid: 2,
-  //   pcsPid: 261,
-  //   pcsCompounding: 365,
-  //   isKingdom: true,
-  //   lpSymbol: 'ETH-BNB LP',
-  //   lpAddresses: {
-  //     97: '',
-  //     56: '0x74e4716e431f45807dcf19f284c7aa99f18a4fbc',
-  //   },
-  //   token: tokens.eth,
-  //   quoteToken: tokens.wbnb,
-  //   kingdomContract: '0x3582933accc5732484138a2dd61fcdd02d0a021c',
-  // },
+  {
+    pid: 0,
+    pcsPid: 0,
+    pcsCompounding: 4200,
+    isKingdom: true,
+    isKingdomToken: true,
+    lpSymbol: 'CAKE',
+    lpAddresses: {
+      97: '',
+      56: '0x0ed8e0a2d99643e1e65cca22ed4424090b8b7458', // CAKE-BUSD LP
+    },
+    token: tokens.cake,
+    quoteToken: tokens.busd,
+    kingdomContract: '0x77440f4dc7b4ef591e78d460374bd12d3d6bdad8',
+  },
+  {
+    pid: 1,
+    pcsPid: 252,
+    pcsCompounding: 420,
+    isKingdom: true,
+    lpSymbol: 'BNB-BUSD LP',
+    lpAddresses: {
+      97: '',
+      56: '0x58f876857a02d6762e0101bb5c46a8c1ed44dc16',
+    },
+    token: tokens.wbnb,
+    quoteToken: tokens.busd,
+    kingdomContract: '0x701d4f8168b00abbd948d36e11added4e1cac742',
+  },
+  {
+    pid: 2,
+    pcsPid: 261,
+    pcsCompounding: 365,
+    isKingdom: true,
+    lpSymbol: 'ETH-BNB LP',
+    lpAddresses: {
+      97: '',
+      56: '0x74e4716e431f45807dcf19f284c7aa99f18a4fbc',
+    },
+    token: tokens.eth,
+    quoteToken: tokens.wbnb,
+    kingdomContract: '0x3582933accc5732484138a2dd61fcdd02d0a021c',
+  },
   {
     pid: 3,
     pcsPid: 255,
