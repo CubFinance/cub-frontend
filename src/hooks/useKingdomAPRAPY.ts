@@ -2,7 +2,7 @@
 import { DEFAULT_TOKEN_DECIMAL } from 'config'
 import { getPoolApr, getFarmApr } from 'utils/apr'
 import { getBalanceNumber } from 'utils/formatBalance'
-import { useGetApiPrice } from 'state/hooks'
+import { useBusdPriceFromPid } from 'state/hooks'
 // import Balance from 'components/Balance'
 import BigNumber from 'bignumber.js'
 
@@ -17,8 +17,7 @@ const useKingdomAPRAPY = (
   lpTotalInQuoteTokenPCS: number,
   quoteTokenPriceUsd: number
 ) => {
-  const cakePrice = useGetApiPrice('0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82')
-
+  const cakePrice = useBusdPriceFromPid(0)
   let apr:number
 
   let extra = null
@@ -33,7 +32,7 @@ const useKingdomAPRAPY = (
     else {
       const totalLiquidity = new BigNumber(lpTotalInQuoteTokenPCS).times(quoteTokenPriceUsd)
 
-      apr = getFarmApr(poolWeightPCS, new BigNumber(cakePrice), totalLiquidity, isKingdom)
+      apr = getFarmApr(poolWeightPCS, cakePrice, totalLiquidity, isKingdom)
     }
 
 
