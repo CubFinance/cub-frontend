@@ -310,7 +310,7 @@ const farms: FarmConfig[] = [
   {
     pid: 3,
     pcsPid: 255,
-    pcsCompounding: 400,
+    pcsCompounding: 365,
     isKingdom: true,
     lpSymbol: 'DOT-BNB LP',
     lpAddresses: {
