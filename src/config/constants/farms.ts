@@ -264,99 +264,63 @@ const farms: FarmConfig[] = [
   // },
 
   // KINGDOMS
+  // {
+  //   pid: 0,
+  //   pcsPid: 0,
+  //   pcsCompounding: 4200,
+  //   isKingdom: true,
+  //   isKingdomToken: true,
+  //   lpSymbol: 'CAKE',
+  //   lpAddresses: {
+  //     97: '',
+  //     56: '0x0ed8e0a2d99643e1e65cca22ed4424090b8b7458', // CAKE-BUSD LP
+  //   },
+  //   token: tokens.cake,
+  //   quoteToken: tokens.busd,
+  //   kingdomContract: '0x77440f4dc7b4ef591e78d460374bd12d3d6bdad8',
+  // },
+  // {
+  //   pid: 1,
+  //   pcsPid: 252,
+  //   pcsCompounding: 420,
+  //   isKingdom: true,
+  //   lpSymbol: 'BNB-BUSD LP',
+  //   lpAddresses: {
+  //     97: '',
+  //     56: '0x58f876857a02d6762e0101bb5c46a8c1ed44dc16',
+  //   },
+  //   token: tokens.wbnb,
+  //   quoteToken: tokens.busd,
+  //   kingdomContract: '0x701d4f8168b00abbd948d36e11added4e1cac742',
+  // },
+  // {
+  //   pid: 2,
+  //   pcsPid: 261,
+  //   pcsCompounding: 365,
+  //   isKingdom: true,
+  //   lpSymbol: 'ETH-BNB LP',
+  //   lpAddresses: {
+  //     97: '',
+  //     56: '0x74e4716e431f45807dcf19f284c7aa99f18a4fbc',
+  //   },
+  //   token: tokens.eth,
+  //   quoteToken: tokens.wbnb,
+  //   kingdomContract: '0x3582933accc5732484138a2dd61fcdd02d0a021c',
+  // },
   {
-    pid: 0,
-    pcsPid: 0,
-    pcsCompounding: 4200,
+    pid: 3,
+    pcsPid: 255,
+    pcsCompounding: 400,
     isKingdom: true,
-    isKingdomToken: true,
-    lpSymbol: 'CAKE',
+    lpSymbol: 'DOT-BNB LP',
     lpAddresses: {
       97: '',
-      56: '0x0ed8e0a2d99643e1e65cca22ed4424090b8b7458', // CAKE-BUSD LP
+      56: '0xDd5bAd8f8b360d76d12FdA230F8BAF42fe0022CF',
     },
-    token: tokens.cake,
-    quoteToken: tokens.busd,
-    kingdomContract: '0x77440f4dc7b4ef591e78d460374bd12d3d6bdad8',
+    token: tokens.dot,
+    quoteToken: tokens.wbnb,
+    kingdomContract: '0x03e48360dc132a1838492b6870c98d2bd895ea9a',
   },
-  {
-    pid: 1,
-    pcsPid: 252,
-    pcsCompounding: 420,
-    isKingdom: true,
-    lpSymbol: 'BNB-BUSD LP',
-    lpAddresses: {
-      97: '',
-      56: '0x58f876857a02d6762e0101bb5c46a8c1ed44dc16',
-    },
-    token: tokens.wbnb,
-    quoteToken: tokens.busd,
-    kingdomContract: '0x701d4f8168b00abbd948d36e11added4e1cac742',
-  },
-  /* {
-    pid: 17,
-    isKingdom: true,
-    lpSymbol: 'BTCB',
-    lpAddresses: {
-      97: '',
-      56: '0xb8875e207ee8096a929d543c9981c9586992eacb', // BTCB-BUSD LP
-    },
-    tokenSymbol: 'BTCB',
-    tokenAddresses: {
-      97: '',
-      56: '0x7130d2a12b9bcbfae4f2634d864a1ee1ce3ead9c',
-    },
-    quoteTokenSymbol: QuoteToken.BUSD,
-    quoteTokenAdresses: contracts.busd,
-  },
-  {
-    pid: 18,
-    isKingdom: true,
-    lpSymbol: 'ETH',
-    lpAddresses: {
-      97: '',
-      56: '0xd9a0d1f5e02de2403f68bb71a15f8847a854b494', // ETH-BUSD LP
-    },
-    tokenSymbol: 'ETH',
-    tokenAddresses: {
-      97: '',
-      56: '0x2170ed0880ac9a755fd29b2688956bd959f933f8',
-    },
-    quoteTokenSymbol: QuoteToken.BUSD,
-    quoteTokenAdresses: contracts.busd,
-  },
-  {
-    pid: 21,
-    isKingdom: true,
-    lpSymbol: 'DOT',
-    lpAddresses: {
-      97: '',
-      56: '0x54c1ec2f543966953f2f7564692606ea7d5a184e', // DOT-BUSD LP
-    },
-    tokenSymbol: 'DOT',
-    tokenAddresses: {
-      97: '',
-      56: '0x7083609fce4d1d8dc0c979aab8c869ea2c873402',
-    },
-    quoteTokenSymbol: QuoteToken.BUSD,
-    quoteTokenAdresses: contracts.busd,
-  },
-  {
-    pid: 15,
-    isKingdom: true,
-    lpSymbol: 'WBNB',
-    lpAddresses: {
-      97: '',
-      56: '0x1b96b92314c44b159149f7e0303511fb2fc4774f', // BNB-BUSD LP
-    },
-    tokenSymbol: 'WBNB',
-    tokenAddresses: {
-      97: '',
-      56: '0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c',
-    },
-    quoteTokenSymbol: QuoteToken.BNB,
-    quoteTokenAdresses: contracts.wbnb,
-  }, */
 ]
 
 export default farms

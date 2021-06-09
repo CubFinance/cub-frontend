@@ -10,6 +10,8 @@ import ExpandableSectionButton from 'components/ExpandableSectionButton'
 import { getBalanceNumber, getFullDisplayBalance } from 'utils/formatBalance'
 // import { useFarmUser } from 'state/hooks'
 import { FarmWithStakedValue } from 'views/Farms/components/FarmCard/FarmCard'
+import { useGetApiPrices } from 'state/hooks'
+import { getAddress } from 'utils/addressHelpers'
 import useKingdomAPRAPY from 'hooks/useKingdomAPRAPY'
 import Balance from 'components/Balance'
 
@@ -52,6 +54,10 @@ const Kingdom: React.FC<KingdomProps> = ({ farm, removed, cakePrice, bnbPrice, e
   const [showExpandableSection, setShowExpandableSection] = useState(false)
   const { apr, lpTotalInQuoteToken, kingdomSupply, lpSymbol, pcsPid, multiplier, isKingdom, isKingdomToken, tokenPriceVsQuote, poolWeightPCS, pcsCompounding, lpTokenBalancePCSv2 = 0, lpTotalInQuoteTokenPCS = 0 } = farm
   const farmImage = lpSymbol.split(' ')[0].toLocaleLowerCase()
+  // console.log('farm',farm.lpSymbol)
+  const prices = useGetApiPrices()
+  const quoteTokenPriceUsd = prices[getAddress(farm.quoteToken.address).toLowerCase()]
+
   let aprApy = useKingdomAPRAPY(
     isKingdom,
     isKingdomToken,
@@ -61,6 +67,7 @@ const Kingdom: React.FC<KingdomProps> = ({ farm, removed, cakePrice, bnbPrice, e
     apr,
     lpTokenBalancePCSv2,
     lpTotalInQuoteTokenPCS,
+    quoteTokenPriceUsd,
   )
   const { dailyAPR, totalAPY } = aprApy
   const { tokenBalance, stakedBalance, earnings } = farm.userData
@@ -85,7 +92,7 @@ const Kingdom: React.FC<KingdomProps> = ({ farm, removed, cakePrice, bnbPrice, e
 
   const farmName = (pcsPid || pcsPid === 0) ? 'Pancake v2' : ''
 
-  aprApy = { ...aprApy, pcsCompounding: farm.pcsCompounding, farmAPR, apr: farm.apr, cakePrice }
+  aprApy = { ...aprApy, pcsCompounding: farm.pcsCompounding, farmAPR, apr: farm.apr, cakePrice, quoteTokenPriceUsd }
 
   return (
     <>

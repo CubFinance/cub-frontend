@@ -8,7 +8,7 @@ import { FarmConfig } from 'config/constants/types'
 import { DEFAULT_TOKEN_DECIMAL } from 'config'
 import kingdomsABI from 'config/abi/kingdoms.json'
 import pcsv2ABI from 'config/abi/PCS-v2-masterchef.json'
-import { getCAKEamount, getWBNBBUSDAmount } from 'utils/kingdomScripts'
+import { getCAKEamount, getWBNBBUSDAmount, getWBNBETHAmount, getWBNBDOTAmount } from 'utils/kingdomScripts'
 
 const fetchFarms = async (farmsToFetch: FarmConfig[]) => {
   const data = await Promise.all(
@@ -116,6 +116,12 @@ const fetchFarms = async (farmsToFetch: FarmConfig[]) => {
           case 1:
             kingdomSupply = await getWBNBBUSDAmount()
             break
+          case 2:
+            kingdomSupply = await getWBNBETHAmount()
+            break
+          case 3:
+            kingdomSupply = await getWBNBDOTAmount()
+            break
           default:
             break
         }
@@ -148,24 +154,35 @@ const fetchFarms = async (farmsToFetch: FarmConfig[]) => {
         tokenPriceVsQuote = new BigNumber(quoteTokenBalanceLP).div(new BigNumber(tokenBalanceLP))
 
         if (farmConfig.isKingdom) {
+// console.log('farmConfig.lpSymbol',farmConfig.lpSymbol)
+// console.log('kingdomSupply',new BigNumber(kingdomSupply).div(DEFAULT_TOKEN_DECIMAL).toNumber())
+
           const lpTokenRatioPCS = new BigNumber(lpTokenBalancePCSv2).div(new BigNumber(lpTotalSupply))
+// console.log('lpTokenRatioPCS',lpTokenRatioPCS.toNumber())
+
           lpTotalInQuoteTokenPCS = new BigNumber(quoteTokenBalanceLP)
             .div(DEFAULT_TOKEN_DECIMAL)
             .times(new BigNumber(2))
             .times(lpTokenRatioPCS)
+// console.log('lpTotalInQuoteTokenPCS',lpTotalInQuoteTokenPCS.toFixed(2))
 
           const ratioPCStoKingdom = new BigNumber(lpTotalSupply).div(new BigNumber(kingdomSupply))
+// console.log('ratioPCStoKingdom',ratioPCStoKingdom.toNumber())
 
           const kingdomTokenSupply = new BigNumber(tokenBalanceLP).div(new BigNumber(ratioPCStoKingdom))
+// console.log('kingdomTokenSupply',kingdomTokenSupply.div(DEFAULT_TOKEN_DECIMAL).toNumber())
 
           const kingdomQuoteTokenSupply = new BigNumber(quoteTokenBalanceLP).div(new BigNumber(ratioPCStoKingdom))
+// console.log('kingdomQuoteTokenSupply',kingdomQuoteTokenSupply.div(DEFAULT_TOKEN_DECIMAL).toNumber())
 
           lpTokenRatio = new BigNumber(kingdomTokenSupply).div(new BigNumber(kingdomQuoteTokenSupply))
+// console.log('lpTokenRatio',lpTokenRatio.toNumber())
 
           lpTotalInQuoteToken = new BigNumber(kingdomQuoteTokenSupply)
             .div(DEFAULT_TOKEN_DECIMAL)
             .times(new BigNumber(2))
             // .times(lpTokenRatio)
+// console.log('lpTotalInQuoteToken',lpTotalInQuoteToken.toNumber())
         }
         // Amount of token in the LP that are considered staking (i.e amount of token * lp ratio)
         tokenAmount = new BigNumber(tokenBalanceLP).div(BIG_TEN.pow(tokenDecimals)).times(lpTokenRatio)
@@ -173,11 +190,11 @@ const fetchFarms = async (farmsToFetch: FarmConfig[]) => {
           .div(BIG_TEN.pow(quoteTokenDecimals))
           .times(lpTokenRatio)
 
-          if(tokenAmount.comparedTo(0) > 0){
-            tokenPriceVsQuote = quoteTokenAmount.div(tokenAmount)
-          }else{
-            tokenPriceVsQuote = new BigNumber(quoteTokenBalanceLP).div(new BigNumber(tokenBalanceLP))
-          }
+        if(tokenAmount.comparedTo(0) > 0){
+          tokenPriceVsQuote = quoteTokenAmount.div(tokenAmount)
+        }else{
+          tokenPriceVsQuote = new BigNumber(quoteTokenBalanceLP).div(new BigNumber(tokenBalanceLP))
+        }
       }
 
       const mCalls = [
@@ -242,7 +259,8 @@ const fetchFarms = async (farmsToFetch: FarmConfig[]) => {
 
         const allocPointPCS = new BigNumber(infoPCS.allocPoint._hex)
         const poolWeightPCS = allocPointPCS.div(new BigNumber(totalAllocPointPCS))
-
+// console.log('tokenPriceVsQuote',tokenPriceVsQuote.toNumber())
+// console.log('poolWeightPCS',poolWeightPCS.toNumber())
         return {
           ...farmConfig,
           tokenAmount: tokenAmount.toJSON(),

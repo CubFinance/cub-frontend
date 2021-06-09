@@ -3,8 +3,6 @@ import useI18n from 'hooks/useI18n'
 import styled from 'styled-components'
 import { Text, Flex, LinkExternal } from '@pancakeswap-libs/uikit'
 
-import AprApy from './AprApy'
-
 export interface ExpandableSectionProps {
   bscScanAddress?: string
   infoAddress?: string
@@ -12,9 +10,7 @@ export interface ExpandableSectionProps {
   totalValueFormatted?: string
   lpLabel?: string
   addLiquidityUrl?: string
-  aprApy?: any
   farmAPR?: string
-  isKingdom?: boolean
 }
 
 const Wrapper = styled.div`
@@ -32,8 +28,6 @@ const DetailsSection: React.FC<ExpandableSectionProps> = ({
   totalValueFormatted,
   lpLabel,
   addLiquidityUrl,
-  aprApy,
-  isKingdom,
 }) => {
   const TranslateString = useI18n()
 
@@ -44,14 +38,6 @@ const DetailsSection: React.FC<ExpandableSectionProps> = ({
         <Text>{TranslateString(354, 'Total Liquidity')}:</Text>
         <Text>{totalValueFormatted}</Text>
       </Flex>
-      {isKingdom && (
-        <AprApy
-          aprApy={aprApy}
-          lpLabel={lpLabel}
-          addLiquidityUrl={addLiquidityUrl}
-          isDetails
-        />
-      )}
       {!removed && (
         <StyledLinkExternal href={addLiquidityUrl}>
           {TranslateString(999, `Get ${lpLabel}`, { name: lpLabel })}

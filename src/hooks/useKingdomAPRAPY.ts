@@ -15,6 +15,7 @@ const useKingdomAPRAPY = (
   cubAPR: number,
   lpTokenBalancePCSv2: number,
   lpTotalInQuoteTokenPCS: number,
+  quoteTokenPriceUsd: number
 ) => {
   const cakePrice = useGetApiPrice('0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82')
 
@@ -29,8 +30,12 @@ const useKingdomAPRAPY = (
         getBalanceNumber(new BigNumber(lpTokenBalancePCSv2).times(DEFAULT_TOKEN_DECIMAL), 18),
         parseFloat('10'),
       )
-    else
-      apr = getFarmApr(poolWeightPCS, new BigNumber(cakePrice), new BigNumber(lpTotalInQuoteTokenPCS), isKingdom)
+    else {
+      const totalLiquidity = new BigNumber(lpTotalInQuoteTokenPCS).times(quoteTokenPriceUsd)
+
+      apr = getFarmApr(poolWeightPCS, new BigNumber(cakePrice), totalLiquidity, isKingdom)
+    }
+
 
     const dailyAPR = new BigNumber(apr).div(new BigNumber(365)).toNumber()
 
