@@ -282,7 +282,7 @@ const farms: FarmConfig[] = [
   {
     pid: 1,
     pcsPid: 252,
-    pcsCompounding: 420,
+    pcsCompounding: 365,
     isKingdom: true,
     lpSymbol: 'BNB-BUSD LP',
     lpAddresses: {

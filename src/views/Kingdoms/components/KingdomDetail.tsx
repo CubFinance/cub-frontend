@@ -76,10 +76,9 @@ const KingdomDetail: React.FC<KingdomDetailProps> = ({
   aprApy,
   account,
 }) => {
-  const tokenValueFormated = oneTokenQuoteValue
+  const tokenValueFormated = oneTokenQuoteValue && oneTokenQuoteValue.toString() !== 'NaN'
     ? `~$${oneTokenQuoteValue.times(DEFAULT_TOKEN_DECIMAL).toFixed(2)}`
     : '-'
-
   const { lpSymbol, multiplier, quoteToken, token, isKingdom, lpAddresses, isTokenOnly, isKingdomToken, kingdomContract } = farm
   const lpLabel = lpSymbol && lpSymbol.toUpperCase().replace('PANCAKE', '')
   const liquidityUrlPathParts = getLiquidityUrlPathParts({

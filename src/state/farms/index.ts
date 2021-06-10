@@ -32,10 +32,6 @@ export const farmsSlice = createSlice({
   reducers: {
     setFarmsPublicData: (state, action) => {
       const liveFarmsData: Farm[] = action.payload
-      // state.data = state.data.map((farm) => {
-      //   const liveFarmData = liveFarmsData.find((f) => f.pid === farm.pid)
-      //   return { ...farm, ...liveFarmData }
-      // })
       state.data = state.data.map(farm => {
         const liveFarmData = liveFarmsData.find(f => f.pid === farm.pid && f.isKingdom === farm.isKingdom)
         return { ...farm, ...liveFarmData }
@@ -44,8 +40,8 @@ export const farmsSlice = createSlice({
     setFarmUserData: (state, action) => {
       const { arrayOfUserDataObjects } = action.payload
       arrayOfUserDataObjects.forEach((userDataEl) => {
-        const { pid } = userDataEl
-        const index = state.data.findIndex((farm) => farm.pid === pid)
+        const { pid, isKingdom } = userDataEl
+        const index = state.data.findIndex((farm) => farm.pid === pid && isKingdom === farm.isKingdom)
         state.data[index] = { ...state.data[index], userData: userDataEl }
       })
       state.userDataLoaded = true
@@ -83,6 +79,7 @@ export const fetchFarmUserDataAsync = (account: string) => async (dispatch, getS
       tokenBalance: userFarmTokenBalances[index],
       stakedBalance: userStakedBalances[index],
       earnings: userFarmEarnings[index],
+      isKingdom: farmsToFetch[index].isKingdom,
     }
   })
 
