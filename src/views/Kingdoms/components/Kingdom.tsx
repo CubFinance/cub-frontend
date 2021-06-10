@@ -75,19 +75,18 @@ const Kingdom: React.FC<KingdomProps> = ({ farm, removed, cakePrice, bnbPrice, e
   const rawEarningsBalance = earnings ? getBalanceNumber(new BigNumber(earnings)) : 0
 
   const tokenPrice = useBusdPriceFromPid(farm.pid)
-  let oneTokenQuoteValue = tokenPrice.div(DEFAULT_TOKEN_DECIMAL)
+  let oneTokenQuoteValue = new BigNumber(0)
 
   if (!farm.isKingdomToken)
     oneTokenQuoteValue = lpTotalInQuoteTokenPCS ? new BigNumber(lpTotalInQuoteTokenPCS).div(new BigNumber(lpTokenBalancePCS)).times(quoteTokenPriceUsd).div(DEFAULT_TOKEN_DECIMAL) : new BigNumber(0)
-
-  // const oneTokenQuoteValue = lpTotalInQuoteToken && kingdomSupply ? new BigNumber(1).times(lpTotalInQuoteToken).div(new BigNumber(kingdomSupply)) : new BigNumber(0)
+  else oneTokenQuoteValue = tokenPrice.div(DEFAULT_TOKEN_DECIMAL)
 
   const walletBalanceQuoteValue = tokenBalance ? new BigNumber(tokenBalance).times(oneTokenQuoteValue).toNumber() : 0
 
   const depositBalanceQuoteValue = stakedBalance ? new BigNumber(stakedBalance).times(oneTokenQuoteValue).toNumber() : 0
 
   const totalValueFormated = lpTotalInQuoteToken
-    ? `$${Number(lpTotalInQuoteToken).toLocaleString(undefined, { maximumFractionDigits: 0 })}`
+    ? `$${Number(new BigNumber(lpTotalInQuoteToken).times(quoteTokenPriceUsd)).toLocaleString(undefined, { maximumFractionDigits: 0 })}`
     : '-'
   const farmAPR = apr && apr.toLocaleString('en-US', { maximumFractionDigits: 2 })
 
