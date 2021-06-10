@@ -13,7 +13,7 @@ const useKingdomAPRAPY = (
   poolWeightPCS: any,
   pcsCompounding: number,
   cubAPR: number,
-  lpTokenBalancePCSv2: number,
+  lpTokenBalanceMC: number,
   lpTotalInQuoteTokenPCS: number,
   quoteTokenPriceUsd: number
 ) => {
@@ -26,7 +26,7 @@ const useKingdomAPRAPY = (
       apr = getPoolApr(
         tokenPriceVsQuote,
         tokenPriceVsQuote,
-        getBalanceNumber(new BigNumber(lpTokenBalancePCSv2).times(DEFAULT_TOKEN_DECIMAL), 18),
+        getBalanceNumber(new BigNumber(lpTokenBalanceMC).times(DEFAULT_TOKEN_DECIMAL), 18),
         parseFloat('10'),
       )
     else {

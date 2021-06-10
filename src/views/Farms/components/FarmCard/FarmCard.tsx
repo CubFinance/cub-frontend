@@ -23,7 +23,7 @@ export interface FarmWithStakedValue extends Farm {
   apr?: number
   liquidity?: BigNumber
   depositFeeBP?: number
-  lpTokenBalancePCSv2?: number
+  lpTokenBalancePCS?: number
   lpTotalInQuoteTokenPCS?: number
   poolWeightPCS?: string
   pcsCompounding?: number

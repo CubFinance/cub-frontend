@@ -10,10 +10,11 @@ import ExpandableSectionButton from 'components/ExpandableSectionButton'
 import { getBalanceNumber, getFullDisplayBalance } from 'utils/formatBalance'
 // import { useFarmUser } from 'state/hooks'
 import { FarmWithStakedValue } from 'views/Farms/components/FarmCard/FarmCard'
-import { useGetApiPrices } from 'state/hooks'
+import { useGetApiPrices, useBusdPriceFromPid } from 'state/hooks'
 import { getAddress } from 'utils/addressHelpers'
 import useKingdomAPRAPY from 'hooks/useKingdomAPRAPY'
 import Balance from 'components/Balance'
+import { DEFAULT_TOKEN_DECIMAL } from 'config'
 
 import KingdomDetail from './KingdomDetail'
 // import ExpandIcon from './ExpandIcon'
@@ -52,7 +53,7 @@ interface KingdomProps {
 
 const Kingdom: React.FC<KingdomProps> = ({ farm, removed, cakePrice, bnbPrice, ethereum, account }) => {
   const [showExpandableSection, setShowExpandableSection] = useState(false)
-  const { apr, lpTotalInQuoteToken, kingdomSupply, lpSymbol, pcsPid, multiplier, isKingdom, isKingdomToken, tokenPriceVsQuote, poolWeightPCS, pcsCompounding, lpTokenBalancePCSv2 = 0, lpTotalInQuoteTokenPCS = 0, quoteToken: { busdPrice: quoteTokenPriceUsd } } = farm
+  const { apr, lpTotalInQuoteToken, kingdomSupply, lpSymbol, pcsPid, multiplier, isKingdom, isKingdomToken, tokenPriceVsQuote, poolWeightPCS, pcsCompounding, lpTokenBalancePCS = 0, lpTotalInQuoteTokenPCS = 0, quoteToken: { busdPrice: quoteTokenPriceUsd } } = farm
   const farmImage = lpSymbol.split(' ')[0].toLocaleLowerCase()
   // console.log('farm',farm.lpSymbol)
 
@@ -63,7 +64,7 @@ const Kingdom: React.FC<KingdomProps> = ({ farm, removed, cakePrice, bnbPrice, e
     poolWeightPCS,
     pcsCompounding,
     apr,
-    lpTokenBalancePCSv2,
+    lpTokenBalancePCS,
     lpTotalInQuoteTokenPCS,
     Number(quoteTokenPriceUsd),
   )
@@ -73,7 +74,13 @@ const Kingdom: React.FC<KingdomProps> = ({ farm, removed, cakePrice, bnbPrice, e
   const rawStakedBalance = stakedBalance ? getBalanceNumber(new BigNumber(stakedBalance)) : 0
   const rawEarningsBalance = earnings ? getBalanceNumber(new BigNumber(earnings)) : 0
 
-  const oneTokenQuoteValue = lpTotalInQuoteToken && kingdomSupply ? new BigNumber(1).times(lpTotalInQuoteToken).div(new BigNumber(kingdomSupply)) : new BigNumber(0)
+  const tokenPrice = useBusdPriceFromPid(farm.pid)
+  let oneTokenQuoteValue = tokenPrice.div(DEFAULT_TOKEN_DECIMAL)
+
+  if (!farm.isKingdomToken)
+    oneTokenQuoteValue = lpTotalInQuoteTokenPCS ? new BigNumber(lpTotalInQuoteTokenPCS).div(new BigNumber(lpTokenBalancePCS)).times(quoteTokenPriceUsd).div(DEFAULT_TOKEN_DECIMAL) : new BigNumber(0)
+
+  // const oneTokenQuoteValue = lpTotalInQuoteToken && kingdomSupply ? new BigNumber(1).times(lpTotalInQuoteToken).div(new BigNumber(kingdomSupply)) : new BigNumber(0)
 
   const walletBalanceQuoteValue = tokenBalance ? new BigNumber(tokenBalance).times(oneTokenQuoteValue).toNumber() : 0
 
