@@ -13,7 +13,9 @@
 }
 
 .k-card .flex-grid .col:last-child {
-  text-align: right;
+  /* text-align: right; */
+  display: flex;
+  flex-direction: column;
 }
 
 .k-card .col:nth-of-type(1) {

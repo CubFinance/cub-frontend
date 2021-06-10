@@ -40,13 +40,10 @@ const Button = styled(UiButton)`
   height: 40px;
   margin-top: 0.3rem;
   display: block;
-  &:last-child {
-    align-self: right;
-  }
 `
 
 const Values = styled.div`
-  display: inline-flex
+  display: flex;
 `
 
 const Brackets = styled.span`
