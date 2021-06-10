@@ -28,7 +28,7 @@ export const getWBNBETHAmount = async () => {
   // 0x73feaa1ee314f8c655e354234017be2193c9e24e: Main staking contract
   // 0x701d4f8168b00abbd948d36e11added4e1cac742: WBNB-ETH Kingdom vault
   const contract = new web3.eth.Contract(PCS_ABI, '0x73feaa1ee314f8c655e354234017be2193c9e24e');
-  const call = await contract.methods.userInfo(252, '0x3582933accc5732484138a2dd61fcdd02d0a021c').call();
+  const call = await contract.methods.userInfo(261, '0x3582933accc5732484138a2dd61fcdd02d0a021c').call();
   return call.amount
 }
 
@@ -36,6 +36,6 @@ export const getWBNBDOTAmount = async () => {
   // 0x73feaa1ee314f8c655e354234017be2193c9e24e: Main staking contract
   // 0x701d4f8168b00abbd948d36e11added4e1cac742: WBNB-DOT Kingdom vault
   const contract = new web3.eth.Contract(PCS_ABI, '0x73feaa1ee314f8c655e354234017be2193c9e24e');
-  const call = await contract.methods.userInfo(252, '0x03e48360dc132a1838492b6870c98d2bd895ea9a').call();
+  const call = await contract.methods.userInfo(255, '0x03e48360dc132a1838492b6870c98d2bd895ea9a').call();
   return call.amount
 }
