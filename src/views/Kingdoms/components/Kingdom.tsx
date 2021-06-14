@@ -10,8 +10,8 @@ import ExpandableSectionButton from 'components/ExpandableSectionButton'
 import { getBalanceNumber, getFullDisplayBalance } from 'utils/formatBalance'
 // import { useFarmUser } from 'state/hooks'
 import { FarmWithStakedValue } from 'views/Farms/components/FarmCard/FarmCard'
-import { useGetApiPrices, useBusdPriceFromPid } from 'state/hooks'
-import { getAddress } from 'utils/addressHelpers'
+import { useBusdPriceFromPid } from 'state/hooks'
+// import { getAddress } from 'utils/addressHelpers'
 import useKingdomAPRAPY from 'hooks/useKingdomAPRAPY'
 import Balance from 'components/Balance'
 import { DEFAULT_TOKEN_DECIMAL } from 'config'
@@ -51,11 +51,10 @@ interface KingdomProps {
   account?: string
 }
 
-const Kingdom: React.FC<KingdomProps> = ({ farm, removed, cakePrice, bnbPrice, ethereum, account }) => {
+const Kingdom: React.FC<KingdomProps> = ({ farm, removed, cakePrice, account }) => {
   const [showExpandableSection, setShowExpandableSection] = useState(false)
-  const { apr, lpTotalInQuoteToken, kingdomSupply, lpSymbol, pcsPid, multiplier, isKingdom, isKingdomToken, tokenPriceVsQuote, poolWeightPCS, pcsCompounding, lpTokenBalancePCS = 0, lpTotalInQuoteTokenPCS = 0, quoteToken: { busdPrice: quoteTokenPriceUsd } } = farm
+  const { apr, lpTotalInQuoteToken, lpSymbol, pcsPid, multiplier, isKingdom, isKingdomToken, tokenPriceVsQuote, poolWeightPCS, pcsCompounding, lpTokenBalancePCS = 0, lpTotalInQuoteTokenPCS = 0, quoteToken: { busdPrice: quoteTokenPriceUsd }, altPid } = farm
   const farmImage = lpSymbol.split(' ')[0].toLocaleLowerCase()
-  // console.log('farm',farm.lpSymbol)
 
   let aprApy = useKingdomAPRAPY(
     isKingdom,
@@ -67,8 +66,10 @@ const Kingdom: React.FC<KingdomProps> = ({ farm, removed, cakePrice, bnbPrice, e
     lpTokenBalancePCS,
     lpTotalInQuoteTokenPCS,
     Number(quoteTokenPriceUsd),
+    altPid,
   )
-  const { dailyAPR, totalAPY } = aprApy
+
+  const { dailyAPR, totalAPY, newMultiplier, pcsApr } = aprApy
   const { tokenBalance, stakedBalance, earnings } = farm.userData
   const rawTokenBalance = tokenBalance ? getBalanceNumber(new BigNumber(tokenBalance)) : 0
   const rawStakedBalance = stakedBalance ? getBalanceNumber(new BigNumber(stakedBalance)) : 0
@@ -92,7 +93,7 @@ const Kingdom: React.FC<KingdomProps> = ({ farm, removed, cakePrice, bnbPrice, e
 
   const farmName = (pcsPid || pcsPid === 0) ? 'Pancake v2' : ''
 
-  aprApy = { ...aprApy, pcsCompounding: farm.pcsCompounding, farmAPR, apr: farm.apr, cakePrice, quoteTokenPriceUsd: Number(quoteTokenPriceUsd) }
+  aprApy = { ...aprApy, pcsCompounding: farm.pcsCompounding, farmAPR, apr: altPid === 12 ? pcsApr : farm.apr, cakePrice, quoteTokenPriceUsd: Number(quoteTokenPriceUsd) }
 
   return (
     <>
@@ -108,19 +109,19 @@ const Kingdom: React.FC<KingdomProps> = ({ farm, removed, cakePrice, bnbPrice, e
             <Text> TVL {totalValueFormated}</Text>
           </div>
           <div className="col">
-            <Balance
-              fontSize="16px"
-              value={totalAPY}
-              decimals={2}
-              unit="%"
-            />
-            <Balance
-              fontSize="16px"
-              value={dailyAPR}
-              decimals={2}
-              unit="%"
-            />
-            <Text>{multiplier}</Text>
+              <Balance
+                fontSize="16px"
+                value={totalAPY}
+                decimals={2}
+                unit="%"
+              />
+              <Balance
+                fontSize="16px"
+                value={dailyAPR}
+                decimals={2}
+                unit="%"
+              />
+              <Text>{newMultiplier || multiplier}</Text>
           </div>
           <div className="col">
             <Balance

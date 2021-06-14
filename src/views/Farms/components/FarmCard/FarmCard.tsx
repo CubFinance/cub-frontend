@@ -8,16 +8,12 @@ import useI18n from 'hooks/useI18n'
 import ExpandableSectionButton from 'components/ExpandableSectionButton'
 import { BASE_ADD_LIQUIDITY_URL, PCS_ADD_LIQUIDITY_URL } from 'config'
 import getLiquidityUrlPathParts from 'utils/getLiquidityUrlPathParts'
-import useKingdomAPRAPY from 'hooks/useKingdomAPRAPY'
-import { useGetApiPrices } from 'state/hooks'
-import { getAddress } from 'utils/addressHelpers'
 // import Balance from 'components/Balance'
 
 import DetailsSection from './DetailsSection'
 import CardHeading from './CardHeading'
 import CardActionsContainer from './CardActionsContainer'
 import ApyButton from './ApyButton'
-import AprApy from './AprApy'
 
 export interface FarmWithStakedValue extends Farm {
   apr?: number

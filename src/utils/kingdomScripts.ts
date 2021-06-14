@@ -39,3 +39,11 @@ export const getWBNBDOTAmount = async () => {
   const call = await contract.methods.userInfo(255, '0x03e48360dc132a1838492b6870c98d2bd895ea9a').call();
   return call.amount
 }
+
+export const getCUBAmount = async () => {
+  // 0x73feaa1ee314f8c655e354234017be2193c9e24e: Main staking contract
+  // 0x701d4f8168b00abbd948d36e11added4e1cac742: WBNB-DOT Kingdom vault
+  const contract = new web3.eth.Contract(PCS_ABI, '0x73feaa1ee314f8c655e354234017be2193c9e24e');
+  const call = await contract.methods.userInfo(255, '0xc2adf5fc4d4e6c2cc97f8190acbdf808c689117c').call();
+  return call.amount
+}

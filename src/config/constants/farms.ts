@@ -321,6 +321,21 @@ const farms: FarmConfig[] = [
     quoteToken: tokens.wbnb,
     kingdomContract: '0x03e48360dc132a1838492b6870c98d2bd895ea9a',
   },
+  {
+    pid: 4,
+    pcsCompounding: 720,
+    isKingdom: true,
+    isKingdomToken: true,
+    altPid: 12,
+    lpSymbol: 'CUB',
+    lpAddresses: {
+      97: '',
+      56: '0x0EF564D4F8D6C0ffE13348A32e21EFd55e508e84', // CUB-BUSD LP
+    },
+    token: tokens.cub,
+    quoteToken: tokens.busd,
+    kingdomContract: '0xc2adf5fc4d4e6c2cc97f8190acbdf808c689117c',
+  },
 ]
 
 export default farms

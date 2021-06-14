@@ -107,7 +107,7 @@ export const sousEmergencyUnstake = async (sousChefContract, amount, account) =>
     })
 }
 
-export const harvest = async (masterChefContract, pid, account) => {
+export const harvest = async (masterChefContract, pid, account, isKingdom) => {
   // if (pid === 0) {
   //   return masterChefContract.methods
   //     .leaveStaking('0')
@@ -116,7 +116,14 @@ export const harvest = async (masterChefContract, pid, account) => {
   //       return tx.transactionHash
   //     })
   // }
-
+  if (isKingdom) {
+    return masterChefContract.methods
+      .withdraw(pid, '0')
+      .send({ from: account })
+      .on('transactionHash', (tx) => {
+        return tx.transactionHash
+      })
+  }
   return masterChefContract.methods
     .deposit(pid, '0')
     .send({ from: account })

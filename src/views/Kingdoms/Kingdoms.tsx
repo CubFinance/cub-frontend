@@ -48,6 +48,7 @@ const Kingdoms: React.FC = () => {
   const { pathname } = useLocation()
   // const TranslateString = useI18n()
   const { data: farmsLP, userDataLoaded } = useFarms()
+
   const cakePrice = usePriceCakeBusd()
   // const [query, setQuery] = useState('')
   const { account } = useWeb3React()
@@ -68,7 +69,8 @@ const Kingdoms: React.FC = () => {
   // Connected users should see loading indicator until first userData has loaded
   const userDataReady = !account || (!!account && userDataLoaded)
 
-  const activeFarms = farmsLP.filter((farm) => farm.isKingdom && farm.multiplier !== '0X' && !isArchivedPid(farm.pid))
+  // const activeFarms = farmsLP.filter((farm) => farm.isKingdom && farm.multiplier !== '0X' && !isArchivedPid(farm.pid))
+  const activeFarms = farmsLP.filter((farm) => farm.isKingdom && !isArchivedPid(farm.pid))
 
   const farmsList = useCallback(
     (farmsToDisplay: Farm[]): FarmWithStakedValue[] => {
@@ -79,7 +81,7 @@ const Kingdoms: React.FC = () => {
 
         const totalLiquidity = new BigNumber(farm.lpTotalInQuoteToken).times(farm.quoteToken.busdPrice)
         const apr = isActive ? getFarmApr(farm.poolWeight, cakePrice, totalLiquidity) : 0
-// console.log('quoteTokenPriceUsd',quoteTokenPriceUsd)
+
         return { ...farm, apr, liquidity: totalLiquidity }
       })
 

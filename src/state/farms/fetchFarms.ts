@@ -8,7 +8,7 @@ import { FarmConfig } from 'config/constants/types'
 import { DEFAULT_TOKEN_DECIMAL } from 'config'
 import kingdomsABI from 'config/abi/kingdoms.json'
 import pcsv2ABI from 'config/abi/PCS-v2-masterchef.json'
-import { getCAKEamount, getWBNBBUSDAmount, getWBNBETHAmount, getWBNBDOTAmount } from 'utils/kingdomScripts'
+import { getCAKEamount, getWBNBBUSDAmount, getWBNBETHAmount, getWBNBDOTAmount, getCUBAmount } from 'utils/kingdomScripts'
 
 const fetchFarms = async (farmsToFetch: FarmConfig[]) => {
   const data = await Promise.all(
@@ -115,6 +115,9 @@ const fetchFarms = async (farmsToFetch: FarmConfig[]) => {
             break
           case 3:
             kingdomSupply = await getWBNBDOTAmount()
+            break
+          case 4:
+            kingdomSupply = await getCUBAmount()
             break
           default:
             break
@@ -235,24 +238,27 @@ const fetchFarms = async (farmsToFetch: FarmConfig[]) => {
 
         const kingdomPoolWeight = kingdomCorrectAlloc.div(new BigNumber(totalAllocPoint))
 
-        const pcsCalls = [
-          {
-            address: getPCSv2MasterChefAddress(),
-            name: 'poolInfo',
-            params: [farmConfig.pcsPid], // BUSD-BNB
-          },
-          {
-            address: getPCSv2MasterChefAddress(),
-            name: 'totalAllocPoint',
-          }
-        ]
+        let poolWeightPCS = new BigNumber(0)
+        if (farmConfig.pcsPid || farmConfig.pcsPid === 0) {
+          const pcsCalls = [
+            {
+              address: getPCSv2MasterChefAddress(),
+              name: 'poolInfo',
+              params: [farmConfig.pcsPid], // BUSD-BNB
+            },
+            {
+              address: getPCSv2MasterChefAddress(),
+              name: 'totalAllocPoint',
+            }
+          ]
 
-        const [infoPCS, totalAllocPointPCS] = await multicall(pcsv2ABI, pcsCalls).catch(error => {
-          throw new Error(`multicall pcs error: ${error}`)
-        })
+          const [infoPCS, totalAllocPointPCS] = await multicall(pcsv2ABI, pcsCalls).catch(error => {
+            throw new Error(`multicall pcs error: ${error}`)
+          })
 
-        const allocPointPCS = new BigNumber(infoPCS.allocPoint._hex)
-        const poolWeightPCS = allocPointPCS.div(new BigNumber(totalAllocPointPCS))
+          poolWeightPCS = new BigNumber(infoPCS.allocPoint._hex).div(new BigNumber(totalAllocPointPCS))
+        }
+
 
         return {
           ...farmConfig,

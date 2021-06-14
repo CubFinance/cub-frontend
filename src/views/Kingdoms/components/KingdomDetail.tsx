@@ -132,7 +132,6 @@ const KingdomDetail: React.FC<KingdomDetailProps> = ({
             aprApy={aprApy}
             lpLabel={lpLabel}
             addLiquidityUrl={addLiquidityUrl}
-            isDetails
           />
         </Detail>
         <Detail>

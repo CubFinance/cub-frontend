@@ -12,7 +12,7 @@ export const useHarvest = (farmPid: number, isKingdom?: boolean) => {
   const kingdomContract = useKingdom()
 
   const handleHarvest = useCallback(async () => {
-    const txHash = await harvest(isKingdom ? kingdomContract : masterChefContract, farmPid, account)
+    const txHash = await harvest(isKingdom ? kingdomContract : masterChefContract, farmPid, account, isKingdom)
     dispatch(fetchFarmUserDataAsync(account))
     return txHash
   }, [account, dispatch, farmPid, masterChefContract, kingdomContract, isKingdom])
@@ -27,8 +27,8 @@ export const useAllHarvest = (farms: any[]) => {
 
   const handleHarvest = useCallback(async () => {
     const harvestPromises = farms.reduce((accum, farm) => {
-      if (farm.isKingdom) return [...accum, harvest(kingdomContract, farm.pid, account)]
-      return [...accum, harvest(masterChefContract, farm.pid, account)]
+      if (farm.isKingdom) return [...accum, harvest(kingdomContract, farm.pid, account, farm.isKingdom)]
+      return [...accum, harvest(masterChefContract, farm.pid, account, farm.isKingdom)]
     }, [])
 
     return Promise.all(harvestPromises)
@@ -45,7 +45,7 @@ export const useSousHarvest = (sousId, isUsingBnb = false) => {
 
   const handleHarvest = useCallback(async () => {
     if (sousId === 0) {
-      await harvest(masterChefContract, 0, account)
+      await harvest(masterChefContract, 0, account, false)
     } else if (isUsingBnb) {
       await soushHarvestBnb(sousChefContract, account)
     } else {
