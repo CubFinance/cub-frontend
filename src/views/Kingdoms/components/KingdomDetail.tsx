@@ -50,7 +50,7 @@ const StyledLinkExternal = styled(Link)`
 `
 
 const CubKingdom = styled.div`
-  color: #2a4a7a;
+  color: ${(props) => props.theme.colors.text};
   margin-top: 0.2rem;
 `
 
@@ -128,7 +128,7 @@ const KingdomDetail: React.FC<KingdomDetailProps> = ({
             <Text>Auto-compound</Text>
           </Flex>
           {altPid === 12 ? (
-            <CubKingdom>CUB Kingdom Multiplier Coexists With CUB Den Multiplier</CubKingdom>
+            <CubKingdom>*CUB Kingdom Multiplier Coexists With CUB Den Multiplier</CubKingdom>
           ) : (
             <Flex justifyContent="space-between">
               <Text>Farm:</Text>
