@@ -25,25 +25,19 @@ export const getWBNBBUSDAmount = async () => {
 }
 
 export const getWBNBETHAmount = async () => {
-  // 0x73feaa1ee314f8c655e354234017be2193c9e24e: Main staking contract
-  // 0x701d4f8168b00abbd948d36e11added4e1cac742: WBNB-ETH Kingdom vault
   const contract = new web3.eth.Contract(PCS_ABI, '0x73feaa1ee314f8c655e354234017be2193c9e24e');
   const call = await contract.methods.userInfo(261, '0x3582933accc5732484138a2dd61fcdd02d0a021c').call();
   return call.amount
 }
 
 export const getWBNBDOTAmount = async () => {
-  // 0x73feaa1ee314f8c655e354234017be2193c9e24e: Main staking contract
-  // 0x701d4f8168b00abbd948d36e11added4e1cac742: WBNB-DOT Kingdom vault
   const contract = new web3.eth.Contract(PCS_ABI, '0x73feaa1ee314f8c655e354234017be2193c9e24e');
   const call = await contract.methods.userInfo(255, '0x03e48360dc132a1838492b6870c98d2bd895ea9a').call();
   return call.amount
 }
 
 export const getCUBAmount = async () => {
-  // 0x73feaa1ee314f8c655e354234017be2193c9e24e: Main staking contract
-  // 0x701d4f8168b00abbd948d36e11added4e1cac742: WBNB-DOT Kingdom vault
-  const contract = new web3.eth.Contract(PCS_ABI, '0x73feaa1ee314f8c655e354234017be2193c9e24e');
-  const call = await contract.methods.userInfo(255, '0xc2adf5fc4d4e6c2cc97f8190acbdf808c689117c').call();
+  const contract = new web3.eth.Contract(PCS_ABI, '0x227e79c83065edb8b954848c46ca50b96cb33e16');
+  const call = await contract.methods.userInfo(12, '0xc2adf5fc4d4e6c2cc97f8190acbdf808c689117c').call();
   return call.amount
 }
