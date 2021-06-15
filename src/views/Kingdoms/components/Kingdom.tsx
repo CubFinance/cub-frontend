@@ -2,7 +2,7 @@ import React, { useState, useMemo } from 'react'
 import { Text, Image, Flex } from '@pancakeswap-libs/uikit'
 import BigNumber from 'bignumber.js'
 import { provider } from 'web3-core'
-import styled from 'styled-components'
+import styled, { keyframes } from 'styled-components'
 // import { IconButton } from '@pancakeswap-libs/uikit'
 // import { Farm } from 'state/types'
 // import { tokenEarnedPerThousandDollarsCompounding, getRoi } from 'utils/compoundApyHelpers'
@@ -28,10 +28,54 @@ const ExpandingWrapper = styled.div<{ expanded: boolean }>`
 `
 
 const K = styled.div`
+  align-self: baseline;
   background: ${(props) => props.theme.card.background};
   border-radius: 8px;
   box-shadow: 0 3px 4px -3px rgba(0,0,0,0.1),0 4px 6px -2px rgba(0,0,0,0.05);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
   padding: 0.4rem 0.8rem;
+  position: relative;
+`
+
+const RainbowLight = keyframes`
+	0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
+`
+
+const StyledCardAccent = styled.div`
+  background: linear-gradient(
+    45deg,
+    rgba(255, 0, 0, 1) 0%,
+    rgba(255, 154, 0, 1) 10%,
+    rgba(208, 222, 33, 1) 20%,
+    rgba(79, 220, 74, 1) 30%,
+    rgba(63, 218, 216, 1) 40%,
+    rgba(47, 201, 226, 1) 50%,
+    rgba(28, 127, 238, 1) 60%,
+    rgba(95, 21, 242, 1) 70%,
+    rgba(186, 12, 248, 1) 80%,
+    rgba(251, 7, 217, 1) 90%,
+    rgba(255, 0, 0, 1) 100%
+  );
+  background-size: 300% 300%;
+  animation: ${RainbowLight} 2s linear infinite;
+  border-radius: 8px;
+  filter: blur(6px);
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  bottom: -2px;
+  left: -2px;
+  z-index: -1;
 `
 
 const KImage = styled(Image)`
@@ -99,6 +143,7 @@ const Kingdom: React.FC<KingdomProps> = ({ farm, removed, cakePrice, account }) 
     <>
       <Divider />
       <K>
+        {farm.token.symbol === 'CUB' && <StyledCardAccent />}
         <div className="flex-grid k-grid">
           <div className="col"><KImage src={`/images/farms/${farmImage}.png`} alt={lpSymbol} width={64} height={64} /></div>
           <div className="col">
@@ -121,7 +166,7 @@ const Kingdom: React.FC<KingdomProps> = ({ farm, removed, cakePrice, account }) 
                 decimals={2}
                 unit="%"
               />
-              <Text>{newMultiplier || multiplier}</Text>
+              <Text>{newMultiplier ? `${newMultiplier}*` : multiplier}</Text>
           </div>
           <div className="col">
             <Balance

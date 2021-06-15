@@ -49,6 +49,11 @@ const StyledLinkExternal = styled(Link)`
   font-weight: 400;
 `
 
+const CubKingdom = styled.div`
+  color: #2a4a7a;
+  margin-top: 0.2rem;
+`
+
 interface KingdomDetailProps {
   farm: FarmWithStakedValue
   walletBalance: number
@@ -79,7 +84,7 @@ const KingdomDetail: React.FC<KingdomDetailProps> = ({
   const tokenValueFormated = oneTokenQuoteValue && oneTokenQuoteValue.toString() !== 'NaN'
     ? `~$${oneTokenQuoteValue.times(DEFAULT_TOKEN_DECIMAL).toFixed(2)}`
     : '-'
-  const { lpSymbol, multiplier, quoteToken, token, isKingdom, lpAddresses, isTokenOnly, isKingdomToken, kingdomContract } = farm
+  const { lpSymbol, multiplier, quoteToken, token, isKingdom, lpAddresses, isTokenOnly, isKingdomToken, kingdomContract, altPid } = farm
   const lpLabel = lpSymbol && lpSymbol.toUpperCase().replace('PANCAKE', '')
   const liquidityUrlPathParts = getLiquidityUrlPathParts({
     quoteTokenAddress: quoteToken.address,
@@ -116,16 +121,20 @@ const KingdomDetail: React.FC<KingdomDetailProps> = ({
           </Flex>
           <Flex justifyContent="space-between">
             <Text>Multiplier:</Text>
-            <Text>{multiplier}</Text>
+            <Text>{aprApy.newMultiplier ? `${aprApy.newMultiplier}*` : multiplier}</Text>
           </Flex>
           <Flex justifyContent="space-between">
             <Text>Type:</Text>
             <Text>Auto-compound</Text>
           </Flex>
-          <Flex justifyContent="space-between">
-            <Text>Farm:</Text>
-            <Text>{farmName}</Text>
-          </Flex>
+          {altPid === 12 ? (
+            <CubKingdom>CUB Kingdom Multiplier Coexists With CUB Den Multiplier</CubKingdom>
+          ) : (
+            <Flex justifyContent="space-between">
+              <Text>Farm:</Text>
+              <Text>{farmName}</Text>
+            </Flex>
+          )}
         </Detail>
         <Detail>
           <AprApy
