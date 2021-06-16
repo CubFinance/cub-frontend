@@ -1,10 +1,8 @@
 import React, { useState, useCallback, useMemo } from 'react'
 import { useLocation } from 'react-router-dom'
-// import BigNumber from 'bignumber.js'
 import styled from 'styled-components'
 import BigNumber from 'bignumber.js'
 import { usePriceCakeBusd } from 'state/hooks'
-// import { getBalanceNumber } from 'utils/formatBalance'
 import { Flex, Text, Button as UiButton, useModal } from '@pancakeswap-libs/uikit'
 import Balance from 'components/Balance'
 import CardBusdValue from 'views/Home/components/CardBusdValue'
@@ -18,7 +16,6 @@ import { useApprove } from 'hooks/useApprove'
 import { getBep20Contract } from 'utils/contractHelpers'
 import { getAddress } from 'utils/addressHelpers'
 import useWeb3 from 'hooks/useWeb3'
-// import CardValue from './CardValue'
 
 import './KingdomCard.css'
 

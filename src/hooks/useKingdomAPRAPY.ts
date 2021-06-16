@@ -11,7 +11,7 @@ const useKingdomAPRAPY = (
   isKingdomToken: boolean,
   tokenPriceVsQuote: number,
   poolWeightPCS: any,
-  pcsCompounding: number,
+  compounding: number,
   cubAPR: number,
   lpTokenBalanceMC: number,
   lpTotalInQuoteTokenPCS: number,
@@ -29,7 +29,7 @@ const useKingdomAPRAPY = (
 
     const dailyAPR = new BigNumber(apr).div(new BigNumber(365)).toNumber()
 
-    const farmAPY = ((((apr / 100 / pcsCompounding) + 1) ** pcsCompounding) - 1) * 100
+    const farmAPY = ((((apr / 100 / compounding) + 1) ** compounding) - 1) * 100
     const totalAPY = farmAPY
     const totalAPYString = totalAPY && totalAPY.toLocaleString('en-US', { maximumFractionDigits: 2 })
 
@@ -53,7 +53,7 @@ const useKingdomAPRAPY = (
 
   const dailyAPR = new BigNumber(apr).div(new BigNumber(365)).toNumber()
 
-  const farmAPY = ((((apr / 100 / pcsCompounding) + 1) ** pcsCompounding) - 1) * 100
+  const farmAPY = ((((apr / 100 / compounding) + 1) ** compounding) - 1) * 100
   const totalAPY = cubAPR ? cubAPR + farmAPY : farmAPY
   const totalAPYString = totalAPY && totalAPY.toLocaleString('en-US', { maximumFractionDigits: 2 })
 

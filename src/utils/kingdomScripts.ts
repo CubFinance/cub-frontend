@@ -1,8 +1,4 @@
 import Web3 from 'web3'
-// import erc20 from 'config/abi/erc20.json'
-// import multicall from 'utils/multicall'
-// import { DEFAULT_TOKEN_DECIMAL } from 'config'
-// import BigNumber from 'bignumber.js'
 
 const PCS_ABI = require('config/abi/PCS.json')
 

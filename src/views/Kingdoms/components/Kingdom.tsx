@@ -1,26 +1,17 @@
-import React, { useState, useMemo } from 'react'
+import React, { useState } from 'react'
 import { Text, Image, Flex } from '@pancakeswap-libs/uikit'
 import BigNumber from 'bignumber.js'
 import { provider } from 'web3-core'
 import styled, { keyframes } from 'styled-components'
-// import { IconButton } from '@pancakeswap-libs/uikit'
-// import { Farm } from 'state/types'
-// import { tokenEarnedPerThousandDollarsCompounding, getRoi } from 'utils/compoundApyHelpers'
 import ExpandableSectionButton from 'components/ExpandableSectionButton'
-import { getBalanceNumber, getFullDisplayBalance } from 'utils/formatBalance'
-// import { useFarmUser } from 'state/hooks'
+import { getBalanceNumber } from 'utils/formatBalance'
 import { FarmWithStakedValue } from 'views/Farms/components/FarmCard/FarmCard'
 import { useBusdPriceFromPid } from 'state/hooks'
-// import { getAddress } from 'utils/addressHelpers'
 import useKingdomAPRAPY from 'hooks/useKingdomAPRAPY'
 import Balance from 'components/Balance'
 import { DEFAULT_TOKEN_DECIMAL } from 'config'
-
 import KingdomDetail from './KingdomDetail'
-// import ExpandIcon from './ExpandIcon'
 import Divider from './DividerBlue'
-// import LinkButton from './LinkButton'
-// import CardValue from './CardValue'
 
 const ExpandingWrapper = styled.div<{ expanded: boolean }>`
   height: ${(props) => (props.expanded ? '100%' : '0px')};
@@ -97,7 +88,7 @@ interface KingdomProps {
 
 const Kingdom: React.FC<KingdomProps> = ({ farm, removed, cakePrice, account }) => {
   const [showExpandableSection, setShowExpandableSection] = useState(false)
-  const { apr, lpTotalInQuoteToken, lpSymbol, pcsPid, multiplier, isKingdom, isKingdomToken, tokenPriceVsQuote, poolWeightPCS, pcsCompounding, lpTokenBalancePCS = 0, lpTotalInQuoteTokenPCS = 0, quoteToken: { busdPrice: quoteTokenPriceUsd }, altPid } = farm
+  const { apr, lpTotalInQuoteToken, lpSymbol, multiplier, isKingdom, isKingdomToken, tokenPriceVsQuote, poolWeightPCS, compounding, lpTokenBalancePCS = 0, lpTotalInQuoteTokenPCS = 0, quoteToken: { busdPrice: quoteTokenPriceUsd }, altPid, farmType } = farm
   const farmImage = lpSymbol.split(' ')[0].toLocaleLowerCase()
 
   let aprApy = useKingdomAPRAPY(
@@ -105,7 +96,7 @@ const Kingdom: React.FC<KingdomProps> = ({ farm, removed, cakePrice, account }) 
     isKingdomToken,
     Number(tokenPriceVsQuote),
     poolWeightPCS,
-    pcsCompounding,
+    compounding,
     apr,
     lpTokenBalancePCS,
     lpTotalInQuoteTokenPCS,
@@ -135,9 +126,7 @@ const Kingdom: React.FC<KingdomProps> = ({ farm, removed, cakePrice, account }) 
     : '-'
   const farmAPR = apr && apr.toLocaleString('en-US', { maximumFractionDigits: 2 })
 
-  const farmName = (pcsPid || pcsPid === 0) ? 'Pancake v2' : ''
-
-  aprApy = { ...aprApy, pcsCompounding: farm.pcsCompounding, farmAPR, apr: altPid === 12 ? pcsApr : farm.apr, cakePrice, quoteTokenPriceUsd: Number(quoteTokenPriceUsd) }
+  aprApy = { ...aprApy, compounding: farm.compounding, farmAPR, apr: altPid === 12 ? pcsApr : farm.apr, cakePrice, quoteTokenPriceUsd: Number(quoteTokenPriceUsd) }
 
   return (
     <>
@@ -150,7 +139,7 @@ const Kingdom: React.FC<KingdomProps> = ({ farm, removed, cakePrice, account }) 
             <Flex justifyContent="flex-start" alignItems="center">
               <Text className="token">{lpSymbol}</Text>
             </Flex>
-            <Text>{farmName}</Text>
+            <Text>{farmType}</Text>
             <Text> TVL {totalValueFormated}</Text>
           </div>
           <div className="col">
@@ -204,7 +193,7 @@ const Kingdom: React.FC<KingdomProps> = ({ farm, removed, cakePrice, account }) 
             rewardBalance={rawEarningsBalance}
             walletBalanceQuoteValue={walletBalanceQuoteValue}
             depositBalanceQuoteValue={depositBalanceQuoteValue}
-            farmName={farmName}
+            farmName={farmType}
             oneTokenQuoteValue={oneTokenQuoteValue}
             removed={removed}
             aprApy={aprApy}

@@ -14,7 +14,7 @@ export interface AprApyProps {
 
 const AprApy: React.FC<AprApyProps> = ({ aprApy,  lpLabel, addLiquidityUrl }) => {
   const TranslateString = useI18n()
-  const { farmAPR, apr, pcsCompounding, pcsApr, dailyAPR, farmAPY, totalAPYString, cakePrice } = aprApy
+  const { farmAPR, apr, compounding, pcsApr, dailyAPR, farmAPY, totalAPYString, cakePrice } = aprApy
 
   return (
     <>
@@ -28,7 +28,7 @@ const AprApy: React.FC<AprApyProps> = ({ aprApy,  lpLabel, addLiquidityUrl }) =>
       </Flex>
       <Flex justifyContent="space-between">
         <Text>{TranslateString(354, 'Compounds / year')}:</Text>
-        <Text>~{pcsCompounding}</Text>
+        <Text>~{compounding}</Text>
       </Flex>
       <Flex justifyContent="space-between">
         <Text>{TranslateString(354, 'Farm APY')}:</Text>

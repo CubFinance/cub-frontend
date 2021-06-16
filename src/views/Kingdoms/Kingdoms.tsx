@@ -1,32 +1,18 @@
-import React, { useEffect, useCallback, useState, useMemo, useRef } from 'react'
-import { Route, useRouteMatch, useLocation } from 'react-router-dom'
+import React, { useEffect, useCallback, useMemo } from 'react'
+import { useLocation } from 'react-router-dom'
 import { Heading, Flex, Text } from '@pancakeswap-libs/uikit'
 import { useAppDispatch } from 'state'
 import BigNumber from 'bignumber.js'
 import { useWeb3React } from '@web3-react/core'
-// import { Image, Heading, RowType, Toggle, Text, Button, Flex } from '@pancakeswap-libs/uikit'
 import styled from 'styled-components'
-// import FlexLayout from 'components/layout/Flex'
 import Page from 'components/layout/Page'
 import PageHeader from 'components/PageHeader'
-// import { MigrationV2 } from 'components/Banner'
-import { useFarms, usePriceCakeBusd, useGetApiPrices, useTotalValueKingdoms } from 'state/hooks'
+import { useFarms, usePriceCakeBusd, useTotalValueKingdoms } from 'state/hooks'
 import useRefresh from 'hooks/useRefresh'
 import { fetchFarmUserDataAsync } from 'state/actions'
-// import usePersistState from 'hooks/usePersistState'
 import { Farm } from 'state/types'
-// import useI18n from 'hooks/useI18n'
-// import { getBalanceNumber } from 'utils/formatBalance'
 import { getFarmApr } from 'utils/apr'
-// import { orderBy } from 'lodash'
-import { getAddress } from 'utils/addressHelpers'
 import isArchivedPid from 'utils/farmHelpers'
-// import PageHeader from 'components/PageHeader'
-// import { fetchFarmsPublicDataAsync, setLoadArchivedFarmsData } from 'state/farms'
-// import { DEFAULT_TOKEN_DECIMAL } from 'config'
-
-// import styled from 'styled-components'
-// import FlexLayout from 'components/layout/Flex'
 
 import { FarmWithStakedValue } from 'views/Farms/components/FarmCard/FarmCard'
 import Kingdom from './components/Kingdom'
@@ -41,16 +27,10 @@ const NUMBER_OF_FARMS_VISIBLE = 12
 
 const Kingdoms: React.FC = () => {
   const totalValue = useTotalValueKingdoms();
-  // const tvl = totalValue
-  //   ? `$${Number(totalValue).toLocaleString(undefined, { maximumFractionDigits: 0 })}`
-  //   : '-'
-  // const { path } = useRouteMatch()
   const { pathname } = useLocation()
-  // const TranslateString = useI18n()
   const { data: farmsLP, userDataLoaded } = useFarms()
 
   const cakePrice = usePriceCakeBusd()
-  // const [query, setQuery] = useState('')
   const { account } = useWeb3React()
 
   const dispatch = useAppDispatch()

@@ -239,12 +239,12 @@ const fetchFarms = async (farmsToFetch: FarmConfig[]) => {
         const kingdomPoolWeight = kingdomCorrectAlloc.div(new BigNumber(totalAllocPoint))
 
         let poolWeightPCS = new BigNumber(0)
-        if (farmConfig.pcsPid || farmConfig.pcsPid === 0) {
+        if (farmConfig.altPid || farmConfig.altPid === 0) {
           const pcsCalls = [
             {
               address: getPCSv2MasterChefAddress(),
               name: 'poolInfo',
-              params: [farmConfig.pcsPid], // BUSD-BNB
+              params: [farmConfig.altPid], // BUSD-BNB
             },
             {
               address: getPCSv2MasterChefAddress(),

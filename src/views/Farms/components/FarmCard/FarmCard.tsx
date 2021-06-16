@@ -22,7 +22,7 @@ export interface FarmWithStakedValue extends Farm {
   lpTokenBalancePCS?: number
   lpTotalInQuoteTokenPCS?: number
   poolWeightPCS?: string
-  pcsCompounding?: number
+  compounding?: number
   kingdomSupply?: string
   quoteTokenPriceUsd?: number
 }

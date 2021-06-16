@@ -128,7 +128,7 @@ const KingdomDetail: React.FC<KingdomDetailProps> = ({
             <Text>Auto-compound</Text>
           </Flex>
           {altPid === 12 ? (
-            <CubKingdom>*CUB Kingdom Multiplier Coexists With CUB Den Multiplier</CubKingdom>
+            <CubKingdom>*CUB Kingdom multiplier coexists with CUB Den multiplier</CubKingdom>
           ) : (
             <Flex justifyContent="space-between">
               <Text>Farm:</Text>

@@ -266,10 +266,11 @@ const farms: FarmConfig[] = [
   // KINGDOMS
   {
     pid: 4,
-    pcsCompounding: 720,
+    altPid: 12,
+    compounding: 720,
     isKingdom: true,
     isKingdomToken: true,
-    altPid: 12,
+    farmType: 'Cub DeFi',
     lpSymbol: 'CUB',
     lpAddresses: {
       97: '',
@@ -281,10 +282,11 @@ const farms: FarmConfig[] = [
   },
   {
     pid: 0,
-    pcsPid: 0,
-    pcsCompounding: 4200,
+    altPid: 0,
+    compounding: 4200,
     isKingdom: true,
     isKingdomToken: true,
+    farmType: 'Pancake v2',
     lpSymbol: 'CAKE',
     lpAddresses: {
       97: '',
@@ -296,9 +298,10 @@ const farms: FarmConfig[] = [
   },
   {
     pid: 1,
-    pcsPid: 252,
-    pcsCompounding: 365,
+    altPid: 252,
+    compounding: 365,
     isKingdom: true,
+    farmType: 'Pancake v2',
     lpSymbol: 'BNB-BUSD LP',
     lpAddresses: {
       97: '',
@@ -310,9 +313,10 @@ const farms: FarmConfig[] = [
   },
   {
     pid: 2,
-    pcsPid: 261,
-    pcsCompounding: 365,
+    altPid: 261,
+    compounding: 365,
     isKingdom: true,
+    farmType: 'Pancake v2',
     lpSymbol: 'ETH-BNB LP',
     lpAddresses: {
       97: '',
@@ -324,9 +328,10 @@ const farms: FarmConfig[] = [
   },
   {
     pid: 3,
-    pcsPid: 255,
-    pcsCompounding: 365,
+    altPid: 255,
+    compounding: 365,
     isKingdom: true,
+    farmType: 'Pancake v2',
     lpSymbol: 'DOT-BNB LP',
     lpAddresses: {
       97: '',
