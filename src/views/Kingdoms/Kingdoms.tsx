@@ -114,20 +114,20 @@ const Kingdoms: React.FC = () => {
             Fees
           </Heading>
           <Flex justifyContent="space-between">
+            <Text>Fee for CUB Staking Kingdom BNB Dividends:</Text>
+            <Text>3%</Text>
+          </Flex>
+          <Flex justifyContent="space-between">
             <Text>Management Fee:</Text>
-            <Text>0.9%</Text>
-          </Flex>
-          <Flex justifyContent="space-between">
-            <Text>Withdrawal Fee:</Text>
-            <Text>None</Text>
-          </Flex>
-          <Flex justifyContent="space-between">
-            <Text>Fee to CUB Staking Kingdom:</Text>
-            <Text>1%</Text>
+            <Text>7%</Text>
           </Flex>
           <Flex justifyContent="space-between">
             <Text>CUB Burn Rate:</Text>
             <Text>100% of Fees Buyback and Burn CUB</Text>
+          </Flex>
+          <Flex justifyContent="space-between">
+            <Text>Withdrawal Fee:</Text>
+            <Text>None</Text>
           </Flex>
         </FeeWrapper>
       </PageHeader>

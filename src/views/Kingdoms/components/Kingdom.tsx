@@ -81,13 +81,12 @@ interface KingdomProps {
   farm: FarmWithStakedValue
   removed?: boolean
   cakePrice?: BigNumber
-  bnbPrice?: BigNumber
-  ethereum?: provider
   account?: string
 }
 
 const Kingdom: React.FC<KingdomProps> = ({ farm, removed, cakePrice, account }) => {
   const [showExpandableSection, setShowExpandableSection] = useState(false)
+
   const { apr, lpTotalInQuoteToken, lpSymbol, multiplier, isKingdom, isKingdomToken, tokenPriceVsQuote, poolWeightPCS, compounding, lpTokenBalancePCS = 0, lpTotalInQuoteTokenPCS = 0, quoteToken: { busdPrice: quoteTokenPriceUsd }, altPid, farmType } = farm
   const farmImage = lpSymbol.split(' ')[0].toLocaleLowerCase()
 
@@ -106,6 +105,7 @@ const Kingdom: React.FC<KingdomProps> = ({ farm, removed, cakePrice, account }) 
 
   const { dailyAPR, totalAPY, newMultiplier, pcsApr } = aprApy
   const { tokenBalance, stakedBalance, earnings } = farm.userData
+
   const rawTokenBalance = tokenBalance ? getBalanceNumber(new BigNumber(tokenBalance)) : 0
   const rawStakedBalance = stakedBalance ? getBalanceNumber(new BigNumber(stakedBalance)) : 0
   const rawEarningsBalance = earnings ? getBalanceNumber(new BigNumber(earnings)) : 0
