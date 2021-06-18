@@ -133,27 +133,6 @@ const Kingdoms: React.FC = () => {
       </PageHeader>
       <Page className="k-container">
         <div id="kingdoms">
-          <div id="content-header" className="k-content">
-            <div className="flex-grid k-grid">
-              <div className="col" />
-              <div className="col">
-                <Text>Token</Text>
-                <Text>Farm</Text>
-                <Text>TVL</Text>
-              </div>
-              <div className="col">
-                <Text>Total APY</Text>
-                <Text>Daily APR</Text>
-                <Text>Multiplier</Text>
-              </div>
-              <div className="col">
-                <Text>Balance</Text>
-                <Text>Deposit</Text>
-                <Text>Rewards</Text>
-              </div>
-              <div className="col" />
-            </div>
-          </div>
           {farmsStakedMemoized.map((farm) => (
             <Kingdom key={farm.pid} farm={farm} cakePrice={cakePrice} account={account} removed={false} />
           ))}
