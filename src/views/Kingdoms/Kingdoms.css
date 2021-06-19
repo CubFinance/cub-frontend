@@ -119,10 +119,16 @@ h1 {
   }
   .k-details > div:nth-child(1), .k-details > div:nth-child(2), .k-details > div:nth-child(3) {
     margin-top: 0.8rem;
-    width: 100%
+    width: 100%;
   }
   .k-details > div > div {
     margin-top: 0.8rem;
+    text-align: center;
+    align-items: center;
+  }
+
+  .k-details a {
+    margin:0 auto;
   }
 
   .k-card > .flex-grid {
