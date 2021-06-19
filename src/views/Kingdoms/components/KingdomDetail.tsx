@@ -2,7 +2,7 @@ import React from 'react'
 import BigNumber from 'bignumber.js'
 import styled from 'styled-components'
 import { Button as UiButton, Link, Flex, Text } from '@pancakeswap-libs/uikit'
-import { DEFAULT_TOKEN_DECIMAL, BASE_ADD_LIQUIDITY_URL, PCS_ADD_LIQUIDITY_URL } from 'config'
+import { DEFAULT_TOKEN_DECIMAL, BASE_ADD_LIQUIDITY_URL, PCS_ADD_LIQUIDITY_URL, BASE_EXCHANGE_URL } from 'config'
 import AprApy from 'views/Farms/components/FarmCard/AprApy'
 import { FarmWithStakedValue } from 'views/Farms/components/FarmCard/FarmCard'
 import getLiquidityUrlPathParts from 'utils/getLiquidityUrlPathParts'
@@ -94,6 +94,7 @@ const KingdomDetail: React.FC<KingdomDetailProps> = ({
   const addLiquidityUrl = `${exchangeUrl}/${liquidityUrlPathParts}`
   const lpAddress = lpAddresses[process.env.REACT_APP_CHAIN_ID]
   const tokenAddress = token.address[process.env.REACT_APP_CHAIN_ID]
+  const buyTokenUrl = `${BASE_EXCHANGE_URL}/#/swap`
   const isToken = isTokenOnly || isKingdomToken
   const farmContract= isToken ?
     `https://bscscan.com/token/${tokenAddress}`
@@ -147,9 +148,14 @@ const KingdomDetail: React.FC<KingdomDetailProps> = ({
           <StyledLinkExternal external href={farmContract}>Farm Contract</StyledLinkExternal>
           <StyledLinkExternal external href={vaultContract}>Kingdom Contract</StyledLinkExternal>
           {!removed && (
-            <StyledLinkExternal external href={addLiquidityUrl}>
-              {`Get ${lpLabel}`}
-            </StyledLinkExternal>
+            <>
+              <StyledLinkExternal external href={buyTokenUrl}>
+                {`Buy ${token.symbol}`}
+              </StyledLinkExternal>
+              <StyledLinkExternal external href={addLiquidityUrl}>
+                Add liquidity
+              </StyledLinkExternal>
+            </>
           )}
           <StyledLinkExternal external href={infoAddress}>See Token Info</StyledLinkExternal>
         </Detail>

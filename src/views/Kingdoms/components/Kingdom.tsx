@@ -12,6 +12,7 @@ import Balance from 'components/Balance'
 import { DEFAULT_TOKEN_DECIMAL } from 'config'
 import KingdomDetail from './KingdomDetail'
 import Divider from './DividerBlue'
+import Spacer from './Spacer'
 
 const ExpandingWrapper = styled.div<{ expanded: boolean }>`
   height: ${(props) => (props.expanded ? '100%' : '0px')};
@@ -73,6 +74,10 @@ const KImage = styled(Image)`
   width: 64px;
 `
 
+const KMain = styled.div`
+  cursor: pointer;
+`
+
 // export interface FarmWithStakedValue extends Farm {
 //   apy?: BigNumber
 // }
@@ -130,19 +135,18 @@ const Kingdom: React.FC<KingdomProps> = ({ farm, removed, cakePrice, account }) 
 
   return (
     <>
-      <Divider />
-      <K
-        onClick={() => setShowExpandableSection(!showExpandableSection)}
-      >
+      <Spacer />
+      <K>
         {farm.token.symbol === 'CUB' && <StyledCardAccent />}
-        <div className="flex-grid k-grid">
+        <KMain role="presentation" className="flex-grid k-grid" onClick={() => setShowExpandableSection(!showExpandableSection)}
+      >
           <div className="col"><KImage src={`/images/farms/${farmImage}.png`} alt={lpSymbol} width={64} height={64} /></div>
           <div className="col">
             <Flex justifyContent="flex-start" alignItems="center">
               <Text className="token">{lpSymbol}</Text>
             </Flex>
             <Text>Uses: {farmType}</Text>
-            <Text>Buy Token Add Liquidity</Text>
+            <Text>TVL {totalValueFormated}</Text>
           </div>
           <div className="col">
             <Balance
@@ -165,6 +169,15 @@ const Kingdom: React.FC<KingdomProps> = ({ farm, removed, cakePrice, account }) 
           <div className="col">
             <Balance
               fontSize="16px"
+              value={rawEarningsBalance}
+              decimals={rawEarningsBalance ? 2 : 1}
+              unit=""
+            />
+            <Text>Rewards</Text>
+          </div>
+          <div className="col">
+            <Balance
+              fontSize="16px"
               value={totalAPY}
               decimals={2}
               unit="%"
@@ -181,10 +194,10 @@ const Kingdom: React.FC<KingdomProps> = ({ farm, removed, cakePrice, account }) 
             />
             <Text>Daily</Text>
           </div>
-          <div className="col">
+          {/* <div className="col">
             <Text>{totalValueFormated}</Text>
             <Text>TVL</Text>
-          </div>
+          </div> */}
           {/* <div className="col">
             <Balance
               fontSize="16px"
@@ -200,8 +213,9 @@ const Kingdom: React.FC<KingdomProps> = ({ farm, removed, cakePrice, account }) 
               onlyArrow
             />
           </div> */}
-        </div>
+        </KMain>
         <ExpandingWrapper expanded={showExpandableSection}>
+          <Divider />
           <KingdomDetail
             farm={farm}
             walletBalance={rawTokenBalance}

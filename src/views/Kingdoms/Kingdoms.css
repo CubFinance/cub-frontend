@@ -65,7 +65,7 @@ h1 {
   margin-right: 0.4rem;
 }
 .k-grid > .col:nth-of-type(2) {
-  flex: 5;
+  flex: 3;
 }
 .k-grid > .col:nth-of-type(3) {
   flex: 2;
