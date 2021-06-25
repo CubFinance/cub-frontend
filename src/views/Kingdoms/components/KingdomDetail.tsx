@@ -102,6 +102,10 @@ const KingdomDetail: React.FC<KingdomDetailProps> = ({
   const vaultContract = `https://bscscan.com/token/${kingdomContract}`
   const infoAddress = `https://pancakeswap.info/pair/${isTokenOnly ? tokenAddress : lpAddress}`
 
+  let displayMultiplier = multiplier
+  if (aprApy.newMultiplier) displayMultiplier = `${aprApy.newMultiplier}*`
+  else if (multiplier) displayMultiplier = `${multiplier.substr(0,4)}X`
+
   return (
     <KDetail>
       <KingdomCard
@@ -122,7 +126,7 @@ const KingdomDetail: React.FC<KingdomDetailProps> = ({
           </Flex>
           <Flex justifyContent="space-between">
             <Text>Multiplier:</Text>
-            <Text>{aprApy.newMultiplier ? `${aprApy.newMultiplier}*` : multiplier}</Text>
+            <Text>{displayMultiplier}</Text>
           </Flex>
           <Flex justifyContent="space-between">
             <Text>Type:</Text>

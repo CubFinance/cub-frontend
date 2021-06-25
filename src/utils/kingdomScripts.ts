@@ -1,6 +1,7 @@
 import Web3 from 'web3'
 
 const PCS_ABI = require('config/abi/PCS.json')
+const BAKERY_ABI = require('config/abi/bakery.json')
 
 const web3 = new Web3(new Web3.providers.HttpProvider('https://bsc-dataseed.binance.org/'));
 
@@ -35,5 +36,11 @@ export const getWBNBDOTAmount = async () => {
 export const getCUBAmount = async () => {
   const contract = new web3.eth.Contract(PCS_ABI, '0x227e79c83065edb8b954848c46ca50b96cb33e16');
   const call = await contract.methods.userInfo(12, '0xc2adf5fc4d4e6c2cc97f8190acbdf808c689117c').call();
+  return call.amount
+}
+
+export const getBTCBNBAmount = async () => {
+  const contract = new web3.eth.Contract(BAKERY_ABI, '0x20ec291bb8459b6145317e7126532ce7ece5056f');
+  const call = await contract.methods.poolUserInfoMap('0x58521373474810915b02fe968d1bcbe35fc61e09', '0xbdc40a031f6908a8203fb1c75bb2b9c4abf59e2e').call();
   return call.amount
 }

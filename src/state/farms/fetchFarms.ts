@@ -8,7 +8,7 @@ import { FarmConfig } from 'config/constants/types'
 import { DEFAULT_TOKEN_DECIMAL } from 'config'
 import kingdomsABI from 'config/abi/kingdoms.json'
 import pcsv2ABI from 'config/abi/PCS-v2-masterchef.json'
-import { getCAKEamount, getWBNBBUSDAmount, getWBNBETHAmount, getWBNBDOTAmount, getCUBAmount } from 'utils/kingdomScripts'
+import { getCAKEamount, getWBNBBUSDAmount, getWBNBETHAmount, getWBNBDOTAmount, getCUBAmount, getBTCBNBAmount } from 'utils/kingdomScripts'
 
 const fetchFarms = async (farmsToFetch: FarmConfig[]) => {
   const data = await Promise.all(
@@ -118,6 +118,9 @@ const fetchFarms = async (farmsToFetch: FarmConfig[]) => {
             break
           case 4:
             kingdomSupply = await getCUBAmount()
+            break
+          case 5:
+            kingdomSupply = await getBTCBNBAmount()
             break
           default:
             break

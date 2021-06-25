@@ -51,7 +51,7 @@ const useKingdomAPRAPY = (
     apr = getFarmApr(poolWeightPCS, cakePrice, totalLiquidity, isKingdom)
   }
 
-  const dailyAPR = new BigNumber(apr).div(new BigNumber(365)).toNumber()
+  const dailyAPR = apr ? new BigNumber(apr).div(new BigNumber(365)).toNumber() : new BigNumber(0)
 
   const farmAPY = ((((apr / 100 / compounding) + 1) ** compounding) - 1) * 100
   const totalAPY = cubAPR ? cubAPR + farmAPY : farmAPY
