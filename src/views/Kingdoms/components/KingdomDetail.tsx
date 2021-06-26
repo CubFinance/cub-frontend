@@ -84,7 +84,7 @@ const KingdomDetail: React.FC<KingdomDetailProps> = ({
   const tokenValueFormated = oneTokenQuoteValue && oneTokenQuoteValue.toString() !== 'NaN'
     ? `~$${oneTokenQuoteValue.times(DEFAULT_TOKEN_DECIMAL).toFixed(2)}`
     : '-'
-  const { lpSymbol, multiplier, quoteToken, token, isKingdom, lpAddresses, isTokenOnly, isKingdomToken, kingdomContract, altPid } = farm
+  const { lpSymbol, multiplier, quoteToken, token, lpAddresses, isTokenOnly, isKingdomToken, kingdomContract, altPid } = farm
   const lpLabel = lpSymbol && lpSymbol.toUpperCase().replace('PANCAKE', '')
   const liquidityUrlPathParts = getLiquidityUrlPathParts({
     quoteTokenAddress: quoteToken.address,
@@ -100,7 +100,7 @@ const KingdomDetail: React.FC<KingdomDetailProps> = ({
     `https://bscscan.com/token/${tokenAddress}`
     : `https://bscscan.com/token/${lpAddress}`
   const vaultContract = `https://bscscan.com/token/${kingdomContract}`
-  const infoAddress = `https://pancakeswap.info/pair/${isTokenOnly ? tokenAddress : lpAddress}`
+  const infoAddress = farm.farmType === 'Bakery' ? `https://info.bakeryswap.org/#/pair/${isTokenOnly ? tokenAddress : lpAddress}` : `https://pancakeswap.info/pair/${isTokenOnly ? tokenAddress : lpAddress}`
 
   let displayMultiplier = multiplier
   if (aprApy.newMultiplier) displayMultiplier = `${aprApy.newMultiplier}*`
