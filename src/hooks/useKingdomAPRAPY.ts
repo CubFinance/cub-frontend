@@ -2,9 +2,10 @@
 import { DEFAULT_TOKEN_DECIMAL } from 'config'
 import { getPoolApr, getFarmApr } from 'utils/apr'
 import { getBalanceNumber } from 'utils/formatBalance'
-import { useBusdPriceFromPid, useFarmFromPid } from 'state/hooks'
+import { useBusdPriceFromPid, useFarmFromPid, useBusdPriceFromLpSymbol } from 'state/hooks'
 // import Balance from 'components/Balance'
 import BigNumber from 'bignumber.js'
+import { FarmWithStakedValue } from 'views/Farms/components/FarmCard/FarmCard'
 
 const useKingdomAPRAPY = (
   isKingdom: boolean,
@@ -17,8 +18,10 @@ const useKingdomAPRAPY = (
   lpTotalInQuoteTokenPCS: number,
   quoteTokenPriceUsd: number,
   altPid?: number,
+  farm?: FarmWithStakedValue,
 ) => {
   const cakePrice = useBusdPriceFromPid(0)
+  const bakePrice = useBusdPriceFromLpSymbol('BAKE-BNB LP')
   const newFarm = useFarmFromPid(altPid)
   let apr:number
   let data = null
@@ -47,8 +50,8 @@ const useKingdomAPRAPY = (
     )
   else {
     const totalLiquidity = new BigNumber(lpTotalInQuoteTokenPCS).times(quoteTokenPriceUsd)
-
-    apr = getFarmApr(poolWeightPCS, cakePrice, totalLiquidity, isKingdom)
+    const farmTokenPrice = farm.farmType === 'Bakery' ? bakePrice : cakePrice
+    apr = getFarmApr(poolWeightPCS, farmTokenPrice, totalLiquidity, isKingdom)
   }
 
   const dailyAPR = apr ? new BigNumber(apr).div(new BigNumber(365)).toNumber() : new BigNumber(0)

@@ -20,6 +20,9 @@ export const getKingdomsAddress = () => {
 export const getPCSv2MasterChefAddress = () => {
   return getAddress(addresses.pcsV2masterChef)
 }
+export const getBakery = () => {
+  return getAddress(addresses.bakery)
+}
 export const getMulticallAddress = () => {
   return getAddress(addresses.multiCall)
 }

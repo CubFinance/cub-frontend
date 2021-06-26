@@ -6,7 +6,7 @@ import styled, { keyframes } from 'styled-components'
 // import ExpandableSectionButton from 'components/ExpandableSectionButton'
 import { getBalanceNumber } from 'utils/formatBalance'
 import { FarmWithStakedValue } from 'views/Farms/components/FarmCard/FarmCard'
-import { useBusdPriceFromPid } from 'state/hooks'
+import { useBusdPriceFromPid, useLpTokenPrice } from 'state/hooks'
 import useKingdomAPRAPY from 'hooks/useKingdomAPRAPY'
 import Balance from 'components/Balance'
 import { DEFAULT_TOKEN_DECIMAL } from 'config'
@@ -92,7 +92,7 @@ interface KingdomProps {
 const Kingdom: React.FC<KingdomProps> = ({ farm, removed, cakePrice, account }) => {
   const [showExpandableSection, setShowExpandableSection] = useState(false)
 
-  const { apr, lpTotalInQuoteToken, lpSymbol, multiplier, isKingdom, isKingdomToken, tokenPriceVsQuote, poolWeightPCS, compounding, lpTokenBalancePCS = 0, lpTotalInQuoteTokenPCS = 0, quoteToken: { busdPrice: quoteTokenPriceUsd }, altPid, farmType } = farm
+  const { apr, lpTotalInQuoteToken, lpSymbol, isKingdom, isKingdomToken, tokenPriceVsQuote, poolWeightPCS, compounding, lpTokenBalancePCS = 0, lpTotalInQuoteTokenPCS = 0, quoteToken: { busdPrice: quoteTokenPriceUsd }, altPid, farmType } = farm
   const farmImage = lpSymbol.split(' ')[0].toLocaleLowerCase()
 
   let aprApy = useKingdomAPRAPY(
@@ -106,16 +106,25 @@ const Kingdom: React.FC<KingdomProps> = ({ farm, removed, cakePrice, account }) 
     lpTotalInQuoteTokenPCS,
     Number(quoteTokenPriceUsd),
     altPid,
+    farm,
   )
 
-  const { dailyAPR, totalAPY, newMultiplier, pcsApr } = aprApy
+  const { dailyAPR, totalAPY, pcsApr } = aprApy
   const { tokenBalance, stakedBalance, earnings } = farm.userData
 
   const rawTokenBalance = tokenBalance ? getBalanceNumber(new BigNumber(tokenBalance)) : 0
   const rawStakedBalance = stakedBalance ? getBalanceNumber(new BigNumber(stakedBalance)) : 0
   const rawEarningsBalance = earnings ? getBalanceNumber(new BigNumber(earnings)) : 0
 
-  const tokenPrice = useBusdPriceFromPid(farm.pid)
+  const tokenPrice = useBusdPriceFromPid(farm.pid);
+  // const tokenPriceByPid = useBusdPriceFromPid(farm.pid);
+  // const tokenPricebyLP = useLpTokenPrice(farm.lpSymbol);
+  // const tokenPrice = farm.farmType !== 'Bakery' ? tokenPriceByPid : tokenPricebyLP
+  // if (farm.lpSymbol === 'BTC-BNB LP') {
+  //   console.log('tokenPriceByPid',tokenPriceByPid.toNumber())
+  //   console.log('tokenPricebyLP',tokenPricebyLP.toNumber())
+  // }
+
   let oneTokenQuoteValue = new BigNumber(0)
 
   if (!farm.isKingdomToken)
@@ -183,7 +192,6 @@ const Kingdom: React.FC<KingdomProps> = ({ farm, removed, cakePrice, account }) 
               unit="%"
             />
             <Text>APY</Text>
-            {/* <Text>{newMultiplier ? `${newMultiplier}*` : multiplier}</Text> */}
           </div>
           <div className="col">
             <Balance

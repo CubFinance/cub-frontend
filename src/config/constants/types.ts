@@ -1,4 +1,5 @@
 import { TranslatableText } from 'state/types'
+import BigNumber from 'bignumber.js'
 
 export interface Address {
   97?: string
@@ -70,6 +71,8 @@ export interface FarmConfig {
   kingdomContract?: string
   altPid?: number
   farmType?: string
+  // lpTotalInQuoteTokenPCS?: BigNumber
+  tokenAmountTotal?: BigNumber
 }
 
 export interface PoolConfig {

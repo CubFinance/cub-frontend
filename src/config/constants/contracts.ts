@@ -16,6 +16,10 @@ export default {
     56: '0x73feaa1eE314F8c655E354234017bE2193C9E24E',
     97: '',
   },
+  bakery: {
+    56: '0x20ec291bb8459b6145317e7126532ce7ece5056f',
+    97: '',
+  },
   wbnb: {
     56: '0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c',
     97: '',

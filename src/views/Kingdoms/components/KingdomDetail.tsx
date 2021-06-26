@@ -2,7 +2,7 @@ import React from 'react'
 import BigNumber from 'bignumber.js'
 import styled from 'styled-components'
 import { Button as UiButton, Link, Flex, Text } from '@pancakeswap-libs/uikit'
-import { DEFAULT_TOKEN_DECIMAL, BASE_ADD_LIQUIDITY_URL, PCS_ADD_LIQUIDITY_URL, BASE_EXCHANGE_URL } from 'config'
+import { DEFAULT_TOKEN_DECIMAL, BAKERY_ADD_LIQUIDITY_URL, PCS_ADD_LIQUIDITY_URL, BASE_EXCHANGE_URL } from 'config'
 import AprApy from 'views/Farms/components/FarmCard/AprApy'
 import { FarmWithStakedValue } from 'views/Farms/components/FarmCard/FarmCard'
 import getLiquidityUrlPathParts from 'utils/getLiquidityUrlPathParts'
@@ -90,7 +90,7 @@ const KingdomDetail: React.FC<KingdomDetailProps> = ({
     quoteTokenAddress: quoteToken.address,
     tokenAddress: token.address,
   })
-  const exchangeUrl = isKingdom ? PCS_ADD_LIQUIDITY_URL : BASE_ADD_LIQUIDITY_URL
+  const exchangeUrl = farm.farmType === 'Bakery' ? BAKERY_ADD_LIQUIDITY_URL : PCS_ADD_LIQUIDITY_URL
   const addLiquidityUrl = `${exchangeUrl}/${liquidityUrlPathParts}`
   const lpAddress = lpAddresses[process.env.REACT_APP_CHAIN_ID]
   const tokenAddress = token.address[process.env.REACT_APP_CHAIN_ID]
@@ -157,7 +157,7 @@ const KingdomDetail: React.FC<KingdomDetailProps> = ({
                 {`Buy ${token.symbol}`}
               </StyledLinkExternal>
               <StyledLinkExternal external href={addLiquidityUrl}>
-                Add liquidity
+                Add Liquidity
               </StyledLinkExternal>
             </>
           )}

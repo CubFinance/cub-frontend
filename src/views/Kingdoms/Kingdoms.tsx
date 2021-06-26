@@ -104,7 +104,7 @@ const Kingdoms: React.FC = () => {
           Stake tokens for cross-platform farming plus CUB rewards
         </Heading>
         <Heading as="h2" color="warning" mb="10px" style={{ textAlign: 'left' }}>
-          IMPORTANT: Must use <a target="_blank" rel="noreferrer" href="https://exchange.pancakeswap.finance/#/pool">Pancakeswap V2 Exchange</a> for V2 Kingdom LP tokens until we add a V2 exchange for Cub Finance
+          IMPORTANT: Must use the host farm exchange (eg. PCS, Bakery) for Kingdom LP tokens
         </Heading>
         <Heading as="h2" color="warning" mb="10px" style={{ textAlign: 'left' }}>
           CertiK Audit is Pending: Our other contracts have been audited by CertiK and Kingdoms are currently under review. Please use at your own discretion until the audit has been published

@@ -3,11 +3,12 @@ import erc20 from 'config/abi/erc20.json'
 import masterchefABI from 'config/abi/masterchef.json'
 import multicall from 'utils/multicall'
 import { BIG_TEN } from 'utils/bigNumber'
-import { getAddress, getMasterChefAddress, getKingdomsAddress, getPCSv2MasterChefAddress } from 'utils/addressHelpers'
+import { getAddress, getMasterChefAddress, getKingdomsAddress, getPCSv2MasterChefAddress, getBakery } from 'utils/addressHelpers'
 import { FarmConfig } from 'config/constants/types'
 import { DEFAULT_TOKEN_DECIMAL } from 'config'
 import kingdomsABI from 'config/abi/kingdoms.json'
 import pcsv2ABI from 'config/abi/PCS-v2-masterchef.json'
+import bakeryABI from 'config/abi/bakery.json'
 import { getCAKEamount, getWBNBBUSDAmount, getWBNBETHAmount, getWBNBDOTAmount, getCUBAmount, getBTCBNBAmount } from 'utils/kingdomScripts'
 
 const fetchFarms = async (farmsToFetch: FarmConfig[]) => {
@@ -70,7 +71,7 @@ const fetchFarms = async (farmsToFetch: FarmConfig[]) => {
           {
             address: farmConfig.isTokenOnly || farmConfig.isKingdomToken ? tokenAddress : lpAddress,
             name: 'balanceOf',
-            params: [getPCSv2MasterChefAddress()],
+            params: [farmConfig.farmType === 'Bakery' ? getBakery() : getPCSv2MasterChefAddress()],
           },
           {
             address: lpAddress,
@@ -197,6 +198,8 @@ const fetchFarms = async (farmsToFetch: FarmConfig[]) => {
         }
       }
 
+      const tokenAmountTotal = new BigNumber(tokenBalanceLP).div(BIG_TEN.pow(tokenDecimals))
+
       const mCalls = [
         {
           address: getMasterChefAddress(),
@@ -260,8 +263,25 @@ const fetchFarms = async (farmsToFetch: FarmConfig[]) => {
           })
 
           poolWeightPCS = new BigNumber(infoPCS.allocPoint._hex).div(new BigNumber(totalAllocPointPCS))
-        }
+        } else if (farmConfig.farmType === 'Bakery') {
+          const bakeryCalls = [
+            {
+              address: getBakery(),
+              name: 'poolInfoMap',
+              params: ['0x58521373474810915b02fe968d1bcbe35fc61e09'],
+            },
+            {
+              address: getBakery(),
+              name: 'totalAllocPoint',
+            }
+          ]
 
+          const [infoBakery, totalAllocPointBakery] = await multicall(bakeryABI, bakeryCalls).catch(error => {
+            throw new Error(`multicall pcs error: ${error}`)
+          })
+
+          poolWeightPCS = new BigNumber(infoBakery.allocPoint._hex).div(new BigNumber(totalAllocPointBakery))
+        }
 
         return {
           ...farmConfig,
@@ -277,6 +297,7 @@ const fetchFarms = async (farmsToFetch: FarmConfig[]) => {
           lpTotalInQuoteTokenPCS: lpTotalInQuoteTokenPCS.toNumber(),
           poolWeightPCS: poolWeightPCS.toJSON(),
           kingdomSupply,
+          tokenAmountTotal: tokenAmountTotal.toJSON(),
         }
       }
 
@@ -295,6 +316,7 @@ const fetchFarms = async (farmsToFetch: FarmConfig[]) => {
         multiplier: `${allocPoint.div(100).toString()}X`,
         depositFeeBP: info.depositFeeBP,
         cubPerBlock: new BigNumber(cubPerBlock).toNumber(),
+        tokenAmountTotal: tokenAmountTotal.toJSON(),
       }
     }),
   )

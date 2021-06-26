@@ -8,7 +8,7 @@ import { Team } from 'config/constants/types'
 import Nfts from 'config/constants/nfts'
 import { getWeb3NoAccount } from 'utils/web3'
 import { getAddress } from 'utils/addressHelpers'
-import { getBalanceNumber } from 'utils/formatBalance'
+import { getBalanceNumber, getBalanceAmount } from 'utils/formatBalance'
 import { BIG_ZERO } from 'utils/bigNumber'
 import useRefresh from 'hooks/useRefresh'
 import { filterFarmsByQuoteToken } from 'utils/farmsPriceHelpers'
@@ -68,12 +68,33 @@ export const useFarmUser = (pid) => {
 }
 
 export const useLpTokenPrice = (symbol: string) => {
-  const farm = useFarmFromSymbol(symbol)
-  const tokenPriceInUsd = useGetApiPrice(getAddress(farm.token.address))
+  /* const farm = useFarmFromSymbol(symbol)
+  // const tokenPriceInUsd = useGetApiPrice(getAddress(farm.token.address))
+  const tokenPriceInUsd = farm.token.busdPrice
+  // console.log('farm.lpTotalSupplyy',farm.lpTotalSupply)
+  // console.log('farm.lpTotalInQuoteToken',farm.lpTotalInQuoteToken)
+  let lpTotal = farm.lpTotalInQuoteToken
+  if (farm.farmType === 'Bakery') lpTotal = farm.lpTotalInQuoteTokenPCS
 
-  return farm.lpTotalSupply && farm.lpTotalInQuoteToken
-    ? new BigNumber(getBalanceNumber(farm.lpTotalSupply)).div(farm.lpTotalInQuoteToken).times(tokenPriceInUsd).times(2)
+  return farm.lpTotalSupply && lpTotal
+    ? new BigNumber(getBalanceNumber(farm.lpTotalSupply)).div(lpTotal).times(tokenPriceInUsd).times(2)
     : BIG_ZERO
+    */
+  const farm = useFarmFromSymbol(symbol)
+  const farmTokenPriceInUsd = useBusdPriceFromPid(farm.pid)
+  let lpTokenPrice = BIG_ZERO
+
+  if (farm.lpTotalSupply && farm.lpTotalInQuoteToken) {
+    // Total value of base token in LP
+    const valueOfBaseTokenInFarm = farmTokenPriceInUsd.times(farm.tokenAmountTotal)
+    // Double it to get overall value in LP
+    const overallValueOfAllTokensInFarm = valueOfBaseTokenInFarm.times(2)
+    // Divide total value of all tokens, by the number of LP tokens
+    const totalLpTokens = getBalanceAmount(farm.lpTotalSupply)
+    lpTokenPrice = overallValueOfAllTokensInFarm.div(totalLpTokens)
+  }
+
+  return lpTokenPrice
 }
 
 // Pools
@@ -105,6 +126,11 @@ export const useFarmFromTokenSymbol = (tokenSymbol: string, preferredQuoteTokens
 // Return the base token price for a farm, from a given pid
 export const useBusdPriceFromPid = (pid: number): BigNumber => {
   const farm = useFarmFromPid(pid)
+  return farm && new BigNumber(farm.token.busdPrice)
+}
+
+export const useBusdPriceFromLpSymbol = (symbol: string): BigNumber => {
+  const farm = useFarmFromSymbol(symbol)
   return farm && new BigNumber(farm.token.busdPrice)
 }
 
