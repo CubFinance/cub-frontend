@@ -51,7 +51,7 @@ const useKingdomAPRAPY = (
   else {
     const totalLiquidity = new BigNumber(lpTotalInQuoteTokenPCS).times(quoteTokenPriceUsd)
     const farmTokenPrice = farm.farmType === 'Bakery' ? bakePrice : cakePrice
-    apr = getFarmApr(poolWeightPCS, farmTokenPrice, totalLiquidity, isKingdom)
+    apr = getFarmApr(poolWeightPCS, farmTokenPrice, totalLiquidity, isKingdom, farm.farmType)
   }
 
   const dailyAPR = apr ? new BigNumber(apr).div(new BigNumber(365)).toNumber() : new BigNumber(0)

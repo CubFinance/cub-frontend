@@ -115,8 +115,11 @@ const Kingdom: React.FC<KingdomProps> = ({ farm, removed, cakePrice, account }) 
   const rawTokenBalance = tokenBalance ? getBalanceNumber(new BigNumber(tokenBalance)) : 0
   const rawStakedBalance = stakedBalance ? getBalanceNumber(new BigNumber(stakedBalance)) : 0
   const rawEarningsBalance = earnings ? getBalanceNumber(new BigNumber(earnings)) : 0
+  // console.log('farm.pid',farm.pid)
+// console.log('farm',farm)
 
-  const tokenPrice = useBusdPriceFromPid(farm.pid);
+  // const oneTokenQuoteValue = new BigNumber(farm.token.busdPrice).div(DEFAULT_TOKEN_DECIMAL)
+
   // const tokenPriceByPid = useBusdPriceFromPid(farm.pid);
   // const tokenPricebyLP = useLpTokenPrice(farm.lpSymbol);
   // const tokenPrice = farm.farmType !== 'Bakery' ? tokenPriceByPid : tokenPricebyLP
@@ -125,12 +128,16 @@ const Kingdom: React.FC<KingdomProps> = ({ farm, removed, cakePrice, account }) 
   //   console.log('tokenPricebyLP',tokenPricebyLP.toNumber())
   // }
 
+  const tokenPrice = useBusdPriceFromPid(farm.pid);
   let oneTokenQuoteValue = new BigNumber(0)
 
   if (!farm.isKingdomToken)
     oneTokenQuoteValue = lpTotalInQuoteTokenPCS ? new BigNumber(lpTotalInQuoteTokenPCS).div(new BigNumber(lpTokenBalancePCS)).times(quoteTokenPriceUsd).div(DEFAULT_TOKEN_DECIMAL) : new BigNumber(0)
   else oneTokenQuoteValue = tokenPrice.div(DEFAULT_TOKEN_DECIMAL)
 
+  if (farm.pid === 4 && lpSymbol === 'CUB') oneTokenQuoteValue = new BigNumber(farm.token.busdPrice).div(DEFAULT_TOKEN_DECIMAL)
+
+// console.log('tokenPrice',tokenPrice.toNumber())
   const walletBalanceQuoteValue = tokenBalance ? new BigNumber(tokenBalance).times(oneTokenQuoteValue).toNumber() : 0
 
   const depositBalanceQuoteValue = stakedBalance ? new BigNumber(stakedBalance).times(oneTokenQuoteValue).toNumber() : 0

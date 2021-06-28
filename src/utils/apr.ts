@@ -1,5 +1,5 @@
 import BigNumber from 'bignumber.js'
-import { BLOCKS_PER_YEAR, CAKE_PER_BLOCK, PCSCAKE_PER_YEAR } from 'config'
+import { BLOCKS_PER_YEAR, CAKE_PER_BLOCK, PCSCAKE_PER_YEAR, BAKE_PER_YEAR } from 'config'
 
 /**
  * Get the APR value in %
@@ -28,9 +28,15 @@ export const getPoolApr = (
  * @param poolLiquidityUsd Total pool liquidity in USD
  * @returns
  */
-export const getFarmApr = (poolWeight: BigNumber, cakePriceUsd: BigNumber, poolLiquidityUsd: BigNumber, isKingdom?: boolean): number => {
+export const getFarmApr = (
+  poolWeight: BigNumber,
+  cakePriceUsd: BigNumber,
+  poolLiquidityUsd: BigNumber,
+  isKingdom?: boolean,
+  farmType?: string
+): number => {
   if (isKingdom) {
-    const yearlyCakeRewardAllocation = PCSCAKE_PER_YEAR.times(poolWeight)
+    const yearlyCakeRewardAllocation = farmType === 'Bakery' ? BAKE_PER_YEAR.times(poolWeight) : PCSCAKE_PER_YEAR.times(poolWeight)
     const apr = yearlyCakeRewardAllocation.times(cakePriceUsd).div(poolLiquidityUsd).times(100)
     return apr.isNaN() || !apr.isFinite() ? null : apr.toNumber()
   }
