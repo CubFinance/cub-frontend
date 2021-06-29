@@ -104,7 +104,7 @@ const KingdomDetail: React.FC<KingdomDetailProps> = ({
 
   let displayMultiplier = multiplier
   if (aprApy.newMultiplier) displayMultiplier = `${aprApy.newMultiplier}*`
-  else if (multiplier) displayMultiplier = `${multiplier.substr(0,4)}X`
+  // else if (multiplier) displayMultiplier = `${multiplier.substr(0,4)}X`
 
   return (
     <KDetail>

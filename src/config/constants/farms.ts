@@ -63,16 +63,17 @@ const farms: FarmConfig[] = [
     token: tokens.btcb,
     quoteToken: tokens.wbnb,
   },
-    {
-      pid: 4,
-      lpSymbol: 'BAKE-BNB LP',
-      lpAddresses: {
-        97: '0xE66790075ad839978fEBa15D4d8bB2b415556a1D',
-        56: '0x3Da30727ed0626b78C212e81B37B97A8eF8A25bB',
-      },
-      token: tokens.bake,
-      quoteToken: tokens.wbnb,
+  // This farm is here for BAKE price for kingdom vault pid 5
+  {
+    pid: 5,
+    lpSymbol: 'BAKE-BNB LP',
+    lpAddresses: {
+      97: '0xE66790075ad839978fEBa15D4d8bB2b415556a1D',
+      56: '0x3Da30727ed0626b78C212e81B37B97A8eF8A25bB',
     },
+    token: tokens.bake,
+    quoteToken: tokens.wbnb,
+  },
   {
     pid: 7,
     lpSymbol: 'ETH-BNB LP',
@@ -351,20 +352,20 @@ const farms: FarmConfig[] = [
     quoteToken: tokens.wbnb,
     kingdomContract: '0x03e48360dc132a1838492b6870c98d2bd895ea9a',
   },
-  // {
-  //   pid: 5,
-  //   compounding: 365,
-  //   isKingdom: true,
-  //   farmType: 'Bakery',
-  //   lpSymbol: 'BTC-BNB LP',
-  //   lpAddresses: {
-  //     97: '',
-  //     56: '0x58521373474810915b02FE968D1BCBe35Fc61E09',
-  //   },
-  //   token: tokens.btcb,
-  //   quoteToken: tokens.wbnb,
-  //   kingdomContract: '0xbdc40a031f6908a8203fb1c75bb2b9c4abf59e2e',
-  // },
+  {
+    pid: 5,
+    compounding: 365,
+    isKingdom: true,
+    farmType: 'Bakery',
+    lpSymbol: 'BTC-BNB LP',
+    lpAddresses: {
+      97: '',
+      56: '0x58521373474810915b02FE968D1BCBe35Fc61E09',
+    },
+    token: tokens.btcb,
+    quoteToken: tokens.wbnb,
+    kingdomContract: '0xbdc40a031f6908a8203fb1c75bb2b9c4abf59e2e',
+  },
 ]
 
 export default farms
