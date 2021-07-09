@@ -20,6 +20,10 @@ export default {
     56: '0x20ec291bb8459b6145317e7126532ce7ece5056f',
     97: '',
   },
+  belt: {
+    56: '0xD4BbC80b9B102b77B21A06cb77E954049605E6c1',
+    97: '',
+  },
   wbnb: {
     56: '0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c',
     97: '',
