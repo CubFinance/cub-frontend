@@ -73,6 +73,8 @@ export interface FarmConfig {
   farmType?: string
   // lpTotalInQuoteTokenPCS?: BigNumber
   tokenAmountTotal?: BigNumber
+  originToken?: string
+  tokenValuePerOrigin?: BigNumber
 }
 
 export interface PoolConfig {

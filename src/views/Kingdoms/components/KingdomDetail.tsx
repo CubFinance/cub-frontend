@@ -2,7 +2,7 @@ import React from 'react'
 import BigNumber from 'bignumber.js'
 import styled from 'styled-components'
 import { Button as UiButton, Link, Flex, Text } from '@pancakeswap-libs/uikit'
-import { DEFAULT_TOKEN_DECIMAL, BAKERY_ADD_LIQUIDITY_URL, PCS_ADD_LIQUIDITY_URL, BASE_EXCHANGE_URL } from 'config'
+import { DEFAULT_TOKEN_DECIMAL, BAKERY_ADD_LIQUIDITY_URL, PCS_ADD_LIQUIDITY_URL, BASE_EXCHANGE_URL, BELT_EXCHANGE } from 'config'
 import AprApy from 'views/Farms/components/FarmCard/AprApy'
 import { FarmWithStakedValue } from 'views/Farms/components/FarmCard/FarmCard'
 import getLiquidityUrlPathParts from 'utils/getLiquidityUrlPathParts'
@@ -90,17 +90,33 @@ const KingdomDetail: React.FC<KingdomDetailProps> = ({
     quoteTokenAddress: quoteToken.address,
     tokenAddress: token.address,
   })
-  const exchangeUrl = farm.farmType === 'Bakery' ? BAKERY_ADD_LIQUIDITY_URL : PCS_ADD_LIQUIDITY_URL
-  const addLiquidityUrl = `${exchangeUrl}/${liquidityUrlPathParts}`
+  // const exchangeUrl = farm.farmType === 'Bakery' ? BAKERY_ADD_LIQUIDITY_URL : PCS_ADD_LIQUIDITY_URL
+  // const buyTokenUrl = `${BASE_EXCHANGE_URL}/#/swap`
+  // const addLiquidityUrl = `${exchangeUrl}/${liquidityUrlPathParts}`
   const lpAddress = lpAddresses[process.env.REACT_APP_CHAIN_ID]
   const tokenAddress = token.address[process.env.REACT_APP_CHAIN_ID]
-  const buyTokenUrl = `${BASE_EXCHANGE_URL}/#/swap`
+
   const isToken = isTokenOnly || isKingdomToken
   const farmContract= isToken ?
     `https://bscscan.com/token/${tokenAddress}`
     : `https://bscscan.com/token/${lpAddress}`
   const vaultContract = `https://bscscan.com/token/${kingdomContract}`
-  const infoAddress = farm.farmType === 'Bakery' ? `https://info.bakeryswap.org/#/pair/${isTokenOnly ? tokenAddress : lpAddress}` : `https://pancakeswap.info/pair/${isTokenOnly ? tokenAddress : lpAddress}`
+  let infoAddress = `https://pancakeswap.info/pair/${isTokenOnly ? tokenAddress : lpAddress}`
+
+  let exchangeUrl = PCS_ADD_LIQUIDITY_URL
+  let buyTokenUrl = `${BASE_EXCHANGE_URL}/#/swap`
+  let addLiquidityUrl = `${exchangeUrl}/${liquidityUrlPathParts}`
+  if (farm.farmType === 'Bakery') {
+    exchangeUrl = BAKERY_ADD_LIQUIDITY_URL
+    addLiquidityUrl = `${exchangeUrl}/${liquidityUrlPathParts}`
+    infoAddress = `https://info.bakeryswap.org/#/pair/${isTokenOnly ? tokenAddress : lpAddress}`
+  }
+  else if (farm.farmType === 'Belt') {
+    exchangeUrl = BELT_EXCHANGE
+    addLiquidityUrl = exchangeUrl
+    buyTokenUrl = exchangeUrl
+    infoAddress = exchangeUrl
+  }
 
   let displayMultiplier = multiplier
   if (aprApy.newMultiplier) displayMultiplier = `${aprApy.newMultiplier}*`

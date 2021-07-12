@@ -2,7 +2,8 @@ import BigNumber from 'bignumber.js'
 import erc20 from 'config/abi/erc20.json'
 import masterchefABI from 'config/abi/masterchef.json'
 import multicall from 'utils/multicall'
-import { BIG_TEN } from 'utils/bigNumber'
+import { useSelector } from 'react-redux'
+import { BIG_TEN, BIG_ZERO } from 'utils/bigNumber'
 import {
   getAddress,
   getMasterChefAddress,
@@ -17,6 +18,7 @@ import kingdomsABI from 'config/abi/kingdoms.json'
 import pcsv2ABI from 'config/abi/PCS-v2-masterchef.json'
 import bakeryABI from 'config/abi/bakery.json'
 import beltABI from 'config/abi/belt.json'
+import multiStratABI from 'config/abi/MultiStrategyTokenImpl.json'
 import {
   getCAKEamount,
   getWBNBBUSDAmount,
@@ -149,12 +151,15 @@ const fetchFarms = async (farmsToFetch: FarmConfig[]) => {
             break
           case 6:
             kingdomSupply = await getBTCAmount()
+            kingdomSupply = new BigNumber(kingdomSupply).div(DEFAULT_TOKEN_DECIMAL).toString()
             break
           case 7:
             kingdomSupply = await getETHAmount()
+            kingdomSupply = new BigNumber(kingdomSupply).div(DEFAULT_TOKEN_DECIMAL).toString()
             break
           case 8:
             kingdomSupply = await getUSDAmount()
+            kingdomSupply = new BigNumber(kingdomSupply).div(DEFAULT_TOKEN_DECIMAL).toString()
             break
           default:
             break
@@ -169,11 +174,15 @@ const fetchFarms = async (farmsToFetch: FarmConfig[]) => {
 
       if (farmConfig.isTokenOnly || farmConfig.isKingdomToken) {
         tokenAmount = farmConfig.isKingdomToken ? new BigNumber(kingdomSupply).div(new BigNumber(10).pow(tokenDecimals)) : new BigNumber(lpTokenBalanceMC).div(new BigNumber(10).pow(tokenDecimals));
+
+        if (farmConfig.farmType === 'Belt') tokenAmount = new BigNumber(kingdomSupply)
+
         if(farmConfig.token.symbol === 'BUSD' && farmConfig.quoteToken.symbol === 'BUSD') {
           tokenPriceVsQuote = new BigNumber(1)
-        }else{
+        } else {
           tokenPriceVsQuote = new BigNumber(quoteTokenBalanceLP).div(new BigNumber(tokenBalanceLP))
         }
+
         lpTotalInQuoteToken = tokenAmount.times(tokenPriceVsQuote)
       } else {
         // Ratio in % a LP tokens that are in staking, vs the total number in circulation
@@ -256,7 +265,11 @@ const fetchFarms = async (farmsToFetch: FarmConfig[]) => {
       const [info, totalAllocPoint, cubPerBlock] = await multicall(masterchefABI, mCalls).catch(error => {
         throw new Error(`multicall nontoken: ${error}`)
       })
-// if (farmConfig.lpSymbol === 'beltBTC') console.log('info, totalAllocPoint, cubPerBlock',info, new BigNumber(totalAllocPoint).toNumber(), new BigNumber(cubPerBlock).toNumber())
+if (farmConfig.lpSymbol === 'beltBTC') {
+  // console.log('info, totalAllocPoint, cubPerBlock',info, new BigNumber(totalAllocPoint).toNumber(), new BigNumber(cubPerBlock).toNumber())
+  // console.log('kingdomSupply', new BigNumber(kingdomSupply).div(DEFAULT_TOKEN_DECIMAL).toNumber())
+  // console.log('kingdomSupply',kingdomSupply)
+}
 
       if (farmConfig.isKingdom) {
         const kCalls = [
@@ -328,6 +341,18 @@ const fetchFarms = async (farmsToFetch: FarmConfig[]) => {
           poolWeightPCS = new BigNumber(infoBakery.allocPoint._hex).div(new BigNumber(totalAllocPointBakery))
         }
 
+        let tokenValuePerOrigin = BIG_ZERO
+        if (farmConfig.farmType === 'Belt') {
+          const bCalls = [
+            {
+              address: tokenAddress,
+              name: 'getPricePerFullShare',
+            },
+          ]
+          const [pricePerFullShare] = await multicall(multiStratABI, bCalls)
+          tokenValuePerOrigin = new BigNumber(pricePerFullShare)
+        }
+
         return {
           ...farmConfig,
           tokenAmount: tokenAmount.toJSON(),
@@ -335,8 +360,8 @@ const fetchFarms = async (farmsToFetch: FarmConfig[]) => {
           lpTotalInQuoteToken: lpTotalInQuoteToken.toJSON(),
           tokenPriceVsQuote: tokenPriceVsQuote.toJSON(),
           poolWeight: kingdomPoolWeight.toJSON(),
-          // multiplier: `${kingdomCorrectAlloc.div(100).toString()}X`,
-          multiplier: '1.5X',
+          multiplier: `${kingdomCorrectAlloc.div(100).toString()}X`,
+          // multiplier: '1.5X',
           depositFeeBP: kInfo.depositFeeBP,
           cubPerBlock: new BigNumber(cubPerBlock).toNumber(),
           lpTokenBalancePCS: new BigNumber(lpTokenBalanceMC).div(DEFAULT_TOKEN_DECIMAL).toNumber(),
@@ -344,6 +369,7 @@ const fetchFarms = async (farmsToFetch: FarmConfig[]) => {
           poolWeightPCS: poolWeightPCS.toJSON(),
           kingdomSupply,
           tokenAmountTotal: tokenAmountTotal.toJSON(),
+          tokenValuePerOrigin: tokenValuePerOrigin.div(DEFAULT_TOKEN_DECIMAL).toJSON(),
         }
       }
 

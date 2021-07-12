@@ -37,6 +37,7 @@ export const PCS_LIQUIDITY_POOL_URL = `${PCS_EXCHANGE_URL}/#/pool`
 export const BAKERY_EXCHANGE_URL = 'https://www.bakeryswap.org'
 export const BAKERY_ADD_LIQUIDITY_URL = `${BAKERY_EXCHANGE_URL}/#/add`
 export const BAKERY_LIQUIDITY_POOL_URL = `${BAKERY_EXCHANGE_URL}/#/pool`
+export const BELT_EXCHANGE = 'https://belt.fi/bsc'
 export const BASE_BSC_SCAN_URL = 'https://bscscan.com'
 export const LOTTERY_MAX_NUMBER_OF_TICKETS = 50
 export const LOTTERY_TICKET_PRICE = 1

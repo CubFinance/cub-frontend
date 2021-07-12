@@ -49,17 +49,17 @@ export const getBTCBNBAmount = async () => {
 export const getBTCAmount = async () => {
   const contract = new web3.eth.Contract(BELT_ABI, '0xD4BbC80b9B102b77B21A06cb77E954049605E6c1');
   const call = await contract.methods.userInfo(7, '0x3f1b0319E2EbeD04D5e2ce367393914bBf8f59f5').call();
-  return call.amount
+  return call.shares
 }
 
 export const getETHAmount = async () => {
   const contract = new web3.eth.Contract(BELT_ABI, '0xD4BbC80b9B102b77B21A06cb77E954049605E6c1');
   const call = await contract.methods.userInfo(8, '0x3f2C7e9cf2e3a718eedf52403e0FB71b9AfC51b0').call();
-  return call.amount
+  return call.shares
 }
 
 export const getUSDAmount = async () => {
   const contract = new web3.eth.Contract(BELT_ABI, '0xD4BbC80b9B102b77B21A06cb77E954049605E6c1');
   const call = await contract.methods.userInfo(3, '0x5860046Ccf3ab8D840F1ac15A547E0c2bBECA6F0').call();
-  return call.amount
+  return call.shares
 }

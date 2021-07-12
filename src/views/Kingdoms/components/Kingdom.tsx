@@ -1,9 +1,7 @@
 import React, { useState } from 'react'
 import { Text, Image, Flex } from '@pancakeswap-libs/uikit'
 import BigNumber from 'bignumber.js'
-// import { provider } from 'web3-core'
 import styled, { keyframes } from 'styled-components'
-// import ExpandableSectionButton from 'components/ExpandableSectionButton'
 import { getBalanceNumber } from 'utils/formatBalance'
 import { FarmWithStakedValue } from 'views/Farms/components/FarmCard/FarmCard'
 import { useBusdPriceFromPid, useLpTokenPrice } from 'state/hooks'
@@ -129,7 +127,7 @@ const Kingdom: React.FC<KingdomProps> = ({ farm, removed, cakePrice, account }) 
 
   if (!farm.isKingdomToken)
     oneTokenQuoteValue = lpTotalInQuoteTokenPCS ? new BigNumber(lpTotalInQuoteTokenPCS).div(new BigNumber(lpTokenBalancePCS)).times(quoteTokenPriceUsd).div(DEFAULT_TOKEN_DECIMAL) : new BigNumber(0)
-  else oneTokenQuoteValue = tokenPrice.div(DEFAULT_TOKEN_DECIMAL)
+  else oneTokenQuoteValue = farm.farmType !== 'Belt' ? tokenPrice.div(DEFAULT_TOKEN_DECIMAL) : new BigNumber(farm.token.busdPrice).div(DEFAULT_TOKEN_DECIMAL)
 
 // console.log('tokenPrice',tokenPrice.toNumber())
   const walletBalanceQuoteValue = tokenBalance ? new BigNumber(tokenBalance).times(oneTokenQuoteValue).toNumber() : 0
@@ -203,25 +201,6 @@ const Kingdom: React.FC<KingdomProps> = ({ farm, removed, cakePrice, account }) 
             />
             <Text>Daily</Text>
           </div>
-          {/* <div className="col">
-            <Text>{totalValueFormated}</Text>
-            <Text>TVL</Text>
-          </div> */}
-          {/* <div className="col">
-            <Balance
-              fontSize="16px"
-              value={rawEarningsBalance}
-              decimals={rawEarningsBalance ? 2 : 1}
-              unit=""
-            />
-          </div>
-          <div className="col">
-            <ExpandableSectionButton
-              onClick={() => setShowExpandableSection(!showExpandableSection)}
-              expanded={showExpandableSection}
-              onlyArrow
-            />
-          </div> */}
         </KMain>
         <ExpandingWrapper expanded={showExpandableSection}>
           <Divider />
