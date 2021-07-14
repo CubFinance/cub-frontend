@@ -65,5 +65,11 @@ export const getUSDAmount = async () => {
 }
 
 export const getBeltAPR = async () => {
-  return fetch('http://206.81.4.113:8080/belt').then(res => res.json())
+  let result
+  try {
+    result = await fetch('http://206.81.4.113:8080/belt').then(res => res.json())
+  } catch(error) {
+    console.log('Failed to fetch from fbslo', error)
+  }
+  return result
 }
