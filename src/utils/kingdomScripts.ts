@@ -65,5 +65,5 @@ export const getUSDAmount = async () => {
 }
 
 export const getBeltAPR = async () => {
-  return fetch('https://fbslo.net/belt').then(res => res.json())
+  return fetch('http://206.81.4.113:8080/belt').then(res => res.json())
 }
