@@ -33,6 +33,7 @@ import {
 } from 'utils/kingdomScripts'
 
 const fetchFarms = async (farmsToFetch: FarmConfig[]) => {
+  const beltData = await getBeltAPR()
   const data = await Promise.all(
     farmsToFetch.map(async (farmConfig) => {
       const lpAddress = getAddress(farmConfig.lpAddresses)
@@ -131,7 +132,6 @@ const fetchFarms = async (farmsToFetch: FarmConfig[]) => {
       let kingdomSupply:string
       let beltAPR:string
       let beltRate:string
-      let beltData:any
 
       if (farmConfig.isKingdom) {
         switch (farmConfig.pid) {
@@ -156,19 +156,16 @@ const fetchFarms = async (farmsToFetch: FarmConfig[]) => {
           case 6:
             kingdomSupply = await getBTCAmount()
             kingdomSupply = new BigNumber(kingdomSupply).div(DEFAULT_TOKEN_DECIMAL).toString()
-            beltData = await getBeltAPR()
             beltAPR = beltData.btc
             break
           case 7:
             kingdomSupply = await getETHAmount()
             kingdomSupply = new BigNumber(kingdomSupply).div(DEFAULT_TOKEN_DECIMAL).toString()
-            beltData = await getBeltAPR()
             beltAPR = beltData.eth
             break
           case 8:
             kingdomSupply = await getUSDAmount()
             kingdomSupply = new BigNumber(kingdomSupply).div(DEFAULT_TOKEN_DECIMAL).toString()
-            beltData = await getBeltAPR()
             beltAPR = beltData.stable
             beltRate = beltData.stableRate
             break

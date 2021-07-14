@@ -70,6 +70,7 @@ export const getBeltAPR = async () => {
     result = await fetch('http://206.81.4.113:8080/belt').then(res => res.json())
   } catch(error) {
     console.log('Failed to fetch from fbslo', error)
+    return { btc: '5', eth: '5', stable: '10', stableRate: '0.97' }
   }
   return result
 }
