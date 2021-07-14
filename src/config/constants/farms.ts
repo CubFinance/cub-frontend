@@ -76,7 +76,7 @@ const farms: FarmConfig[] = [
   },
   // This farm is here for BELT price for kingdom vault pid 6-8
   {
-    pid: 4,
+    pid: 5,
     lpSymbol: 'BELT-BNB LP',
     lpAddresses: {
       97: '',
