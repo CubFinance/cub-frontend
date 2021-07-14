@@ -4,7 +4,7 @@ import BigNumber from 'bignumber.js'
 import styled, { keyframes } from 'styled-components'
 import { getBalanceNumber } from 'utils/formatBalance'
 import { FarmWithStakedValue } from 'views/Farms/components/FarmCard/FarmCard'
-import { useBusdPriceFromPid } from 'state/hooks'
+import { useBusdPriceFromLpSymbol } from 'state/hooks'
 import useKingdomAPRAPY from 'hooks/useKingdomAPRAPY'
 import Balance from 'components/Balance'
 import { DEFAULT_TOKEN_DECIMAL } from 'config'
@@ -111,7 +111,7 @@ const Kingdom: React.FC<KingdomProps> = ({ farm, removed, cakePrice, account }) 
   const rawStakedBalance = stakedBalance ? getBalanceNumber(new BigNumber(stakedBalance)) : 0
   const rawEarningsBalance = earnings ? getBalanceNumber(new BigNumber(earnings)) : 0
 
-  const tokenPrice = useBusdPriceFromPid(farm.pid);
+  const tokenPrice = useBusdPriceFromLpSymbol(farm.lpSymbol);
   let oneTokenQuoteValue = new BigNumber(0)
 
   if (!farm.isKingdomToken)

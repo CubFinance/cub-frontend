@@ -65,7 +65,7 @@ const farms: FarmConfig[] = [
   },
   // This farm is here for BAKE price for kingdom vault pid 5
   {
-    pid: 200,
+    pid: 4,
     lpSymbol: 'BAKE-BNB LP',
     lpAddresses: {
       97: '0xE66790075ad839978fEBa15D4d8bB2b415556a1D',
@@ -76,7 +76,7 @@ const farms: FarmConfig[] = [
   },
   // This farm is here for BELT price for kingdom vault pid 6-8
   {
-    pid: 201,
+    pid: 4,
     lpSymbol: 'BELT-BNB LP',
     lpAddresses: {
       97: '',
