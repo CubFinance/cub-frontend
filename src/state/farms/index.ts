@@ -1,5 +1,6 @@
 /* eslint-disable no-param-reassign */
 import { createSlice } from '@reduxjs/toolkit'
+import BigNumber from 'bignumber.js'
 import farmsConfig from 'config/constants/farms'
 import isArchivedPid from 'utils/farmHelpers'
 import fetchFarms from './fetchFarms'
@@ -62,7 +63,25 @@ export const fetchFarmsPublicDataAsync = () => async (dispatch, getState) => {
   const farmsToFetch = fetchArchived ? farmsConfig : nonArchivedFarms
   const farms = await fetchFarms(farmsToFetch)
   const farmsWithPrices = await fetchFarmsPrices(farms)
-  dispatch(setFarmsPublicData(farmsWithPrices))
+
+  // Modify token price based on quotetoken price, only for Belt
+  const newFarms = farmsWithPrices.map((farm) => {
+    if (farm.farmType === 'Belt') {
+      let tokenPrice = new BigNumber(0)
+      if (farm.lpSymbol !== 'beltUSD') {
+
+        tokenPrice = farm.quoteToken.busdPrice ? new BigNumber(farm.tokenValuePerOrigin).times(farm.quoteToken.busdPrice) : new BigNumber(0)
+      } else {
+        tokenPrice = new BigNumber(farm.beltRate)
+      }
+      const updatedFarm = { ...farm, lpTotalInQuoteToken:  farm.tokenAmount, token: { ...farm.token, busdPrice: tokenPrice.toString() } }
+
+      return updatedFarm
+    }
+    return farm
+  })
+
+  dispatch(setFarmsPublicData(newFarms))
 }
 export const fetchFarmUserDataAsync = (account: string) => async (dispatch, getState) => {
   const fetchArchived = getState().farms.loadArchivedFarmsData

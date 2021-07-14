@@ -23,6 +23,9 @@ export const getPCSv2MasterChefAddress = () => {
 export const getBakery = () => {
   return getAddress(addresses.bakery)
 }
+export const getBelt = () => {
+  return getAddress(addresses.belt)
+}
 export const getMulticallAddress = () => {
   return getAddress(addresses.multiCall)
 }

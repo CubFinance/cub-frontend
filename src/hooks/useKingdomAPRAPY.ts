@@ -8,20 +8,24 @@ import BigNumber from 'bignumber.js'
 import { FarmWithStakedValue } from 'views/Farms/components/FarmCard/FarmCard'
 
 const useKingdomAPRAPY = (
-  isKingdom: boolean,
-  isKingdomToken: boolean,
-  tokenPriceVsQuote: number,
-  poolWeightPCS: any,
-  compounding: number,
-  cubAPR: number,
-  lpTokenBalanceMC: number,
-  lpTotalInQuoteTokenPCS: number,
-  quoteTokenPriceUsd: number,
-  altPid?: number,
+  // isKingdom: boolean,
+  // isKingdomToken: boolean,
+  // tokenPriceVsQuote: number,
+  // poolWeightPCS: any,
+  // compounding: number,
+  // cubAPR: number,
+  // lpTokenBalanceMC: number,
+  // lpTotalInQuoteTokenPCS: number,
+  // quoteTokenPriceUsd: number,
+  // altPid?: number,
   farm?: FarmWithStakedValue,
 ) => {
+  const { apr: cubAPR, isKingdom, isKingdomToken, tokenPriceVsQuote, poolWeightPCS, compounding, lpTokenBalancePCS: lpTokenBalanceMC = 0, lpTotalInQuoteTokenPCS = 0, quoteToken: { busdPrice: quoteTokenPriceUsd }, altPid, farmType, beltAPR, beltRate } = farm
+
   const cakePrice = useBusdPriceFromPid(0)
   const bakePrice = useBusdPriceFromLpSymbol('BAKE-BNB LP')
+  const beltPrice = useBusdPriceFromLpSymbol('BELT-BNB LP')
+
   const newFarm = useFarmFromPid(altPid)
   let apr:number
   let data = null
@@ -41,17 +45,27 @@ const useKingdomAPRAPY = (
     return data
   }
 
-  if (isKingdomToken)
+  if (farm.lpSymbol === 'CAKE') {
+    // const total = farm.farmType === 'Belt' ? new BigNumber(farm.tokenAmount).times(DEFAULT_TOKEN_DECIMAL) : new BigNumber(lpTokenBalanceMC).times(DEFAULT_TOKEN_DECIMAL)
+    //
+    // let rewardTokenPrice = Number(farm.token.busdPrice)
+    // if (farm.farmType === 'Belt') rewardTokenPrice = 12.8257
+
     apr = getPoolApr(
-      tokenPriceVsQuote,
-      tokenPriceVsQuote,
+      Number(farm.token.busdPrice),
+      Number(farm.token.busdPrice),
       getBalanceNumber(new BigNumber(lpTokenBalanceMC).times(DEFAULT_TOKEN_DECIMAL), 18),
-      parseFloat('10'),
+      parseFloat('10') // CAKE is 10
     )
-  else {
+  } else {
     const totalLiquidity = new BigNumber(lpTotalInQuoteTokenPCS).times(quoteTokenPriceUsd)
-    const farmTokenPrice = farm.farmType === 'Bakery' ? bakePrice : cakePrice
-    apr = getFarmApr(poolWeightPCS, farmTokenPrice, totalLiquidity, isKingdom, farm.farmType)
+
+    let farmTokenPrice = cakePrice
+    if (farmType === 'Bakery') farmTokenPrice = bakePrice
+    else if (farmType === 'Belt') farmTokenPrice = beltPrice
+
+    if (farmType === 'Belt') apr = Number(beltAPR)
+    else apr = getFarmApr(new BigNumber(poolWeightPCS), farmTokenPrice, totalLiquidity, isKingdom, farmType)
   }
 
   const dailyAPR = apr ? new BigNumber(apr).div(new BigNumber(365)).toNumber() : new BigNumber(0).toNumber()

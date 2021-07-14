@@ -15,7 +15,6 @@ const useStake = (pid: number, isKingdom?: boolean) => {
     async (amount: string) => {
       const txHash = await stake(isKingdom ? kingdomContract : masterChefContract, pid, amount, account)
       dispatch(fetchFarmUserDataAsync(account))
-      console.info(txHash)
     },
     [account, dispatch, masterChefContract, pid, kingdomContract, isKingdom],
   )

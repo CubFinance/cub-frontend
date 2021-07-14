@@ -1,12 +1,10 @@
 import React, { useState } from 'react'
 import { Text, Image, Flex } from '@pancakeswap-libs/uikit'
 import BigNumber from 'bignumber.js'
-// import { provider } from 'web3-core'
 import styled, { keyframes } from 'styled-components'
-// import ExpandableSectionButton from 'components/ExpandableSectionButton'
 import { getBalanceNumber } from 'utils/formatBalance'
 import { FarmWithStakedValue } from 'views/Farms/components/FarmCard/FarmCard'
-import { useBusdPriceFromPid, useLpTokenPrice } from 'state/hooks'
+import { useBusdPriceFromPid } from 'state/hooks'
 import useKingdomAPRAPY from 'hooks/useKingdomAPRAPY'
 import Balance from 'components/Balance'
 import { DEFAULT_TOKEN_DECIMAL } from 'config'
@@ -78,10 +76,6 @@ const KMain = styled.div`
   cursor: pointer;
 `
 
-// export interface FarmWithStakedValue extends Farm {
-//   apy?: BigNumber
-// }
-
 interface KingdomProps {
   farm: FarmWithStakedValue
   removed?: boolean
@@ -92,22 +86,23 @@ interface KingdomProps {
 const Kingdom: React.FC<KingdomProps> = ({ farm, removed, cakePrice, account }) => {
   const [showExpandableSection, setShowExpandableSection] = useState(false)
 
-  const { apr, lpTotalInQuoteToken, lpSymbol, isKingdom, isKingdomToken, tokenPriceVsQuote, poolWeightPCS, compounding, lpTokenBalancePCS = 0, lpTotalInQuoteTokenPCS = 0, quoteToken: { busdPrice: quoteTokenPriceUsd }, altPid, farmType } = farm
+  const { apr, lpTotalInQuoteToken, lpSymbol, lpTokenBalancePCS = 0, lpTotalInQuoteTokenPCS = 0, quoteToken: { busdPrice: quoteTokenPriceUsd }, altPid, farmType } = farm
   const farmImage = lpSymbol.split(' ')[0].toLocaleLowerCase()
 
-  let aprApy = useKingdomAPRAPY(
-    isKingdom,
-    isKingdomToken,
-    Number(tokenPriceVsQuote),
-    poolWeightPCS,
-    compounding,
-    apr,
-    lpTokenBalancePCS,
-    lpTotalInQuoteTokenPCS,
-    Number(quoteTokenPriceUsd),
-    altPid,
-    farm,
-  )
+  // let aprApy = useKingdomAPRAPY(
+  //   isKingdom,
+  //   isKingdomToken,
+  //   Number(tokenPriceVsQuote),
+  //   poolWeightPCS,
+  //   compounding,
+  //   apr,
+  //   lpTokenBalancePCS,
+  //   lpTotalInQuoteTokenPCS,
+  //   Number(quoteTokenPriceUsd),
+  //   altPid,
+  //   farm,
+  // )
+  let aprApy = useKingdomAPRAPY(farm)
 
   const { dailyAPR, totalAPY, pcsApr } = aprApy
   const { tokenBalance, stakedBalance, earnings } = farm.userData
@@ -116,22 +111,13 @@ const Kingdom: React.FC<KingdomProps> = ({ farm, removed, cakePrice, account }) 
   const rawStakedBalance = stakedBalance ? getBalanceNumber(new BigNumber(stakedBalance)) : 0
   const rawEarningsBalance = earnings ? getBalanceNumber(new BigNumber(earnings)) : 0
 
-   // const tokenPriceByPid = useBusdPriceFromPid(farm.pid);
-  // const tokenPricebyLP = useLpTokenPrice(farm.lpSymbol);
-  // const tokenPrice = farm.farmType !== 'Bakery' ? tokenPriceByPid : tokenPricebyLP
-  // if (farm.lpSymbol === 'BTC-BNB LP') {
-  //   console.log('tokenPriceByPid',tokenPriceByPid.toNumber())
-  //   console.log('tokenPricebyLP',tokenPricebyLP.toNumber())
-  // }
-
   const tokenPrice = useBusdPriceFromPid(farm.pid);
   let oneTokenQuoteValue = new BigNumber(0)
 
   if (!farm.isKingdomToken)
     oneTokenQuoteValue = lpTotalInQuoteTokenPCS ? new BigNumber(lpTotalInQuoteTokenPCS).div(new BigNumber(lpTokenBalancePCS)).times(quoteTokenPriceUsd).div(DEFAULT_TOKEN_DECIMAL) : new BigNumber(0)
-  else oneTokenQuoteValue = tokenPrice.div(DEFAULT_TOKEN_DECIMAL)
+  else oneTokenQuoteValue = farm.farmType !== 'Belt' ? tokenPrice.div(DEFAULT_TOKEN_DECIMAL) : new BigNumber(farm.token.busdPrice).div(DEFAULT_TOKEN_DECIMAL)
 
-// console.log('tokenPrice',tokenPrice.toNumber())
   const walletBalanceQuoteValue = tokenBalance ? new BigNumber(tokenBalance).times(oneTokenQuoteValue).toNumber() : 0
 
   const depositBalanceQuoteValue = stakedBalance ? new BigNumber(stakedBalance).times(oneTokenQuoteValue).toNumber() : 0
@@ -141,7 +127,7 @@ const Kingdom: React.FC<KingdomProps> = ({ farm, removed, cakePrice, account }) 
     : '-'
   const farmAPR = apr && apr.toLocaleString('en-US', { maximumFractionDigits: 2 })
 
-  aprApy = { ...aprApy, compounding: farm.compounding, farmAPR, apr: altPid === 12 ? pcsApr : farm.apr, cakePrice, quoteTokenPriceUsd: Number(quoteTokenPriceUsd) }
+  aprApy = { ...aprApy, compounding: farm.compounding, farmAPR, apr: altPid === 12 ? pcsApr : farm.apr, cakePrice, quoteTokenPriceUsd: Number(quoteTokenPriceUsd), lpTotalInQuoteToken }
 
   return (
     <>
@@ -203,25 +189,6 @@ const Kingdom: React.FC<KingdomProps> = ({ farm, removed, cakePrice, account }) 
             />
             <Text>Daily</Text>
           </div>
-          {/* <div className="col">
-            <Text>{totalValueFormated}</Text>
-            <Text>TVL</Text>
-          </div> */}
-          {/* <div className="col">
-            <Balance
-              fontSize="16px"
-              value={rawEarningsBalance}
-              decimals={rawEarningsBalance ? 2 : 1}
-              unit=""
-            />
-          </div>
-          <div className="col">
-            <ExpandableSectionButton
-              onClick={() => setShowExpandableSection(!showExpandableSection)}
-              expanded={showExpandableSection}
-              onlyArrow
-            />
-          </div> */}
         </KMain>
         <ExpandingWrapper expanded={showExpandableSection}>
           <Divider />

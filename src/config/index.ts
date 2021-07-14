@@ -23,6 +23,8 @@ export const PCSBLOCKS_PER_YEAR = new BigNumber((60 / BSC_BLOCK_TIME) * 60 * 24 
 export const PCSCAKE_PER_YEAR = PCSCAKE_PER_BLOCK.times(PCSBLOCKS_PER_YEAR)
 export const BAKE_PER_BLOCK = new BigNumber(22)
 export const BAKE_PER_YEAR = BAKE_PER_BLOCK.times(BLOCKS_PER_YEAR)
+export const BELT_PER_BLOCK = new BigNumber(1.178)
+export const BELT_PER_YEAR = BELT_PER_BLOCK.times(BLOCKS_PER_YEAR)
 
 // export const PCS_BLOCKS_PER_YEAR = new BigNumber((60 / BSC_BLOCK_TIME) * 60 * 24 * 365) // 10512000
 export const BASE_URL = 'https://cubdefi.com'
@@ -35,6 +37,7 @@ export const PCS_LIQUIDITY_POOL_URL = `${PCS_EXCHANGE_URL}/#/pool`
 export const BAKERY_EXCHANGE_URL = 'https://www.bakeryswap.org'
 export const BAKERY_ADD_LIQUIDITY_URL = `${BAKERY_EXCHANGE_URL}/#/add`
 export const BAKERY_LIQUIDITY_POOL_URL = `${BAKERY_EXCHANGE_URL}/#/pool`
+export const BELT_EXCHANGE = 'https://belt.fi/bsc'
 export const BASE_BSC_SCAN_URL = 'https://bscscan.com'
 export const LOTTERY_MAX_NUMBER_OF_TICKETS = 50
 export const LOTTERY_TICKET_PRICE = 1

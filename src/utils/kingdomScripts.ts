@@ -2,6 +2,7 @@ import Web3 from 'web3'
 
 const PCS_ABI = require('config/abi/PCS.json')
 const BAKERY_ABI = require('config/abi/bakery.json')
+const BELT_ABI = require('config/abi/belt.json')
 
 const web3 = new Web3(new Web3.providers.HttpProvider('https://bsc-dataseed.binance.org/'));
 
@@ -43,4 +44,26 @@ export const getBTCBNBAmount = async () => {
   const contract = new web3.eth.Contract(BAKERY_ABI, '0x20ec291bb8459b6145317e7126532ce7ece5056f');
   const call = await contract.methods.poolUserInfoMap('0x58521373474810915b02fe968d1bcbe35fc61e09', '0xbdc40a031f6908a8203fb1c75bb2b9c4abf59e2e').call();
   return call.amount
+}
+
+export const getBTCAmount = async () => {
+  const contract = new web3.eth.Contract(BELT_ABI, '0xD4BbC80b9B102b77B21A06cb77E954049605E6c1');
+  const call = await contract.methods.userInfo(7, '0x3f1b0319E2EbeD04D5e2ce367393914bBf8f59f5').call();
+  return call.shares
+}
+
+export const getETHAmount = async () => {
+  const contract = new web3.eth.Contract(BELT_ABI, '0xD4BbC80b9B102b77B21A06cb77E954049605E6c1');
+  const call = await contract.methods.userInfo(8, '0x3f2C7e9cf2e3a718eedf52403e0FB71b9AfC51b0').call();
+  return call.shares
+}
+
+export const getUSDAmount = async () => {
+  const contract = new web3.eth.Contract(BELT_ABI, '0xD4BbC80b9B102b77B21A06cb77E954049605E6c1');
+  const call = await contract.methods.userInfo(3, '0x5860046Ccf3ab8D840F1ac15A547E0c2bBECA6F0').call();
+  return call.shares
+}
+
+export const getBeltAPR = async () => {
+  return fetch('https://fbslo.net/belt').then(res => res.json())
 }

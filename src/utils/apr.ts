@@ -1,5 +1,5 @@
 import BigNumber from 'bignumber.js'
-import { BLOCKS_PER_YEAR, CAKE_PER_BLOCK, PCSCAKE_PER_YEAR, BAKE_PER_YEAR } from 'config'
+import { BLOCKS_PER_YEAR, CAKE_PER_BLOCK, PCSCAKE_PER_YEAR, BAKE_PER_YEAR, BELT_PER_YEAR } from 'config'
 
 /**
  * Get the APR value in %
@@ -35,8 +35,20 @@ export const getFarmApr = (
   isKingdom?: boolean,
   farmType?: string
 ): number => {
+  // console.log('poolWeight',poolWeight.toNumber())
+  // console.log('cakePriceUsd',cakePriceUsd.toNumber())
+  // console.log('poolLiquidityUsd',poolLiquidityUsd.toNumber())
+  // if (farmType === 'Belt') {
+  //   console.log('poolWeight',poolWeight.toNumber())
+  //   console.log('cakePriceUsd',cakePriceUsd.toNumber())
+  //   console.log('poolLiquidityUsd',poolLiquidityUsd.toNumber())
+  // }
+
   if (isKingdom) {
-    const yearlyCakeRewardAllocation = farmType === 'Bakery' ? BAKE_PER_YEAR.times(poolWeight) : PCSCAKE_PER_YEAR.times(poolWeight)
+    let yearlyCakeRewardAllocation = PCSCAKE_PER_YEAR.times(poolWeight)
+    if (farmType === 'Bakery') yearlyCakeRewardAllocation = BAKE_PER_YEAR.times(poolWeight)
+    else if (farmType === 'Belt') yearlyCakeRewardAllocation = BELT_PER_YEAR.times(poolWeight)
+
     const apr = yearlyCakeRewardAllocation.times(cakePriceUsd).div(poolLiquidityUsd).times(100)
     return apr.isNaN() || !apr.isFinite() ? null : apr.toNumber()
   }
