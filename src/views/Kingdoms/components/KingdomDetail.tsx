@@ -90,9 +90,7 @@ const KingdomDetail: React.FC<KingdomDetailProps> = ({
     quoteTokenAddress: quoteToken.address,
     tokenAddress: token.address,
   })
-  // const exchangeUrl = farm.farmType === 'Bakery' ? BAKERY_ADD_LIQUIDITY_URL : PCS_ADD_LIQUIDITY_URL
-  // const buyTokenUrl = `${BASE_EXCHANGE_URL}/#/swap`
-  // const addLiquidityUrl = `${exchangeUrl}/${liquidityUrlPathParts}`
+
   const lpAddress = lpAddresses[process.env.REACT_APP_CHAIN_ID]
   const tokenAddress = token.address[process.env.REACT_APP_CHAIN_ID]
 

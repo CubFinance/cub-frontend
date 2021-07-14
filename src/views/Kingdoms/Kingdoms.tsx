@@ -55,12 +55,6 @@ const Kingdoms: React.FC = () => {
   const farmsList = useCallback(
     (farmsToDisplay: Farm[]): FarmWithStakedValue[] => {
       const farmsToDisplayWithAPR: FarmWithStakedValue[] = farmsToDisplay.map((farm) => {
-        // if (farm.farmType === 'Belt') {
-        //   const tokenPrice = farm.quoteToken.busdPrice ? new BigNumber(farm.tokenValuePerOrigin).times(farm.quoteToken.busdPrice) : new BigNumber(0)
-        //
-        //   farm.token.busdPrice = tokenPrice.toString()
-        // }
-
         if (!farm.lpTotalInQuoteToken) {
           return farm
         }

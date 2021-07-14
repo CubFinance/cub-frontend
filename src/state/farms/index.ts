@@ -67,15 +67,19 @@ export const fetchFarmsPublicDataAsync = () => async (dispatch, getState) => {
   // Modify token price based on quotetoken price, only for Belt
   const newFarms = farmsWithPrices.map((farm) => {
     if (farm.farmType === 'Belt') {
-      const tokenPrice = farm.quoteToken.busdPrice ? new BigNumber(farm.tokenValuePerOrigin).times(farm.quoteToken.busdPrice) : new BigNumber(0)
+      let tokenPrice = new BigNumber(0)
+      if (farm.lpSymbol !== 'beltUSD') {
 
+        tokenPrice = farm.quoteToken.busdPrice ? new BigNumber(farm.tokenValuePerOrigin).times(farm.quoteToken.busdPrice) : new BigNumber(0)
+      } else {
+        tokenPrice = new BigNumber(farm.beltRate)
+      }
       const updatedFarm = { ...farm, lpTotalInQuoteToken:  farm.tokenAmount, token: { ...farm.token, busdPrice: tokenPrice.toString() } }
 
       return updatedFarm
     }
     return farm
   })
-  console.log('newFarms')
 
   dispatch(setFarmsPublicData(newFarms))
 }

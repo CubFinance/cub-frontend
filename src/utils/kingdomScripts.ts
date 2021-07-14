@@ -63,3 +63,7 @@ export const getUSDAmount = async () => {
   const call = await contract.methods.userInfo(3, '0x5860046Ccf3ab8D840F1ac15A547E0c2bBECA6F0').call();
   return call.shares
 }
+
+export const getBeltAPR = async () => {
+  return fetch('https://fbslo.net/belt').then(res => res.json())
+}

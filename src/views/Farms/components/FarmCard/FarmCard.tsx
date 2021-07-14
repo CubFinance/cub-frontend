@@ -25,6 +25,8 @@ export interface FarmWithStakedValue extends Farm {
   compounding?: number
   kingdomSupply?: string
   quoteTokenPriceUsd?: number
+  beltAPR?:string
+  beltRate?:string
 }
 
 const RainbowLight = keyframes`

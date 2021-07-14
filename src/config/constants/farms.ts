@@ -74,6 +74,17 @@ const farms: FarmConfig[] = [
     token: tokens.bake,
     quoteToken: tokens.wbnb,
   },
+  // This farm is here for BELT price for kingdom vault pid 6-8
+  {
+    pid: 4,
+    lpSymbol: 'BELT-BNB LP',
+    lpAddresses: {
+      97: '',
+      56: '0xF3Bc6FC080ffCC30d93dF48BFA2aA14b869554bb',
+    },
+    token: tokens.belt,
+    quoteToken: tokens.wbnb,
+  },
   {
     pid: 7,
     lpSymbol: 'ETH-BNB LP',
@@ -373,7 +384,6 @@ const farms: FarmConfig[] = [
     isKingdom: true,
     isKingdomToken: true,
     farmType: 'Belt',
-    originToken: 'BTCB',
     lpSymbol: 'beltBTC',
     lpAddresses: {
       97: '',
@@ -383,40 +393,38 @@ const farms: FarmConfig[] = [
     quoteToken: tokens.btcb,
     kingdomContract: '0x3f1b0319E2EbeD04D5e2ce367393914bBf8f59f5',
   },
-  // {
-  //   pid: 7,
-  //   altPid: 8,
-  //   compounding: 365,
-  //   isKingdom: true,
-  //   isKingdomToken: true,
-  //   farmType: 'Belt',
-  //   originToken: 'ETH',
-  //   lpSymbol: 'beltETH',
-  //   lpAddresses: {
-  //     97: '',
-  //     56: '0xaa20e8cb61299df2357561c2ac2e1172bc68bc25',
-  //   },
-  //   token: tokens.belteth,
-  //   quoteToken: tokens.busd,
-  //   kingdomContract: '0x3f2C7e9cf2e3a718eedf52403e0FB71b9AfC51b0',
-  // },
-  // {
-  //   pid: 8,
-  //   altPid: 3,
-  //   compounding: 365,
-  //   isKingdom: true,
-  //   isKingdomToken: true,
-  //   farmType: 'Belt',
-  //   originToken: 'BUSD',
-  //   lpSymbol: 'beltUSD',
-  //   lpAddresses: {
-  //     97: '',
-  //     56: '0x9cb73f20164e399958261c289eb5f9846f4d1404',
-  //   },
-  //   token: tokens.beltusd,
-  //   quoteToken: tokens.busd,
-  //   kingdomContract: '0x5860046Ccf3ab8D840F1ac15A547E0c2bBECA6F0',
-  // },
+  {
+    pid: 7,
+    altPid: 8,
+    compounding: 365,
+    isKingdom: true,
+    isKingdomToken: true,
+    farmType: 'Belt',
+    lpSymbol: 'beltETH',
+    lpAddresses: {
+      97: '',
+      56: '0xaa20e8cb61299df2357561c2ac2e1172bc68bc25',
+    },
+    token: tokens.belteth,
+    quoteToken: tokens.eth,
+    kingdomContract: '0x3f2C7e9cf2e3a718eedf52403e0FB71b9AfC51b0',
+  },
+  {
+    pid: 8,
+    altPid: 3,
+    compounding: 365,
+    isKingdom: true,
+    isKingdomToken: true,
+    farmType: 'Belt',
+    lpSymbol: 'beltUSD',
+    lpAddresses: {
+      97: '',
+      56: '0x9cb73f20164e399958261c289eb5f9846f4d1404',
+    },
+    token: tokens.beltusd,
+    quoteToken: tokens.busd,
+    kingdomContract: '0x5860046Ccf3ab8D840F1ac15A547E0c2bBECA6F0',
+  },
 ]
 
 export default farms

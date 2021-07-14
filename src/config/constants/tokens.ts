@@ -120,6 +120,15 @@ const tokens = {
     decimals: 18,
     projectLink: 'https://www.bakeryswap.org/',
   },
+  belt: {
+    symbol: 'BELT',
+    address: {
+      56: '0xE0e514c71282b6f4e823703a39374Cf58dc3eA4f',
+      97: '',
+    },
+    decimals: 18,
+    projectLink: 'https://beta.belt.fi/',
+  },
   beltbtc: {
     symbol: 'beltBTC',
     address: {

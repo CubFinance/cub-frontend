@@ -28,7 +28,8 @@ import {
   getBTCBNBAmount,
   getBTCAmount,
   getETHAmount,
-  getUSDAmount
+  getUSDAmount,
+  getBeltAPR,
 } from 'utils/kingdomScripts'
 
 const fetchFarms = async (farmsToFetch: FarmConfig[]) => {
@@ -128,6 +129,9 @@ const fetchFarms = async (farmsToFetch: FarmConfig[]) => {
       ] = multiResult
 
       let kingdomSupply:string
+      let beltAPR:string
+      let beltRate:string
+      let beltData:any
 
       if (farmConfig.isKingdom) {
         switch (farmConfig.pid) {
@@ -152,14 +156,21 @@ const fetchFarms = async (farmsToFetch: FarmConfig[]) => {
           case 6:
             kingdomSupply = await getBTCAmount()
             kingdomSupply = new BigNumber(kingdomSupply).div(DEFAULT_TOKEN_DECIMAL).toString()
+            beltData = await getBeltAPR()
+            beltAPR = beltData.btc
             break
           case 7:
             kingdomSupply = await getETHAmount()
             kingdomSupply = new BigNumber(kingdomSupply).div(DEFAULT_TOKEN_DECIMAL).toString()
+            beltData = await getBeltAPR()
+            beltAPR = beltData.eth
             break
           case 8:
             kingdomSupply = await getUSDAmount()
             kingdomSupply = new BigNumber(kingdomSupply).div(DEFAULT_TOKEN_DECIMAL).toString()
+            beltData = await getBeltAPR()
+            beltAPR = beltData.stable
+            beltRate = beltData.stableRate
             break
           default:
             break
@@ -184,6 +195,9 @@ const fetchFarms = async (farmsToFetch: FarmConfig[]) => {
         }
 
         lpTotalInQuoteToken = tokenAmount.times(tokenPriceVsQuote)
+// console.log('farmConfig.lpSymbol',farmConfig.lpSymbol)
+// console.log('lpTotalInQuoteToken',lpTotalInQuoteToken.toNumber())
+        // lpTotalInQuoteTokenPCS = tokenAmountPCS.times(tokenPriceVsQuote)
       } else {
         // Ratio in % a LP tokens that are in staking, vs the total number in circulation
         let lpTokenRatio = new BigNumber(lpTokenBalanceMC).div(new BigNumber(lpTotalSupply))
@@ -265,11 +279,6 @@ const fetchFarms = async (farmsToFetch: FarmConfig[]) => {
       const [info, totalAllocPoint, cubPerBlock] = await multicall(masterchefABI, mCalls).catch(error => {
         throw new Error(`multicall nontoken: ${error}`)
       })
-if (farmConfig.lpSymbol === 'beltBTC') {
-  // console.log('info, totalAllocPoint, cubPerBlock',info, new BigNumber(totalAllocPoint).toNumber(), new BigNumber(cubPerBlock).toNumber())
-  // console.log('kingdomSupply', new BigNumber(kingdomSupply).div(DEFAULT_TOKEN_DECIMAL).toNumber())
-  // console.log('kingdomSupply',kingdomSupply)
-}
 
       if (farmConfig.isKingdom) {
         const kCalls = [
@@ -342,15 +351,21 @@ if (farmConfig.lpSymbol === 'beltBTC') {
         }
 
         let tokenValuePerOrigin = BIG_ZERO
-        if (farmConfig.farmType === 'Belt') {
+        // let totalSupplyBelt = BIG_ZERO
+        if (farmConfig.farmType === 'Belt' && farmConfig.lpSymbol !== 'beltUSD') {
           const bCalls = [
             {
               address: tokenAddress,
               name: 'getPricePerFullShare',
             },
+            // {
+            //   address: tokenAddress,
+            //   name: 'totalSupply',
+            // },
           ]
           const [pricePerFullShare] = await multicall(multiStratABI, bCalls)
-          tokenValuePerOrigin = new BigNumber(pricePerFullShare)
+          tokenValuePerOrigin = new BigNumber(pricePerFullShare).div(DEFAULT_TOKEN_DECIMAL)
+          // totalSupplyBelt = new BigNumber(tSupply).div(DEFAULT_TOKEN_DECIMAL)
         }
 
         return {
@@ -369,7 +384,10 @@ if (farmConfig.lpSymbol === 'beltBTC') {
           poolWeightPCS: poolWeightPCS.toJSON(),
           kingdomSupply,
           tokenAmountTotal: tokenAmountTotal.toJSON(),
-          tokenValuePerOrigin: tokenValuePerOrigin.div(DEFAULT_TOKEN_DECIMAL).toJSON(),
+          tokenValuePerOrigin: tokenValuePerOrigin.toJSON(),
+          // totalSupplyBelt: totalSupplyBelt.toJSON(),
+          beltAPR,
+          beltRate,
         }
       }
 
