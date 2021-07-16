@@ -67,7 +67,7 @@ export const getUSDAmount = async () => {
 export const getBeltAPR = async () => {
   let result
   try {
-    result = await fetch('https://belt-api.fbslo.net/belt').then(res => res.json())
+    result = await fetch('https://fbslo.net/belt').then(res => res.json())
   } catch(error) {
     console.log('Failed to fetch from fbslo', error)
     return { btc: '5', eth: '5', stable: '10', stableRate: '0.97' }
