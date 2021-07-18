@@ -150,8 +150,9 @@ const Kingdom: React.FC<KingdomProps> = ({ farm, removed, cakePrice, account }) 
               value={rawTokenBalance}
               decimals={rawTokenBalance ? 2 : 1}
               unit=""
+              color={rawTokenBalance && "warning"}
             />
-            <Text>Balance</Text>
+            <Text color={rawTokenBalance && "warning"}>Balance</Text>
           </div>
           <div className="col">
             <Balance
