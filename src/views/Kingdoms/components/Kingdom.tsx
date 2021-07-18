@@ -150,9 +150,9 @@ const Kingdom: React.FC<KingdomProps> = ({ farm, removed, cakePrice, account }) 
               value={rawTokenBalance}
               decimals={rawTokenBalance ? 2 : 1}
               unit=""
-              color={rawTokenBalance && "warning"}
+              color={rawTokenBalance ? "warning" : "text"}
             />
-            <Text color={rawTokenBalance && "warning"}>Balance</Text>
+            <Text color={rawTokenBalance ? "warning" : "text"}>Balance</Text>
           </div>
           <div className="col">
             <Balance
@@ -160,9 +160,9 @@ const Kingdom: React.FC<KingdomProps> = ({ farm, removed, cakePrice, account }) 
               value={rawStakedBalance}
               decimals={rawStakedBalance ? 2 : 1}
               unit=""
-              color={rawStakedBalance && "warning"}
+              color={rawStakedBalance ? "warning" : "text"}
             />
-            <Text color={rawStakedBalance && "warning"}>Deposited</Text>
+            <Text color={rawStakedBalance ? "warning" : "text"}>Deposited</Text>
           </div>
           <div className="col">
             <Balance
@@ -170,9 +170,9 @@ const Kingdom: React.FC<KingdomProps> = ({ farm, removed, cakePrice, account }) 
               value={rawEarningsBalance}
               decimals={rawEarningsBalance ? 2 : 1}
               unit=""
-              color={rawEarningsBalance && "warning"}
+              color={rawEarningsBalance ? "warning" : "text"}
             />
-            <Text   color={rawEarningsBalance && "warning"}>Rewards</Text>
+            <Text color={rawEarningsBalance ? "warning" : "text"}>Rewards</Text>
           </div>
           <div className="col">
             <Balance
