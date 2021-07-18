@@ -3,10 +3,10 @@ import BigNumber from 'bignumber.js'
 import styled from 'styled-components'
 import { Button as UiButton, Link, Flex, Text } from '@pancakeswap-libs/uikit'
 import { DEFAULT_TOKEN_DECIMAL, BAKERY_ADD_LIQUIDITY_URL, PCS_ADD_LIQUIDITY_URL, BASE_EXCHANGE_URL, BELT_EXCHANGE } from 'config'
-import AprApy from 'views/Farms/components/FarmCard/AprApy'
 import { FarmWithStakedValue } from 'views/Farms/components/FarmCard/FarmCard'
 import getLiquidityUrlPathParts from 'utils/getLiquidityUrlPathParts'
 import KingdomCard from './KingdomCard'
+import AprApy from './AprApy'
 
 const Button = styled(UiButton)`
   height: 36px;

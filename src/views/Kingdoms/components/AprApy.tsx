@@ -4,7 +4,7 @@ import { Text, Flex, Skeleton } from '@pancakeswap-libs/uikit'
 import useI18n from 'hooks/useI18n'
 import Balance from 'components/Balance'
 
-import ApyButton from './ApyButton'
+import ApyButton from 'views/Farms/components/FarmCard/ApyButton'
 
 export interface AprApyProps {
   aprApy: any

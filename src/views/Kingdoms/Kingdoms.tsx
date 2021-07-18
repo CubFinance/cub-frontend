@@ -23,8 +23,6 @@ const FeeWrapper = styled.div`
   max-width: 400px;
 `
 
-const NUMBER_OF_FARMS_VISIBLE = 12
-
 const Kingdoms: React.FC = () => {
   const totalValue = useTotalValueKingdoms();
   const { pathname } = useLocation()
