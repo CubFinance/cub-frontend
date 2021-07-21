@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback, useMemo } from 'react'
+import React, { useEffect, useCallback, useMemo, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { Heading, Flex, Text } from '@pancakeswap-libs/uikit'
 import { useAppDispatch } from 'state'
@@ -14,9 +14,11 @@ import { Farm } from 'state/types'
 import { getFarmApr } from 'utils/apr'
 import isArchivedPid from 'utils/farmHelpers'
 
+
 import { FarmWithStakedValue } from 'views/Farms/components/FarmCard/FarmCard'
 import Kingdom from './components/Kingdom'
 import CardValue from './components/CardValue'
+import TotalStaked from './components/TotalStaked'
 import './Kingdoms.css'
 
 const FeeWrapper = styled.div`
@@ -81,6 +83,45 @@ const Kingdoms: React.FC = () => {
     isActive,
   ])
 
+  const [totalStake, setTotalStake] = useState({})
+  const updateTotalStake = (lpSymbol: string, depositBalanceQuoteValue: number, totalAPY: number, dailyAPR: number) => {
+    console.log('updating', lpSymbol)
+    if (totalStake[lpSymbol]) {
+      setTotalStake({
+        ...totalStake,
+        [lpSymbol]: {
+          depositBalanceQuoteValue: +totalStake[lpSymbol].depositBalanceQuoteValue + +depositBalanceQuoteValue,
+          totalAPY: +totalStake[lpSymbol].totalAPY + +totalAPY,
+          dailyAPR: +totalStake[lpSymbol].dailyAPR + +dailyAPR,
+        },
+      })
+    } else {
+      setTotalStake({
+        ...totalStake,
+        [lpSymbol]: {
+          depositBalanceQuoteValue,
+          totalAPY,
+          dailyAPR,
+        },
+      })
+    }
+  }
+
+  // const [totalStake, setTotalStake] = useState({})
+  // const updateTotalStake = (lpSymbol, depositBalanceQuoteValue, totalAPY, dailyAPR) => {
+  //   setTotalStake([
+  //     ...totalStake.slice(0, lpSymbol),
+  //     {
+  //       [lpSymbol]: {
+  //         depositBalanceQuoteValue,
+  //         totalAPY,
+  //         dailyAPR,
+  //       },
+  //     },
+  //     ...totalStake.slice(lpSymbol + 1),
+  //   ])
+  // }
+
   return (
     <>
       <PageHeader>
@@ -130,9 +171,10 @@ const Kingdoms: React.FC = () => {
         </FeeWrapper>
       </PageHeader>
       <Page className="k-container">
+        <TotalStaked farms={farmsStakedMemoized} cakePrice={cakePrice} totalStake={totalStake} />
         <div id="kingdoms">
           {farmsStakedMemoized.map((farm) => (
-            <Kingdom key={farm.pid} farm={farm} cakePrice={cakePrice} account={account} removed={false} />
+            <Kingdom key={farm.pid} farm={farm} cakePrice={cakePrice} account={account} removed={false} updateTotalStake={updateTotalStake} />
           ))}
         </div>
       </Page>

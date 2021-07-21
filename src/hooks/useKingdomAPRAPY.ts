@@ -8,19 +8,9 @@ import BigNumber from 'bignumber.js'
 import { FarmWithStakedValue } from 'views/Farms/components/FarmCard/FarmCard'
 
 const useKingdomAPRAPY = (
-  // isKingdom: boolean,
-  // isKingdomToken: boolean,
-  // tokenPriceVsQuote: number,
-  // poolWeightPCS: any,
-  // compounding: number,
-  // cubAPR: number,
-  // lpTokenBalanceMC: number,
-  // lpTotalInQuoteTokenPCS: number,
-  // quoteTokenPriceUsd: number,
-  // altPid?: number,
-  farm?: FarmWithStakedValue,
+  farm: FarmWithStakedValue,
 ) => {
-  const { apr: cubAPR, isKingdom, isKingdomToken, tokenPriceVsQuote, poolWeightPCS, compounding, lpTokenBalancePCS: lpTokenBalanceMC = 0, lpTotalInQuoteTokenPCS = 0, quoteToken: { busdPrice: quoteTokenPriceUsd }, altPid, farmType, beltAPR, beltRate } = farm
+  const { apr: cubAPR, isKingdom, poolWeightPCS, compounding, lpTokenBalancePCS: lpTokenBalanceMC = 0, lpTotalInQuoteTokenPCS = 0, quoteToken: { busdPrice: quoteTokenPriceUsd }, altPid, farmType, beltAPR } = farm
 
   const cakePrice = useBusdPriceFromPid(0)
   const bakePrice = useBusdPriceFromLpSymbol('BAKE-BNB LP')
@@ -46,11 +36,6 @@ const useKingdomAPRAPY = (
   }
 
   if (farm.lpSymbol === 'CAKE') {
-    // const total = farm.farmType === 'Belt' ? new BigNumber(farm.tokenAmount).times(DEFAULT_TOKEN_DECIMAL) : new BigNumber(lpTokenBalanceMC).times(DEFAULT_TOKEN_DECIMAL)
-    //
-    // let rewardTokenPrice = Number(farm.token.busdPrice)
-    // if (farm.farmType === 'Belt') rewardTokenPrice = 12.8257
-
     apr = getPoolApr(
       Number(farm.token.busdPrice),
       Number(farm.token.busdPrice),

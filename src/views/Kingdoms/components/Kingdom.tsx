@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useMemo, useEffect } from 'react'
 import { Text, Image, Flex } from '@pancakeswap-libs/uikit'
 import BigNumber from 'bignumber.js'
 import styled, { keyframes } from 'styled-components'
@@ -81,9 +81,10 @@ interface KingdomProps {
   removed?: boolean
   cakePrice?: BigNumber
   account?: string
+  updateTotalStake?: any
 }
 
-const Kingdom: React.FC<KingdomProps> = ({ farm, removed, cakePrice, account }) => {
+const Kingdom: React.FC<KingdomProps> = ({ farm, removed, cakePrice, account, updateTotalStake }) => {
   const [showExpandableSection, setShowExpandableSection] = useState(false)
 
   const { apr, lpTotalInQuoteToken, lpSymbol, lpTokenBalancePCS = 0, lpTotalInQuoteTokenPCS = 0, quoteToken: { busdPrice: quoteTokenPriceUsd }, altPid, farmType } = farm
@@ -128,6 +129,12 @@ const Kingdom: React.FC<KingdomProps> = ({ farm, removed, cakePrice, account }) 
   const farmAPR = apr && apr.toLocaleString('en-US', { maximumFractionDigits: 2 })
 
   aprApy = { ...aprApy, compounding: farm.compounding, farmAPR, apr: altPid === 12 ? pcsApr : farm.apr, cakePrice, quoteTokenPriceUsd: Number(quoteTokenPriceUsd), lpTotalInQuoteToken }
+
+  // setInterval(() => updateTotalStake(farm.lpSymbol, depositBalanceQuoteValue, aprApy.totalAPY, aprApy.dailyAPR), 10000)
+  // useEffect(() => {
+  //   console.log('useEffect')
+  //   updateTotalStake(farm.lpSymbol, depositBalanceQuoteValue, aprApy.totalAPY, aprApy.dailyAPR)
+  // }, [updateTotalStake, farm.lpSymbol, depositBalanceQuoteValue, aprApy.totalAPY, aprApy.dailyAPR])
 
   return (
     <>
