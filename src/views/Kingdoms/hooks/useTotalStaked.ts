@@ -11,14 +11,17 @@ const useTotalStaked = (farms: any, cakePrice: BigNumber) => {
   let rawTotalStakedUSD = BIG_ZERO
   let rawTotalAPY = 0
   let rawTotalDailyAPR = 0
+  let count = 0
   farms.forEach((farm) => {
     if (farm.isKingdom) {
       const { userData, lpTotalInQuoteTokenPCS = 0, lpTokenBalancePCS = 0, quoteToken: { busdPrice: quoteTokenPriceUsd } } = farm
       const { stakedBalance, earnings } = userData
+      // eslint-disable-next-line react-hooks/rules-of-hooks
+      const tokenPrice = useBusdPriceFromLpSymbol(farm.lpSymbol);
+      // eslint-disable-next-line react-hooks/rules-of-hooks
+      const aprApy = useKingdomAPRAPY(farm)
 
-      if (stakedBalance !== '0') {
-        // eslint-disable-next-line react-hooks/rules-of-hooks
-        const tokenPrice = useBusdPriceFromLpSymbol(farm.lpSymbol);
+      if (stakedBalance > '1') {
         let oneTokenQuoteValue = BIG_ZERO
 
         if (!farm.isKingdomToken)
@@ -29,10 +32,10 @@ const useTotalStaked = (farms: any, cakePrice: BigNumber) => {
 
         rawTotalStakedUSD = rawTotalStakedUSD.plus(new BigNumber(depositBalanceQuoteValue))
 
-        // eslint-disable-next-line react-hooks/rules-of-hooks
-        const aprApy = useKingdomAPRAPY(farm)
         rawTotalAPY = +rawTotalAPY + +aprApy.totalAPY
         rawTotalDailyAPR = +rawTotalDailyAPR + +aprApy.dailyAPR
+
+        count += 1
       }
 
       if (earnings !== '0') rawTotalCUB = rawTotalCUB.plus(new BigNumber(earnings))
@@ -45,7 +48,7 @@ const useTotalStaked = (farms: any, cakePrice: BigNumber) => {
 
   const cubBusd = cubEarned ? new BigNumber(cubEarned).multipliedBy(cakePrice).toNumber() : 0
 
-  return [stakedUSD, cubEarned, cubBusd, rawTotalAPY, rawTotalDailyAPR]
+  return [stakedUSD, cubEarned, cubBusd, rawTotalAPY, rawTotalDailyAPR, count]
 }
 
 export default useTotalStaked
