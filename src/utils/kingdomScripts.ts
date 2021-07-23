@@ -1,4 +1,5 @@
 import Web3 from 'web3'
+import axios from 'axios'
 
 const PCS_ABI = require('config/abi/PCS.json')
 const BAKERY_ABI = require('config/abi/bakery.json')
@@ -65,12 +66,18 @@ export const getUSDAmount = async () => {
 }
 
 export const getBeltAPR = async () => {
-  let result
-  try {
-    result = await fetch('https://belt-api.fbslo.net/belt').then(res => res.json())
-  } catch(error) {
+  // return { btc: '5', eth: '5', stable: '10', stableRate: '0.97' }
+  return axios.get('https://belt-api.fbslo.net/belt', { timeout: 3000 }).then(result => result.data).catch((error) => {
     console.log('Failed to fetch from fbslo', error)
     return { btc: '5', eth: '5', stable: '10', stableRate: '0.97' }
-  }
-  return result
+  })
+
+  // let result
+  // try {
+  //   result = await fetch('https://belt-api.fbslo.net/belt').then(res => res.json())
+  // } catch(error) {
+  //   console.log('Failed to fetch from fbslo', error)
+  //   return { btc: '5', eth: '5', stable: '10', stableRate: '0.97' }
+  // }
+  // return result
 }
