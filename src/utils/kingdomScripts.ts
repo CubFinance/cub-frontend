@@ -66,18 +66,7 @@ export const getUSDAmount = async () => {
 }
 
 export const getBeltAPR = async () => {
-  // return { btc: '5', eth: '5', stable: '10', stableRate: '0.97' }
-  return axios.get('https://belt-api.fbslo.net/belt', { timeout: 3000 }).then(result => result.data).catch((error) => {
-    console.log('Failed to fetch from fbslo', error)
+  return axios.get('https://belt-api.fbslo.net/belt', { timeout: 3000 }).then(result => result.data).catch(() => {
     return { btc: '5', eth: '5', stable: '10', stableRate: '0.97' }
   })
-
-  // let result
-  // try {
-  //   result = await fetch('https://belt-api.fbslo.net/belt').then(res => res.json())
-  // } catch(error) {
-  //   console.log('Failed to fetch from fbslo', error)
-  //   return { btc: '5', eth: '5', stable: '10', stableRate: '0.97' }
-  // }
-  // return result
 }
