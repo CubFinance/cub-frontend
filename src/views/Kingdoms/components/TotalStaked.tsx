@@ -19,7 +19,7 @@ interface TotalStakedProps {
 const TotalStaked: React.FC<TotalStakedProps> = ({ farms, cakePrice }) => {
   const [totalStakeUSD, totalCub, totalCubUSD, totalAPY, totalDailyAPR, count] = useTotalStaked(farms, cakePrice);
 
-  const avgAPY = totalAPY.toString() !== 'NaN' ? totalAPY / count : 0
+  const avgAPY = totalAPY.toString() !== 'NaN' && totalAPY !== 0 ? totalAPY / count : 0
   const avgDaily = totalDailyAPR ? totalDailyAPR / count : 0
 
   const stakedUSDFormatted = totalStakeUSD ?  `$${totalStakeUSD.toLocaleString('en-US', { maximumFractionDigits: 2 })}`
