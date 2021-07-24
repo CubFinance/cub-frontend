@@ -184,7 +184,7 @@ const Kingdom: React.FC<KingdomProps> = ({ farm, removed, cakePrice, account, up
           <div className="col">
             <Balance
               fontSize="16px"
-              value={totalAPY}
+              value={totalAPY.toString() !== 'NaN' ? totalAPY : 0}
               decimals={2}
               unit="%"
               color="warning"
