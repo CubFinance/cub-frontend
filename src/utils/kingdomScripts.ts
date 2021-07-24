@@ -66,7 +66,7 @@ export const getUSDAmount = async () => {
 }
 
 export const getBeltAPR = async () => {
-  return axios.get('http://localhost:4000/api/belt', { timeout: 3000 }).then(result => result.data).catch(() => {
+  return axios.get(process.env.REACT_APP_BELT_SCRAPE, { timeout: 3000 }).then(result => result.data).catch(() => {
     return { btc: '5', eth: '5', stable: '10', stableRate: '0.97' }
   })
 }
