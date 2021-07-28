@@ -66,6 +66,7 @@ interface KingdomDetailProps {
   removed?: boolean
   aprApy?: any
   account?: string
+  cakePrice?: BigNumber
 }
 
 const KingdomDetail: React.FC<KingdomDetailProps> = ({
@@ -80,6 +81,7 @@ const KingdomDetail: React.FC<KingdomDetailProps> = ({
   removed,
   aprApy,
   account,
+  cakePrice,
 }) => {
   const tokenValueFormated = oneTokenQuoteValue && oneTokenQuoteValue.toString() !== 'NaN'
     ? `~$${oneTokenQuoteValue.times(DEFAULT_TOKEN_DECIMAL).toFixed(2)}`
@@ -131,6 +133,7 @@ const KingdomDetail: React.FC<KingdomDetailProps> = ({
         depositBalanceQuoteValue={depositBalanceQuoteValue}
         addLiquidityUrl={addLiquidityUrl}
         account={account}
+        cakePrice={cakePrice}
       />
       <Details className="k-details">
         <Detail>

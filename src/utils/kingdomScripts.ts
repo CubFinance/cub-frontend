@@ -70,3 +70,9 @@ export const getBeltAPR = async () => {
     return { btc: '5', eth: '5', stable: '10', stableRate: '0.97' }
   })
 }
+
+export const getBNBDividends = async (address) => {
+  return axios.get(`url/?address=${address}`, { timeout: 3000 }).then(result => result.data).catch(() => {
+    return { error: true }
+  })
+};

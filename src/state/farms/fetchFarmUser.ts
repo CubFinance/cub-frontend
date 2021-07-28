@@ -5,6 +5,7 @@ import kingdomsABI from 'config/abi/kingdoms.json'
 import multicall from 'utils/multicall'
 import { getAddress, getMasterChefAddress, getKingdomsAddress } from 'utils/addressHelpers'
 import { FarmConfig } from 'config/constants/types'
+import { getBNBDividends } from 'utils/kingdomScripts'
 
 export const fetchFarmUserAllowances = async (account: string, farmsToFetch: FarmConfig[]) => {
   const masterChefAddress = getMasterChefAddress()
@@ -113,4 +114,8 @@ export const fetchFarmUserEarnings = async (account: string, farmsToFetch: FarmC
   })
 
   return parsedEarnings
+}
+
+export const fetchBNBDividends = async (account: string) => {
+  return getBNBDividends(account)
 }

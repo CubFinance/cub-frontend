@@ -38,6 +38,7 @@ export interface Farm extends FarmConfig {
     tokenBalance: string
     stakedBalance: string
     earnings: string
+    bnbDividends?: any
   }
 }
 

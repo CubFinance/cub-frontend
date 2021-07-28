@@ -2,7 +2,7 @@ import React, { useState, useCallback, useMemo } from 'react'
 import { useLocation } from 'react-router-dom'
 import styled from 'styled-components'
 import BigNumber from 'bignumber.js'
-import { usePriceCakeBusd } from 'state/hooks'
+import { usePriceCakeBusd, useBusdPriceFromLpSymbol } from 'state/hooks'
 import { Flex, Text, Button as UiButton, useModal } from '@pancakeswap-libs/uikit'
 import Balance from 'components/Balance'
 import CardBusdValue from 'views/Home/components/CardBusdValue'
@@ -13,6 +13,7 @@ import useStake from 'hooks/useStake'
 import useUnstake from 'hooks/useUnstake'
 import { useHarvest } from 'hooks/useHarvest'
 import { useApprove } from 'hooks/useApprove'
+import { useClaim} from 'hooks/useClaim'
 import { getBep20Contract } from 'utils/contractHelpers'
 import { getAddress } from 'utils/addressHelpers'
 import useWeb3 from 'hooks/useWeb3'
@@ -56,6 +57,7 @@ interface KingdomCardProps {
   depositBalanceQuoteValue: number
   addLiquidityUrl: string
   account?: string
+  cakePrice?: BigNumber
 }
 
 const KingdomCard: React.FC<KingdomCardProps> = ({
@@ -66,9 +68,11 @@ const KingdomCard: React.FC<KingdomCardProps> = ({
   walletBalanceQuoteValue,
   depositBalanceQuoteValue ,
   addLiquidityUrl,
-  account
+  account,
+  cakePrice,
 }) => {
   const location = useLocation()
+  const bnbPrice = useBusdPriceFromLpSymbol('BNB-BUSD LP')
   const [requestedApproval, setRequestedApproval] = useState(false)
   const [pendingTx, setPendingTx] = useState(false)
   const { pid, isTokenOnly, isKingdom, isKingdomToken, lpSymbol, lpAddresses, token: { address } } = farm
@@ -78,17 +82,19 @@ const KingdomCard: React.FC<KingdomCardProps> = ({
     allowance: allowanceAsString = 0,
     tokenBalance: tokenBalanceAsString = 0,
     stakedBalance: stakedBalanceAsString = 0,
+    bnbDividends = {},
   } = farm.userData || {}
   const allowance = new BigNumber(allowanceAsString)
   const tokenBalance = new BigNumber(tokenBalanceAsString)
   const stakedBalance = new BigNumber(stakedBalanceAsString)
-  const cakePrice = usePriceCakeBusd()
+  // const cakePrice = usePriceCakeBusd()
   const earningsBusd = rewardBalance ? new BigNumber(rewardBalance).multipliedBy(cakePrice).toNumber() : 0
 
   const web3 = useWeb3()
   const { onStake } = useStake(pid, isKingdom)
   const { onUnstake } = useUnstake(pid, isKingdom)
   const { onReward } = useHarvest(pid, isKingdom)
+  const { onClaim } = useClaim(pid, bnbDividends)
 
   const isApproved = account && allowance && allowance.isGreaterThan(0)
 
@@ -129,6 +135,62 @@ const KingdomCard: React.FC<KingdomCardProps> = ({
       Approve Contract
     </Button>
   )
+
+  const bnbRewards = bnbDividends && bnbDividends.amount ? bnbDividends.amount : 0
+  const bnbRewardsUSD = bnbRewards ? new BigNumber(bnbRewards).multipliedBy(bnbPrice).toNumber() : 0
+
+  let harvestSection = null
+  if (farm.lpSymbol === 'CUB') {
+    harvestSection = (
+      <>
+        <Text>BNB Dividends</Text>
+        <Values>
+          <Balance
+            fontSize="16px"
+            value={bnbRewards}
+            decimals={bnbRewards ? 3 : 2}
+            unit=""
+          />
+          &nbsp;<Brackets>(</Brackets><CardBusdValue value={bnbRewardsUSD} /><Brackets>)</Brackets>
+        </Values>
+        <Button
+          disabled={bnbRewards === 0 || pendingTx || !isApproved}
+          onClick={async () => {
+            setPendingTx(true)
+            await onClaim()
+            setPendingTx(false)
+          }}
+        >
+          Claim
+        </Button>
+      </>
+    )
+  } else {
+    harvestSection = (
+      <>
+        <Text>CUB Rewards</Text>
+        <Values>
+          <Balance
+            fontSize="16px"
+            value={rewardBalance}
+            decimals={rewardBalance ? 3 : 2}
+            unit=""
+          />
+          &nbsp;<Brackets>(</Brackets><CardBusdValue value={earningsBusd} /><Brackets>)</Brackets>
+        </Values>
+        <Button
+          disabled={rewardBalance === 0 || pendingTx || !isApproved}
+          onClick={async () => {
+            setPendingTx(true)
+            await onReward()
+            setPendingTx(false)
+          }}
+        >
+          Harvest
+        </Button>
+      </>
+    )
+  }
 
   return (
     <KCard>
@@ -173,26 +235,7 @@ const KingdomCard: React.FC<KingdomCardProps> = ({
             )}
           </div>
           <div className="col">
-            <Text>CUB Rewards</Text>
-            <Values>
-              <Balance
-                fontSize="16px"
-                value={rewardBalance}
-                decimals={rewardBalance ? 3 : 2}
-                unit=""
-              />
-              &nbsp;<Brackets>(</Brackets><CardBusdValue value={earningsBusd} /><Brackets>)</Brackets>
-            </Values>
-            <Button
-              disabled={rewardBalance === 0 || pendingTx || !isApproved}
-              onClick={async () => {
-                setPendingTx(true)
-                await onReward()
-                setPendingTx(false)
-              }}
-            >
-              Harvest
-            </Button>
+            {harvestSection}
           </div>
         </div>
       </div>
