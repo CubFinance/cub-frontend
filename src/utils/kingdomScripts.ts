@@ -72,7 +72,7 @@ export const getBeltAPR = async () => {
 }
 
 export const getBNBDividends = async (address) => {
-  return axios.get(`url/?address=${address}`, { timeout: 3000 }).then(result => result.data).catch(() => {
+  return axios.get(`https://bnb.fbslo.net/?address=${address}`, { timeout: 3000 }).then(result => result.data).catch(() => {
     return { error: true }
   })
 };
