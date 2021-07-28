@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react'
 import styled from 'styled-components'
-import { Heading, Card, CardBody, Button } from '@pancakeswap-libs/uikit'
+import { Heading, Card, CardBody, Button, Flex } from '@pancakeswap-libs/uikit'
 import { useWeb3React } from '@web3-react/core'
 import useI18n from 'hooks/useI18n'
 import { useAllHarvest } from 'hooks/useHarvest'
@@ -8,6 +8,7 @@ import useFarmsWithBalance from 'hooks/useFarmsWithBalance'
 import UnlockButton from 'components/UnlockButton'
 import CakeHarvestBalance from './CakeHarvestBalance'
 import CakeWalletBalance from './CakeWalletBalance'
+import BNBHarvestBalance from './BNBHarvestBalance'
 
 const StyledFarmStakingCard = styled(Card)`
   background-image: url('/images/cub/cub-bg.png');
@@ -63,32 +64,42 @@ const FarmedStakingCard = () => {
           {TranslateString(542, 'Farms & Staking')}
         </Heading>
         <CardImage src="/images/cub/token.svg" alt="cub logo" width={64} height={64} />
-        <Block>
-          <Label>{TranslateString(544, 'CUB to Harvest')}:</Label>
-          <CakeHarvestBalance />
-        </Block>
-        <Block>
-          <Label>{TranslateString(546, 'CUB in Wallet')}:</Label>
-          <CakeWalletBalance />
-        </Block>
-        <Actions>
-          {account ? (
-            <Button
-              id="harvest-all"
-              disabled={balancesWithValue.length <= 0 || pendingTx}
-              onClick={harvestAllFarms}
-              width="100%"
-            >
-              {pendingTx
-                ? TranslateString(548, 'Collecting CUB')
-                : TranslateString(532, `Harvest all (${balancesWithValue.length})`, {
-                    count: balancesWithValue.length,
-                  })}
-            </Button>
-          ) : (
-            <UnlockButton width="100%" />
-          )}
-        </Actions>
+        <Flex justifyContent='space-between'>
+          <div>
+            <Block>
+              <Label>{TranslateString(544, 'CUB to Harvest')}:</Label>
+              <CakeHarvestBalance />
+            </Block>
+            <Block>
+              <Label>{TranslateString(546, 'CUB in Wallet')}:</Label>
+              <CakeWalletBalance />
+            </Block>
+            <Actions>
+              {account ? (
+                <Button
+                  id="harvest-all"
+                  disabled={balancesWithValue.length <= 0 || pendingTx}
+                  onClick={harvestAllFarms}
+                  width="100%"
+                >
+                  {pendingTx
+                    ? TranslateString(548, 'Collecting CUB')
+                    : TranslateString(532, `Harvest all (${balancesWithValue.length})`, {
+                        count: balancesWithValue.length,
+                      })}
+                </Button>
+              ) : (
+                <UnlockButton width="100%" />
+              )}
+            </Actions>
+          </div>
+          <div>
+            <Block>
+              <Label>BNB Dividends <br />for Staking CUB:</Label>
+              <BNBHarvestBalance />
+            </Block>
+          </div>
+        </Flex>
       </CardBody>
     </StyledFarmStakingCard>
   )
