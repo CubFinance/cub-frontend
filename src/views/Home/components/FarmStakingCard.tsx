@@ -5,6 +5,8 @@ import { useWeb3React } from '@web3-react/core'
 import useI18n from 'hooks/useI18n'
 import { useAllHarvest } from 'hooks/useHarvest'
 import useFarmsWithBalance from 'hooks/useFarmsWithBalance'
+import { useKingdomFromPid } from 'state/hooks'
+import { useClaim} from 'hooks/useClaim'
 import UnlockButton from 'components/UnlockButton'
 import CakeHarvestBalance from './CakeHarvestBalance'
 import CakeWalletBalance from './CakeWalletBalance'
@@ -40,6 +42,11 @@ const FarmedStakingCard = () => {
   const TranslateString = useI18n()
   const farmsWithBalance = useFarmsWithBalance()
   const balancesWithValue = farmsWithBalance.filter((balanceType) => balanceType.balance.toNumber() > 0)
+
+  const farm = useKingdomFromPid(4)
+  const { bnbDividends = {} } = farm.userData || {}
+  const { onClaim } = useClaim(bnbDividends)
+  const bnbRewards = bnbDividends && bnbDividends.amount ? bnbDividends.amount : 0
 
   const { onReward } = useAllHarvest(balancesWithValue.map((farmWithBalance) => {
     const { pid, isKingdom } = farmWithBalance
@@ -96,8 +103,24 @@ const FarmedStakingCard = () => {
           <div>
             <Block>
               <Label>BNB Dividends <br />for Staking CUB:</Label>
-              <BNBHarvestBalance />
+              <BNBHarvestBalance bnbDividends={bnbDividends} />
             </Block>
+            <Actions>
+              {account ? (
+                <Button
+                  disabled={bnbRewards === 0 || pendingTx}
+                  onClick={async () => {
+                    setPendingTx(true)
+                    await onClaim()
+                    setPendingTx(false)
+                  }}
+                >
+                  Claim BNB
+                </Button>
+              ) : (
+                <UnlockButton width="100%" />
+              )}
+            </Actions>
           </div>
         </Flex>
       </CardBody>

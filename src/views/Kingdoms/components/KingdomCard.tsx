@@ -94,7 +94,7 @@ const KingdomCard: React.FC<KingdomCardProps> = ({
   const { onStake } = useStake(pid, isKingdom)
   const { onUnstake } = useUnstake(pid, isKingdom)
   const { onReward } = useHarvest(pid, isKingdom)
-  const { onClaim } = useClaim(pid, bnbDividends)
+  const { onClaim } = useClaim(bnbDividends)
 
   const isApproved = account && allowance && allowance.isGreaterThan(0)
 

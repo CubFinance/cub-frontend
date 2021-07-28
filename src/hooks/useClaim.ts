@@ -5,7 +5,7 @@ import { fetchFarmUserDataAsync, updateUserBalance, updateUserPendingReward } fr
 import { claim } from 'utils/callHelpers'
 import { useMasterchef, useSousChef, useKingdom } from './useContract'
 
-export const useClaim = (farmPid: number, bnbDividends: any) => {
+export const useClaim = (bnbDividends: any) => {
   const dispatch = useAppDispatch()
   const { account } = useWeb3React()
   const { user = '', amount = '', nonce = '', signature = '' } = bnbDividends

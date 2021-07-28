@@ -2,10 +2,10 @@ import React from 'react'
 import { Text } from '@pancakeswap-libs/uikit'
 import { useWeb3React } from '@web3-react/core'
 import BigNumber from 'bignumber.js'
-import useAllEarnings from 'hooks/useAllEarnings'
-import { useBusdPriceFromLpSymbol, useKingdomFromPid } from 'state/hooks'
+// import useAllEarnings from 'hooks/useAllEarnings'
+import { useBusdPriceFromLpSymbol } from 'state/hooks'
 import styled from 'styled-components'
-import { DEFAULT_TOKEN_DECIMAL } from 'config'
+// import { DEFAULT_TOKEN_DECIMAL } from 'config'
 import CardValue from './CardValue'
 import CardBusdValue from './CardBusdValue'
 
@@ -13,11 +13,9 @@ const Block = styled.div`
   margin-bottom: 24px;
 `
 
-const BNBHarvestBalance = () => {
+const BNBHarvestBalance = ({ bnbDividends }) => {
   const { account } = useWeb3React()
   const bnbPrice = useBusdPriceFromLpSymbol('BNB-BUSD LP')
-  const farm = useKingdomFromPid(4)
-  const { bnbDividends = {} } = farm.userData || {}
   const bnbRewards = bnbDividends && bnbDividends.amount ? bnbDividends.amount : 0
   const bnbRewardsUSD = bnbRewards ? new BigNumber(bnbRewards).multipliedBy(bnbPrice).toNumber() : 0
 
