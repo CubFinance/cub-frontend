@@ -42,7 +42,7 @@ const SearchInput: React.FC<Props> = ({ onChange: onChangeCallback }) => {
         <StyledInput
           value={searchText}
           onChange={onChange}
-          placeholder="Search farms"
+          placeholder="Search"
           onBlur={() => setToggled(false)}
         />
       </InputWrapper>
