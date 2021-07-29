@@ -14,10 +14,13 @@ interface TotalStakedProps {
   farms: any
   cakePrice: BigNumber
   totalStake?: any
+  bakePrice?: BigNumber
+  beltPrice?: BigNumber
+  cubDen?: any
 }
 
-const TotalStaked: React.FC<TotalStakedProps> = ({ farms, cakePrice }) => {
-  const [totalStakeUSD, totalCub, totalCubUSD, totalAPY, totalDailyAPR, count] = useTotalStaked(farms, cakePrice);
+const TotalStaked: React.FC<TotalStakedProps> = ({ farms, cakePrice, bakePrice, beltPrice, cubDen }) => {
+  const [totalStakeUSD, totalCub, totalCubUSD, totalAPY, totalDailyAPR, count] = useTotalStaked(farms, cakePrice, bakePrice, beltPrice, cubDen);
 
   const avgAPY = totalAPY.toString() !== 'NaN' && totalAPY !== 0 ? totalAPY / count : 0
   const avgDaily = totalDailyAPR ? totalDailyAPR / count : 0

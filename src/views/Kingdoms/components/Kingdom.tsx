@@ -4,7 +4,6 @@ import BigNumber from 'bignumber.js'
 import styled, { keyframes } from 'styled-components'
 import { getBalanceNumber } from 'utils/formatBalance'
 import { FarmWithStakedValue } from 'views/Farms/components/FarmCard/FarmCard'
-import { useBusdPriceFromLpSymbol } from 'state/hooks'
 import useKingdomAPRAPY from 'hooks/useKingdomAPRAPY'
 import Balance from 'components/Balance'
 import { DEFAULT_TOKEN_DECIMAL } from 'config'
@@ -82,12 +81,15 @@ interface KingdomProps {
   cakePrice?: BigNumber
   account?: string
   updateTotalStake?: any
+  bakePrice?: BigNumber
+  beltPrice?: BigNumber
+  cubDen?: any
 }
 
-const Kingdom: React.FC<KingdomProps> = ({ farm, removed, cakePrice, account, updateTotalStake }) => {
+const Kingdom: React.FC<KingdomProps> = ({ farm, removed, cakePrice, account, updateTotalStake, bakePrice, beltPrice, cubDen }) => {
   const [showExpandableSection, setShowExpandableSection] = useState(false)
 
-  const { apr, lpTotalInQuoteToken, lpSymbol, lpTokenBalancePCS = 0, lpTotalInQuoteTokenPCS = 0, quoteToken: { busdPrice: quoteTokenPriceUsd }, altPid, farmType } = farm
+  const { apr, lpTotalInQuoteToken, lpSymbol, lpTokenBalancePCS = 0, lpTotalInQuoteTokenPCS = 0, quoteToken: { busdPrice: quoteTokenPriceUsd }, altPid, farmType, token: { busdPrice: tokenPriceString } } = farm
   const farmImage = lpSymbol.split(' ')[0].toLocaleLowerCase()
 
   // let aprApy = useKingdomAPRAPY(
@@ -103,7 +105,9 @@ const Kingdom: React.FC<KingdomProps> = ({ farm, removed, cakePrice, account, up
   //   altPid,
   //   farm,
   // )
-  let aprApy = useKingdomAPRAPY(farm)
+  // const cakePrice = useBusdPriceFromPid(0)
+
+  let aprApy = useKingdomAPRAPY(farm, cakePrice, bakePrice, beltPrice, cubDen)
 
   const { dailyAPR, totalAPY, pcsApr } = aprApy
   const { tokenBalance, stakedBalance, earnings } = farm.userData
@@ -111,8 +115,7 @@ const Kingdom: React.FC<KingdomProps> = ({ farm, removed, cakePrice, account, up
   const rawTokenBalance = tokenBalance ? getBalanceNumber(new BigNumber(tokenBalance)) : 0
   const rawStakedBalance = stakedBalance ? getBalanceNumber(new BigNumber(stakedBalance)) : 0
   const rawEarningsBalance = earnings ? getBalanceNumber(new BigNumber(earnings)) : 0
-
-  const tokenPrice = useBusdPriceFromLpSymbol(farm.lpSymbol);
+  const tokenPrice = new BigNumber(tokenPriceString);
   let oneTokenQuoteValue = new BigNumber(0)
 
   if (!farm.isKingdomToken)

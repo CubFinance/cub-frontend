@@ -1,12 +1,12 @@
-import { DEFAULT_TOKEN_DECIMAL,  } from 'config'
+// import { DEFAULT_TOKEN_DECIMAL,  } from 'config'
 import { BIG_ZERO } from 'utils/bigNumber'
-import { useSelector } from 'react-redux'
+// import { useSelector } from 'react-redux'
 // import { getPoolApr, getFarmApr } from 'utils/apr'
 import { getBalanceNumber } from 'utils/formatBalance'
 import BigNumber from 'bignumber.js'
 import useKingdomAPRAPY from 'hooks/useKingdomAPRAPY'
 
-const useTotalStaked = (farms: any, cakePrice: BigNumber) => {
+const useTotalStaked = (farms: any, cakePrice: BigNumber, bakePrice: BigNumber, beltPrice: BigNumber, cubDen: any) => {
   let rawTotalCUB = BIG_ZERO
   let rawTotalStakedUSD = BIG_ZERO
   let rawTotalAPY = 0
@@ -18,7 +18,7 @@ const useTotalStaked = (farms: any, cakePrice: BigNumber) => {
       const { stakedBalance, earnings } = userData
 
       // eslint-disable-next-line react-hooks/rules-of-hooks
-      const aprApy = useKingdomAPRAPY(farm)
+      const aprApy = useKingdomAPRAPY(farm, cakePrice, bakePrice, beltPrice, cubDen)
 
       if (stakedBalance > '1') {
         let oneTokenQuoteValue = BIG_ZERO

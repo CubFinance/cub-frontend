@@ -51,6 +51,11 @@ export const useFarmFromPid = (pid): Farm => {
   return farm
 }
 
+export const useKingdomFromPid = (pid): Farm => {
+  const farm = useSelector((state: State) => state.farms.data.find((f) => f.pid === pid && f.isKingdom))
+  return farm
+}
+
 export const useFarmFromSymbol = (lpSymbol: string): Farm => {
   const farm = useSelector((state: State) => state.farms.data.find((f) => f.lpSymbol === lpSymbol))
   return farm

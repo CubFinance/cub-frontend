@@ -1,19 +1,3 @@
-/* import React, { useEffect, useCallback, useMemo, useState } from 'react'
-import { useLocation } from 'react-router-dom'
-import { Heading, Flex, Text } from '@pancakeswap-libs/uikit'
-import { useAppDispatch } from 'state'
-import BigNumber from 'bignumber.js'
-import { useWeb3React } from '@web3-react/core'
-import styled from 'styled-components'
-import Page from 'components/layout/Page'
-import PageHeader from 'components/PageHeader'
-import { useFarms, usePriceCakeBusd, useTotalValueKingdoms } from 'state/hooks'
-import useRefresh from 'hooks/useRefresh'
-import { fetchFarmUserDataAsync } from 'state/actions'
-import { Farm } from 'state/types'
-import { getFarmApr } from 'utils/apr'
-import isArchivedPid from 'utils/farmHelpers' */
-
 import React, { useEffect, useCallback, useState, useMemo, useRef } from 'react'
 import { useLocation } from 'react-router-dom'
 import { useAppDispatch } from 'state'
@@ -24,12 +8,11 @@ import styled from 'styled-components'
 // import FlexLayout from 'components/layout/Flex'
 import Page from 'components/layout/Page'
 // import { MigrationV2 } from 'components/Banner'
-import { useFarms, usePriceCakeBusd, useGetApiPrices, useTotalValueKingdoms } from 'state/hooks'
+import { useFarms, usePriceCakeBusd, useGetApiPrices, useTotalValueKingdoms, useBusdPriceFromLpSymbol, useFarmFromPid } from 'state/hooks'
 import useRefresh from 'hooks/useRefresh'
 import { fetchFarmUserDataAsync } from 'state/actions'
 // import usePersistState from 'hooks/usePersistState'
 import { Farm } from 'state/types'
-import useI18n from 'hooks/useI18n'
 // import { getBalanceNumber } from 'utils/formatBalance'
 import { getFarmApr } from 'utils/apr'
 import { orderBy } from 'lodash'
@@ -134,96 +117,18 @@ const FeeWrapper = styled.div`
 const NUMBER_OF_FARMS_VISIBLE = 20
 
 const Kingdoms: React.FC = () => {
-  /* const { pathname } = useLocation()
-  const { data: farmsLP, userDataLoaded } = useFarms()
-
-  const cakePrice = usePriceCakeBusd()
-  const { account } = useWeb3React()
-
-  const dispatch = useAppDispatch()
-  const { fastRefresh } = useRefresh()
-  useEffect(() => {
-    if (account) {
-      dispatch(fetchFarmUserDataAsync(account))
-    }
-  }, [account, dispatch, fastRefresh])
-
-  const isArchived = pathname.includes('archived')
-  const isInactive = pathname.includes('history')
-  const isActive = !isInactive && !isArchived
-
-  // Users with no wallet connected should see 0 as Earned amount
-  // Connected users should see loading indicator until first userData has loaded
-  const userDataReady = !account || (!!account && userDataLoaded)
-
-  // const activeFarms = farmsLP.filter((farm) => farm.isKingdom && farm.multiplier !== '0X' && !isArchivedPid(farm.pid))
-  const activeFarms = farmsLP.filter((farm) => farm.isKingdom && !isArchivedPid(farm.pid))
-
-  const farmsList = useCallback(
-    (farmsToDisplay: Farm[]): FarmWithStakedValue[] => {
-      const farmsToDisplayWithAPR: FarmWithStakedValue[] = farmsToDisplay.map((farm) => {
-        if (!farm.lpTotalInQuoteToken) {
-          return farm
-        }
-
-        const totalLiquidity = new BigNumber(farm.lpTotalInQuoteToken).times(farm.quoteToken.busdPrice)
-        const apr = isActive ? getFarmApr(farm.poolWeight, cakePrice, totalLiquidity) : 0
-
-        return { ...farm, apr, liquidity: totalLiquidity }
-      })
-
-      return farmsToDisplayWithAPR
-    },
-    [cakePrice, isActive],
-  )
-
-  const farmsStakedMemoized = useMemo(() => {
-    let farmsStaked = []
-
-    if (isActive) {
-      farmsStaked = farmsList(activeFarms)
-    }
-    return farmsStaked
-  }, [
-    activeFarms,
-    farmsList,
-    isActive,
-  ])
-
-  const [totalStake, setTotalStake] = useState({})
-  const updateTotalStake = (lpSymbol: string, depositBalanceQuoteValue: number, totalAPY: number, dailyAPR: number) => {
-    console.log('updating', lpSymbol)
-    if (totalStake[lpSymbol]) {
-      setTotalStake({
-        ...totalStake,
-        [lpSymbol]: {
-          depositBalanceQuoteValue: +totalStake[lpSymbol].depositBalanceQuoteValue + +depositBalanceQuoteValue,
-          totalAPY: +totalStake[lpSymbol].totalAPY + +totalAPY,
-          dailyAPR: +totalStake[lpSymbol].dailyAPR + +dailyAPR,
-        },
-      })
-    } else {
-      setTotalStake({
-        ...totalStake,
-        [lpSymbol]: {
-          depositBalanceQuoteValue,
-          totalAPY,
-          dailyAPR,
-        },
-      })
-    }
-  } */
-
   const totalValue = useTotalValueKingdoms();
   // const { path } = useRouteMatch()
   const { pathname } = useLocation()
-  const TranslateString = useI18n()
   const { data: farmsLP } = useFarms()
-  const cakePrice = usePriceCakeBusd()
   const [query, setQuery] = useState('')
   const { account } = useWeb3React()
   const [sortOption, setSortOption] = useState('hot')
   const prices = useGetApiPrices()
+  const cakePrice = usePriceCakeBusd()
+  const bakePrice = useBusdPriceFromLpSymbol('BAKE-BNB LP')
+  const beltPrice = useBusdPriceFromLpSymbol('BELT-BNB LP')
+  const cubDen = useFarmFromPid(12)
 
   const dispatch = useAppDispatch()
   const { fastRefresh } = useRefresh()
@@ -475,7 +380,7 @@ const Kingdoms: React.FC = () => {
         </FeeWrapper>
       </PageHeader>
       <Page className="k-container">
-        <TotalStaked farms={farmsStakedMemoized} cakePrice={cakePrice} totalStake={totalStake} />
+        <TotalStaked farms={farmsStakedMemoized} cakePrice={cakePrice} totalStake={totalStake} bakePrice={bakePrice} beltPrice={beltPrice} cubDen={cubDen} />
         <ControlContainer>
           <ViewControls>
             <ToggleWrapper>
@@ -520,7 +425,7 @@ const Kingdoms: React.FC = () => {
         </ControlContainer>
         <div id="kingdoms">
           {farmsStakedMemoized.map((farm) => (
-            <Kingdom key={farm.pid} farm={farm} cakePrice={cakePrice} account={account} removed={false} updateTotalStake={updateTotalStake} />
+            <Kingdom key={farm.pid} farm={farm} cakePrice={cakePrice} account={account} removed={false} updateTotalStake={updateTotalStake} bakePrice={bakePrice} beltPrice={beltPrice} cubDen={cubDen} />
           ))}
         </div>
         <div ref={loadMoreRef} />

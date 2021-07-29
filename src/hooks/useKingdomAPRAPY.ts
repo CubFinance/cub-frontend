@@ -2,20 +2,19 @@
 import { DEFAULT_TOKEN_DECIMAL } from 'config'
 import { getPoolApr, getFarmApr } from 'utils/apr'
 import { getBalanceNumber } from 'utils/formatBalance'
-import { useBusdPriceFromPid, useFarmFromPid, useBusdPriceFromLpSymbol } from 'state/hooks'
+// import { useBusdPriceFromPid, useFarmFromPid, useBusdPriceFromLpSymbol } from 'state/hooks'
 // import Balance from 'components/Balance'
 import BigNumber from 'bignumber.js'
 import { FarmWithStakedValue } from 'views/Farms/components/FarmCard/FarmCard'
 
 const useKingdomAPRAPY = (
   farm: FarmWithStakedValue,
+  cakePrice: BigNumber,
+  bakePrice: BigNumber,
+  beltPrice: BigNumber,
+  cubDen: any,
 ) => {
   const { apr: cubAPR, isKingdom, poolWeightPCS, compounding, lpTokenBalancePCS: lpTokenBalanceMC = 0, lpTotalInQuoteTokenPCS = 0, quoteToken: { busdPrice: quoteTokenPriceUsd }, altPid, farmType, beltAPR } = farm
-
-  const cakePrice = useBusdPriceFromPid(0)
-  const bakePrice = useBusdPriceFromLpSymbol('BAKE-BNB LP')
-  const beltPrice = useBusdPriceFromLpSymbol('BELT-BNB LP')
-  const cubDen = useFarmFromPid(altPid)
 
   let apr:number
   let data = null
