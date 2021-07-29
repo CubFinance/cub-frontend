@@ -15,8 +15,8 @@ const useKingdomAPRAPY = (
   const cakePrice = useBusdPriceFromPid(0)
   const bakePrice = useBusdPriceFromLpSymbol('BAKE-BNB LP')
   const beltPrice = useBusdPriceFromLpSymbol('BELT-BNB LP')
-
   const newFarm = useFarmFromPid(altPid)
+  
   let apr:number
   let data = null
 
