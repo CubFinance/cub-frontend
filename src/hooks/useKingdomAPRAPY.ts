@@ -15,14 +15,14 @@ const useKingdomAPRAPY = (
   const cakePrice = useBusdPriceFromPid(0)
   const bakePrice = useBusdPriceFromLpSymbol('BAKE-BNB LP')
   const beltPrice = useBusdPriceFromLpSymbol('BELT-BNB LP')
-  const newFarm = useFarmFromPid(altPid)
-  
+  const cubDen = useFarmFromPid(altPid)
+
   let apr:number
   let data = null
 
   if (altPid === 12) {
-    const totalLiquidity = new BigNumber(newFarm.lpTotalInQuoteToken).times(newFarm.quoteToken.busdPrice)
-    apr = getFarmApr(newFarm.poolWeight, newFarm.tokenPriceVsQuote, totalLiquidity)
+    const totalLiquidity = new BigNumber(cubDen.lpTotalInQuoteToken).times(cubDen.quoteToken.busdPrice)
+    apr = getFarmApr(cubDen.poolWeight, cubDen.tokenPriceVsQuote, totalLiquidity)
 
     const dailyAPR = new BigNumber(apr).div(new BigNumber(365)).toNumber()
 
@@ -30,7 +30,7 @@ const useKingdomAPRAPY = (
     const totalAPY = farmAPY
     const totalAPYString = totalAPY && totalAPY.toLocaleString('en-US', { maximumFractionDigits: 2 })
 
-    data = { pcsApr: apr, dailyAPR, farmAPY, totalAPY, totalAPYString, newMultiplier: newFarm.multiplier }
+    data = { pcsApr: apr, dailyAPR, farmAPY, totalAPY, totalAPYString, newMultiplier: cubDen.multiplier }
 
     return data
   }
