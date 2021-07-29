@@ -1,13 +1,10 @@
-// import { useCallback } from 'react'
 import { DEFAULT_TOKEN_DECIMAL } from 'config'
 import { getPoolApr, getFarmApr } from 'utils/apr'
 import { getBalanceNumber } from 'utils/formatBalance'
-// import { useBusdPriceFromPid, useFarmFromPid, useBusdPriceFromLpSymbol } from 'state/hooks'
-// import Balance from 'components/Balance'
 import BigNumber from 'bignumber.js'
 import { FarmWithStakedValue } from 'views/Farms/components/FarmCard/FarmCard'
 
-const useKingdomAPRAPY = (
+const getKingdomAPRAPY = (
   farm: FarmWithStakedValue,
   cakePrice: BigNumber,
   bakePrice: BigNumber,
@@ -63,4 +60,4 @@ const useKingdomAPRAPY = (
   return data
 }
 
-export default useKingdomAPRAPY
+export default getKingdomAPRAPY

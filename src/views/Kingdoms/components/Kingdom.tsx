@@ -4,7 +4,7 @@ import BigNumber from 'bignumber.js'
 import styled, { keyframes } from 'styled-components'
 import { getBalanceNumber } from 'utils/formatBalance'
 import { FarmWithStakedValue } from 'views/Farms/components/FarmCard/FarmCard'
-import useKingdomAPRAPY from 'hooks/useKingdomAPRAPY'
+import getKingdomAPRAPY from 'utils/getKingdomAPRAPY'
 import Balance from 'components/Balance'
 import { DEFAULT_TOKEN_DECIMAL } from 'config'
 import KingdomDetail from './KingdomDetail'
@@ -107,7 +107,7 @@ const Kingdom: React.FC<KingdomProps> = ({ farm, removed, cakePrice, account, up
   // )
   // const cakePrice = useBusdPriceFromPid(0)
 
-  let aprApy = useKingdomAPRAPY(farm, cakePrice, bakePrice, beltPrice, cubDen)
+  let aprApy = getKingdomAPRAPY(farm, cakePrice, bakePrice, beltPrice, cubDen)
 
   const { dailyAPR, totalAPY, pcsApr } = aprApy
   const { tokenBalance, stakedBalance, earnings } = farm.userData
