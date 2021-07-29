@@ -394,8 +394,8 @@ const Kingdoms: React.FC = () => {
               <Select
                 options={[
                   {
-                    label: 'Hot',
-                    value: 'hot',
+                    label: 'Default',
+                    value: 'default',
                   },
                   {
                     label: 'APR',
