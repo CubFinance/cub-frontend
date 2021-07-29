@@ -1,28 +1,24 @@
-// import { useCallback } from 'react'
 import { DEFAULT_TOKEN_DECIMAL } from 'config'
 import { getPoolApr, getFarmApr } from 'utils/apr'
 import { getBalanceNumber } from 'utils/formatBalance'
-import { useBusdPriceFromPid, useFarmFromPid, useBusdPriceFromLpSymbol } from 'state/hooks'
-// import Balance from 'components/Balance'
 import BigNumber from 'bignumber.js'
 import { FarmWithStakedValue } from 'views/Farms/components/FarmCard/FarmCard'
 
-const useKingdomAPRAPY = (
+const getKingdomAPRAPY = (
   farm: FarmWithStakedValue,
+  cakePrice: BigNumber,
+  bakePrice: BigNumber,
+  beltPrice: BigNumber,
+  cubDen: any,
 ) => {
   const { apr: cubAPR, isKingdom, poolWeightPCS, compounding, lpTokenBalancePCS: lpTokenBalanceMC = 0, lpTotalInQuoteTokenPCS = 0, quoteToken: { busdPrice: quoteTokenPriceUsd }, altPid, farmType, beltAPR } = farm
 
-  const cakePrice = useBusdPriceFromPid(0)
-  const bakePrice = useBusdPriceFromLpSymbol('BAKE-BNB LP')
-  const beltPrice = useBusdPriceFromLpSymbol('BELT-BNB LP')
-
-  const newFarm = useFarmFromPid(altPid)
   let apr:number
   let data = null
 
   if (altPid === 12) {
-    const totalLiquidity = new BigNumber(newFarm.lpTotalInQuoteToken).times(newFarm.quoteToken.busdPrice)
-    apr = getFarmApr(newFarm.poolWeight, newFarm.tokenPriceVsQuote, totalLiquidity)
+    const totalLiquidity = new BigNumber(cubDen.lpTotalInQuoteToken).times(cubDen.quoteToken.busdPrice)
+    apr = getFarmApr(cubDen.poolWeight, cubDen.tokenPriceVsQuote, totalLiquidity)
 
     const dailyAPR = new BigNumber(apr).div(new BigNumber(365)).toNumber()
 
@@ -30,7 +26,7 @@ const useKingdomAPRAPY = (
     const totalAPY = farmAPY
     const totalAPYString = totalAPY && totalAPY.toLocaleString('en-US', { maximumFractionDigits: 2 })
 
-    data = { pcsApr: apr, dailyAPR, farmAPY, totalAPY, totalAPYString, newMultiplier: newFarm.multiplier }
+    data = { pcsApr: apr, dailyAPR, farmAPY, totalAPY, totalAPYString, newMultiplier: cubDen.multiplier }
 
     return data
   }
@@ -64,4 +60,4 @@ const useKingdomAPRAPY = (
   return data
 }
 
-export default useKingdomAPRAPY
+export default getKingdomAPRAPY
