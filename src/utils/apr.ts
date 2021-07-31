@@ -35,15 +35,6 @@ export const getFarmApr = (
   isKingdom?: boolean,
   farmType?: string
 ): number => {
-  // console.log('poolWeight',poolWeight.toNumber())
-  // console.log('cakePriceUsd',cakePriceUsd.toNumber())
-  // console.log('poolLiquidityUsd',poolLiquidityUsd.toNumber())
-  // if (farmType === 'Belt') {
-  //   console.log('poolWeight',poolWeight.toNumber())
-  //   console.log('cakePriceUsd',cakePriceUsd.toNumber())
-  //   console.log('poolLiquidityUsd',poolLiquidityUsd.toNumber())
-  // }
-
   if (isKingdom) {
     let yearlyCakeRewardAllocation = PCSCAKE_PER_YEAR.times(poolWeight)
     if (farmType === 'Bakery') yearlyCakeRewardAllocation = BAKE_PER_YEAR.times(poolWeight)

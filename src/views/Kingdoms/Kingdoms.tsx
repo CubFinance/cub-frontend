@@ -126,6 +126,7 @@ const Kingdoms: React.FC = () => {
   const [sortOption, setSortOption] = useState('hot')
   const prices = useGetApiPrices()
   const cakePrice = usePriceCakeBusd()
+  const realCakePrice = useBusdPriceFromLpSymbol('CAKE') || new BigNumber(0)
   const bakePrice = useBusdPriceFromLpSymbol('BAKE-BNB LP')
   const beltPrice = useBusdPriceFromLpSymbol('BELT-BNB LP')
   const cubDen = useFarmFromPid(12)
@@ -425,7 +426,7 @@ const Kingdoms: React.FC = () => {
         </ControlContainer>
         <div id="kingdoms">
           {farmsStakedMemoized.map((farm) => (
-            <Kingdom key={farm.pid} farm={farm} cakePrice={cakePrice} account={account} removed={false} updateTotalStake={updateTotalStake} bakePrice={bakePrice} beltPrice={beltPrice} cubDen={cubDen} />
+            <Kingdom key={farm.pid} farm={farm} cakePrice={cakePrice} account={account} removed={false} updateTotalStake={updateTotalStake} bakePrice={bakePrice} beltPrice={beltPrice} cubDen={cubDen} realCakePrice={realCakePrice} />
           ))}
         </div>
         <div ref={loadMoreRef} />

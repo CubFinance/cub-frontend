@@ -84,30 +84,16 @@ interface KingdomProps {
   bakePrice?: BigNumber
   beltPrice?: BigNumber
   cubDen?: any
+  realCakePrice?: BigNumber
 }
 
-const Kingdom: React.FC<KingdomProps> = ({ farm, removed, cakePrice, account, updateTotalStake, bakePrice, beltPrice, cubDen }) => {
+const Kingdom: React.FC<KingdomProps> = ({ farm, removed, cakePrice, account, updateTotalStake, bakePrice, beltPrice, cubDen, realCakePrice}) => {
   const [showExpandableSection, setShowExpandableSection] = useState(false)
 
   const { apr, lpTotalInQuoteToken, lpSymbol, lpTokenBalancePCS = 0, lpTotalInQuoteTokenPCS = 0, quoteToken: { busdPrice: quoteTokenPriceUsd }, altPid, farmType, token: { busdPrice: tokenPriceString } } = farm
   const farmImage = lpSymbol.split(' ')[0].toLocaleLowerCase()
 
-  // let aprApy = useKingdomAPRAPY(
-  //   isKingdom,
-  //   isKingdomToken,
-  //   Number(tokenPriceVsQuote),
-  //   poolWeightPCS,
-  //   compounding,
-  //   apr,
-  //   lpTokenBalancePCS,
-  //   lpTotalInQuoteTokenPCS,
-  //   Number(quoteTokenPriceUsd),
-  //   altPid,
-  //   farm,
-  // )
-  // const cakePrice = useBusdPriceFromPid(0)
-
-  let aprApy = getKingdomAPRAPY(farm, cakePrice, bakePrice, beltPrice, cubDen)
+  let aprApy = getKingdomAPRAPY(farm, realCakePrice, bakePrice, beltPrice, cubDen)
 
   const { dailyAPR, totalAPY, pcsApr } = aprApy
   const { tokenBalance, stakedBalance, earnings } = farm.userData
@@ -132,12 +118,6 @@ const Kingdom: React.FC<KingdomProps> = ({ farm, removed, cakePrice, account, up
   const farmAPR = apr && apr.toLocaleString('en-US', { maximumFractionDigits: 2 })
 
   aprApy = { ...aprApy, compounding: farm.compounding, farmAPR, apr: altPid === 12 ? pcsApr : farm.apr, cakePrice, quoteTokenPriceUsd: Number(quoteTokenPriceUsd), lpTotalInQuoteToken }
-
-  // setInterval(() => updateTotalStake(farm.lpSymbol, depositBalanceQuoteValue, aprApy.totalAPY, aprApy.dailyAPR), 10000)
-  // useEffect(() => {
-  //   console.log('useEffect')
-  //   updateTotalStake(farm.lpSymbol, depositBalanceQuoteValue, aprApy.totalAPY, aprApy.dailyAPR)
-  // }, [updateTotalStake, farm.lpSymbol, depositBalanceQuoteValue, aprApy.totalAPY, aprApy.dailyAPR])
 
   return (
     <>

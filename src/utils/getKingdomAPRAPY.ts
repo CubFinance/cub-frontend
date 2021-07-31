@@ -6,7 +6,7 @@ import { FarmWithStakedValue } from 'views/Farms/components/FarmCard/FarmCard'
 
 const getKingdomAPRAPY = (
   farm: FarmWithStakedValue,
-  cakePrice: BigNumber,
+  realCakePrice: BigNumber,
   bakePrice: BigNumber,
   beltPrice: BigNumber,
   cubDen: any,
@@ -30,7 +30,12 @@ const getKingdomAPRAPY = (
 
     return data
   }
-
+// if (farm.lpSymbol === 'BNB-BUSD LP') {
+//   console.log('farm',farm.lpSymbol)
+//   console.log('poolWeightPCS',poolWeightPCS)
+//   console.log('cakePrice',realCakePrice.toNumber())
+//   console.log('totalLiquidity',new BigNumber(lpTotalInQuoteTokenPCS).times(quoteTokenPriceUsd).toNumber())
+// }
   if (farm.lpSymbol === 'CAKE') {
     apr = getPoolApr(
       Number(farm.token.busdPrice),
@@ -41,7 +46,7 @@ const getKingdomAPRAPY = (
   } else {
     const totalLiquidity = new BigNumber(lpTotalInQuoteTokenPCS).times(quoteTokenPriceUsd)
 
-    let farmTokenPrice = cakePrice
+    let farmTokenPrice = realCakePrice
     if (farmType === 'Bakery') farmTokenPrice = bakePrice
     else if (farmType === 'Belt') farmTokenPrice = beltPrice
 
