@@ -90,6 +90,7 @@ export const sousEmergencyUnstake = async (sousChefContract, amount, account) =>
 }
 
 export const harvest = async (masterChefContract, pid, account, isKingdom) => {
+  console.log('masterChefContract',masterChefContract)
   if (isKingdom) {
     return masterChefContract.methods
       .withdraw(pid, '0')
@@ -108,7 +109,7 @@ export const harvest = async (masterChefContract, pid, account, isKingdom) => {
 
 export const claim = async (contract, account, user, amount, nonce, signature) => {
   return contract.methods
-    .withdraw(user, amount, nonce, signature)
+    .claim(user, amount, nonce, signature)
     .send({ from: account })
     .on('transactionHash', (tx) => {
       return tx.transactionHash

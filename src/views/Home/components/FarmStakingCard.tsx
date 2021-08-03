@@ -5,7 +5,7 @@ import { useWeb3React } from '@web3-react/core'
 import useI18n from 'hooks/useI18n'
 import { useAllHarvest } from 'hooks/useHarvest'
 import useFarmsWithBalance from 'hooks/useFarmsWithBalance'
-import { useKingdomFromPid } from 'state/hooks'
+import useBnbDividends from 'hooks/useBnbDividends'
 import { useClaim} from 'hooks/useClaim'
 import UnlockButton from 'components/UnlockButton'
 import CakeHarvestBalance from './CakeHarvestBalance'
@@ -38,14 +38,14 @@ const Actions = styled.div`
 
 const FarmedStakingCard = () => {
   const [pendingTx, setPendingTx] = useState(false)
+  const [pendingTxDivs, setPendingTxDivs] = useState(false)
   const { account } = useWeb3React()
+  const bnbDividends = useBnbDividends()
   const TranslateString = useI18n()
   const farmsWithBalance = useFarmsWithBalance()
   const balancesWithValue = farmsWithBalance.filter((balanceType) => balanceType.balance.toNumber() > 0)
 
-  const farm = useKingdomFromPid(4)
-  const { bnbDividends = {} } = farm.userData || {}
-  const { onClaim } = useClaim(bnbDividends)
+  const { onClaim } = useClaim(bnbDividends || {})
   const bnbRewards = bnbDividends && bnbDividends.amount ? bnbDividends.amount : 0
 
   const { onReward } = useAllHarvest(balancesWithValue.map((farmWithBalance) => {
@@ -108,11 +108,11 @@ const FarmedStakingCard = () => {
             <Actions>
               {account ? (
                 <Button
-                  disabled={bnbRewards === 0 || pendingTx}
+                  disabled={bnbRewards === 0 || pendingTxDivs}
                   onClick={async () => {
-                    setPendingTx(true)
+                    setPendingTxDivs(true)
                     await onClaim()
-                    setPendingTx(false)
+                    setPendingTxDivs(false)
                   }}
                 >
                   Claim BNB

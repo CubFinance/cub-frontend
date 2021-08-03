@@ -12,6 +12,10 @@ export default {
     56: '0x2e72f4b196b9e5b89c29579cc135756a00e6cbbd',
     97: '',
   },
+  bnbDividends: {
+    56: '0xa22efc88F3Eb641D881D0807dc8E305d71920cAB',
+    97: '',
+  },
   pcsV2masterChef: {
     56: '0x73feaa1eE314F8c655E354234017bE2193C9E24E',
     97: '',

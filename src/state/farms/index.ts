@@ -10,7 +10,6 @@ import {
   fetchFarmUserAllowances,
   fetchFarmUserTokenBalances,
   fetchFarmUserStakedBalances,
-  fetchBNBDividends,
 } from './fetchFarmUser'
 import { FarmsState, Farm } from '../types'
 
@@ -40,11 +39,11 @@ export const farmsSlice = createSlice({
       })
     },
     setFarmUserData: (state, action) => {
-      const { arrayOfUserDataObjects, bnbDividends } = action.payload
+      const { arrayOfUserDataObjects } = action.payload
       arrayOfUserDataObjects.forEach((userDataEl) => {
         const { pid, isKingdom, lpSymbol } = userDataEl
         const index = state.data.findIndex((farm) => farm.pid === pid && isKingdom === farm.isKingdom)
-        if (isKingdom && lpSymbol === 'CUB') state.data[index] = { ...state.data[index], userData: { ...userDataEl, bnbDividends }}
+        if (isKingdom && lpSymbol === 'CUB') state.data[index] = { ...state.data[index], userData: { ...userDataEl }}
         else state.data[index] = { ...state.data[index], userData: userDataEl }
       })
       state.userDataLoaded = true
@@ -92,7 +91,6 @@ export const fetchFarmUserDataAsync = (account: string) => async (dispatch, getS
   const userFarmTokenBalances = await fetchFarmUserTokenBalances(account, farmsToFetch)
   const userStakedBalances = await fetchFarmUserStakedBalances(account, farmsToFetch)
   const userFarmEarnings = await fetchFarmUserEarnings(account, farmsToFetch)
-  const bnbDividends = await fetchBNBDividends(account)
 
   const arrayOfUserDataObjects = userFarmAllowances.map((farmAllowance, index) => {
     return {
@@ -106,7 +104,7 @@ export const fetchFarmUserDataAsync = (account: string) => async (dispatch, getS
     }
   })
 
-  dispatch(setFarmUserData({ arrayOfUserDataObjects, bnbDividends }))
+  dispatch(setFarmUserData({ arrayOfUserDataObjects }))
 }
 
 export default farmsSlice.reducer

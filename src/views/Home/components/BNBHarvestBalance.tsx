@@ -2,10 +2,11 @@ import React from 'react'
 import { Text } from '@pancakeswap-libs/uikit'
 import { useWeb3React } from '@web3-react/core'
 import BigNumber from 'bignumber.js'
-// import useAllEarnings from 'hooks/useAllEarnings'
+import { DEFAULT_TOKEN_DECIMAL } from 'config'
+import { BIG_ZERO } from 'utils/bigNumber'
+
 import { useBusdPriceFromLpSymbol } from 'state/hooks'
 import styled from 'styled-components'
-// import { DEFAULT_TOKEN_DECIMAL } from 'config'
 import CardValue from './CardValue'
 import CardBusdValue from './CardBusdValue'
 
@@ -16,8 +17,9 @@ const Block = styled.div`
 const BNBHarvestBalance = ({ bnbDividends }) => {
   const { account } = useWeb3React()
   const bnbPrice = useBusdPriceFromLpSymbol('BNB-BUSD LP')
-  const bnbRewards = bnbDividends && bnbDividends.amount ? bnbDividends.amount : 0
-  const bnbRewardsUSD = bnbRewards ? new BigNumber(bnbRewards).multipliedBy(bnbPrice).toNumber() : 0
+
+  const bnbRewards = bnbDividends && bnbDividends.amount ? new BigNumber(bnbDividends.amount).div(DEFAULT_TOKEN_DECIMAL) : BIG_ZERO
+  const bnbRewardsUSD = bnbRewards ? bnbRewards.multipliedBy(bnbPrice).toNumber() : 0
 
   if (!account) {
     return (
@@ -29,7 +31,7 @@ const BNBHarvestBalance = ({ bnbDividends }) => {
 
   return (
     <Block>
-      <CardValue value={bnbRewards} lineHeight="1.5" />
+      <CardValue value={bnbRewards.toNumber()} lineHeight="1.5" />
       {!bnbPrice.eq(0) && <CardBusdValue value={bnbRewardsUSD} />}
     </Block>
   )

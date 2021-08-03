@@ -1,11 +1,11 @@
 import BigNumber from 'bignumber.js'
+// import axios from 'axios'
 import erc20ABI from 'config/abi/erc20.json'
 import masterchefABI from 'config/abi/masterchef.json'
 import kingdomsABI from 'config/abi/kingdoms.json'
 import multicall from 'utils/multicall'
 import { getAddress, getMasterChefAddress, getKingdomsAddress } from 'utils/addressHelpers'
 import { FarmConfig } from 'config/constants/types'
-import { getBNBDividends } from 'utils/kingdomScripts'
 
 export const fetchFarmUserAllowances = async (account: string, farmsToFetch: FarmConfig[]) => {
   const masterChefAddress = getMasterChefAddress()
@@ -70,20 +70,6 @@ export const fetchFarmUserStakedBalances = async (account: string, farmsToFetch:
     return new BigNumber(stakedBalance[0]._hex).toJSON()
   })
   return parsedStakedBalances
-
-  /* const calls = farmsToFetch.map((farm) => {
-    return {
-      address: farm.isKingdom ? kingdomAddress : masterChefAddress,
-      name: 'userInfo',
-      params: [farm.pid, account],
-    }
-  })
-
-  const rawStakedBalances = await multicall(masterchefABI, calls)
-  const parsedStakedBalances = rawStakedBalances.map((stakedBalance) => {
-    return new BigNumber(stakedBalance[0]._hex).toJSON()
-  })
-  return parsedStakedBalances */
 }
 
 export const fetchFarmUserEarnings = async (account: string, farmsToFetch: FarmConfig[]) => {
@@ -114,8 +100,4 @@ export const fetchFarmUserEarnings = async (account: string, farmsToFetch: FarmC
   })
 
   return parsedEarnings
-}
-
-export const fetchBNBDividends = async (account: string) => {
-  return getBNBDividends(account)
 }
