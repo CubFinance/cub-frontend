@@ -40,11 +40,11 @@ const FarmedStakingCard = () => {
   const [pendingTx, setPendingTx] = useState(false)
   const [pendingTxDivs, setPendingTxDivs] = useState(false)
   const { account } = useWeb3React()
-  const bnbDividends = useBnbDividends()
   const TranslateString = useI18n()
   const farmsWithBalance = useFarmsWithBalance()
   const balancesWithValue = farmsWithBalance.filter((balanceType) => balanceType.balance.toNumber() > 0)
 
+  const bnbDividends = useBnbDividends()
   const { onClaim } = useClaim(bnbDividends || {})
   const bnbRewards = bnbDividends && bnbDividends.amount ? bnbDividends.amount : 0
 

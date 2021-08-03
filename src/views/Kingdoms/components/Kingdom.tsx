@@ -80,14 +80,14 @@ interface KingdomProps {
   removed?: boolean
   cakePrice?: BigNumber
   account?: string
-  updateTotalStake?: any
   bakePrice?: BigNumber
   beltPrice?: BigNumber
   cubDen?: any
   realCakePrice?: BigNumber
+  bnbDividends?: any
 }
 
-const Kingdom: React.FC<KingdomProps> = ({ farm, removed, cakePrice, account, updateTotalStake, bakePrice, beltPrice, cubDen, realCakePrice}) => {
+const Kingdom: React.FC<KingdomProps> = ({ farm, removed, cakePrice, account, bakePrice, beltPrice, cubDen, realCakePrice, bnbDividends }) => {
   const [showExpandableSection, setShowExpandableSection] = useState(false)
 
   const { apr, lpTotalInQuoteToken, lpSymbol, lpTokenBalancePCS = 0, lpTotalInQuoteTokenPCS = 0, quoteToken: { busdPrice: quoteTokenPriceUsd }, altPid, farmType, token: { busdPrice: tokenPriceString } } = farm
@@ -199,6 +199,7 @@ const Kingdom: React.FC<KingdomProps> = ({ farm, removed, cakePrice, account, up
             aprApy={aprApy}
             account={account}
             cakePrice={cakePrice}
+            bnbDividends={bnbDividends}
           />
         </ExpandingWrapper>
       </K>

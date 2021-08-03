@@ -17,6 +17,7 @@ import { useClaim} from 'hooks/useClaim'
 import { getBep20Contract } from 'utils/contractHelpers'
 import { getAddress } from 'utils/addressHelpers'
 import useWeb3 from 'hooks/useWeb3'
+import { DEFAULT_TOKEN_DECIMAL } from 'config'
 
 import './KingdomCard.css'
 
@@ -58,6 +59,7 @@ interface KingdomCardProps {
   addLiquidityUrl: string
   account?: string
   cakePrice?: BigNumber
+  bnbDividends?: any
 }
 
 const KingdomCard: React.FC<KingdomCardProps> = ({
@@ -70,11 +72,13 @@ const KingdomCard: React.FC<KingdomCardProps> = ({
   addLiquidityUrl,
   account,
   cakePrice,
+  bnbDividends,
 }) => {
   const location = useLocation()
   const bnbPrice = useBusdPriceFromLpSymbol('BNB-BUSD LP')
   const [requestedApproval, setRequestedApproval] = useState(false)
   const [pendingTx, setPendingTx] = useState(false)
+  const [pendingTxDivs, setPendingTxDivs] = useState(false)
   const { pid, isTokenOnly, isKingdom, isKingdomToken, lpSymbol, lpAddresses, token: { address } } = farm
 
   const tokenName = lpSymbol.toUpperCase()
@@ -82,7 +86,6 @@ const KingdomCard: React.FC<KingdomCardProps> = ({
     allowance: allowanceAsString = 0,
     tokenBalance: tokenBalanceAsString = 0,
     stakedBalance: stakedBalanceAsString = 0,
-    bnbDividends = {},
   } = farm.userData || {}
   const allowance = new BigNumber(allowanceAsString)
   const tokenBalance = new BigNumber(tokenBalanceAsString)
@@ -94,7 +97,7 @@ const KingdomCard: React.FC<KingdomCardProps> = ({
   const { onStake } = useStake(pid, isKingdom)
   const { onUnstake } = useUnstake(pid, isKingdom)
   const { onReward } = useHarvest(pid, isKingdom)
-  const { onClaim } = useClaim(bnbDividends)
+  const { onClaim } = useClaim(bnbDividends || {})
 
   const isApproved = account && allowance && allowance.isGreaterThan(0)
 
@@ -136,7 +139,7 @@ const KingdomCard: React.FC<KingdomCardProps> = ({
     </Button>
   )
 
-  const bnbRewards = bnbDividends && bnbDividends.amount ? bnbDividends.amount : 0
+  const bnbRewards = bnbDividends && bnbDividends.amount ? new BigNumber(bnbDividends.amount).div(DEFAULT_TOKEN_DECIMAL).toNumber() : 0
   const bnbRewardsUSD = bnbRewards ? new BigNumber(bnbRewards).multipliedBy(bnbPrice).toNumber() : 0
 
   let harvestSection = null
@@ -154,11 +157,11 @@ const KingdomCard: React.FC<KingdomCardProps> = ({
           &nbsp;<Brackets>(</Brackets><CardBusdValue value={bnbRewardsUSD} /><Brackets>)</Brackets>
         </Values>
         <Button
-          disabled={bnbRewards === 0 || pendingTx || !isApproved}
+          disabled={bnbRewards === 0 || pendingTxDivs || !isApproved}
           onClick={async () => {
-            setPendingTx(true)
+            setPendingTxDivs(true)
             await onClaim()
-            setPendingTx(false)
+            setPendingTxDivs(false)
           }}
         >
           Claim

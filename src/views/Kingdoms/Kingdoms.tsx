@@ -31,6 +31,7 @@ import SearchInput from 'views/Farms/components/SearchInput'
 // import ToggleView from './components/ToggleView/ToggleView'
 // import { DesktopColumnSchema, ViewMode } from './components/types'
 
+import useBnbDividends from 'hooks/useBnbDividends'
 import { FarmWithStakedValue } from 'views/Farms/components/FarmCard/FarmCard'
 import Kingdom from './components/Kingdom'
 import CardValue from './components/CardValue'
@@ -130,6 +131,8 @@ const Kingdoms: React.FC = () => {
   const bakePrice = useBusdPriceFromLpSymbol('BAKE-BNB LP')
   const beltPrice = useBusdPriceFromLpSymbol('BELT-BNB LP')
   const cubDen = useFarmFromPid(12)
+
+  const bnbDividends = useBnbDividends() || {}
 
   const dispatch = useAppDispatch()
   const { fastRefresh } = useRefresh()
@@ -309,29 +312,6 @@ const Kingdoms: React.FC = () => {
     setSortOption(option.value)
   }
 
-  const [totalStake, setTotalStake] = useState({})
-  const updateTotalStake = (lpSymbol: string, depositBalanceQuoteValue: number, totalAPY: number, dailyAPR: number) => {
-    if (totalStake[lpSymbol]) {
-      setTotalStake({
-        ...totalStake,
-        [lpSymbol]: {
-          depositBalanceQuoteValue: +totalStake[lpSymbol].depositBalanceQuoteValue + +depositBalanceQuoteValue,
-          totalAPY: +totalStake[lpSymbol].totalAPY + +totalAPY,
-          dailyAPR: +totalStake[lpSymbol].dailyAPR + +dailyAPR,
-        },
-      })
-    } else {
-      setTotalStake({
-        ...totalStake,
-        [lpSymbol]: {
-          depositBalanceQuoteValue,
-          totalAPY,
-          dailyAPR,
-        },
-      })
-    }
-  }
-
   return (
     <>
       <PageHeader>
@@ -381,7 +361,7 @@ const Kingdoms: React.FC = () => {
         </FeeWrapper>
       </PageHeader>
       <Page className="k-container">
-        <TotalStaked farms={farmsStakedMemoized} cakePrice={cakePrice} totalStake={totalStake} bakePrice={bakePrice} beltPrice={beltPrice} cubDen={cubDen} />
+        <TotalStaked farms={farmsStakedMemoized} cakePrice={cakePrice} bakePrice={bakePrice} beltPrice={beltPrice} cubDen={cubDen} />
         <ControlContainer>
           <ViewControls>
             <ToggleWrapper>
@@ -426,7 +406,7 @@ const Kingdoms: React.FC = () => {
         </ControlContainer>
         <div id="kingdoms">
           {farmsStakedMemoized.map((farm) => (
-            <Kingdom key={farm.pid} farm={farm} cakePrice={cakePrice} account={account} removed={false} updateTotalStake={updateTotalStake} bakePrice={bakePrice} beltPrice={beltPrice} cubDen={cubDen} realCakePrice={realCakePrice} />
+            <Kingdom key={farm.pid} farm={farm} cakePrice={cakePrice} account={account} removed={false} bakePrice={bakePrice} beltPrice={beltPrice} cubDen={cubDen} realCakePrice={realCakePrice} bnbDividends={bnbDividends} />
           ))}
         </div>
         <div ref={loadMoreRef} />

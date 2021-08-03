@@ -13,7 +13,6 @@ const Wrapper = styled.div`
 interface TotalStakedProps {
   farms: any
   cakePrice: BigNumber
-  totalStake?: any
   bakePrice?: BigNumber
   beltPrice?: BigNumber
   cubDen?: any
