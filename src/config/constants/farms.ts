@@ -416,7 +416,7 @@ const farms: FarmConfig[] = [
     isKingdom: true,
     isKingdomToken: true,
     farmType: 'Belt',
-    lpSymbol: 'beltUSD',
+    lpSymbol: '4belt',
     lpAddresses: {
       97: '',
       56: '0x9cb73f20164e399958261c289eb5f9846f4d1404',

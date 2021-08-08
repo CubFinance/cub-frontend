@@ -349,7 +349,7 @@ const fetchFarms = async (farmsToFetch: FarmConfig[]) => {
 
         let tokenValuePerOrigin = BIG_ZERO
         // let totalSupplyBelt = BIG_ZERO
-        if (farmConfig.farmType === 'Belt' && farmConfig.lpSymbol !== 'beltUSD') {
+        if (farmConfig.farmType === 'Belt' && farmConfig.lpSymbol !== '4belt') {
           const bCalls = [
             {
               address: tokenAddress,

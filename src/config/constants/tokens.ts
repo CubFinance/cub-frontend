@@ -148,7 +148,7 @@ const tokens = {
     projectLink: 'https://belt.fi/bsc',
   },
   beltusd: {
-    symbol: 'beltUSD',
+    symbol: '4belt',
     address: {
       56: '0x9cb73f20164e399958261c289eb5f9846f4d1404',
       97: '',

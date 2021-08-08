@@ -69,7 +69,7 @@ export const fetchFarmsPublicDataAsync = () => async (dispatch, getState) => {
   const newFarms = farmsWithPrices.map((farm) => {
     if (farm.farmType === 'Belt') {
       let tokenPrice = new BigNumber(0)
-      if (farm.lpSymbol !== 'beltUSD') {
+      if (farm.lpSymbol !== '4belt') {
 
         tokenPrice = farm.quoteToken.busdPrice ? new BigNumber(farm.tokenValuePerOrigin).times(farm.quoteToken.busdPrice) : new BigNumber(0)
       } else {

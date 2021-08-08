@@ -90,7 +90,6 @@ export const sousEmergencyUnstake = async (sousChefContract, amount, account) =>
 }
 
 export const harvest = async (masterChefContract, pid, account, isKingdom) => {
-  console.log('masterChefContract',masterChefContract)
   if (isKingdom) {
     return masterChefContract.methods
       .withdraw(pid, '0')
