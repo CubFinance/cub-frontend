@@ -1,16 +1,15 @@
-// import tokens from './tokens'
-// import farms from './farms'
-// import { Ifo, Token } from './types'
-import { Ifo } from './types'
+import tokens from './tokens'
+import farms from './farms'
+import { Ifo, Token } from './types'
 
-/* const cakeBnbLpToken: Token = {
+const cakeBnbLpToken: Token = {
   symbol: farms[1].lpSymbol,
   address: farms[1].lpAddresses,
   decimals: 18,
-} */
+}
 
 const ifos: Ifo[] = [
-  /* {
+  {
     id: 'horizon',
     address: '0x6137B571f7F1E44839ae10310a08be86D1A4D03B',
     isActive: true,
@@ -186,7 +185,7 @@ const ifos: Ifo[] = [
     articleUrl: 'https://medium.com/pancakeswap/1-000-000-ifo-blink-joins-pancakeswap-15841800bdd8',
     tokenOfferingPrice: null,
     isV1: true,
-  }, */
+  },
 ]
 
 export default ifos
