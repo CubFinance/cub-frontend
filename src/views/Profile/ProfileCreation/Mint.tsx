@@ -67,7 +67,7 @@ const Mint: React.FC = () => {
       <Text as="p">{TranslateString(786, 'Every profile starts by making a “starter” collectible (NFT).')}</Text>
       <Text as="p">{TranslateString(788, 'This starter will also become your first profile picture.')}</Text>
       <Text as="p" mb="24px">
-        {TranslateString(790, 'You can change your profile pic later if you get another approved Pancake Collectible.')}
+        {TranslateString(790, 'You can change your profile pic later if you get another approved Cub Collectible.')}
       </Text>
       <Card mb="24px">
         <CardBody>
@@ -78,7 +78,7 @@ const Mint: React.FC = () => {
             {TranslateString(794, 'Choose wisely: you can only ever make one starter collectible!')}
           </Text>
           <Text as="p" mb="24px" color="textSubtle">
-            {TranslateString(999, `Cost: ${MINT_COST} CAKE`, { num: MINT_COST })}
+            {TranslateString(999, `Cost: ${MINT_COST} CUB`, { num: MINT_COST })}
           </Text>
           {nfts.map((nft) => {
             const handleChange = (value: string) => setVariationId(Number(value))
@@ -99,7 +99,7 @@ const Mint: React.FC = () => {
           })}
           {!hasMinimumCakeRequired && (
             <Text color="failure" mb="16px">
-              {TranslateString(1098, `A minimum of ${MINT_COST} CAKE is required`)}
+              {TranslateString(1098, `A minimum of ${MINT_COST} CUB is required`)}
             </Text>
           )}
           <ApproveConfirmButtons

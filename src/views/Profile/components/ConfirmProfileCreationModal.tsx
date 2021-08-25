@@ -74,7 +74,7 @@ const ConfirmProfileCreationModal: React.FC<Props> = ({
       </Text>
       <Flex justifyContent="space-between" mb="16px">
         <Text>{TranslateString(999, 'Cost')}</Text>
-        <Text>{TranslateString(999, `${REGISTER_COST} CAKE`, { num: REGISTER_COST })}</Text>
+        <Text>{TranslateString(999, `${REGISTER_COST} CUB`, { num: REGISTER_COST })}</Text>
       </Flex>
       <ApproveConfirmButtons
         isApproveDisabled={isConfirmed || isConfirming || isApproved}

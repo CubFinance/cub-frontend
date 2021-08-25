@@ -64,7 +64,7 @@ const IfoCardTokens: React.FC<IfoCardTokensProps> = ({
     if (account && !hasProfile) {
       return (
         <Text textAlign="center">
-          {TranslateString(999, 'You need an active PancakeSwap Profile to take part in an IFO!')}
+          {TranslateString(999, 'You need an active CubDefi Profile to take part in an IFO!')}
         </Text>
       )
     }
@@ -82,7 +82,7 @@ const IfoCardTokens: React.FC<IfoCardTokensProps> = ({
     if (publicIfoData.status === 'live') {
       return (
         <>
-          <TokenSection img="/images/farms/cake-bnb.svg" mb="24px">
+          <TokenSection img="/images/farms/cub-bnb.svg" mb="24px">
             <Label>{`Your ${currency.symbol} committed`}</Label>
             <Value>{getBalanceNumber(userPoolCharacteristics.amountTokenCommittedInLP, currency.decimals)}</Value>
             <PercentageOfTotal
@@ -105,7 +105,7 @@ const IfoCardTokens: React.FC<IfoCardTokensProps> = ({
         </Flex>
       ) : (
         <>
-          <TokenSection img="/images/farms/cake-bnb.svg" mb="24px">
+          <TokenSection img="/images/farms/cub-bnb.svg" mb="24px">
             <Label>{hasClaimed ? `Your ${currency.symbol} RECLAIMED` : `Your ${currency.symbol} TO RECLAIM`}</Label>
             <Flex alignItems="center">
               <Value>{getBalanceNumber(userPoolCharacteristics.refundingAmountInLP, currency.decimals)}</Value>

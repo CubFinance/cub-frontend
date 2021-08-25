@@ -57,7 +57,7 @@ const IfoCardDetails: React.FC<IfoCardDetailsProps> = ({ poolId, ifo, publicIfoD
             <FooterEntry label={TranslateString(999, 'Max. LP token entry')} value={maxLpTokens} />
           )}
           <FooterEntry label={TranslateString(999, 'Funds to raise:')} value={ifo[poolId].raiseAmount} />
-          <FooterEntry label={TranslateString(999, 'CAKE to burn:')} value={ifo[poolId].cakeToBurn} />
+          <FooterEntry label={TranslateString(999, 'CUB to burn:')} value={ifo[poolId].cakeToBurn} />
           <FooterEntry label={`Price per ${ifo.token.symbol}: `} value={`$${ifo.tokenOfferingPrice}`} />
         </>
       )
@@ -86,7 +86,7 @@ const IfoCardDetails: React.FC<IfoCardDetailsProps> = ({ poolId, ifo, publicIfoD
           )}
           <FooterEntry label={TranslateString(999, 'Total committed:')} value={totalCommitted} />
           <FooterEntry label={TranslateString(999, 'Funds to raise:')} value={ifo[poolId].raiseAmount} />
-          <FooterEntry label={TranslateString(999, 'CAKE to burn:')} value={ifo[poolId].cakeToBurn} />
+          <FooterEntry label={TranslateString(999, 'CUB to burn:')} value={ifo[poolId].cakeToBurn} />
           <FooterEntry
             label={`Price per ${ifo.token.symbol}: `}
             value={`$${ifo.tokenOfferingPrice ? ifo.tokenOfferingPrice : '?'}`}

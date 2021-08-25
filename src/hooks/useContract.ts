@@ -7,6 +7,7 @@ import {
   getBunnySpecialContract,
   getPancakeRabbitContract,
   getProfileContract,
+  getIfoContract,
   getIfoV1Contract,
   getIfoV2Contract,
   getLotteryContract,
@@ -27,6 +28,11 @@ import {
 /**
  * Helper hooks to get specific contracts (by ABI)
  */
+
+export const useIfoContract = (address: string) => {
+  const web3 = useWeb3()
+  return useMemo(() => getIfoContract(address, web3), [address, web3])
+}
 
 export const useIfoV1Contract = (address: string) => {
   const web3 = useWeb3()

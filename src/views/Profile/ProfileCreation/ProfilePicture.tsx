@@ -55,12 +55,12 @@ const ProfilePicture: React.FC = () => {
           {TranslateString(852, 'Oops!')}
         </Heading>
         <Text bold fontSize="20px" mb="24px">
-          {TranslateString(854, 'We couldn’t find any Pancake Collectibles in your wallet.')}
+          {TranslateString(854, 'We couldn’t find any Cub Collectibles in your wallet.')}
         </Text>
         <Text as="p">
           {TranslateString(
             856,
-            'You need a Pancake Collectible to finish setting up your profile. If you sold or transferred your starter collectible to another wallet, you’ll need to get it back or acquire a new one somehow. You can’t make a new starter with this wallet address.',
+            'You need a Cub Collectible to finish setting up your profile. If you sold or transferred your starter collectible to another wallet, you’ll need to get it back or acquire a new one somehow. You can’t make a new starter with this wallet address.',
           )}
         </Text>
       </>
@@ -87,7 +87,7 @@ const ProfilePicture: React.FC = () => {
             )}
           </Text>
           <Text as="p" color="textSubtle" mb="24px">
-            {TranslateString(816, 'Only approved Pancake Collectibles can be used.')}
+            {TranslateString(816, 'Only approved Cub Collectibles can be used.')}
             <Link to="/collectibles" style={{ marginLeft: '4px' }}>
               {TranslateString(999, 'See the list >')}
             </Link>

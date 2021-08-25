@@ -70,7 +70,7 @@ const IfoSteps: React.FC<Props> = ({ ifo, walletIfoData }) => {
               Activate your Profile
             </Heading>
             <Text color="textSubtle" small mb="16px">
-              You’ll need an active PancakeSwap Profile to take part in an IFO!
+              You’ll need an active CubDefi Profile to take part in an IFO!
             </Text>
             {isStepValid ? (
               <Text color="success" bold>
@@ -87,10 +87,10 @@ const IfoSteps: React.FC<Props> = ({ ifo, walletIfoData }) => {
         return (
           <CardBody>
             <Heading as="h4" color="secondary" mb="16px">
-              Get CAKE-BNB LP Tokens
+              Get CUB-BNB LP Tokens
             </Heading>
             <Text color="textSubtle" small>
-              Stake CAKE and BNB in the liquidity pool to get LP tokens. <br />
+              Stake CUB and BNB in the liquidity pool to get LP tokens. <br />
               You’ll spend them to buy IFO sale tokens.
             </Text>
             <Button
@@ -123,7 +123,7 @@ const IfoSteps: React.FC<Props> = ({ ifo, walletIfoData }) => {
               Claim your tokens and achievement
             </Heading>
             <Text color="textSubtle" small>
-              After the IFO sales finish, you can claim any IFO tokens that you bought, and any unspent CAKE-BNB LP
+              After the IFO sales finish, you can claim any IFO tokens that you bought, and any unspent CUB-BNB LP
               tokens will be returned to your wallet.
             </Text>
           </CardBody>

@@ -52,6 +52,8 @@ import cakeVaultAbi from 'config/abi/cakeVault.json'
 import predictionsAbi from 'config/abi/predictions.json'
 import pcsV2MasterchefAbi from 'config/abi/PCS-v2-masterchef.json'
 
+const ifoAbi = ifoV1Abi
+
 const getContract = (abi: any, address: string, web3?: Web3) => {
   const _web3 = web3 ?? web3NoAccount
   return new _web3.eth.Contract((abi as unknown) as AbiItem, address)
@@ -65,6 +67,9 @@ export const getErc721Contract = (address: string, web3?: Web3) => {
 }
 export const getLpContract = (address: string, web3?: Web3) => {
   return getContract(lpTokenAbi, address, web3)
+}
+export const getIfoContract = (address: string, web3?: Web3) => {
+  return getContract(ifoAbi, address, web3)
 }
 export const getIfoV1Contract = (address: string, web3?: Web3) => {
   return getContract(ifoV1Abi, address, web3)

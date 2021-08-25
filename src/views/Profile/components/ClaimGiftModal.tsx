@@ -63,7 +63,7 @@ const ClaimGift: React.FC<ClaimGiftProps> = ({ onSuccess, onDismiss }) => {
   return (
     <Modal title={TranslateString(999, 'Claim your Gift!')} onDismiss={onDismiss}>
       <div style={{ maxWidth: '640px' }}>
-        <Text as="p">{TranslateString(999, 'Thank you for being a day-one user of Pancake Profiles!')}</Text>
+        <Text as="p">{TranslateString(999, 'Thank you for being a day-one user of Cub Profiles!')}</Text>
         <Text as="p" mb="8px">
           {TranslateString(
             999,
@@ -71,7 +71,7 @@ const ClaimGift: React.FC<ClaimGiftProps> = ({ onSuccess, onDismiss }) => {
           )}
         </Text>
         <Text as="p">
-          {TranslateString(999, "To make it up to you, we'll refund you the full 4 CAKE it cost to make your bunny.")}
+          {TranslateString(999, "To make it up to you, we'll refund you the full 4 CUB it cost to make your bunny.")}
         </Text>
         <Text as="p" mb="8px">
           {TranslateString(
@@ -91,7 +91,7 @@ const ClaimGift: React.FC<ClaimGiftProps> = ({ onSuccess, onDismiss }) => {
           onClick={handleClick}
           disabled={!canClaim}
         >
-          {TranslateString(999, 'Claim Your CAKE')}
+          {TranslateString(999, 'Claim Your CUB')}
         </Button>
       </div>
     </Modal>

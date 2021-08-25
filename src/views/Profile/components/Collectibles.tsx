@@ -34,18 +34,18 @@ const Collectibles = () => {
   return (
     <>
       <Heading as="h4" size="md" mb="8px">
-        {TranslateString(999, 'Pancake Collectibles')}
+        {TranslateString(999, 'Cub Collectibles')}
       </Heading>
       <Text as="p">
         {TranslateString(
           999,
-          'Pancake Collectibles are special ERC-721 NFTs that can be used on the PancakeSwap platform.',
+          'Cub Collectibles are special ERC-721 NFTs that can be used on the CubDefi platform.',
         )}
       </Text>
       <Text as="p">
         {TranslateString(
           999,
-          "NFTs in this user's wallet that aren't approved Pancake Collectibles won't be shown here.",
+          "NFTs in this user's wallet that aren't approved Cub Collectibles won't be shown here.",
         )}
       </Text>
       {nftsInWallet.length > 0 && (
@@ -63,7 +63,7 @@ const Collectibles = () => {
         </Flex>
       )}
       <Flex alignItems="center" justifyContent="flex-end">
-        <Link to="/collectibles">{TranslateString(999, 'See all approved Pancake Collectibles')}</Link>
+        <Link to="/collectibles">{TranslateString(999, 'See all approved Cub Collectibles')}</Link>
         <ChevronRightIcon />
       </Flex>
     </>

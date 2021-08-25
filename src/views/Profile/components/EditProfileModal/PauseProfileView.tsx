@@ -61,7 +61,7 @@ const PauseProfilePage: React.FC<PauseProfilePageProps> = ({ onDismiss }) => {
         )}
       </Text>
       <Text as="p" color="textSubtle" mb="24px">
-        {TranslateString(999, `Cost to reactivate in future: ${getBalanceNumber(numberCakeToReactivate)} CAKE`)}
+        {TranslateString(999, `Cost to reactivate in future: ${getBalanceNumber(numberCakeToReactivate)} CUB`)}
       </Text>
       <label htmlFor="acknowledgement" style={{ cursor: 'pointer', display: 'block', marginBottom: '24px' }}>
         <Flex alignItems="center">

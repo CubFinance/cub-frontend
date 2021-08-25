@@ -34,7 +34,7 @@ const ifos: Ifo[] = [
     tokenOfferingPrice: 0.25,
     isV1: false,
   },
-  {
+  /* {
     id: 'belt',
     address: '0xc9FBedC033a1c479a6AD451ffE463025E92a1d38',
     isActive: false,
@@ -185,7 +185,7 @@ const ifos: Ifo[] = [
     articleUrl: 'https://medium.com/pancakeswap/1-000-000-ifo-blink-joins-pancakeswap-15841800bdd8',
     tokenOfferingPrice: null,
     isV1: true,
-  },
+  }, */
 ]
 
 export default ifos
