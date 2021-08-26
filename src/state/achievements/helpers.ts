@@ -2,7 +2,7 @@ import { request, gql } from 'graphql-request'
 import { campaignMap } from 'config/constants/campaigns'
 import { GRAPH_API_PROFILE } from 'config/constants/endpoints'
 import { Achievement } from 'state/types'
-import { getAchievementTitle, getAchievementDescription } from 'utils/achievements'
+// import { getAchievementTitle, getAchievementDescription } from 'utils/achievements'
 
 interface UserPointIncreaseEvent {
   campaignId: string
@@ -58,8 +58,8 @@ export const getAchievements = async (account: string): Promise<Achievement[]> =
         id: userPoint.campaignId,
         type: campaignMeta.type,
         address: userPoint.id,
-        title: getAchievementTitle(campaignMeta),
-        description: getAchievementDescription(campaignMeta),
+        // title: getAchievementTitle(campaignMeta),
+        // description: getAchievementDescription(campaignMeta),
         badge: campaignMeta.badge,
         points: Number(userPoint.points),
       },

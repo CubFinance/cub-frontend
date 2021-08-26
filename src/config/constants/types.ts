@@ -28,6 +28,7 @@ interface IfoPoolInfo {
   distributionRatio: number // Range [0-1]
 }
 
+/* IFO v2
 export interface Ifo {
   id: string
   isActive: boolean
@@ -42,6 +43,25 @@ export interface Ifo {
   isV1: boolean
   [PoolIds.poolBasic]?: IfoPoolInfo
   [PoolIds.poolUnlimited]: IfoPoolInfo
+}
+*/
+export interface Ifo {
+  id: string
+  isActive: boolean
+  address: string
+  name: string
+  subTitle?: string
+  description?: string
+  launchDate: string
+  launchTime: string
+  saleAmount: string
+  raiseAmount: string
+  cakeToBurn: string
+  projectSiteUrl: string
+  currency: string
+  currencyAddress: string
+  tokenDecimals: number
+  releaseBlockNumber: number
 }
 
 export enum PoolCategory {
