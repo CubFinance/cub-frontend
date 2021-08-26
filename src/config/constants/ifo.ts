@@ -94,7 +94,7 @@ const ifos: Ifo[] = [
     currency: 'CAKE-BNB LP',
     currencyAddress: '0xA527a61703D82139F8a06Bc30097cC9CAA2df5A6',
     tokenDecimals: 18,
-    releaseBlockNumber: 4086064,
+    releaseBlockNumber: 14394954,
   },
 ]
 
