@@ -98,7 +98,7 @@ const ifos: Ifo[] = [
   },
   {
     id: 'cakepop',
-    address: '0x0e8d2080d31f8b119df60ab9e23bf0d1df2b5d9d',
+    address: '0x3f875C0e53dE5E336045c1B998fA31a79648Db52',
     isActive: true,
     name: 'CakePop',
     subTitle: 'A blockchain based mutual to share the risk of DeFi on Binance Smart Chain',

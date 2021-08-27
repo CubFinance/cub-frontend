@@ -52,10 +52,10 @@ const Ifo = () => {
             <li>{TranslateString(598, 'Get CUB-BNB LP tokens by adding CUB and BNB liquidity')}</li>
           </List>
           <Flex mb="16px">
-            <LinkExternal href="https://exchange.cubdefi.com/" mr="16px">
+            <LinkExternal href="https://pancakeswap.finance/swap" mr="16px">
               {TranslateString(999, 'Buy CUB')}
             </LinkExternal>
-            <LinkExternal href="https://exchange.cubdefi.com/#/add/">
+            <LinkExternal href="https://pancakeswap.finance/liquidity">
               {TranslateString(999, 'Get LP tokens')}
             </LinkExternal>
           </Flex>
@@ -81,7 +81,7 @@ const Ifo = () => {
         <div>
           <Image src="/images/ifo-bunny.svg" alt="ifo bunny" width={436} height={406} responsive />
           <div>
-            <Title as="h2">{TranslateString(512, 'Want to launch your own IFO?')}</Title>
+            <Title as="h2">{TranslateString(512, 'Want to launch your own IDO?')}</Title>
             <Text mb={3}>
               {TranslateString(
                 514,

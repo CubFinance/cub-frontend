@@ -63,7 +63,7 @@ const ComingSoon = () => {
               )}
             </Text>
             <Text mb={3}>
-              <LiquidityLink href="https://exchange.cubdefi.com/#/add">
+              <LiquidityLink href="https://pancakeswap.finance/liquidity">
                 {TranslateString(506, 'Get CUB-BNB LP >')}
               </LiquidityLink>
             </Text>
@@ -75,7 +75,7 @@ const ComingSoon = () => {
           </Block>
           <MobileImage src="/images/ifo-bunny.svg" alt="ifo bunny" />
           <Block>
-            <Title as="h2">{TranslateString(512, 'Want to launch your own IFO?')}</Title>
+            <Title as="h2">{TranslateString(512, 'Want to launch your own IDO?')}</Title>
             <Text mb={3}>
               {TranslateString(
                 514,
