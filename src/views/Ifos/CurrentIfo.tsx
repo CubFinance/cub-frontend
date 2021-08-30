@@ -45,41 +45,42 @@ const Ifo = () => {
       </IfoCards>
       <LaunchIfoCallout>
         <div>
-          <Title as="h2">{TranslateString(592, 'How to take part')}</Title>
-          <Heading mb="16px">{TranslateString(594, 'Before Sale')}:</Heading>
+          <Title as="h2">{TranslateString(592, 'How to Participate in Decentralized IDOs on CubFinance')}</Title>
+          <Heading mb="16px">{TranslateString(594, 'Before IDO')}:</Heading>
           <List>
-            <li>{TranslateString(596, 'Buy CUB and BNB tokens')}</li>
-            <li>{TranslateString(598, 'Get CUB-BNB LP tokens by adding CUB and BNB liquidity')}</li>
+            <li>{TranslateString(596, 'Buy CUB and BUSD Tokens')}</li>
+            <li>{TranslateString(598, 'Get CUB-BUSD LP tokens (PCSv2 Only) on PancakeSwap')}</li>
           </List>
           <Flex mb="16px">
-            <LinkExternal href="https://pancakeswap.finance/swap" mr="16px">
+            <LinkExternal href="https://exchange.cubdefi.com/" mr="16px">
               {TranslateString(999, 'Buy CUB')}
             </LinkExternal>
-            <LinkExternal href="https://pancakeswap.finance/liquidity">
+            <LinkExternal href="https://pancakeswap.finance/add/0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56/0x50D809c74e0B8e49e7B4c65BB3109AbE3Ff4C1C1">
               {TranslateString(999, 'Get LP tokens')}
             </LinkExternal>
           </Flex>
-          <Heading mb="16px">{TranslateString(600, 'During Sale')}:</Heading>
+          <Heading mb="16px">{TranslateString(600, 'During IDO')}:</Heading>
           <List>
-            <li>{TranslateString(602, 'While the sale is live, commit your CUB-LP tokens to buy the IDO tokens')}</li>
+            <li>{TranslateString(602, 'While the IDO is live, commit your CUB-BUSD LP tokens to participate in the decentralized raise at the predetermined token price')}</li>
           </List>
-          <Heading mb="16px">{TranslateString(604, 'After Sale')}:</Heading>
+          <Heading mb="16px">{TranslateString(604, 'After IDO')}:</Heading>
           <List>
-            <li>{TranslateString(606, 'Claim the tokens you bought, along with any unspent funds.')}</li>
+            <li>{TranslateString(606, 'Click "Claim" to claim the IDO tokens you purchased along with any unspent CUB-BUSD LP.')}</li>
             <li>{TranslateString(608, 'Done!')}</li>
           </List>
+          <img src="images/cub/header_logo_wide.svg" alt="cub" />
           <Text as="div" pt="16px">
             <Button
               as="a"
               variant="secondary"
-              href="https://docs.pancakeswap.finance/core-products/ifo-initial-farm-offering"
+              href="https://docs.cubdefi.com/major-feature-releases/initial-dex-offering-ido"
             >
               {TranslateString(610, 'Read more')}
             </Button>
           </Text>
         </div>
         <div>
-          <Image src="/images/ifo-bunny.svg" alt="ifo bunny" width={436} height={406} responsive />
+          <Image src="/images/cub/wide.svg" alt="ifo bunny" width={436} height={406} responsive />
           <div>
             <Title as="h2">{TranslateString(512, 'Want to launch your own IDO?')}</Title>
             <Text mb={3}>

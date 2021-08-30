@@ -21,13 +21,18 @@ export interface IfoCardProps {
 }
 
 const StyledIfoCard = styled(Card)<{ ifoId: string }>`
-  background-image: ${({ ifoId }) => `url('/images/ifos/${ifoId}-bg.svg')`};
+  /* background-image: ${({ ifoId }) => `url('/images/ifos/${ifoId}-bg.svg')`};
   background-repeat: no-repeat;
   background-size: contain;
-  padding-top: 112px;
+  padding-top: 112px;*/
   margin-left: auto;
   margin-right: auto;
   max-width: 437px;
+  width: 100%;
+`
+
+const BackgroundImg = styled.img<{ ifoId: string }>`
+  max-height: 112px;
   width: 100%;
 `
 
@@ -141,6 +146,7 @@ const IfoCard: React.FC<IfoCardProps> = ({ ifo }) => {
 
   return (
     <StyledIfoCard ifoId={id} ribbon={Ribbon} isActive={isActive}>
+      <BackgroundImg ifoId={id} src={`/images/ifos/${id}-bg.svg`} />
       <CardBody>
         <IfoCardHeader ifoId={id} name={name} subTitle={subTitle} />
         <IfoCardProgress progress={state.progress} />

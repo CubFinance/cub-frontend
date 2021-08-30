@@ -1,7 +1,7 @@
 import { Ifo } from './types'
 
 const ifos: Ifo[] = [
-  {
+  /* {
     id: 'blink',
     address: '0x44a9Cc8463EC00937242b660BF65B10365d99baD',
     isActive: false,
@@ -95,25 +95,25 @@ const ifos: Ifo[] = [
     currencyAddress: '0xfdf68922460d7508f84bd55acb9d276d3f9a2c31',
     tokenDecimals: 18,
     releaseBlockNumber: 14394954,
-  },
+  }, */
   {
     id: 'cakepop',
-    address: '0x3f875C0e53dE5E336045c1B998fA31a79648Db52',
+    address: '0x345c045f3573368b82da5d1b3a21250dafa889dd',
     isActive: true,
     name: 'CakePop',
-    subTitle: 'A blockchain based mutual to share the risk of DeFi on Binance Smart Chain',
+    subTitle: 'A powerful new Dividend-paying token. Buy, HODL and earn CAKE passively!',
     description:
-      'CakePop allows users to buy insurance cover to greatly diminish or reduce the financial risk of hacks. It replaces the idea of a traditional insurance company, because it is wholly owned by the members. The model encourages engagement as members receive economic incentives for participating in Risk Assessment, Claims Assessment and Governance.',
+      'CakePop is a new kind of tokenomic dividend coin that aims to build deep value through marketing, transaction leverage and future platform growth. CakePop is built around the idea that branding is everything in the age of infinite choices. CakePop will launch with a standalone UI for tracking past, current and future dividends. CakePop will also introduce various farms on partner platforms like CubFinance which will create a radical number of TXs. Each TX will generate fee rewards for CAKEPOP holders and payout autonomously as CAKE Dividends!',
     launchDate: 'Aug. 30',
-    launchTime: '4PM SGT',
-    saleAmount: '1,000,000 CAKEPOP-TEST',
-    raiseAmount: '$10',
-    cakeToBurn: '$1',
-    projectSiteUrl: 'https://cubdefi.com',
+    launchTime: '~2PM EST',
+    saleAmount: '333,333,333 CAKEPOP',
+    raiseAmount: '$250,000',
+    cakeToBurn: '$125,000',
+    projectSiteUrl: 'https://cakepop.app',
     currency: 'CUB-BUSD LP',
     currencyAddress: '0xfdf68922460d7508f84bd55acb9d276d3f9a2c31',
     tokenDecimals: 18,
-    releaseBlockNumber: 10394954,
+    releaseBlockNumber: 10512405,
   },
 ]
 
