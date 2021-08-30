@@ -40,6 +40,11 @@ const config: MenuEntry[] = [
     },
   },
   {
+    label: 'IDO',
+    icon: 'IfoIcon',
+    href: '/ido',
+  },
+  {
     label: 'LeoBridge',
     icon: 'NftIcon',
     href: "https://bridge.cubdefi.com",

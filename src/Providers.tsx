@@ -8,6 +8,7 @@ import { LanguageContextProvider } from 'contexts/Localisation/languageContext'
 import { ThemeContextProvider } from 'contexts/ThemeContext'
 import { RefreshContextProvider } from 'contexts/RefreshContext'
 import { ToastsProvider } from 'contexts/ToastsContext'
+import { BlockContextProvider } from 'contexts/BlockContext'
 import store from 'state'
 
 const Providers: React.FC = ({ children }) => {
@@ -18,9 +19,11 @@ const Providers: React.FC = ({ children }) => {
           <HelmetProvider>
             <ThemeContextProvider>
               <LanguageContextProvider>
-                <RefreshContextProvider>
-                  <ModalProvider>{children}</ModalProvider>
-                </RefreshContextProvider>
+                <BlockContextProvider>
+                  <RefreshContextProvider>
+                    <ModalProvider>{children}</ModalProvider>
+                  </RefreshContextProvider>
+                </BlockContextProvider>
               </LanguageContextProvider>
             </ThemeContextProvider>
           </HelmetProvider>

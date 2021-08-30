@@ -29,8 +29,8 @@ export const customMeta: { [key: string]: PageMeta } = {
   '/collectibles': {
     title: 'Collectibles | Cub Finance',
   },
-  '/ifo': {
-    title: 'Initial Farm Offering | Cub Finance',
+  '/ido': {
+    title: 'Initial DEX Offering | Cub Finance',
   },
   '/teams': {
     title: 'Leaderboard | Cub Finance',

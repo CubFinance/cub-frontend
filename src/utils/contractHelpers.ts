@@ -35,6 +35,7 @@ import bep20Abi from 'config/abi/erc20.json'
 import erc721Abi from 'config/abi/erc721.json'
 import lpTokenAbi from 'config/abi/lpToken.json'
 import cakeAbi from 'config/abi/cake.json'
+import idoAbi from 'config/abi/ido.json'
 import ifoV1Abi from 'config/abi/ifoV1.json'
 import ifoV2Abi from 'config/abi/ifoV2.json'
 import pointCenterIfo from 'config/abi/pointCenterIfo.json'
@@ -65,6 +66,9 @@ export const getErc721Contract = (address: string, web3?: Web3) => {
 }
 export const getLpContract = (address: string, web3?: Web3) => {
   return getContract(lpTokenAbi, address, web3)
+}
+export const getIfoContract = (address: string, web3?: Web3) => {
+  return getContract(idoAbi, address, web3)
 }
 export const getIfoV1Contract = (address: string, web3?: Web3) => {
   return getContract(ifoV1Abi, address, web3)
