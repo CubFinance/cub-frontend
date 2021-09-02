@@ -76,6 +76,7 @@ export interface FarmConfig {
   tokenValuePerOrigin?: BigNumber
   tokenPerBlock?: number
   totalSupplyBelt?: BigNumber
+  pcsVersion?: number
 }
 
 export interface PoolConfig {

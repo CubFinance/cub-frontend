@@ -156,6 +156,88 @@ const tokens = {
     decimals: 18,
     projectLink: 'https://belt.fi/bsc',
   },
+  /* For IDOs */
+  hzn: {
+    symbol: 'HZN',
+    address: {
+      56: '0xC0eFf7749b125444953ef89682201Fb8c6A917CD',
+      97: '',
+    },
+    decimals: 18,
+    projectLink: 'https://horizonprotocol.com/',
+  },
+  watch: {
+    symbol: 'WATCH',
+    address: {
+      56: '0x7A9f28EB62C791422Aa23CeAE1dA9C847cBeC9b0',
+      97: '',
+    },
+    decimals: 18,
+    projectLink: 'https://yieldwatch.net/',
+  },
+  bry: {
+    symbol: 'BRY',
+    address: {
+      56: '0xf859Bf77cBe8699013d6Dbc7C2b926Aaf307F830',
+      97: '',
+    },
+    decimals: 18,
+    projectLink: 'https://berrydata.co/',
+  },
+  wsote: {
+    symbol: 'wSOTE',
+    address: {
+      56: '0x541E619858737031A1244A5d0Cd47E5ef480342c',
+      97: '',
+    },
+    decimals: 18,
+    projectLink: 'https://soteria.finance/#/',
+  },
+  helmet: {
+    symbol: 'Helmet',
+    address: {
+      56: '0x948d2a81086A075b3130BAc19e4c6DEe1D2E3fE8',
+      97: '',
+    },
+    decimals: 18,
+    projectLink: 'https://www.helmet.insure/',
+  },
+  ten: {
+    symbol: 'TEN',
+    address: {
+      56: '0xdFF8cb622790b7F92686c722b02CaB55592f152C',
+      97: '',
+    },
+    decimals: 18,
+    projectLink: 'https://www.tenet.farm/',
+  },
+  ditto: {
+    symbol: 'DITTO',
+    address: {
+      56: '0x233d91A0713155003fc4DcE0AFa871b508B3B715',
+      97: '',
+    },
+    decimals: 9,
+    projectLink: 'https://ditto.money/',
+  },
+  blink: {
+    symbol: 'BLINK',
+    address: {
+      56: '0x63870A18B6e42b01Ef1Ad8A2302ef50B7132054F',
+      97: '',
+    },
+    decimals: 6,
+    projectLink: 'https://blink.wink.org',
+  },
+  cakepop: {
+    symbol: 'CAKEPOP',
+    address: {
+      56: '0x2f0de2cfa6f4b3a7fd4b650a4c771e07718bb4b0',
+      97: '',
+    },
+    decimals: 18,
+    projectLink: 'https://cakepop.app',
+  },
 }
 
 export default tokens

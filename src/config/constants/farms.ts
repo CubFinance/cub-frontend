@@ -116,6 +116,17 @@ const farms: FarmConfig[] = [
     quoteToken: tokens.busd,
   },
   // {
+  //   pid: 25,
+  //   pcsVersion: 2,
+  //   lpSymbol: 'CAKEPOP-BNB LP',
+  //   lpAddresses: {
+  //     97: '',
+  //     56: '0x305d0Fb73BaA4E8E242E6BDD3bb43a6667ABddf5',
+  //   },
+  //   token: tokens.cakepop,
+  //   quoteToken: tokens.wbnb,
+  // },
+  // {
   //   pid: 4,
   //   lpSymbol: 'USDC-BUSD LP',
   //   lpAddresses: {

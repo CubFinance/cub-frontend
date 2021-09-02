@@ -76,7 +76,8 @@ const fetchFarms = async (farmsToFetch: FarmConfig[]) => {
         },
       ]
 
-      if (farmConfig.isKingdom) {
+      if (farmConfig.isKingdom || farmConfig.pcsVersion === 2) {
+        console.log('farm',farmConfig.lpSymbol)
         let hostMasterchef = getPCSv2MasterChefAddress()
         if (farmConfig.farmType === 'Bakery') hostMasterchef = getBakery()
         else if (farmConfig.farmType === 'Belt') hostMasterchef = getBelt()

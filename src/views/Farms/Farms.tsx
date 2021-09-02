@@ -338,7 +338,7 @@ const Farms: React.FC<FarmsProps> = ({ tokenMode, kingdomMode }) => {
   })
 
   const renderContent = (): JSX.Element => {
-    if (!kingdomMode && viewMode === ViewMode.TABLE && rowData.length) {
+    if (viewMode === ViewMode.TABLE && rowData.length) {
       const columnSchema = DesktopColumnSchema
 
       const columns = columnSchema.map((column) => ({
@@ -396,10 +396,7 @@ const Farms: React.FC<FarmsProps> = ({ tokenMode, kingdomMode }) => {
 
   let header = TranslateString(674, 'Farms')
   let heading = TranslateString(320, 'Stake LP tokens to earn CUB')
-  let subHeading = TranslateString(10000, 'Deposit Fee will be used to buyback CUB and bLEO')
-  let subHeadingPCS = null
-  let subHeadingCertik = null
-  let kingdomFees = null
+  const subHeading = TranslateString(10000, 'Deposit Fee will be used to buyback CUB and bLEO')
   // let extra = null
   // const data = useGetStats()
   // const tvl = data ? data.total_value_locked_all.toLocaleString('en-US', { maximumFractionDigits: 0 }) : null
@@ -407,43 +404,6 @@ const Farms: React.FC<FarmsProps> = ({ tokenMode, kingdomMode }) => {
   if (tokenMode) {
     header = TranslateString(674, 'Dens')
     heading = TranslateString(10002, 'Stake tokens to earn CUB')
-  } else if (kingdomMode) {
-    header = TranslateString(674, 'Kingdoms')
-    heading = TranslateString(null, 'Kingdoms: Composable Auto-Compounding')
-    subHeading = TranslateString(null, 'Stake tokens for cross-platform farming plus CUB rewards')
-    subHeadingPCS = (
-      <Heading as="h2" color="warning" mb="20px" style={{ textAlign: 'left' }}>
-        IMPORTANT: Must use <a target="_blank" rel="noreferrer" href="https://exchange.pancakeswap.finance/#/pool">Pancakeswap V2 Exchange</a> for V2 Kingdom LP tokens until we add a V2 exchange for Cub Finance
-      </Heading>
-    )
-    subHeadingCertik = (
-      <Heading as="h2" color="warning" mb="20px" style={{ textAlign: 'left' }}>
-        CertiK Audit is Pending: Our other contracts have been audited by CertiK and Kingdoms are currently under review. Please use at your own discretion until the audit has been published
-      </Heading>
-    )
-    kingdomFees = (
-      <FeeWrapper>
-      <Heading as="h2" color="secondary" mb="5px" style={{ textAlign: 'left' }}>
-        Fees
-      </Heading>
-        <Flex justifyContent="space-between">
-          <Text>Management Fee:</Text>
-          <Text>0.9%</Text>
-        </Flex>
-        <Flex justifyContent="space-between">
-          <Text>Withdrawal Fee:</Text>
-          <Text>None</Text>
-        </Flex>
-        <Flex justifyContent="space-between">
-          <Text>Fee to CUB Staking Kingdom:</Text>
-          <Text>1%</Text>
-        </Flex>
-        <Flex justifyContent="space-between">
-          <Text>CUB Burn Rate:</Text>
-          <Text>100% of Fees Buyback and Burn CUB</Text>
-        </Flex>
-      </FeeWrapper>
-    )
   }
 
   const tlvSpacing = '20px'
@@ -460,9 +420,6 @@ const Farms: React.FC<FarmsProps> = ({ tokenMode, kingdomMode }) => {
         <Heading as="h2" color="secondary" mb={tlvSpacing} style={{ textAlign: 'left' }}>
           {subHeading}
         </Heading>
-        {subHeadingPCS}
-        {subHeadingCertik}
-        {kingdomFees}
         <br/>
         {/* extra */}
         <Wrapper>
