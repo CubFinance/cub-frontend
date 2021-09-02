@@ -1,28 +1,19 @@
 import React from 'react'
-import { Route, useRouteMatch, Link } from 'react-router-dom'
-import { ButtonMenu, ButtonMenuItem, Flex } from '@pancakeswap-libs/uikit'
+import { Route, useRouteMatch } from 'react-router-dom'
 import Container from 'components/layout/Container'
+import IfoTabButtons from './components/IfoTabButtons'
 import Hero from './components/Hero'
 import CurrentIfo from './CurrentIfo'
 import PastIfo from './PastIfo'
 
 const Ifos = () => {
-  const { path, url, isExact } = useRouteMatch()
+  const { path } = useRouteMatch()
 
   return (
     <>
       <Hero />
       <Container>
-        <Flex justifyContent="center" alignItems="center" mb="32px">
-          <ButtonMenu activeIndex={!isExact ? 1 : 0} scale="sm" variant="subtle">
-            <ButtonMenuItem as={Link} to={`${url}`}>
-              Next IFO
-            </ButtonMenuItem>
-            <ButtonMenuItem as={Link} to={`${url}/history`}>
-              Past IFOs
-            </ButtonMenuItem>
-          </ButtonMenu>
-        </Flex>
+        <IfoTabButtons />
         <Route exact path={`${path}`}>
           <CurrentIfo />
         </Route>

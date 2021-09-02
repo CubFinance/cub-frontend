@@ -58,7 +58,7 @@ export default {
     56: '',
   },
   pancakeProfile: {
-    56: '',
+    56: '0xDf4dBf6536201370F95e06A0F8a7a70fE40E388a',
     97: '',
   },
   pancakeRabbits: {
@@ -66,11 +66,11 @@ export default {
     97: '',
   },
   bunnyFactory: {
-    56: '',
+    56: '0x428ad484a8f13a0535bbacf55274deb5e8328e44',
     97: '',
   },
   claimRefund: {
-    56: '',
+    56: '0xE7e53A7e9E3Cf6b840f167eF69519175c497e149',
     97: '',
   },
   pointCenterIfo: {
