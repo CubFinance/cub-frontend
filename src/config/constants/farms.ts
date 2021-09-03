@@ -118,13 +118,13 @@ const farms: FarmConfig[] = [
   {
     pid: 25,
     pcsVersion: 2,
-    lpSymbol: 'CAKEPOP-BNB LP',
+    lpSymbol: 'CAKEPOP-BUSD LP',
     lpAddresses: {
       97: '',
       56: '0x305d0Fb73BaA4E8E242E6BDD3bb43a6667ABddf5',
     },
     token: tokens.cakepop,
-    quoteToken: tokens.wbnb,
+    quoteToken: tokens.busd,
   },
   // {
   //   pid: 4,
