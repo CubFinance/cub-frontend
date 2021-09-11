@@ -102,7 +102,7 @@ const KingdomDetail: React.FC<KingdomDetailProps> = ({
   const farmContract= isToken ?
     `https://bscscan.com/token/${tokenAddress}`
     : `https://bscscan.com/token/${lpAddress}`
-  const vaultContract = `https://bscscan.com/token/${kingdomContract}`
+  const vaultContract = `https://bscscan.com/address/${kingdomContract}`
   let infoAddress = `https://pancakeswap.info/pair/${isTokenOnly ? tokenAddress : lpAddress}`
 
   let exchangeUrl = PCS_ADD_LIQUIDITY_URL
