@@ -15,7 +15,7 @@ const farms: FarmConfig[] = [
   // },
   {
     pid: 10,
-    lpSymbol: 'CUB-BUSD LP',
+    lpSymbol: 'CUB-BUSD LP (v1)',
     lpAddresses: {
       97: '',
       56: '0x0EF564D4F8D6C0ffE13348A32e21EFd55e508e84',
@@ -25,7 +25,7 @@ const farms: FarmConfig[] = [
   },
   {
     pid: 11,
-    lpSymbol: 'CUB-BNB LP',
+    lpSymbol: 'CUB-BNB LP (v1)',
     lpAddresses: {
       97: '',
       56: '0xc08C74dC9EF46C6dB122b30c48a659831017DD2E',
@@ -35,7 +35,7 @@ const farms: FarmConfig[] = [
   },
   {
     pid: 9,
-    lpSymbol: 'bLEO-BNB LP',
+    lpSymbol: 'bLEO-BNB LP (v1)',
     lpAddresses: {
       97: '',
       56: '0x243E060DEcA0499fCaE6ABe548C0115faaBa0ed4',
@@ -107,7 +107,7 @@ const farms: FarmConfig[] = [
   },
   {
     pid: 23,
-    lpSymbol: 'DEC-BUSD LP',
+    lpSymbol: 'DEC-BUSD LP (v1)',
     lpAddresses: {
       97: '',
       56: '0x4c79edab89848f34084283bb1fe8eac2dca649c3',
@@ -295,6 +295,48 @@ const farms: FarmConfig[] = [
   //   token: tokens.cake,
   //   quoteToken: tokens.busd,
   // },
+
+  // V2 Farms
+  {
+    pid: 26,
+    lpSymbol: 'CUB-BUSD LP (v2)',
+    lpAddresses: {
+      97: '',
+      56: '0xfdF68922460d7508f84bD55ACB9D276d3f9a2c31',
+    },
+    token: tokens.cub,
+    quoteToken: tokens.busd,
+  },
+  {
+    pid: 27,
+    lpSymbol: 'CUB-BNB LP (v2)',
+    lpAddresses: {
+      97: '',
+      56: '0x7BaE0d7D2760E681559fbb502b43fFA26561bA24',
+    },
+    token: tokens.cub,
+    quoteToken: tokens.wbnb,
+  },
+  {
+    pid: 28,
+    lpSymbol: 'BLEO-BNB LP (v2)',
+    lpAddresses: {
+      97: '',
+      56: '0x0Bca6e9B2C6C83Ebd457fB0D12fa5763114A8920',
+    },
+    token: tokens.bleo,
+    quoteToken: tokens.wbnb,
+  },
+  {
+    pid: 29,
+    lpSymbol: 'DEC-BUSD LP (v2)',
+    lpAddresses: {
+      97: '',
+      56: '0x6125029A56CcdBE2625491b57F889308Dd7b9085',
+    },
+    token: tokens.dec,
+    quoteToken: tokens.busd,
+  },
 
   // KINGDOMS
   {
