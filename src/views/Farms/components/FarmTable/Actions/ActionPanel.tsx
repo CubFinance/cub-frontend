@@ -2,6 +2,7 @@ import React from 'react'
 import styled, { keyframes, css } from 'styled-components'
 import useI18n from 'hooks/useI18n'
 import { LinkExternal, Text, Flex } from '@pancakeswap-libs/uikit'
+import { BASE_ADD_LIQUIDITY_URL, PCS_ADD_LIQUIDITY_URL } from 'config'
 import { FarmWithStakedValue } from 'views/Farms/components/FarmCard/FarmCard'
 import getLiquidityUrlPathParts from 'utils/getLiquidityUrlPathParts'
 import { NoFeeTag, DualTag } from 'components/Tags'
@@ -149,12 +150,15 @@ const ActionPanel: React.FunctionComponent<ActionPanelProps> = ({
   const bsc = `https://bscscan.com/address/${lpAddress}`
   const info = `https://pancakeswap.info/pair/${lpAddress}`
 
+  const exchangeUrl = farm.pcsVersion && farm.pcsVersion > 1 ? PCS_ADD_LIQUIDITY_URL : BASE_ADD_LIQUIDITY_URL
+  const addLiquidityUrl = `${exchangeUrl}/${liquidityUrlPathParts}`
+
   return (
     <Container expanded={expanded}>
       <InfoContainer>
         {isActive && (
           <StakeContainer>
-            <StyledLinkExternal href={`https://exchange.cubdefi.com/#/add/${liquidityUrlPathParts}`}>
+            <StyledLinkExternal href={addLiquidityUrl}>
               {TranslateString(999, `Get ${lpLabel}`, { name: lpLabel })}
             </StyledLinkExternal>
           </StakeContainer>

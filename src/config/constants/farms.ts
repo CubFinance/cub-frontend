@@ -115,17 +115,7 @@ const farms: FarmConfig[] = [
     token: tokens.dec,
     quoteToken: tokens.busd,
   },
-  {
-    pid: 25,
-    pcsVersion: 2,
-    lpSymbol: 'CAKEPOP-BUSD LP',
-    lpAddresses: {
-      97: '',
-      56: '0x305d0Fb73BaA4E8E242E6BDD3bb43a6667ABddf5',
-    },
-    token: tokens.cakepop,
-    quoteToken: tokens.busd,
-  },
+
   // {
   //   pid: 4,
   //   lpSymbol: 'USDC-BUSD LP',
@@ -297,49 +287,17 @@ const farms: FarmConfig[] = [
   // },
 
   // V2 Farms
+
   {
-    pid: 26,
+    pid: 25,
     pcsVersion: 2,
-    lpSymbol: 'DEC-BUSD LP (v2)',
+    lpSymbol: 'CAKEPOP-BUSD LP',
     lpAddresses: {
       97: '',
-      56: '0x6125029A56CcdBE2625491b57F889308Dd7b9085',
+      56: '0x305d0Fb73BaA4E8E242E6BDD3bb43a6667ABddf5',
     },
-    token: tokens.dec,
+    token: tokens.cakepop,
     quoteToken: tokens.busd,
-  },
-  {
-    pid: 27,
-    pcsVersion: 2,
-    lpSymbol: 'CUB-BUSD LP (v2)',
-    lpAddresses: {
-      97: '',
-      56: '0xfdF68922460d7508f84bD55ACB9D276d3f9a2c31',
-    },
-    token: tokens.cub,
-    quoteToken: tokens.busd,
-  },
-  {
-    pid: 28,
-    pcsVersion: 2,
-    lpSymbol: 'CUB-BNB LP (v2)',
-    lpAddresses: {
-      97: '',
-      56: '0x7BaE0d7D2760E681559fbb502b43fFA26561bA24',
-    },
-    token: tokens.cub,
-    quoteToken: tokens.wbnb,
-  },
-  {
-    pid: 29,
-    pcsVersion: 2,
-    lpSymbol: 'BLEO-BNB LP (v2)',
-    lpAddresses: {
-      97: '',
-      56: '0x0Bca6e9B2C6C83Ebd457fB0D12fa5763114A8920',
-    },
-    token: tokens.bleo,
-    quoteToken: tokens.wbnb,
   },
 
   // KINGDOMS
