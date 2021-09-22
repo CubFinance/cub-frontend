@@ -298,7 +298,8 @@ const farms: FarmConfig[] = [
 
   // V2 Farms
   {
-    pid: 26,
+    pid: 27,
+    pcsVersion: 2,
     lpSymbol: 'CUB-BUSD LP (v2)',
     lpAddresses: {
       97: '',
@@ -308,7 +309,8 @@ const farms: FarmConfig[] = [
     quoteToken: tokens.busd,
   },
   {
-    pid: 27,
+    pid: 28,
+    pcsVersion: 2,
     lpSymbol: 'CUB-BNB LP (v2)',
     lpAddresses: {
       97: '',
@@ -318,7 +320,8 @@ const farms: FarmConfig[] = [
     quoteToken: tokens.wbnb,
   },
   {
-    pid: 28,
+    pid: 29,
+    pcsVersion: 2,
     lpSymbol: 'BLEO-BNB LP (v2)',
     lpAddresses: {
       97: '',
@@ -326,16 +329,6 @@ const farms: FarmConfig[] = [
     },
     token: tokens.bleo,
     quoteToken: tokens.wbnb,
-  },
-  {
-    pid: 29,
-    lpSymbol: 'DEC-BUSD LP (v2)',
-    lpAddresses: {
-      97: '',
-      56: '0x6125029A56CcdBE2625491b57F889308Dd7b9085',
-    },
-    token: tokens.dec,
-    quoteToken: tokens.busd,
   },
 
   // KINGDOMS
