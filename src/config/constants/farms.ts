@@ -298,6 +298,17 @@ const farms: FarmConfig[] = [
 
   // V2 Farms
   {
+    pid: 26,
+    pcsVersion: 2,
+    lpSymbol: 'DEC-BUSD LP (v2)',
+    lpAddresses: {
+      97: '',
+      56: '0x6125029A56CcdBE2625491b57F889308Dd7b9085',
+    },
+    token: tokens.dec,
+    quoteToken: tokens.busd,
+  },
+  {
     pid: 27,
     pcsVersion: 2,
     lpSymbol: 'CUB-BUSD LP (v2)',
