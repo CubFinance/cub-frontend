@@ -483,6 +483,36 @@ const farms: FarmConfig[] = [
     quoteToken: tokens.busd,
     kingdomContract: '0x5860046Ccf3ab8D840F1ac15A547E0c2bBECA6F0',
   },
+  {
+    pid: 9,
+    altPid: 262,
+    compounding: 365,
+    isKingdom: true,
+    farmType: 'Pancake v2',
+    lpSymbol: 'BTC-BNB LP',
+    lpAddresses: {
+      97: '',
+      56: '0x61eb789d75a95caa3ff50ed7e47b96c132fec082',
+    },
+    token: tokens.btcb,
+    quoteToken: tokens.wbnb,
+    kingdomContract: '0xcd0778d48e3aa98c91633d844d1d83c7be282d5f',
+  },
+  {
+    pid: 10,
+    altPid: 432,
+    compounding: 365,
+    isKingdom: true,
+    farmType: 'Pancake v2',
+    lpSymbol: 'SPS-BNB LP',
+    lpAddresses: {
+      97: '',
+      56: '0xfdfde3af740a22648b9dd66d05698e5095940850',
+    },
+    token: tokens.sps,
+    quoteToken: tokens.wbnb,
+    kingdomContract: '0xc18cd88a97f39b1db91990c79227223ae6f5efb2',
+  },
 ]
 
 export default farms

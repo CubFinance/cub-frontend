@@ -238,6 +238,15 @@ const tokens = {
     decimals: 18,
     projectLink: 'https://cakepop.app',
   },
+  sps: {
+    symbol: 'SPS',
+    address: {
+      56: '0x1633b7157e7638c4d6593436111bf125ee74703f',
+      97: '',
+    },
+    decimals: 18,
+    projectLink: 'https://splinterlands.com/',
+  },
 }
 
 export default tokens
