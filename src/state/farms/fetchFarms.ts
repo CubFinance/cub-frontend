@@ -295,7 +295,7 @@ const fetchFarms = async (farmsToFetch: FarmConfig[]) => {
         })
 
         const allocPoint = new BigNumber(kInfo.allocPoint._hex)
-        const kingdomTotalAlloc = new BigNumber(600)
+        const kingdomTotalAlloc = new BigNumber(3500)
 
         const kingdomCorrectAlloc = allocPoint.times(new BigNumber(kingdomTotalAlloc)).div(new BigNumber(kTotalAllocPoint))
 
@@ -373,6 +373,7 @@ const fetchFarms = async (farmsToFetch: FarmConfig[]) => {
           tokenPriceVsQuote: tokenPriceVsQuote.toJSON(),
           poolWeight: farmConfig.pid === 4 ? '0.19' : kingdomPoolWeight.toJSON(),
           multiplier: farmConfig.pid === 4 ? '30X' : `${kingdomCorrectAlloc.div(100).toString()}X`,
+          // multiplier: farmConfig.pid === 4 ? '30X' : `2X`,
           // multiplier: '1.5X',
           depositFeeBP: kInfo.depositFeeBP,
           cubPerBlock: new BigNumber(cubPerBlock).toNumber(),
