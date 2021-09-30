@@ -55,7 +55,7 @@ export const getBTCBNBAmount = async () => {
 
 export const getSPSBNBAmount = async () => {
   const contract = new web3.eth.Contract(PCS_ABI, '0x73feaa1ee314f8c655e354234017be2193c9e24e');
-  const call = await contract.methods.userInfo(262, '0xc18cd88a97f39b1db91990c79227223ae6f5efb2').call();
+  const call = await contract.methods.userInfo(432, '0xc18cd88a97f39b1db91990c79227223ae6f5efb2').call();
   return call.amount
 }
 

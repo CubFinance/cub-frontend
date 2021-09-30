@@ -303,7 +303,7 @@ const fetchFarms = async (farmsToFetch: FarmConfig[]) => {
         })
 
         const allocPoint = new BigNumber(kInfo.allocPoint._hex)
-        const kingdomTotalAlloc = new BigNumber(3500)
+        const kingdomTotalAlloc = new BigNumber(3000)
 
         const kingdomCorrectAlloc = allocPoint.times(new BigNumber(kingdomTotalAlloc)).div(new BigNumber(kTotalAllocPoint))
 
