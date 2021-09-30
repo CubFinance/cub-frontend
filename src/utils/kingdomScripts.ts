@@ -41,11 +41,27 @@ export const getCUBAmount = async () => {
   return call.amount
 }
 
-export const getBTCBNBAmount = async () => {
+export const getBTCBNBBakeryAmount = async () => {
   const contract = new web3.eth.Contract(BAKERY_ABI, '0x20ec291bb8459b6145317e7126532ce7ece5056f');
   const call = await contract.methods.poolUserInfoMap('0x58521373474810915b02fe968d1bcbe35fc61e09', '0xbdc40a031f6908a8203fb1c75bb2b9c4abf59e2e').call();
   return call.amount
 }
+
+export const getBTCBNBAmount = async () => {
+  const contract = new web3.eth.Contract(PCS_ABI, '0x73feaa1ee314f8c655e354234017be2193c9e24e');
+  const call = await contract.methods.userInfo(262, '0xcd0778d48e3aa98c91633d844d1d83c7be282d5f').call();
+  return call.amount
+}
+
+export const getSPSBNBAmount = async () => {
+  const contract = new web3.eth.Contract(PCS_ABI, '0x73feaa1ee314f8c655e354234017be2193c9e24e');
+  const call = await contract.methods.userInfo(262, '0xc18cd88a97f39b1db91990c79227223ae6f5efb2').call();
+  return call.amount
+}
+
+/*
+ * BELT vaults
+ */
 
 export const getBTCAmount = async () => {
   const contract = new web3.eth.Contract(BELT_ABI, '0xD4BbC80b9B102b77B21A06cb77E954049605E6c1');

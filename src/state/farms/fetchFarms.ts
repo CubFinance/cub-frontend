@@ -25,11 +25,13 @@ import {
   getWBNBETHAmount,
   getWBNBDOTAmount,
   getCUBAmount,
-  getBTCBNBAmount,
+  getBTCBNBBakeryAmount,
   getBTCAmount,
   getETHAmount,
   getUSDAmount,
   getBeltAPR,
+  getBTCBNBAmount,
+  getSPSBNBAmount,
 } from 'utils/kingdomScripts'
 
 const fetchFarms = async (farmsToFetch: FarmConfig[]) => {
@@ -151,7 +153,7 @@ const fetchFarms = async (farmsToFetch: FarmConfig[]) => {
             kingdomSupply = await getCUBAmount()
             break
           case 5:
-            kingdomSupply = await getBTCBNBAmount()
+            kingdomSupply = await getBTCBNBBakeryAmount()
             break
           case 6:
             kingdomSupply = await getBTCAmount()
@@ -168,6 +170,12 @@ const fetchFarms = async (farmsToFetch: FarmConfig[]) => {
             kingdomSupply = new BigNumber(kingdomSupply).div(DEFAULT_TOKEN_DECIMAL).toString()
             beltAPR = beltData.stable
             beltRate = beltData.stableRate
+            break
+          case 9:
+            kingdomSupply = await getBTCBNBAmount()
+            break
+          case 10:
+            kingdomSupply = await getSPSBNBAmount()
             break
           default:
             break
