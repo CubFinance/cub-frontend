@@ -172,18 +172,18 @@ const Kingdoms: React.FC = () => {
   const activeFarms = farmsLP.filter(farm => {
     return farm.isKingdom && !isArchivedPid(farm.pid)
   })
-  // const inactiveFarms = farmsLP.filter(farm => {
-  //   return farm.isKingdom && farm.multiplier === '0X' && !isArchivedPid(farm.pid)
-  // })
+  const inactiveFarms = farmsLP.filter(farm => {
+    return farm.isKingdom && farm.multiplier === '0X' && !isArchivedPid(farm.pid)
+  })
   // const archivedFarms = farmsLP.filter((farm) => isArchivedPid(farm.pid))
 
   const stakedOnlyFarms = activeFarms.filter(
     (farm) => farm.userData && new BigNumber(farm.userData.stakedBalance).isGreaterThan(0),
   )
 
-  // const stakedInactiveFarms = inactiveFarms.filter(
-  //   (farm) => farm.userData && new BigNumber(farm.userData.stakedBalance).isGreaterThan(0),
-  // )
+  const stakedInactiveFarms = inactiveFarms.filter(
+    (farm) => farm.userData && new BigNumber(farm.userData.stakedBalance).isGreaterThan(0),
+  )
   //
   // const stakedArchivedFarms = archivedFarms.filter(
   //   (farm) => farm.userData && new BigNumber(farm.userData.stakedBalance).isGreaterThan(0),
@@ -248,12 +248,12 @@ const Kingdoms: React.FC = () => {
     if (isActive) {
       farmsStaked = stakedOnly ? farmsList(stakedOnlyFarms) : farmsList(activeFarms)
     }
-    /* if (isInactive) {
-      farmsStaked = stakedOnly ? farmsList(stakedInactiveFarms) : farmsList(inactiveFarms)
-    }
-    if (isArchived) {
-      farmsStaked = stakedOnly ? farmsList(stakedArchivedFarms) : farmsList(archivedFarms)
-    } */
+    // if (isInactive) {
+    //   farmsStaked = stakedOnly ? farmsList(stakedInactiveFarms) : farmsList(inactiveFarms)
+    // }
+    // if (isArchived) {
+    //   farmsStaked = stakedOnly ? farmsList(stakedArchivedFarms) : farmsList(archivedFarms)
+    // }
 
     return sortFarms(farmsStaked).slice(0, numberOfFarmsVisible)
   }, [
@@ -408,6 +408,12 @@ const Kingdoms: React.FC = () => {
           {farmsStakedMemoized.map((farm) => (
             <Kingdom key={farm.pid} farm={farm} cakePrice={cakePrice} account={account} removed={false} bakePrice={bakePrice} beltPrice={beltPrice} cubDen={cubDen} realCakePrice={realCakePrice} bnbDividends={bnbDividends} />
           ))}
+          {/* <br />
+          <div>INACTIVE</div>
+          <br />
+          {farmsList(stakedInactiveFarms).map((farm) => (
+            <Kingdom key={farm.pid} farm={farm} cakePrice={cakePrice} account={account} removed={false} bakePrice={bakePrice} beltPrice={beltPrice} cubDen={cubDen} realCakePrice={realCakePrice} bnbDividends={bnbDividends} />
+          ))} */ }
         </div>
         <div ref={loadMoreRef} />
       </Page>

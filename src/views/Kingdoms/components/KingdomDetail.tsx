@@ -2,7 +2,7 @@ import React from 'react'
 import BigNumber from 'bignumber.js'
 import styled from 'styled-components'
 import { Button as UiButton, Link, Flex, Text } from '@pancakeswap-libs/uikit'
-import { DEFAULT_TOKEN_DECIMAL, BAKERY_ADD_LIQUIDITY_URL, PCS_ADD_LIQUIDITY_URL, BASE_EXCHANGE_URL, BELT_EXCHANGE } from 'config'
+import { DEFAULT_TOKEN_DECIMAL, BAKERY_ADD_LIQUIDITY_URL, PCS_ADD_LIQUIDITY_URL, PCS_EXCHANGE_URL, BELT_EXCHANGE } from 'config'
 import { FarmWithStakedValue } from 'views/Farms/components/FarmCard/FarmCard'
 import getLiquidityUrlPathParts from 'utils/getLiquidityUrlPathParts'
 import KingdomCard from './KingdomCard'
@@ -106,7 +106,7 @@ const KingdomDetail: React.FC<KingdomDetailProps> = ({
   let infoAddress = `https://pancakeswap.info/pair/${isTokenOnly ? tokenAddress : lpAddress}`
 
   let exchangeUrl = PCS_ADD_LIQUIDITY_URL
-  let buyTokenUrl = `${BASE_EXCHANGE_URL}/#/swap`
+  let buyTokenUrl = `${PCS_EXCHANGE_URL}/swap/${token.address['56']}`
   let addLiquidityUrl = `${exchangeUrl}/${liquidityUrlPathParts}`
   if (farm.farmType === 'Bakery') {
     exchangeUrl = BAKERY_ADD_LIQUIDITY_URL

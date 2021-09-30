@@ -129,7 +129,12 @@ const Kingdom: React.FC<KingdomProps> = ({ farm, removed, cakePrice, account, ba
           <div className="col"><KImage src={`/images/farms/${farmImage}.png`} alt={lpSymbol} width={64} height={64} /></div>
           <div className="col">
             <Flex justifyContent="flex-start" alignItems="center">
-              <Text className="token">{lpSymbol}</Text>
+              {farmType === 'Bakery' ? (
+                <Text className="token inactive">{lpSymbol} <span style={{ position: 'absolute'}}>&nbsp;(DEPRECATED) - Migrate to PCSv2 BTC-BNB Kingdom</span></Text>
+
+              ) : (
+                <Text className="token">{lpSymbol}</Text>
+              )}
             </Flex>
             <Text>Uses: {farmType}</Text>
             <Text>TVL {totalValueFormated}</Text>
