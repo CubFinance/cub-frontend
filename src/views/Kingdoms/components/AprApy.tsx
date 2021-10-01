@@ -13,25 +13,30 @@ export interface AprApyProps {
 }
 
 const AprApy: React.FC<AprApyProps> = ({ aprApy,  lpLabel, addLiquidityUrl }) => {
-  const TranslateString = useI18n()
-  const { farmAPR, apr, compounding, pcsApr, dailyAPR, farmAPY, totalAPYString, cakePrice } = aprApy
+  const { farmAPR, apr, compounding, hostApr, dailyAPR, farmAPY, totalAPYString, cakePrice, aprWithLpRewards, lpRewardsApr } = aprApy
 
   return (
     <>
       <Flex justifyContent="space-between">
-        <Text color="warning">{TranslateString(354, 'Total APY')}:</Text>
+        <Text color="warning">Total APY:</Text>
         <Text bold color="warning">{totalAPYString}%</Text>
       </Flex>
       <Flex justifyContent="space-between">
-        <Text>{TranslateString(354, 'Farm APR')}:</Text>
-        <Text>{`${new BigNumber(pcsApr).toFixed(2)}% (${new BigNumber(dailyAPR).toFixed(3)}%)`}</Text>
+        <Text>Farm APR:</Text>
+        <Text>{`${new BigNumber(hostApr).toFixed(2)}% (${new BigNumber(dailyAPR).toFixed(3)}%)`}</Text>
       </Flex>
+      {lpRewardsApr ? (
+        <Flex justifyContent="space-between">
+          <Text>APR+LP rewards:</Text>
+          <Text>{aprWithLpRewards}%</Text>
+        </Flex>
+      ) : null}
       <Flex justifyContent="space-between">
-        <Text>{TranslateString(354, 'Compounds / year')}:</Text>
+        <Text>Compounds / year:</Text>
         <Text>~{compounding}</Text>
       </Flex>
       <Flex justifyContent="space-between">
-        <Text>{TranslateString(354, 'Farm APY')}:</Text>
+        <Text>Farm APY:</Text>
         <Balance
           fontSize="16px"
           value={farmAPY}
@@ -40,7 +45,7 @@ const AprApy: React.FC<AprApyProps> = ({ aprApy,  lpLabel, addLiquidityUrl }) =>
         />
       </Flex>
       <Flex justifyContent="space-between" alignItems="center">
-        <Text>{TranslateString(736, 'CUB APR')}:</Text>
+        <Text>CUB APR:</Text>
         <Text bold style={{ display: 'flex', alignItems: 'center' }}>
           {apr ? (
             <>

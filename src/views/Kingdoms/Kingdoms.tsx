@@ -105,12 +105,6 @@ const ViewControls = styled.div`
   }
 `
 
-const Wrapper = styled.div`
-  display: flex;
-  justify-content: flex-start;
-  align-items: flex-start;
-`
-
 const FeeWrapper = styled.div`
   max-width: 400px;
 `
@@ -199,7 +193,9 @@ const Kingdoms: React.FC = () => {
         const quoteTokenPriceUsd = prices[getAddress(farm.quoteToken.address).toLowerCase()]
         const totalLiquidity = new BigNumber(farm.lpTotalInQuoteToken).times(quoteTokenPriceUsd)
         const apr = isActive ? getFarmApr(farm.poolWeight, cakePrice, totalLiquidity) : 0
-
+// console.log('farm',farm.lpSymbol)
+// console.log('lpRewardsApr',lpRewardsApr)
+// console.log('aprWithLpRewards',aprWithLpRewards)
         return { ...farm, apr, liquidity: totalLiquidity }
       })
 

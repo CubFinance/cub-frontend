@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react'
+import React, { useState } from 'react'
 import { Text, Image, Flex } from '@pancakeswap-libs/uikit'
 import BigNumber from 'bignumber.js'
 import styled, { keyframes } from 'styled-components'
@@ -90,12 +90,12 @@ interface KingdomProps {
 const Kingdom: React.FC<KingdomProps> = ({ farm, removed, cakePrice, account, bakePrice, beltPrice, cubDen, realCakePrice, bnbDividends }) => {
   const [showExpandableSection, setShowExpandableSection] = useState(false)
 
-  const { apr, lpTotalInQuoteToken, lpSymbol, lpTokenBalancePCS = 0, lpTotalInQuoteTokenPCS = 0, quoteToken: { busdPrice: quoteTokenPriceUsd }, altPid, farmType, token: { busdPrice: tokenPriceString } } = farm
+  const { apr, lpTotalInQuoteToken, lpSymbol, lpTokenBalancePCS = 0, lpTotalInQuoteTokenPCS = 0, quoteToken: { busdPrice: quoteTokenPriceUsd }, altPid, farmType, token: { busdPrice: tokenPriceString }, compounding } = farm
   const farmImage = lpSymbol.split(' ')[0].toLocaleLowerCase()
 
   let aprApy = getKingdomAPRAPY(farm, realCakePrice, bakePrice, beltPrice, cubDen)
 
-  const { dailyAPR, totalAPY, pcsApr } = aprApy
+  const { dailyAPR, totalAPY, hostApr } = aprApy
   const { tokenBalance, stakedBalance, earnings } = farm.userData
 
   const rawTokenBalance = tokenBalance ? getBalanceNumber(new BigNumber(tokenBalance)) : 0
@@ -117,7 +117,7 @@ const Kingdom: React.FC<KingdomProps> = ({ farm, removed, cakePrice, account, ba
     : '-'
   const farmAPR = apr && apr.toLocaleString('en-US', { maximumFractionDigits: 2 })
 
-  aprApy = { ...aprApy, compounding: farm.compounding, farmAPR, apr: altPid === 12 ? pcsApr : farm.apr, cakePrice, quoteTokenPriceUsd: Number(quoteTokenPriceUsd), lpTotalInQuoteToken }
+  aprApy = { ...aprApy, compounding, farmAPR, apr: altPid === 12 ? hostApr : apr, cakePrice, quoteTokenPriceUsd: Number(quoteTokenPriceUsd), lpTotalInQuoteToken }
 
   return (
     <>

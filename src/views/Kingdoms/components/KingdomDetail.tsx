@@ -1,18 +1,12 @@
 import React from 'react'
 import BigNumber from 'bignumber.js'
 import styled from 'styled-components'
-import { Button as UiButton, Link, Flex, Text } from '@pancakeswap-libs/uikit'
+import { Link, Flex, Text } from '@pancakeswap-libs/uikit'
 import { DEFAULT_TOKEN_DECIMAL, BAKERY_ADD_LIQUIDITY_URL, PCS_ADD_LIQUIDITY_URL, PCS_EXCHANGE_URL, BELT_EXCHANGE } from 'config'
 import { FarmWithStakedValue } from 'views/Farms/components/FarmCard/FarmCard'
 import getLiquidityUrlPathParts from 'utils/getLiquidityUrlPathParts'
 import KingdomCard from './KingdomCard'
 import AprApy from './AprApy'
-
-const Button = styled(UiButton)`
-  height: 36px;
-  font-size: 1rem;
-  padding: 0 12px;
-`
 
 const Details = styled.div`
   margin-top: 1rem;

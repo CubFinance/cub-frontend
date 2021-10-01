@@ -3,6 +3,8 @@ import { getPoolApr, getFarmApr } from 'utils/apr'
 import { getBalanceNumber } from 'utils/formatBalance'
 import BigNumber from 'bignumber.js'
 import { FarmWithStakedValue } from 'views/Farms/components/FarmCard/FarmCard'
+import lpAprs from 'config/constants/lpAprs.json'
+import getDisplayApr from 'utils/getDisplayApr'
 
 const getKingdomAPRAPY = (
   farm: FarmWithStakedValue,
@@ -26,16 +28,11 @@ const getKingdomAPRAPY = (
     const totalAPY = farmAPY
     const totalAPYString = totalAPY && totalAPY.toLocaleString('en-US', { maximumFractionDigits: 2 })
 
-    data = { pcsApr: apr, dailyAPR, farmAPY, totalAPY, totalAPYString, newMultiplier: cubDen.multiplier }
+    data = { hostApr: apr, dailyAPR, farmAPY, totalAPY, totalAPYString, newMultiplier: cubDen.multiplier }
 
     return data
   }
-// if (farm.lpSymbol === 'BNB-BUSD LP') {
-//   console.log('farm',farm.lpSymbol)
-//   console.log('poolWeightPCS',poolWeightPCS)
-//   console.log('cakePrice',realCakePrice.toNumber())
-//   console.log('totalLiquidity',new BigNumber(lpTotalInQuoteTokenPCS).times(quoteTokenPriceUsd).toNumber())
-// }
+
   if (farm.lpSymbol === 'CAKE') {
     apr = getPoolApr(
       Number(farm.token.busdPrice),
@@ -54,15 +51,19 @@ const getKingdomAPRAPY = (
     else apr = getFarmApr(new BigNumber(poolWeightPCS), farmTokenPrice, totalLiquidity, isKingdom, farmType)
   }
 
+  const lpRewardsApr = lpAprs[farm.lpAddresses['56']?.toLocaleLowerCase()] ?? 0
+  const aprWithLpRewards = getDisplayApr(apr, lpRewardsApr)
+
   if (farmType === 'Bakery') apr = 10
 
   const dailyAPR = apr ? new BigNumber(apr).div(new BigNumber(365)).toNumber() : new BigNumber(0).toNumber()
 
-  const farmAPY = ((((apr / 100 / compounding) + 1) ** compounding) - 1) * 100
+  let farmAPY = ((((apr / 100 / compounding) + 1) ** compounding) - 1) * 100
+  if (farmType === 'Pancake v2') farmAPY = ((((Number(aprWithLpRewards) / 100 / compounding) + 1) ** compounding) - 1) * 100
   const totalAPY = cubAPR ? cubAPR + farmAPY : farmAPY
   const totalAPYString = totalAPY && totalAPY.toLocaleString('en-US', { maximumFractionDigits: 2 })
 
-  data = { pcsApr: apr, dailyAPR, farmAPY, totalAPY, totalAPYString }
+  data = { hostApr: apr, dailyAPR, farmAPY, totalAPY, totalAPYString, lpRewardsApr, aprWithLpRewards }
 
   return data
 }
