@@ -380,7 +380,7 @@ const fetchFarms = async (farmsToFetch: FarmConfig[]) => {
           lpTotalInQuoteToken: lpTotalInQuoteToken.toJSON(),
           tokenPriceVsQuote: tokenPriceVsQuote.toJSON(),
           poolWeight: farmConfig.pid === 4 ? '0.19' : kingdomPoolWeight.toJSON(),
-          multiplier: farmConfig.pid === 4 ? '30X' : `${kingdomCorrectAlloc.div(100).toString()}X`,
+          multiplier: farmConfig.pid === 4 ? '30X' : `${kingdomCorrectAlloc.div(100).toFixed(1).toString()}X`,
           // multiplier: farmConfig.pid === 4 ? '30X' : `2X`,
           // multiplier: '1.5X',
           depositFeeBP: kInfo.depositFeeBP,
