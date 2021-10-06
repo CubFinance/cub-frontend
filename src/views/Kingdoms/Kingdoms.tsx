@@ -1,17 +1,16 @@
 import React, { useEffect, useCallback, useState, useMemo, useRef } from 'react'
-import { useLocation } from 'react-router-dom'
+import { Route, useRouteMatch, useLocation } from 'react-router-dom'
 import { useAppDispatch } from 'state'
 import BigNumber from 'bignumber.js'
 import { useWeb3React } from '@web3-react/core'
 import { Heading, Toggle, Text, Flex } from '@pancakeswap-libs/uikit'
 import styled from 'styled-components'
-// import FlexLayout from 'components/layout/Flex'
+import FlexLayout from 'components/layout/Flex'
 import Page from 'components/layout/Page'
-// import { MigrationV2 } from 'components/Banner'
 import { useFarms, usePriceCakeBusd, useGetApiPrices, useTotalValueKingdoms, useBusdPriceFromLpSymbol, useFarmFromPid } from 'state/hooks'
 import useRefresh from 'hooks/useRefresh'
 import { fetchFarmUserDataAsync } from 'state/actions'
-// import usePersistState from 'hooks/usePersistState'
+import usePersistState from 'hooks/usePersistState'
 import { Farm } from 'state/types'
 // import { getBalanceNumber } from 'utils/formatBalance'
 import { getFarmApr } from 'utils/apr'
@@ -22,20 +21,14 @@ import PageHeader from 'components/PageHeader'
 import { fetchFarmsPublicDataAsync, setLoadArchivedFarmsData } from 'state/farms'
 import Select, { OptionProps } from 'components/Select/Select'
 // import { DEFAULT_TOKEN_DECIMAL } from 'config'
-// import { useGetStats } from 'hooks/api'
-// import FarmCard, { FarmWithStakedValue } from './components/FarmCard/FarmCard'
-// import Table from './components/FarmTable/FarmTable'
-// import FarmTabButtons from 'views/Farms/components/FarmTabButtons'
 import SearchInput from 'views/Farms/components/SearchInput'
-// import { RowProps } from './components/FarmTable/Row'
-// import ToggleView from './components/ToggleView/ToggleView'
-// import { DesktopColumnSchema, ViewMode } from './components/types'
-
+import { ViewMode } from 'views/Farms/components/types'
 import useBnbDividends from 'hooks/useBnbDividends'
 import { FarmWithStakedValue } from 'views/Farms/components/FarmCard/FarmCard'
 import Kingdom from './components/Kingdom'
 import CardValue from './components/CardValue'
 import TotalStaked from './components/TotalStaked'
+import FarmTabButtons from './components/FarmTabButtons'
 import './Kingdoms.css'
 
 const ControlContainer = styled.div`
@@ -112,8 +105,8 @@ const FeeWrapper = styled.div`
 const NUMBER_OF_FARMS_VISIBLE = 20
 
 const Kingdoms: React.FC = () => {
+  const { path } = useRouteMatch()
   const totalValue = useTotalValueKingdoms();
-  // const { path } = useRouteMatch()
   const { pathname } = useLocation()
   const { data: farmsLP } = useFarms()
   const [query, setQuery] = useState('')
@@ -164,12 +157,14 @@ const Kingdoms: React.FC = () => {
   }, [isArchived, dispatch, account])
 
   const activeFarms = farmsLP.filter(farm => {
-    return farm.isKingdom && !isArchivedPid(farm.pid)
+    return farm.isKingdom && !['0X', '0.0X'].includes(farm.multiplier) && !isArchivedPid(farm.pid)
   })
+
   const inactiveFarms = farmsLP.filter(farm => {
-    return farm.isKingdom && farm.multiplier === '0X' && !isArchivedPid(farm.pid)
+    return farm.isKingdom && ['0X', '0.0X'].includes(farm.multiplier) && !isArchivedPid(farm.pid)
   })
-  // const archivedFarms = farmsLP.filter((farm) => isArchivedPid(farm.pid))
+
+  const archivedFarms = farmsLP.filter((farm) => isArchivedPid(farm.pid))
 
   const stakedOnlyFarms = activeFarms.filter(
     (farm) => farm.userData && new BigNumber(farm.userData.stakedBalance).isGreaterThan(0),
@@ -178,10 +173,10 @@ const Kingdoms: React.FC = () => {
   const stakedInactiveFarms = inactiveFarms.filter(
     (farm) => farm.userData && new BigNumber(farm.userData.stakedBalance).isGreaterThan(0),
   )
-  //
-  // const stakedArchivedFarms = archivedFarms.filter(
-  //   (farm) => farm.userData && new BigNumber(farm.userData.stakedBalance).isGreaterThan(0),
-  // )
+
+  const stakedArchivedFarms = archivedFarms.filter(
+    (farm) => farm.userData && new BigNumber(farm.userData.stakedBalance).isGreaterThan(0),
+  )
 
   const farmsList = useCallback(
     (farmsToDisplay: Farm[]): FarmWithStakedValue[] => {
@@ -193,9 +188,7 @@ const Kingdoms: React.FC = () => {
         const quoteTokenPriceUsd = prices[getAddress(farm.quoteToken.address).toLowerCase()]
         const totalLiquidity = new BigNumber(farm.lpTotalInQuoteToken).times(quoteTokenPriceUsd)
         const apr = isActive ? getFarmApr(farm.poolWeight, cakePrice, totalLiquidity) : 0
-// console.log('farm',farm.lpSymbol)
-// console.log('lpRewardsApr',lpRewardsApr)
-// console.log('aprWithLpRewards',aprWithLpRewards)
+
         return { ...farm, apr, liquidity: totalLiquidity }
       })
 
@@ -244,12 +237,12 @@ const Kingdoms: React.FC = () => {
     if (isActive) {
       farmsStaked = stakedOnly ? farmsList(stakedOnlyFarms) : farmsList(activeFarms)
     }
-    // if (isInactive) {
-    //   farmsStaked = stakedOnly ? farmsList(stakedInactiveFarms) : farmsList(inactiveFarms)
-    // }
-    // if (isArchived) {
-    //   farmsStaked = stakedOnly ? farmsList(stakedArchivedFarms) : farmsList(archivedFarms)
-    // }
+    if (isInactive) {
+      farmsStaked = stakedOnly ? farmsList(stakedInactiveFarms) : farmsList(inactiveFarms)
+    }
+    if (isArchived) {
+      farmsStaked = stakedOnly ? farmsList(stakedArchivedFarms) : farmsList(archivedFarms)
+    }
 
     return sortFarms(farmsStaked).slice(0, numberOfFarmsVisible)
   }, [
@@ -260,6 +253,12 @@ const Kingdoms: React.FC = () => {
     stakedOnly,
     stakedOnlyFarms,
     numberOfFarmsVisible,
+    isInactive,
+    stakedInactiveFarms,
+    inactiveFarms,
+    isArchived,
+    stakedArchivedFarms,
+    archivedFarms,
   ])
 
   useEffect(() => {
@@ -280,29 +279,27 @@ const Kingdoms: React.FC = () => {
     }
   }, [farmsStakedMemoized, observerIsSet])
 
-  /* const renderContent = (): JSX.Element => {
+  const renderContent = (): JSX.Element => {
     return (
       <div>
-        <FlexLayout>
           <Route exact path={`${path}`}>
             {farmsStakedMemoized.map((farm) => (
-              <FarmCard key={farm.pid} farm={farm} cakePrice={cakePrice} account={account} removed={false} />
+              <Kingdom key={farm.pid} farm={farm} cakePrice={cakePrice} account={account} removed={false} bakePrice={bakePrice} beltPrice={beltPrice} cubDen={cubDen} realCakePrice={realCakePrice} bnbDividends={bnbDividends} />
             ))}
           </Route>
           <Route exact path={`${path}/history`}>
             {farmsStakedMemoized.map((farm) => (
-              <FarmCard key={farm.pid} farm={farm} cakePrice={cakePrice} account={account} removed />
+              <Kingdom key={farm.pid} farm={farm} cakePrice={cakePrice} account={account} removed bakePrice={bakePrice} beltPrice={beltPrice} cubDen={cubDen} realCakePrice={realCakePrice} bnbDividends={bnbDividends} />
             ))}
           </Route>
           <Route exact path={`${path}/archived`}>
             {farmsStakedMemoized.map((farm) => (
-              <FarmCard key={farm.pid} farm={farm} cakePrice={cakePrice} account={account} removed />
+              <Kingdom key={farm.pid} farm={farm} cakePrice={cakePrice} account={account} removed bakePrice={bakePrice} beltPrice={beltPrice} cubDen={cubDen} realCakePrice={realCakePrice} bnbDividends={bnbDividends} />
             ))}
           </Route>
-        </FlexLayout>
       </div>
     )
-  } */
+  }
 
   const handleSortOptionChange = (option: OptionProps): void => {
     setSortOption(option.value)
@@ -364,6 +361,10 @@ const Kingdoms: React.FC = () => {
               <Toggle checked={stakedOnly} onChange={() => setStakedOnly(!stakedOnly)} scale="sm" />
               <Text>Staked only</Text>
             </ToggleWrapper>
+            <FarmTabButtons
+              hasStakeInFinishedFarms={stakedInactiveFarms.length > 0}
+              hasStakeInArchivedFarms={stakedArchivedFarms.length > 0}
+            />
           </ViewControls>
           <FilterContainer>
             <LabelWrapper>
@@ -401,15 +402,10 @@ const Kingdoms: React.FC = () => {
           </FilterContainer>
         </ControlContainer>
         <div id="kingdoms">
-          {farmsStakedMemoized.map((farm) => (
+          {/* farmsStakedMemoized.map((farm) => (
             <Kingdom key={farm.pid} farm={farm} cakePrice={cakePrice} account={account} removed={false} bakePrice={bakePrice} beltPrice={beltPrice} cubDen={cubDen} realCakePrice={realCakePrice} bnbDividends={bnbDividends} />
-          ))}
-          {/* <br />
-          <div>INACTIVE</div>
-          <br />
-          {farmsList(stakedInactiveFarms).map((farm) => (
-            <Kingdom key={farm.pid} farm={farm} cakePrice={cakePrice} account={account} removed={false} bakePrice={bakePrice} beltPrice={beltPrice} cubDen={cubDen} realCakePrice={realCakePrice} bnbDividends={bnbDividends} />
-          ))} */ }
+          )) */}
+          {renderContent()}
         </div>
         <div ref={loadMoreRef} />
       </Page>

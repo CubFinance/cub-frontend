@@ -431,21 +431,17 @@ const Farms: React.FC<FarmsProps> = ({ tokenMode, kingdomMode }) => {
       {/* <MigrationV2 /> */}
       <Page>
         <ControlContainer>
-          {
-            !kingdomMode && (
-              <ViewControls>
-                <ToggleView viewMode={viewMode} onToggle={(mode: ViewMode) => setViewMode(mode)} />
-                <ToggleWrapper>
-                  <Toggle checked={stakedOnly} onChange={() => setStakedOnly(!stakedOnly)} scale="sm" />
-                  <Text> {TranslateString(1116, 'Staked only')}</Text>
-                </ToggleWrapper>
-                <FarmTabButtons
-                  hasStakeInFinishedFarms={stakedInactiveFarms.length > 0}
-                  hasStakeInArchivedFarms={stakedArchivedFarms.length > 0}
-                />
-              </ViewControls>
-            )
-          }
+          <ViewControls>
+            <ToggleView viewMode={viewMode} onToggle={(mode: ViewMode) => setViewMode(mode)} />
+            <ToggleWrapper>
+              <Toggle checked={stakedOnly} onChange={() => setStakedOnly(!stakedOnly)} scale="sm" />
+              <Text> {TranslateString(1116, 'Staked only')}</Text>
+            </ToggleWrapper>
+            <FarmTabButtons
+              hasStakeInFinishedFarms={stakedInactiveFarms.length > 0}
+              hasStakeInArchivedFarms={stakedArchivedFarms.length > 0}
+            />
+          </ViewControls>
           <FilterContainer>
             <LabelWrapper>
               <Text>SORT BY</Text>
