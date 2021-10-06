@@ -2,7 +2,6 @@ import BigNumber from 'bignumber.js'
 import erc20 from 'config/abi/erc20.json'
 import masterchefABI from 'config/abi/masterchef.json'
 import multicall from 'utils/multicall'
-import { useSelector } from 'react-redux'
 import { BIG_TEN, BIG_ZERO } from 'utils/bigNumber'
 import {
   getAddress,
@@ -200,8 +199,6 @@ const fetchFarms = async (farmsToFetch: FarmConfig[]) => {
         }
 
         lpTotalInQuoteToken = tokenAmount.times(tokenPriceVsQuote)
-// console.log('farmConfig.lpSymbol',farmConfig.lpSymbol)
-// console.log('lpTotalInQuoteToken',lpTotalInQuoteToken.toNumber())
         // lpTotalInQuoteTokenPCS = tokenAmountPCS.times(tokenPriceVsQuote)
       } else {
         // Ratio in % a LP tokens that are in staking, vs the total number in circulation
@@ -216,35 +213,25 @@ const fetchFarms = async (farmsToFetch: FarmConfig[]) => {
         tokenPriceVsQuote = new BigNumber(quoteTokenBalanceLP).div(new BigNumber(tokenBalanceLP))
 
         if (farmConfig.isKingdom) {
-// console.log('farmConfig.lpSymbol',farmConfig.lpSymbol)
-// console.log('kingdomSupply',new BigNumber(kingdomSupply).div(DEFAULT_TOKEN_DECIMAL).toNumber())
 
           const lpTokenRatioPCS = new BigNumber(lpTokenBalanceMC).div(new BigNumber(lpTotalSupply))
-// console.log('lpTokenRatioPCS',lpTokenRatioPCS.toNumber())
 
           lpTotalInQuoteTokenPCS = new BigNumber(quoteTokenBalanceLP)
             .div(DEFAULT_TOKEN_DECIMAL)
             .times(new BigNumber(2))
             .times(lpTokenRatioPCS)
-// console.log('lpTotalInQuoteTokenPCS',lpTotalInQuoteTokenPCS.toFixed(2))
 
           const ratioPCStoKingdom = new BigNumber(lpTotalSupply).div(new BigNumber(kingdomSupply))
-// console.log('ratioPCStoKingdom',ratioPCStoKingdom.toNumber())
 
           const kingdomTokenSupply = new BigNumber(tokenBalanceLP).div(new BigNumber(ratioPCStoKingdom))
-// console.log('kingdomTokenSupply',kingdomTokenSupply.div(DEFAULT_TOKEN_DECIMAL).toNumber())
 
           const kingdomQuoteTokenSupply = new BigNumber(quoteTokenBalanceLP).div(new BigNumber(ratioPCStoKingdom))
-// console.log('kingdomQuoteTokenSupply',kingdomQuoteTokenSupply.div(DEFAULT_TOKEN_DECIMAL).toNumber())
 
           lpTokenRatio = new BigNumber(kingdomTokenSupply).div(new BigNumber(kingdomQuoteTokenSupply))
-// console.log('lpTokenRatio',lpTokenRatio.toNumber())
 
           lpTotalInQuoteToken = new BigNumber(kingdomQuoteTokenSupply)
             .div(DEFAULT_TOKEN_DECIMAL)
             .times(new BigNumber(2))
-            // .times(lpTokenRatio)
-// console.log('lpTotalInQuoteToken',lpTotalInQuoteToken.toNumber())
         }
         // Amount of token in the LP that are considered staking (i.e amount of token * lp ratio)
         tokenAmount = new BigNumber(tokenBalanceLP).div(BIG_TEN.pow(tokenDecimals)).times(lpTokenRatio)
@@ -260,10 +247,6 @@ const fetchFarms = async (farmsToFetch: FarmConfig[]) => {
       }
 
       const tokenAmountTotal = new BigNumber(tokenBalanceLP).div(BIG_TEN.pow(tokenDecimals))
-
-      // let info = 0
-      // let totalAllocPoint = 0
-      // let cubPerBlock = 0
 
       const mCalls = [
         {
