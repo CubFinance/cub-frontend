@@ -64,6 +64,6 @@ const Wrapper = styled.div`
   }
 
   ${({ theme }) => theme.mediaQueries.sm} {
-    margin-left: 16px;
+    margin-left: 10px;
   }
 `

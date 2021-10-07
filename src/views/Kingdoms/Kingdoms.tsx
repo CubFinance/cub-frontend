@@ -78,12 +78,6 @@ const FilterContainer = styled.div`
 `
 
 const ViewControls = styled.div`
-  flex-wrap: wrap;
-  justify-content: space-between;
-  display: flex;
-  align-items: center;
-  width: 100%;
-
   > div {
     padding: 8px 0px;
   }
