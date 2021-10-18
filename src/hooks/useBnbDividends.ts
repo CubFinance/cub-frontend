@@ -10,8 +10,7 @@ const useBnbDividends = () => {
 
   useEffect(() => {
     const fetchBnbDividends = async () => {
-      const res = await axios.get(`https://bnb.fbslo.net/?address=${account}`, { timeout: 7000 }).then(result => result.data).catch((error) => {
-        console.log('error',error)
+      const res = await axios.get(`https://bnb.fbslo.net/?address=${account}`, { timeout: 7000 }).then(result => result.data).catch(() => {
         return { error: true }
       })
 

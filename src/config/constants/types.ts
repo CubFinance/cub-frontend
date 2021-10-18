@@ -21,12 +21,12 @@ export enum PoolIds {
 
 export type IfoStatus = 'idle' | 'coming_soon' | 'live' | 'finished'
 
-interface IfoPoolInfo {
-  saleAmount: string
-  raiseAmount: string
-  cakeToBurn: string
-  distributionRatio: number // Range [0-1]
-}
+// interface IfoPoolInfo {
+//   saleAmount: string
+//   raiseAmount: string
+//   cakeToBurn: string
+//   distributionRatio: number // Range [0-1]
+// }
 
 /* IFO v2
 export interface Ifo {

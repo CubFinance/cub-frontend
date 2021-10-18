@@ -1,7 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
 import { ChevronDownIcon, ChevronUpIcon, Text } from '@pancakeswap-libs/uikit'
-import useI18n from 'hooks/useI18n'
 
 export interface ExpandableSectionButtonProps {
   onClick?: () => void
@@ -21,7 +20,6 @@ const Wrapper = styled.div`
 `
 
 const ExpandableSectionButton: React.FC<ExpandableSectionButtonProps> = ({ onClick, expanded, onlyArrow }) => {
-  const TranslateString = useI18n()
 
   let extra = null
   if (!onlyArrow)

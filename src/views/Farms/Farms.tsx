@@ -3,7 +3,7 @@ import { Route, useRouteMatch, useLocation } from 'react-router-dom'
 import { useAppDispatch } from 'state'
 import BigNumber from 'bignumber.js'
 import { useWeb3React } from '@web3-react/core'
-import { Image, Heading, RowType, Toggle, Text, Button, Flex } from '@pancakeswap-libs/uikit'
+import { Image, Heading, RowType, Toggle, Text, Button } from '@pancakeswap-libs/uikit'
 import styled from 'styled-components'
 import FlexLayout from 'components/layout/Flex'
 import Page from 'components/layout/Page'
@@ -105,10 +105,6 @@ const Wrapper = styled.div`
   display: flex;
   justify-content: flex-start;
   align-items: flex-start;
-`
-
-const FeeWrapper = styled.div`
-  max-width: 400px;
 `
 
 /* const StyledImage = styled(Image)`

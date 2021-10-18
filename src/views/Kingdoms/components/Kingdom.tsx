@@ -150,7 +150,7 @@ const Kingdom: React.FC<KingdomProps> = ({ farm, removed, cakePrice, account, ba
               value={rawStakedBalance}
               decimals={rawStakedBalance ? 2 : 1}
               unit=""
-              color={rawStakedBalance > 0.0000001 ? "warning" : "text"}
+              color={rawStakedBalance ? "warning" : "text"}
             />
             <Text>Deposited</Text>
           </div>

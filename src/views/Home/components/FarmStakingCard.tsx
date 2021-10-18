@@ -42,7 +42,7 @@ const FarmedStakingCard = () => {
   const { account } = useWeb3React()
   const TranslateString = useI18n()
   const farmsWithBalance = useFarmsWithBalance()
-  const balancesWithValue = farmsWithBalance.filter((balanceType) => balanceType.balance.toNumber() > 0)
+  const balancesWithValue = farmsWithBalance.filter((balanceType) => balanceType.balance.toNumber() > 10000)
 
   const bnbDividends = useBnbDividends()
   const { onClaim } = useClaim(bnbDividends || {})
