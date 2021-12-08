@@ -25,7 +25,6 @@ const CardMidContent = styled(Heading).attrs({ size: 'xl' })`
 const EarnAPRCard = () => {
   const TranslateString = useI18n()
   const { data: farmsLP } = useFarms()
-  const prices = useGetApiPrices()
   const cakePrice = usePriceCakeBusd()
 
   const highestApr = useMemo(() => {
@@ -33,8 +32,8 @@ const EarnAPRCard = () => {
       // Filter inactive farms, because their theoretical APR is super high. In practice, it's 0.
       .filter((farm) => farm.multiplier !== '0X')
       .map((farm) => {
-        if (farm.lpTotalInQuoteToken && prices) {
-          const quoteTokenPriceUsd = prices[getAddress(farm.quoteToken.address).toLowerCase()]
+        if (farm.lpTotalInQuoteToken) {
+          const quoteTokenPriceUsd = farm.quoteToken.busdPrice
           const totalLiquidity = new BigNumber(farm.lpTotalInQuoteToken).times(quoteTokenPriceUsd)
           return getFarmApr(farm.poolWeight, cakePrice, totalLiquidity)
         }
@@ -43,7 +42,7 @@ const EarnAPRCard = () => {
 
     const maxApr = max(aprs)
     return maxApr?.toLocaleString('en-US', { maximumFractionDigits: 2 })
-  }, [cakePrice, farmsLP, prices])
+  }, [cakePrice, farmsLP])
 
   return (
     <StyledFarmStakingCard>
