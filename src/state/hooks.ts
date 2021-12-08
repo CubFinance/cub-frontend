@@ -17,7 +17,7 @@ import { State, Farm, Pool, ProfileState, TeamsState, AchievementState, PriceSta
 import { fetchProfile } from './profile'
 import { fetchTeam, fetchTeams } from './teams'
 import { fetchAchievements } from './achievements'
-import { fetchPrices } from './prices'
+// import { fetchPrices } from './prices'
 import { fetchWalletNfts } from './collectibles'
 
 export const useFetchPublicData = () => {
@@ -204,14 +204,14 @@ export const useAchievements = () => {
 }
 
 // Prices
-export const useFetchPriceList = () => {
-  const { slowRefresh } = useRefresh()
-  const dispatch = useAppDispatch()
-
-  useEffect(() => {
-    dispatch(fetchPrices())
-  }, [dispatch, slowRefresh])
-}
+// export const useFetchPriceList = () => {
+//   const { slowRefresh } = useRefresh()
+//   const dispatch = useAppDispatch()
+//
+//   useEffect(() => {
+//     dispatch(fetchPrices())
+//   }, [dispatch, slowRefresh])
+// }
 
 export const useGetApiPrices = () => {
   const prices: PriceState['data'] = useSelector((state: State) => state.prices.data)

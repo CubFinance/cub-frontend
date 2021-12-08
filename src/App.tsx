@@ -4,7 +4,7 @@ import { Router, Route, Switch } from 'react-router-dom'
 import { ResetCSS } from '@pancakeswap-libs/uikit'
 import BigNumber from 'bignumber.js'
 import useEagerConnect from 'hooks/useEagerConnect'
-import { useFetchPriceList, useFetchProfile, useFetchPublicData } from 'state/hooks'
+import { useFetchProfile, useFetchPublicData } from 'state/hooks'
 import GlobalStyle from './style/Global'
 import Menu from './components/Menu'
 import SuspenseWithChunkError from './components/SuspenseWithChunkError'
@@ -47,7 +47,6 @@ const App: React.FC = () => {
   useEagerConnect()
   useFetchPublicData()
   useFetchProfile()
-  useFetchPriceList()
 
   return (
     <Router history={history}>
