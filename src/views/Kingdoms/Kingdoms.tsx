@@ -7,7 +7,7 @@ import { Heading, Toggle, Text, Flex } from '@pancakeswap-libs/uikit'
 import styled from 'styled-components'
 // import FlexLayout from 'components/layout/Flex'
 import Page from 'components/layout/Page'
-import { useFarms, usePriceCakeBusd, useGetApiPrices, useTotalValueKingdoms, useBusdPriceFromLpSymbol, useFarmFromPid } from 'state/hooks'
+import { useFarms, usePriceCakeBusd, useTotalValueKingdoms, useBusdPriceFromLpSymbol, useFarmFromPid } from 'state/hooks'
 import useRefresh from 'hooks/useRefresh'
 import { fetchFarmUserDataAsync } from 'state/actions'
 // import usePersistState from 'hooks/usePersistState'
@@ -15,7 +15,7 @@ import { Farm } from 'state/types'
 // import { getBalanceNumber } from 'utils/formatBalance'
 import { getFarmApr } from 'utils/apr'
 import { orderBy } from 'lodash'
-import { getAddress } from 'utils/addressHelpers'
+// import { getAddress } from 'utils/addressHelpers'
 import isArchivedPid from 'utils/farmHelpers'
 import PageHeader from 'components/PageHeader'
 import { fetchFarmsPublicDataAsync, setLoadArchivedFarmsData } from 'state/farms'
@@ -106,7 +106,6 @@ const Kingdoms: React.FC = () => {
   const [query, setQuery] = useState('')
   const { account } = useWeb3React()
   const [sortOption, setSortOption] = useState('hot')
-  const prices = useGetApiPrices()
   const cakePrice = usePriceCakeBusd()
   const realCakePrice = useBusdPriceFromLpSymbol('CAKE') || new BigNumber(0)
   const bakePrice = useBusdPriceFromLpSymbol('BAKE-BNB LP')
@@ -175,11 +174,11 @@ const Kingdoms: React.FC = () => {
   const farmsList = useCallback(
     (farmsToDisplay: Farm[]): FarmWithStakedValue[] => {
       let farmsToDisplayWithAPR: FarmWithStakedValue[] = farmsToDisplay.map((farm) => {
-        if (!farm.lpTotalInQuoteToken || !prices) {
+        if (!farm.lpTotalInQuoteToken) {
           return farm
         }
 
-        const quoteTokenPriceUsd = prices[getAddress(farm.quoteToken.address).toLowerCase()]
+        const quoteTokenPriceUsd = farm.quoteToken.busdPrice
         const totalLiquidity = new BigNumber(farm.lpTotalInQuoteToken).times(quoteTokenPriceUsd)
         const apr = isActive ? getFarmApr(farm.poolWeight, cakePrice, totalLiquidity) : 0
 
@@ -194,7 +193,7 @@ const Kingdoms: React.FC = () => {
       }
       return farmsToDisplayWithAPR
     },
-    [cakePrice, prices, query, isActive],
+    [cakePrice, query, isActive],
   )
 
   const handleChangeQuery = (event: React.ChangeEvent<HTMLInputElement>) => {
