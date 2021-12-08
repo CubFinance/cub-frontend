@@ -25,7 +25,7 @@ export const useFetchPublicData = () => {
   const { slowRefresh } = useRefresh()
   useEffect(() => {
     dispatch(fetchFarmsPublicDataAsync())
-    dispatch(fetchPoolsPublicDataAsync())
+    // dispatch(fetchPoolsPublicDataAsync())
   }, [dispatch, slowRefresh])
 
   useEffect(() => {
@@ -368,38 +368,34 @@ export const useGetCollectibles = () => {
 
 export const useTotalValue = (): BigNumber => {
   const farms = useFarms();
-  const prices = useGetApiPrices()
   let value = new BigNumber(0);
 
-  if (prices)
-    value = farms.data.reduce((accu, farm) => {
-      const quoteTokenPriceUsd = prices[getAddress(farm.quoteToken.address).toLowerCase()]
-      const totalLiquidity = new BigNumber(farm.lpTotalInQuoteToken).times(quoteTokenPriceUsd)
-      let newAccu = accu
-      if (!totalLiquidity.isNaN() && !totalLiquidity.isZero())
-        newAccu = accu.plus(totalLiquidity)
-      return newAccu
-    }, value)
+  value = farms.data.reduce((accu, farm) => {
+    const quoteTokenPriceUsd = farm.quoteToken.busdPrice
+    const totalLiquidity = new BigNumber(farm.lpTotalInQuoteToken).times(quoteTokenPriceUsd)
+    let newAccu = accu
+    if (totalLiquidity.gt(0))
+      newAccu = accu.plus(totalLiquidity)
+    return newAccu
+  }, value)
 
   return value;
 }
 
 export const useTotalValueKingdoms = (): BigNumber => {
   const farms = useFarms();
-  const prices = useGetApiPrices()
   let value = new BigNumber(0);
 
   const kingdoms = farms.data.filter(farm => farm.isKingdom)
 
-  if (prices)
-    value = kingdoms.reduce((accu, farm) => {
-      const quoteTokenPriceUsd = prices[getAddress(farm.quoteToken.address).toLowerCase()]
-      const totalLiquidity = new BigNumber(farm.lpTotalInQuoteToken).times(quoteTokenPriceUsd)
-      let newAccu = accu
-      if (!totalLiquidity.isNaN() && !totalLiquidity.isZero())
-        newAccu = accu.plus(totalLiquidity)
-      return newAccu
-    }, value)
+  value = kingdoms.reduce((accu, farm) => {
+    const quoteTokenPriceUsd = farm.quoteToken.busdPrice
+    const totalLiquidity = new BigNumber(farm.lpTotalInQuoteToken).times(quoteTokenPriceUsd)
+    let newAccu = accu
+    if (totalLiquidity.gt(0))
+      newAccu = accu.plus(totalLiquidity)
+    return newAccu
+  }, value)
 
   return value;
 }

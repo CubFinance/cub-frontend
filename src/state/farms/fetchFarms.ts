@@ -180,7 +180,13 @@ const fetchFarms = async (farmsToFetch: FarmConfig[]) => {
             break
         }
       }
-
+    //   if (farmConfig.lpSymbol === 'BLEO-BNB LP (v2)' && farmConfig.pid === 28) {
+    //   console.log('farm',farmConfig.lpSymbol)
+    //   console.log('tokenBalanceLP',new BigNumber(tokenBalanceLP).div(DEFAULT_TOKEN_DECIMAL).toFixed(12))
+    //   console.log('quoteTokenBalanceLP',new BigNumber(quoteTokenBalanceLP).div(DEFAULT_TOKEN_DECIMAL).toFixed(12))
+    //   console.log('lpTokenBalanceMC',new BigNumber(lpTokenBalanceMC).div(DEFAULT_TOKEN_DECIMAL).toFixed(12))
+    //   console.log('lpTotalSupply',new BigNumber(lpTotalSupply).div(DEFAULT_TOKEN_DECIMAL).toFixed(12))
+    // }
       let tokenAmount
       let lpTotalInQuoteToken
       let tokenPriceVsQuote
@@ -382,7 +388,7 @@ const fetchFarms = async (farmsToFetch: FarmConfig[]) => {
 
       const allocPoint = new BigNumber(info.allocPoint._hex)
       const poolWeight = allocPoint.div(new BigNumber(totalAllocPoint))
-
+// console.log('tokenPriceVsQuote',tokenPriceVsQuote.toFormat(10))
       return {
         ...farmConfig,
         tokenAmount: tokenAmount.toJSON(),
