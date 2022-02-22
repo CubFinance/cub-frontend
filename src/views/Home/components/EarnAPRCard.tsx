@@ -6,7 +6,7 @@ import { NavLink } from 'react-router-dom'
 import useI18n from 'hooks/useI18n'
 import BigNumber from 'bignumber.js'
 import { getFarmApr } from 'utils/apr'
-import { useFarms, usePriceCakeBusd, useGetApiPrices } from 'state/hooks'
+import { useFarms, usePriceCakeBusd } from 'state/hooks'
 import { getAddress } from 'utils/addressHelpers'
 
 const StyledFarmStakingCard = styled(Card)`

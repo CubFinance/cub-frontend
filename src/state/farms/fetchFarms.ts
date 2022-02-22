@@ -402,6 +402,7 @@ const fetchFarms = async (farmsToFetch: FarmConfig[]) => {
         depositFeeBP: info.depositFeeBP,
         cubPerBlock: new BigNumber(cubPerBlock).toNumber(),
         tokenAmountTotal: tokenAmountTotal.toJSON(),
+        lpTokenBalance: new BigNumber(lpTokenBalanceMC).div(DEFAULT_TOKEN_DECIMAL).toNumber(),
       }
     }),
   )

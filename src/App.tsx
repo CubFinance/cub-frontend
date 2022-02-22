@@ -21,6 +21,7 @@ const Farms = lazy(() => import('./views/Farms'))
 const Kingdoms = lazy(() => import('./views/Kingdoms'))
 const NotFound = lazy(() => import('./views/NotFound'))
 const Ifos = lazy(() => import('./views/Ifos'))
+const Airdrops = lazy(() => import('./views/Airdrops'))
 /* const Lottery = lazy(() => import('./views/Lottery'))
 const Ifos = lazy(() => import('./views/Ifos'))
 const NotFound = lazy(() => import('./views/NotFound'))
@@ -69,6 +70,9 @@ const App: React.FC = () => {
             </Route>
             <Route path="/ido">
               <Ifos />
+            </Route>
+            <Route path="/airdrops">
+              <Airdrops />
             </Route>
             {/* <Route path="/lottery">
               <Lottery />

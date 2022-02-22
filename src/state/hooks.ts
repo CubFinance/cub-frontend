@@ -12,6 +12,7 @@ import { getBalanceAmount } from 'utils/formatBalance'
 import { BIG_ZERO } from 'utils/bigNumber'
 import useRefresh from 'hooks/useRefresh'
 import { filterFarmsByQuoteToken } from 'utils/farmsPriceHelpers'
+import { DEFAULT_TOKEN_DECIMAL } from 'config'
 import { fetchFarmsPublicDataAsync, fetchPoolsPublicDataAsync, fetchPoolsUserDataAsync, setBlock } from './actions'
 import { State, Farm, Pool, ProfileState, TeamsState, AchievementState, PriceState, FarmsState } from './types'
 import { fetchProfile } from './profile'
@@ -398,4 +399,55 @@ export const useTotalValueKingdoms = (): BigNumber => {
   }, value)
 
   return value;
+}
+
+
+export const useTotalCubStaked = (): any => {
+  const farms = useFarms()
+  let total = { cub: new BigNumber(0), value: new BigNumber(0) }
+
+  const cubFarms = farms.data.filter(farm => farm.token.symbol === 'CUB' && new BigNumber(farm.userData.stakedBalance).gt(0))
+
+  // console.log('cubFarms',cubFarms)
+
+  total = cubFarms.reduce((accu, farm) => {
+    let newAccu = accu
+    
+    const { userData, lpTotalInQuoteToken, lpTokenBalance, quoteToken: { busdPrice: quoteTokenPriceUsd }, token: { busdPrice: tokenPriceString } } = farm
+    const { stakedBalance } = userData
+    // console.log('stakedBalance', stakedBalance)
+    // one token value in quote token
+    // one LP token value USD?
+    // 
+    // stakedBalance LP amount * one LP token value = total value staked
+    // total value / 2 = total CUB tokens value
+    //
+    //  total CUB tokens value (1/2 of LP) / one CUB token value = amount of CUB tokens
+
+    const stakedAmount = new BigNumber(stakedBalance);
+    // console.log('stakedBalance',stakedAmount.toNumber())
+    if (stakedAmount.eq(0)) return newAccu
+
+    const tokenPrice = new BigNumber(tokenPriceString);
+    let oneTokenQuoteValue = new BigNumber(0)
+
+    if (!farm.isTokenOnly && !farm.isKingdomToken)
+      oneTokenQuoteValue = lpTotalInQuoteToken ? new BigNumber(lpTotalInQuoteToken).div(new BigNumber(lpTokenBalance)).times(quoteTokenPriceUsd).times(DEFAULT_TOKEN_DECIMAL) : new BigNumber(0)
+    else oneTokenQuoteValue = tokenPrice.times(DEFAULT_TOKEN_DECIMAL)
+
+    const totalValueStaked = stakedAmount.times(oneTokenQuoteValue).div(DEFAULT_TOKEN_DECIMAL)
+    const totalCubValue = !farm.isTokenOnly && !farm.isKingdomToken ? totalValueStaked.div(2) : totalValueStaked
+    const amountCubTokens = !farm.isTokenOnly && !farm.isKingdomToken ? totalCubValue.div(tokenPrice) : totalCubValue.div(oneTokenQuoteValue).times(DEFAULT_TOKEN_DECIMAL)
+
+    // console.log('oneTokenQuoteValue',oneTokenQuoteValue.div(DEFAULT_TOKEN_DECIMAL).toNumber())
+    // console.log('totalValueStaked',totalValueStaked.div(DEFAULT_TOKEN_DECIMAL).toNumber())
+    // console.log('totalCubValue',totalCubValue.div(DEFAULT_TOKEN_DECIMAL).toNumber())
+    // console.log('amountCubTokens',amountCubTokens.div(DEFAULT_TOKEN_DECIMAL).toNumber())
+
+    newAccu = { cub: newAccu.cub.plus(amountCubTokens.div(DEFAULT_TOKEN_DECIMAL)), value: newAccu.value.plus(totalCubValue.div(DEFAULT_TOKEN_DECIMAL)) }
+    // console.log('newAccu', newAccu)
+    return newAccu
+  }, total)
+
+  return total
 }
