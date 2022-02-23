@@ -3,16 +3,24 @@ import { Route, useRouteMatch, useLocation } from 'react-router-dom'
 import { useAppDispatch } from 'state'
 import BigNumber from 'bignumber.js'
 import { useWeb3React } from '@web3-react/core'
-import { Heading, Toggle, Text, Flex } from '@pancakeswap-libs/uikit'
+import { Heading, Text, Flex } from '@pancakeswap-libs/uikit'
 import styled from 'styled-components'
 import useRefresh from 'hooks/useRefresh'
 import { fetchFarmUserDataAsync } from 'state/actions'
 import Page from 'components/layout/Page'
 import PageHeader from 'components/PageHeader'
+import { useTotalCubStaked } from 'state/hooks'
+import { DEFAULT_TOKEN_DECIMAL } from 'config'
+import { BIG_ZERO } from 'utils/bigNumber'
+import { useTotalSupply, useBurnedBalance } from 'hooks/useTokenBalance'
+import { getBalanceNumber } from 'utils/formatBalance'
+import { getCakeAddress } from 'utils/addressHelpers'
+import CardValue from 'views/Home/components/CardValue'
 import StakedBalance from './StakedBalance'
 
 const Title = styled.div`
-  font-size: 2rem
+  font-size: 2rem;
+  color: ${(props) => props.theme.colors.primary};
 `
 
 const Airdrops: React.FC = () => {
@@ -28,22 +36,31 @@ const Airdrops: React.FC = () => {
     }
   }, [account, dispatch, fastRefresh])
 
+  const { cub = BIG_ZERO, value = BIG_ZERO } = useTotalCubStaked()
+  const totalSupply = useTotalSupply()
+  const burnedBalance = useBurnedBalance(getCakeAddress())
+  const circSupply = totalSupply ? totalSupply.minus(burnedBalance) : new BigNumber(0);
+  const cubSupply = getBalanceNumber(circSupply) || 0;
+  const pendingAirdrop = cubSupply ? new BigNumber(1000000).div(cubSupply).times(cub).toNumber() : 0
+
   return (
     <>
       <PageHeader>
         <div className='k-header'>
           <Heading as="h1" size="xxl" color="secondary" mb="10px">
-            Airdrops
+            POLYCUB Airdrop
           </Heading>
         </div>
       </PageHeader>
       <Page>
-        <Title>
-          POLYCUB Airdrop
-        </Title>
-        <Text>[XXX] CUB Staked for Airdrop</Text>
-        <StakedBalance />
-        <Text>Pending Airdrop: [1,000,000 / XXX = YYY] POLYCUB over 60 days</Text>
+        <Flex justifyContent="space-between">
+          <Title>CUB Eligible for Airdrop:</Title>
+          <StakedBalance cub={cub} value={value} />
+        </Flex>
+        <Flex justifyContent="space-between">
+          <Title>Pending Airdrop over 60 days:</Title>
+          <Text bold fontSize="40px" style={{ lineHeight: '1' }} color="text">{pendingAirdrop.toLocaleString('en-US', { maximumFractionDigits: 0 })}</Text>
+        </Flex>
       </Page>
     </>
   )

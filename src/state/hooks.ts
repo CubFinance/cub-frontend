@@ -408,25 +408,12 @@ export const useTotalCubStaked = (): any => {
 
   const cubFarms = farms.data.filter(farm => farm.token.symbol === 'CUB' && new BigNumber(farm.userData.stakedBalance).gt(0))
 
-  // console.log('cubFarms',cubFarms)
-
   total = cubFarms.reduce((accu, farm) => {
     let newAccu = accu
     
     const { userData, lpTotalInQuoteToken, lpTokenBalance, quoteToken: { busdPrice: quoteTokenPriceUsd }, token: { busdPrice: tokenPriceString } } = farm
     const { stakedBalance } = userData
-    // console.log('stakedBalance', stakedBalance)
-    // one token value in quote token
-    // one LP token value USD?
-    // 
-    // stakedBalance LP amount * one LP token value = total value staked
-    // total value / 2 = total CUB tokens value
-    //
-    //  total CUB tokens value (1/2 of LP) / one CUB token value = amount of CUB tokens
-
     const stakedAmount = new BigNumber(stakedBalance);
-    // console.log('stakedBalance',stakedAmount.toNumber())
-    if (stakedAmount.eq(0)) return newAccu
 
     const tokenPrice = new BigNumber(tokenPriceString);
     let oneTokenQuoteValue = new BigNumber(0)
