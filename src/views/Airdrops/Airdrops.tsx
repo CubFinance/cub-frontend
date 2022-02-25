@@ -23,6 +23,15 @@ const Title = styled.div`
   color: ${(props) => props.theme.colors.primary};
 `
 
+const FlexMobile = styled(Flex)`
+  justify-content: space-between;
+
+  @media only screen and (max-width: 768px) {
+    flex-direction: column;
+    justify-content: felx-start;
+  }
+`
+
 const Airdrops: React.FC = () => {
   // const { path } = useRouteMatch()
   // const { pathname } = useLocation()
@@ -41,7 +50,8 @@ const Airdrops: React.FC = () => {
   const burnedBalance = useBurnedBalance(getCakeAddress())
   const circSupply = totalSupply ? totalSupply.minus(burnedBalance) : new BigNumber(0);
   const cubSupply = getBalanceNumber(circSupply) || 0;
-  const pendingAirdrop = cubSupply ? new BigNumber(1000000).div(cubSupply).times(cub).toNumber() : 0
+  const pendingAirdrop = cubSupply ? new BigNumber(1000000).div(cubSupply).times(cub) : BIG_ZERO
+  const pCubValue = pendingAirdrop.times(1)
 
   return (
     <>
@@ -53,14 +63,17 @@ const Airdrops: React.FC = () => {
         </div>
       </PageHeader>
       <Page>
-        <Flex justifyContent="space-between">
-          <Title>CUB Eligible for Airdrop:</Title>
-          <StakedBalance cub={cub} value={value} />
-        </Flex>
-        <Flex justifyContent="space-between">
-          <Title>Pending Airdrop over 60 days:</Title>
-          <Text bold fontSize="40px" style={{ lineHeight: '1' }} color="text">{pendingAirdrop.toLocaleString('en-US', { maximumFractionDigits: 0 })}</Text>
-        </Flex>
+        <FlexMobile>
+          <Flex flexDirection="column">
+            <Title>Total Staked CUB Balance</Title>
+            <StakedBalance cub={cub} value={value} />
+          </Flex>
+          <Flex flexDirection="column">
+            <Title>Pending Airdrop (60 days)</Title>
+            <StakedBalance cub={pendingAirdrop} value={pCubValue} />
+            {/* <Text bold fontSize="40px" style={{ lineHeight: '1' }} color="text">{pendingAirdrop.toLocaleString('en-US', { maximumFractionDigits: 0 })}</Text> */}
+          </Flex>
+        </FlexMobile>
       </Page>
     </>
   )

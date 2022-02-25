@@ -73,6 +73,10 @@ const config: MenuEntry[] = [
         label: 'AstroTools',
         href: 'https://app.astrotools.io/pancake-pair-explorer/0x50d809c74e0b8e49e7b4c65bb3109abe3ff4c1c1',
       },
+      {
+        label: 'Airdrops',
+        href: '/airdrops',
+      },
     ],
   },
   {

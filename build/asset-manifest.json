@@ -6,8 +6,8 @@
     "static/js/1.c07c9488.chunk.js.map": "/static/js/1.c07c9488.chunk.js.map",
     "static/js/2.aecc9a3b.chunk.js": "/static/js/2.aecc9a3b.chunk.js",
     "static/js/2.aecc9a3b.chunk.js.map": "/static/js/2.aecc9a3b.chunk.js.map",
-    "main.js": "/static/js/main.7fe860eb.chunk.js",
-    "main.js.map": "/static/js/main.7fe860eb.chunk.js.map",
+    "main.js": "/static/js/main.b9b73ba8.chunk.js",
+    "main.js.map": "/static/js/main.b9b73ba8.chunk.js.map",
     "runtime-main.js": "/static/js/runtime-main.f2d56667.js",
     "runtime-main.js.map": "/static/js/runtime-main.f2d56667.js.map",
     "static/js/5.19a23c98.chunk.js": "/static/js/5.19a23c98.chunk.js",
@@ -39,6 +39,6 @@
   "entrypoints": [
     "static/js/runtime-main.f2d56667.js",
     "static/js/5.19a23c98.chunk.js",
-    "static/js/main.7fe860eb.chunk.js"
+    "static/js/main.b9b73ba8.chunk.js"
   ]
 }
