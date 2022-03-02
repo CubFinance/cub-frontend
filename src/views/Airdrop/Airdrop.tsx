@@ -3,7 +3,7 @@ import { Route, useRouteMatch, useLocation } from 'react-router-dom'
 import { useAppDispatch } from 'state'
 import BigNumber from 'bignumber.js'
 import { useWeb3React } from '@web3-react/core'
-import { Heading, Text, Flex } from '@pancakeswap-libs/uikit'
+import { Heading, Text, Flex, Button } from '@pancakeswap-libs/uikit'
 import styled from 'styled-components'
 import useRefresh from 'hooks/useRefresh'
 import { fetchFarmUserDataAsync } from 'state/actions'
@@ -75,6 +75,12 @@ const Header = styled(Text)`
   justify-content: center;
 `
 
+const Wrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`
+
 const Airdrops: React.FC = () => {
   // const { path } = useRouteMatch()
   // const { pathname } = useLocation()
@@ -95,8 +101,6 @@ const Airdrops: React.FC = () => {
   const cubSupply = getBalanceNumber(circSupply) || 0;
   const pendingAirdrop = cubSupply ? new BigNumber(1000000).div(cubSupply).times(cub) : BIG_ZERO
   const pCubValue = pendingAirdrop.times(1)
-
-  
 
   return (
     <>
@@ -131,6 +135,11 @@ const Airdrops: React.FC = () => {
             <Text>To particiapte in the airdrop, all you need to do is hodl CUB in either the CUB Kingdom, CUB-BUSD Farm or CUB-BNB farm. A daily snapshot of CUB balances in these 3 locations is taken every day for 60 consecutive days. Each day, POLYCUB tokens are then distributed based on the current balances in each snapshot. This means that if your balance changes (add stake or reduce stake), then your airdrop amount will change from day-to-day. Either increasing if you stake more or decreasing if you stake less.</Text>
           </TextCard>
         </DescriptionCard>
+        <Wrapper>
+          <Button size="sm">
+            <a href="https://polycub.com/airdrop">Learn More</a>
+          </Button>
+        </Wrapper>
       </Page>
     </>
   )
