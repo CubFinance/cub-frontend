@@ -40,6 +40,24 @@ const config: MenuEntry[] = [
     },
   },
   {
+    label: 'Airdrop',
+    icon: 'PawIcon',
+    href: '/airdrop',
+    status: {
+      text: 'POLYCUB',
+      color: 'warning',
+    },
+  },
+  {
+    label: 'PolyCUB',
+    icon: 'PawIcon',
+    href: 'https://polycub.com',
+    status: {
+      text: 'Polygon',
+      color: 'warning',
+    },
+  },
+  {
     label: 'IDO',
     icon: 'IfoIcon',
     href: '/ido',
@@ -72,10 +90,6 @@ const config: MenuEntry[] = [
       {
         label: 'AstroTools',
         href: 'https://app.astrotools.io/pancake-pair-explorer/0x50d809c74e0b8e49e7b4c65bb3109abe3ff4c1c1',
-      },
-      {
-        label: 'Airdrops',
-        href: '/airdrops',
       },
     ],
   },
