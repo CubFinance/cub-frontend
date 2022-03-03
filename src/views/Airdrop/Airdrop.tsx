@@ -77,7 +77,7 @@ const Header = styled(Text)`
 
 const Wrapper = styled.div`
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
 `
 
@@ -137,7 +137,10 @@ const Airdrops: React.FC = () => {
         </DescriptionCard>
         <Wrapper>
           <Button size="sm">
-            <a href="https://polycub.com/airdrop">Learn More</a>
+            <a href="https://docs.polycub.com/airdrop">Learn More</a>
+          </Button>
+          <Button size="sm">
+            <a href="https://polycub.com/airdrop">Claim</a>
           </Button>
         </Wrapper>
       </Page>
