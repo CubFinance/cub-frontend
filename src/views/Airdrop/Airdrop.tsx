@@ -100,7 +100,7 @@ const Airdrops: React.FC = () => {
   const circSupply = totalSupply ? totalSupply.minus(burnedBalance) : new BigNumber(0);
   const cubSupply = getBalanceNumber(circSupply) || 0;
   const pendingAirdrop = cubSupply ? new BigNumber(1000000).div(cubSupply).times(cub) : BIG_ZERO
-  const pCubValue = pendingAirdrop.times(1)
+  const pCubValue = pendingAirdrop.times(4.4)
 
   return (
     <>
