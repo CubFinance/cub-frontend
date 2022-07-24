@@ -29,6 +29,9 @@
     "import/no-extraneous-dependencies": 0,
     "jsx-a11y/media-has-caption": 0,
     "@typescript-eslint/no-var-requires": 0,
+    "react/require-default-props": 1,
+    "react/no-unused-prop-types": 1,
+    "react/destructuring-assignment": 1
     // End temporary rules
   }
 }
