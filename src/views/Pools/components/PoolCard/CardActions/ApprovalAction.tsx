@@ -41,7 +41,7 @@ const ApprovalAction: React.FC<ApprovalActionProps> = ({ pool, isLoading = false
         )
         setRequestedApproval(false)
       }
-    } catch (e) {
+    } catch (e: any) {
       console.error(e)
       toastError('Error', e?.message)
     }
