@@ -348,7 +348,7 @@ const farms: FarmConfig[] = [
     lpSymbol: 'bHBD-CUB',
     lpAddresses: {
       97: '',
-      56: '0x874966221020d6ac1aed0e2cfad9cbfee0ba713b',
+      56: '0x93c52e0213376a78c8b1c0b7d1f9fcba057c9a0d',
     },
     token: tokens.bhbd,
     quoteToken: tokens.cub,
