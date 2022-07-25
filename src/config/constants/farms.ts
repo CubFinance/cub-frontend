@@ -321,6 +321,39 @@ const farms: FarmConfig[] = [
     quoteToken: tokens.wbnb,
   },
   {
+    pid: 30,
+    pcsVersion: 2,
+    lpSymbol: 'bHBD-BUSD',
+    lpAddresses: {
+      97: '',
+      56: '0x8b97f5b65532d2f89ff0e60e308540bb20e47933',
+    },
+    token: tokens.bhbd,
+    quoteToken: tokens.busd,
+  },
+  {
+    pid: 31,
+    pcsVersion: 2,
+    lpSymbol: 'bHIVE-CUB',
+    lpAddresses: {
+      97: '',
+      56: '0xbb98f40a60bfcc5a12b529c860fcdcd03830c8be',
+    },
+    token: tokens.bhive,
+    quoteToken: tokens.cub,
+  },
+  {
+    pid: 32,
+    pcsVersion: 2,
+    lpSymbol: 'bHBD-CUB',
+    lpAddresses: {
+      97: '',
+      56: '0x874966221020d6ac1aed0e2cfad9cbfee0ba713b',
+    },
+    token: tokens.bhbd,
+    quoteToken: tokens.cub,
+  },
+  {
     pid: 26,
     pcsVersion: 2,
     lpSymbol: 'DEC-BUSD LP (v2)',
@@ -342,39 +375,6 @@ const farms: FarmConfig[] = [
     token: tokens.cakepop,
     quoteToken: tokens.busd,
   },
-  // {
-  //   pid: 30,
-  //   pcsVersion: 2,
-  //   lpSymbol: 'bHBD-BUSD',
-  //   lpAddresses: {
-  //     97: '',
-  //     56: '0x8b97f5b65532d2f89ff0e60e308540bb20e47933',
-  //   },
-  //   token: tokens.bhbd,
-  //   quoteToken: tokens.busd,
-  // },
-  // {
-  //   pid: 31,
-  //   pcsVersion: 2,
-  //   lpSymbol: 'bHIVE-CUB',
-  //   lpAddresses: {
-  //     97: '',
-  //     56: '0xbb98f40a60bfcc5a12b529c860fcdcd03830c8be',
-  //   },
-  //   token: tokens.bhive,
-  //   quoteToken: tokens.cub,
-  // },
-  // {
-  //   pid: 32,
-  //   pcsVersion: 2,
-  //   lpSymbol: 'bHBD-CUB',
-  //   lpAddresses: {
-  //     97: '',
-  //     56: '0x874966221020d6ac1aed0e2cfad9cbfee0ba713b',
-  //   },
-  //   token: tokens.bhbd,
-  //   quoteToken: tokens.cub,
-  // },
 
   // KINGDOMS
   {

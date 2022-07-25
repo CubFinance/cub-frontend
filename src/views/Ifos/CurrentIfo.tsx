@@ -41,7 +41,7 @@ const Ifo = () => {
   return (
     <div>
       <IfoCards isSingle>
-        <IfoCard ifo={activeIfo} />
+        {activeIfo? <IfoCard ifo={activeIfo} /> : <Text>No Active IDOs</Text>}
       </IfoCards>
       <LaunchIfoCallout>
         <div>

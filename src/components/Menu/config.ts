@@ -40,15 +40,6 @@ const config: MenuEntry[] = [
     },
   },
   {
-    label: 'Airdrop',
-    icon: 'PawIcon',
-    href: '/airdrop',
-    status: {
-      text: 'POLYCUB',
-      color: 'warning',
-    },
-  },
-  {
     label: 'PolyCUB',
     icon: 'PawIcon',
     href: 'https://polycub.com',

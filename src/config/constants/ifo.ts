@@ -99,7 +99,7 @@ const ifos: Ifo[] = [
   {
     id: 'cakepop',
     address: '0x345c045f3573368b82da5d1b3a21250dafa889dd',
-    isActive: true,
+    isActive: false,
     name: 'CakePop',
     subTitle: 'A powerful new Dividend-paying token. Buy, HODL and earn CAKE passively!',
     description:
