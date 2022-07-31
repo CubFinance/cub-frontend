@@ -13,26 +13,26 @@ const farms: FarmConfig[] = [
   //   token: tokens.wbnb,
   //   quoteToken: tokens.busd,
   // },
-  {
-    pid: 10,
-    lpSymbol: 'CUB-BUSD LP (v1)',
-    lpAddresses: {
-      97: '',
-      56: '0x0EF564D4F8D6C0ffE13348A32e21EFd55e508e84',
-    },
-    token: tokens.cub,
-    quoteToken: tokens.busd,
-  },
-  {
-    pid: 11,
-    lpSymbol: 'CUB-BNB LP (v1)',
-    lpAddresses: {
-      97: '',
-      56: '0xc08C74dC9EF46C6dB122b30c48a659831017DD2E',
-    },
-    token: tokens.cub,
-    quoteToken: tokens.wbnb,
-  },
+  // {
+  //   pid: 10,
+  //   lpSymbol: 'CUB-BUSD LP (v1)',
+  //   lpAddresses: {
+  //     97: '',
+  //     56: '0x0EF564D4F8D6C0ffE13348A32e21EFd55e508e84',
+  //   },
+  //   token: tokens.cub,
+  //   quoteToken: tokens.busd,
+  // },
+  // {
+  //   pid: 11,
+  //   lpSymbol: 'CUB-BNB LP (v1)',
+  //   lpAddresses: {
+  //     97: '',
+  //     56: '0xc08C74dC9EF46C6dB122b30c48a659831017DD2E',
+  //   },
+  //   token: tokens.cub,
+  //   quoteToken: tokens.wbnb,
+  // },
   {
     pid: 9,
     lpSymbol: 'bLEO-BNB LP (v1)',
