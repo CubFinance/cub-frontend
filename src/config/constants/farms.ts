@@ -290,7 +290,7 @@ const farms: FarmConfig[] = [
   {
     pid: 29,
     pcsVersion: 2,
-    lpSymbol: 'CUB-BUSD LP (v2)',
+    lpSymbol: 'BUSD-CUB LP (v2)',
     lpAddresses: {
       97: '',
       56: '0xfdF68922460d7508f84bD55ACB9D276d3f9a2c31',
@@ -301,7 +301,7 @@ const farms: FarmConfig[] = [
   {
     pid: 27,
     pcsVersion: 2,
-    lpSymbol: 'CUB-BNB LP (v2)',
+    lpSymbol: 'BNB-CUB LP (v2)',
     lpAddresses: {
       97: '',
       56: '0x7BaE0d7D2760E681559fbb502b43fFA26561bA24',
