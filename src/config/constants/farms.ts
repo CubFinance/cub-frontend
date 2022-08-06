@@ -33,16 +33,16 @@ const farms: FarmConfig[] = [
   //   token: tokens.cub,
   //   quoteToken: tokens.wbnb,
   // },
-  {
-    pid: 9,
-    lpSymbol: 'bLEO-BNB LP (v1)',
-    lpAddresses: {
-      97: '',
-      56: '0x243E060DEcA0499fCaE6ABe548C0115faaBa0ed4',
-    },
-    token: tokens.bleo,
-    quoteToken: tokens.wbnb,
-  },
+  // {
+  //   pid: 9,
+  //   lpSymbol: 'bLEO-BNB LP (v1)',
+  //   lpAddresses: {
+  //     97: '',
+  //     56: '0x243E060DEcA0499fCaE6ABe548C0115faaBa0ed4',
+  //   },
+  //   token: tokens.bleo,
+  //   quoteToken: tokens.wbnb,
+  // },
   {
     pid: 6,
     lpSymbol: 'USDT-BUSD LP',
@@ -105,16 +105,16 @@ const farms: FarmConfig[] = [
     token: tokens.dai,
     quoteToken: tokens.busd,
   },
-  {
-    pid: 23,
-    lpSymbol: 'DEC-BUSD LP (v1)',
-    lpAddresses: {
-      97: '',
-      56: '0x4c79edab89848f34084283bb1fe8eac2dca649c3',
-    },
-    token: tokens.dec,
-    quoteToken: tokens.busd,
-  },
+  // {
+  //   pid: 23,
+  //   lpSymbol: 'DEC-BUSD LP (v1)',
+  //   lpAddresses: {
+  //     97: '',
+  //     56: '0x4c79edab89848f34084283bb1fe8eac2dca649c3',
+  //   },
+  //   token: tokens.dec,
+  //   quoteToken: tokens.busd,
+  // },
 
   // {
   //   pid: 4,
@@ -213,7 +213,7 @@ const farms: FarmConfig[] = [
     lpSymbol: 'CUB',
     lpAddresses: {
       97: '',
-      56: '0x0EF564D4F8D6C0ffE13348A32e21EFd55e508e84', // CUB-BUSD LP
+      56: '0xfdF68922460d7508f84bD55ACB9D276d3f9a2c31', // CUB-BUSD LP
     },
     token: tokens.cub,
     quoteToken: tokens.busd,

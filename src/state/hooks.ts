@@ -229,13 +229,13 @@ export const useGetApiPrice = (address: string) => {
   return prices[address.toLowerCase()]
 }
 
-export const usePriceBnbBusd = (): BigNumber => {
-  const bnbBusdFarm = useFarmFromPid(2)
-  return bnbBusdFarm.tokenPriceVsQuote ? new BigNumber(1).div(bnbBusdFarm.tokenPriceVsQuote) : BIG_ZERO
-}
+// export const usePriceBnbBusd = (): BigNumber => {
+//   const bnbBusdFarm = useFarmFromPid(2)
+//   return bnbBusdFarm.tokenPriceVsQuote ? new BigNumber(1).div(bnbBusdFarm.tokenPriceVsQuote) : BIG_ZERO
+// }
 
 export const usePriceCakeBusd = (): BigNumber => {
-  const cakeBnbFarm = useFarmFromPid(10)
+  const cakeBnbFarm = useFarmFromPid(29)
   // const bnbBusdPrice = usePriceBnbBusd()
   //
   // const cakeBusdPrice = cakeBnbFarm.tokenPriceVsQuote ? bnbBusdPrice.times(cakeBnbFarm.tokenPriceVsQuote) : BIG_ZERO
@@ -410,7 +410,7 @@ export const useTotalCubStaked = (): any => {
 
   total = cubFarms.reduce((accu, farm) => {
     let newAccu = accu
-    
+
     const { userData, lpTotalInQuoteToken, lpTokenBalance, quoteToken: { busdPrice: quoteTokenPriceUsd }, token: { busdPrice: tokenPriceString } } = farm
     const { stakedBalance } = userData
     const stakedAmount = new BigNumber(stakedBalance);
