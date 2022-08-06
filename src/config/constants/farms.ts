@@ -288,6 +288,28 @@ const farms: FarmConfig[] = [
 
   // V2 Farms
   {
+    pid: 32,
+    pcsVersion: 2,
+    lpSymbol: 'bHBD-CUB',
+    lpAddresses: {
+      97: '',
+      56: '0x93c52e0213376a78c8b1c0b7d1f9fcba057c9a0d',
+    },
+    token: tokens.bhbd,
+    quoteToken: tokens.cub,
+  },
+  {
+    pid: 31,
+    pcsVersion: 2,
+    lpSymbol: 'bHIVE-CUB',
+    lpAddresses: {
+      97: '',
+      56: '0xbb98f40a60bfcc5a12b529c860fcdcd03830c8be',
+    },
+    token: tokens.bhive,
+    quoteToken: tokens.cub,
+  },
+  {
     pid: 29,
     pcsVersion: 2,
     lpSymbol: 'BUSD-CUB LP (v2)',
@@ -310,17 +332,6 @@ const farms: FarmConfig[] = [
     quoteToken: tokens.wbnb,
   },
   {
-    pid: 28,
-    pcsVersion: 2,
-    lpSymbol: 'BLEO-BNB LP (v2)',
-    lpAddresses: {
-      97: '',
-      56: '0x0Bca6e9B2C6C83Ebd457fB0D12fa5763114A8920',
-    },
-    token: tokens.bleo,
-    quoteToken: tokens.wbnb,
-  },
-  {
     pid: 30,
     pcsVersion: 2,
     lpSymbol: 'bHBD-BUSD',
@@ -332,26 +343,15 @@ const farms: FarmConfig[] = [
     quoteToken: tokens.busd,
   },
   {
-    pid: 31,
+    pid: 28,
     pcsVersion: 2,
-    lpSymbol: 'bHIVE-CUB',
+    lpSymbol: 'BLEO-BNB LP (v2)',
     lpAddresses: {
       97: '',
-      56: '0xbb98f40a60bfcc5a12b529c860fcdcd03830c8be',
+      56: '0x0Bca6e9B2C6C83Ebd457fB0D12fa5763114A8920',
     },
-    token: tokens.bhive,
-    quoteToken: tokens.cub,
-  },
-  {
-    pid: 32,
-    pcsVersion: 2,
-    lpSymbol: 'bHBD-CUB',
-    lpAddresses: {
-      97: '',
-      56: '0x93c52e0213376a78c8b1c0b7d1f9fcba057c9a0d',
-    },
-    token: tokens.bhbd,
-    quoteToken: tokens.cub,
+    token: tokens.bleo,
+    quoteToken: tokens.wbnb,
   },
   {
     pid: 26,
