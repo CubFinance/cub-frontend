@@ -253,7 +253,7 @@ const tokens = {
       56: '0x874966221020d6ac1aed0e2cfad9cbfee0ba713b',
       97: '',
     },
-    decimals: 18,
+    decimals: 3,
     projectLink: 'https://cubdefi.com/',
   },
   bhive: {
@@ -262,7 +262,7 @@ const tokens = {
       56: '0x9faf07d1fbc130d698e227e50d1fb72657c0a342',
       97: '',
     },
-    decimals: 18,
+    decimals: 3,
     projectLink: 'https://cubdefi.com/',
   },
 }

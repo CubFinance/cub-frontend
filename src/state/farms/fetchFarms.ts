@@ -12,7 +12,6 @@ import {
   getBelt
 } from 'utils/addressHelpers'
 import { FarmConfig } from 'config/constants/types'
-import { DEFAULT_TOKEN_DECIMAL } from 'config'
 import kingdomsABI from 'config/abi/kingdoms.json'
 import pcsv2ABI from 'config/abi/PCS-v2-masterchef.json'
 import bakeryABI from 'config/abi/bakery.json'
@@ -40,6 +39,8 @@ const fetchFarms = async (farmsToFetch: FarmConfig[]) => {
       const lpAddress = getAddress(farmConfig.lpAddresses)
       const tokenAddress = getAddress(farmConfig.token.address)
       const quoteAddress = getAddress(farmConfig.quoteToken.address)
+      const DECIMAL_PLACES_MAX = Math.max(farmConfig.quoteToken.decimals, farmConfig.token.decimals)
+      const DEFAULT_TOKEN_DECIMAL = 10 ** DECIMAL_PLACES_MAX;
 
       let calls = [
         // Balance of token in the LP contract
