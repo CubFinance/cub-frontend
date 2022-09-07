@@ -295,8 +295,8 @@ const farms: FarmConfig[] = [
       97: '',
       56: '0x625e672ee08e89afd5bf1300831b6a8433fee9f5',
     },
-    token: tokens.bhbd,
-    quoteToken: tokens.bhive,
+    token: tokens.bhive,
+    quoteToken: tokens.bhbd,
   },
   {
     pid: 30,
