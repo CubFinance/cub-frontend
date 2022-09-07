@@ -288,6 +288,28 @@ const farms: FarmConfig[] = [
 
   // V2 Farms
   {
+    pid: 33,
+    pcsVersion: 2,
+    lpSymbol: 'bHBD-bHIVE',
+    lpAddresses: {
+      97: '',
+      56: '0x625e672ee08e89afd5bf1300831b6a8433fee9f5',
+    },
+    token: tokens.bhbd,
+    quoteToken: tokens.bhive,
+  },
+  {
+    pid: 30,
+    pcsVersion: 2,
+    lpSymbol: 'bHBD-BUSD',
+    lpAddresses: {
+      97: '',
+      56: '0x8b97f5b65532d2f89ff0e60e308540bb20e47933',
+    },
+    token: tokens.bhbd,
+    quoteToken: tokens.busd,
+  },
+  {
     pid: 32,
     pcsVersion: 2,
     lpSymbol: 'bHBD-CUB',
@@ -330,17 +352,6 @@ const farms: FarmConfig[] = [
     },
     token: tokens.cub,
     quoteToken: tokens.wbnb,
-  },
-  {
-    pid: 30,
-    pcsVersion: 2,
-    lpSymbol: 'bHBD-BUSD',
-    lpAddresses: {
-      97: '',
-      56: '0x8b97f5b65532d2f89ff0e60e308540bb20e47933',
-    },
-    token: tokens.bhbd,
-    quoteToken: tokens.busd,
   },
   {
     pid: 28,
