@@ -3,7 +3,7 @@ import { Route, useRouteMatch, useLocation } from 'react-router-dom'
 import { useAppDispatch } from 'state'
 import BigNumber from 'bignumber.js'
 import { useWeb3React } from '@web3-react/core'
-import { Image, Heading, RowType, Toggle, Text, Button } from '@pancakeswap-libs/uikit'
+import {Image, Heading, RowType, Toggle, Text, Button, Card} from '@pancakeswap-libs/uikit'
 import styled from 'styled-components'
 import FlexLayout from 'components/layout/Flex'
 import Page from 'components/layout/Page'
@@ -31,6 +31,9 @@ import SearchInput from './components/SearchInput'
 import { RowProps } from './components/FarmTable/Row'
 import ToggleView from './components/ToggleView/ToggleView'
 import { DesktopColumnSchema, ViewMode } from './components/types'
+import aprApy from "../Kingdoms/components/AprApy";
+import {getRoi, tokenEarnedPerThousandDollarsCompounding} from "../../utils/compoundApyHelpers";
+import AdditionalHeader, {HiveLogo} from "../../style/AdditionalHeader";
 // import CardValue from '../Home/components/CardValue'
 
 
@@ -301,9 +304,22 @@ const Farms: React.FC<FarmsProps> = ({ tokenMode, kingdomMode }) => {
     const quoteTokenAddress = quoteToken.address
     const lpLabel = farm.lpSymbol && farm.lpSymbol.split(' ')[0].toUpperCase().replace('PANCAKE', '')
 
+    const tokenEarnedPerThousand365D = tokenEarnedPerThousandDollarsCompounding({
+      numberOfDays: 365,
+      farmApr: farm.apr,
+      tokenPrice: token.busdPrice,
+      roundingDecimals: 2,
+      compoundFrequency: 1,
+    })
+
+    const APR = getRoi({
+      amountEarned: tokenEarnedPerThousand365D,
+      amountInvested: 1000 / parseFloat(token.busdPrice),
+    }).toFixed(2);
+
     const row: RowProps = {
       apr: {
-        value: farm.apr && farm.apr.toLocaleString('en-US', { maximumFractionDigits: 2 }),
+        value: APR,
         multiplier: farm.multiplier,
         lpLabel,
         tokenAddress,
@@ -406,22 +422,33 @@ const Farms: React.FC<FarmsProps> = ({ tokenMode, kingdomMode }) => {
   return (
     <>
       <PageHeader>
-        <Heading as="h1" size="xxl" color="secondary" mb="15px">
-          {header}
-        </Heading>
-        <Heading as="h1" size="lg" color="primary" mb="20px" style={{ textAlign: 'left' }}>
-          {heading}
-        </Heading>
-        <Heading as="h2" color="secondary" mb={tlvSpacing} style={{ textAlign: 'left' }}>
-          {subHeading}
-        </Heading>
-        <br/>
-        {/* extra */}
-        <Wrapper>
-          <Button size="sm">
-            <a href="https://docs.cubdefi.com">Learn More</a>
-          </Button>
-        </Wrapper>
+        <div className="columns-cad">
+          <div className="column-cad">
+            <Heading as="h1" size="xxl" color="secondary" mb="15px">
+              {header}
+            </Heading>
+            <Heading as="h1" size="lg" color="primary" mb="20px" style={{ textAlign: 'left' }}>
+              {heading}
+            </Heading>
+            <br/>
+            {/* extra */}
+          </div>
+
+          <div className="column-cad" style={{height: "100%", display: "flex", flexDirection: "row", flexGrow: 1}}>
+            <AdditionalHeader />
+            <Card style={{height: "100%", flexGrow: 1, maxWidth: "400px", marginLeft: "auto", padding: "10px 20px"}}>
+                <Heading><HiveLogo /> Multi-Token Bridge</Heading>
+
+                <hr />
+
+                <p style={{marginBottom: "10px"}}>MTB Assets (HIVE and HBD) Can Be Wrapped and Utilized to Provide Liquidity and Earn High Yields. MTB Assets Generate Revenue Which Buys and Burns CUB Each Day</p>
+
+                <Button className="button-cad">
+                  <a href="https://docs.cubdefi.com/mechanics/multi-token-bridge">How it Works</a>
+                </Button>
+            </Card>
+          </div>
+        </div>
       </PageHeader>
       {/* <MigrationV2 /> */}
       <Page>

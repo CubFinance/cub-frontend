@@ -1,4 +1,4 @@
-import { MenuEntry } from '@pancakeswap-libs/uikit'
+import { MenuEntry } from "@pancakeswap-libs/uikit";
 
 const config: MenuEntry[] = [
   {
@@ -40,6 +40,16 @@ const config: MenuEntry[] = [
     },
   },
   {
+    label: 'Wrap HBD',
+    icon: 'DollarIcon',
+    href: "https://wleo.io/hbd-bsc/",
+  },
+  {
+    label: 'Wrap HIVE',
+    icon: 'HiveIcon',
+    href: "https://wleo.io/hive-bsc/",
+  },
+  {
     label: 'PolyCUB',
     icon: 'PawIcon',
     href: 'https://polycub.com',
@@ -52,11 +62,6 @@ const config: MenuEntry[] = [
     label: 'IDO',
     icon: 'IfoIcon',
     href: '/ido',
-  },
-  {
-    label: 'LeoBridge',
-    icon: 'NftIcon',
-    href: "https://bridge.cubdefi.com",
   },
   {
     label: 'Info',
