@@ -14,6 +14,7 @@ import DetailsSection from './DetailsSection'
 import CardHeading from './CardHeading'
 import CardActionsContainer from './CardActionsContainer'
 import ApyButton from './ApyButton'
+import {getRoi, tokenEarnedPerThousandDollarsCompounding} from "../../../../utils/compoundApyHelpers";
 
 export interface FarmWithStakedValue extends Farm {
   apr?: number
@@ -127,6 +128,19 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm, removed, cakePrice, account }
   const addLiquidityUrl = `${exchangeUrl}/${liquidityUrlPathParts}`
   const lpAddress = farm.lpAddresses[process.env.REACT_APP_CHAIN_ID]
 
+    const tokenEarnedPerThousand365D = tokenEarnedPerThousandDollarsCompounding({
+        numberOfDays: 365,
+        farmApr: farm.apr,
+        tokenPrice: farm.token.busdPrice,
+        roundingDecimals: 2,
+        compoundFrequency: 1,
+    })
+
+    const APR = getRoi({
+        amountEarned: tokenEarnedPerThousand365D,
+        amountInvested: 1000 / parseFloat(farm.token.busdPrice),
+    }).toFixed(2);
+
   return (
     <FCard>
       {farm.token.symbol === 'CUB' && <StyledCardAccent />}
@@ -140,12 +154,12 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm, removed, cakePrice, account }
       />
       {!removed && (
         <Flex justifyContent="space-between" alignItems="center">
-          <Text>{TranslateString(736, 'APR')}:</Text>
+          <Text>{TranslateString(999, 'APY')}:</Text>
           <Text bold style={{ display: 'flex', alignItems: 'center' }}>
             {farm.apr ? (
               <>
                 <ApyButton lpLabel={lpLabel} addLiquidityUrl={addLiquidityUrl} cakePrice={cakePrice} apr={farm.apr} />
-                {farmAPR}%
+                {APR}%
               </>
             ) : (
               <Skeleton height={24} width={80} />
