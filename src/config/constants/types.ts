@@ -87,6 +87,7 @@ export interface FarmConfig {
   isKingdom?: boolean
   isTokenOnly?: boolean
   isKingdomToken?: boolean
+  isKingdomLocked?: boolean
   compounding?: number
   kingdomContract?: string
   altPid?: number

@@ -30,6 +30,7 @@ import CardValue from './components/CardValue'
 import TotalStaked from './components/TotalStaked'
 import FarmTabButtons from './components/FarmTabButtons'
 import './Kingdoms.css'
+import LockedKingdom from "./components/LockedKingdom";
 
 const ControlContainer = styled.div`
   display: flex;
@@ -276,17 +277,20 @@ const Kingdoms: React.FC = () => {
     return (
       <div>
           <Route exact path={`${path}`}>
-            {farmsStakedMemoized.map((farm) => (
+            {farmsStakedMemoized.map((farm) => (farm.isKingdomLocked ?
+                    <LockedKingdom key={farm.pid} farm={farm} cakePrice={cakePrice} account={account} removed={false} bakePrice={bakePrice} beltPrice={beltPrice} cubDen={cubDen} realCakePrice={realCakePrice} bnbDividends={bnbDividends} /> :
               <Kingdom key={farm.pid} farm={farm} cakePrice={cakePrice} account={account} removed={false} bakePrice={bakePrice} beltPrice={beltPrice} cubDen={cubDen} realCakePrice={realCakePrice} bnbDividends={bnbDividends} />
             ))}
           </Route>
           <Route exact path={`${path}/history`}>
-            {farmsStakedMemoized.map((farm) => (
+            {farmsStakedMemoized.map((farm) => (farm.isKingdomLocked ?
+                    <LockedKingdom key={farm.pid} farm={farm} cakePrice={cakePrice} account={account} removed bakePrice={bakePrice} beltPrice={beltPrice} cubDen={cubDen} realCakePrice={realCakePrice} bnbDividends={bnbDividends} /> :
               <Kingdom key={farm.pid} farm={farm} cakePrice={cakePrice} account={account} removed bakePrice={bakePrice} beltPrice={beltPrice} cubDen={cubDen} realCakePrice={realCakePrice} bnbDividends={bnbDividends} />
             ))}
           </Route>
           <Route exact path={`${path}/archived`}>
-            {farmsStakedMemoized.map((farm) => (
+            {farmsStakedMemoized.map((farm) => (farm.isKingdomLocked ?
+                    <LockedKingdom key={farm.pid} farm={farm} cakePrice={cakePrice} account={account} removed bakePrice={bakePrice} beltPrice={beltPrice} cubDen={cubDen} realCakePrice={realCakePrice} bnbDividends={bnbDividends} /> :
               <Kingdom key={farm.pid} farm={farm} cakePrice={cakePrice} account={account} removed bakePrice={bakePrice} beltPrice={beltPrice} cubDen={cubDen} realCakePrice={realCakePrice} bnbDividends={bnbDividends} />
             ))}
           </Route>

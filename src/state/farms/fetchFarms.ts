@@ -152,6 +152,9 @@ const fetchFarms = async (farmsToFetch: FarmConfig[]) => {
           case 4:
             kingdomSupply = await getCUBAmount()
             break
+          case 34:
+            kingdomSupply = await getCUBAmount()
+            break
           case 5:
             kingdomSupply = await getBTCBNBBakeryAmount()
             break
@@ -208,7 +211,7 @@ const fetchFarms = async (farmsToFetch: FarmConfig[]) => {
         lpTotalInQuoteToken = tokenAmount.times(tokenPriceVsQuote)
         // lpTotalInQuoteTokenPCS = tokenAmountPCS.times(tokenPriceVsQuote)
       } else {
-        // Ratio in % a LP tokens that are in staking, vs the total number in circulation
+        // Ratio in % as LP tokens that are in staking, vs the total number in circulation
         let lpTokenRatio = new BigNumber(lpTokenBalanceMC).div(new BigNumber(lpTotalSupply))
 
         // Total value in staking in quote token value
