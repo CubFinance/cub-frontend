@@ -389,7 +389,7 @@ const farms: FarmConfig[] = [
 
   // KINGDOMS
   {
-    pid: 34,
+    pid: 32,
     altPid: 13,
     compounding: 0,
     isKingdom: true,

@@ -1,12 +1,7 @@
 import { Flex, Text, Skeleton, useModal, Button, CalculateIcon } from '@pancakeswap-libs/uikit'
-import { LightGreyCard } from 'components/Card'
-import { useVaultApy } from 'hooks/useVaultApy'
 import Balance from 'components/Balance'
 import React, { memo } from 'react'
-import { FlexGap } from 'components/Layout/Flex'
-import { DeserializedPool, VaultKey } from 'state/types'
 import styled from 'styled-components'
-import { VaultRoiCalculatorModal } from '../Vault/VaultRoiCalculatorModal'
 
 const AprLabelContainer = styled(Flex)`
   &:hover {
@@ -15,16 +10,16 @@ const AprLabelContainer = styled(Flex)`
 `
 
 // eslint-disable-next-line import/prefer-default-export
-export const StakingApy = memo(({ pool }: { pool: DeserializedPool }) => {
-  //const { flexibleApy, lockedApy } = useVaultApy()
+export const StakingApy = memo(() => {
+  // const { flexibleApy, lockedApy } = useVaultApy()
 
-  //const [onPresentFlexibleApyModal] = useModal(<VaultRoiCalculatorModal pool={pool} />)
+  // const [onPresentFlexibleApyModal] = useModal(<VaultRoiCalculatorModal pool={pool} />)
 
-  //const [onPresentLockedApyModal] = useModal(<VaultRoiCalculatorModal pool={pool} initialView={1} />)
+  // const [onPresentLockedApyModal] = useModal(<VaultRoiCalculatorModal pool={pool} initialView={1} />)
 
     return null;
 
-  /*return (
+  /* return (
     <LightGreyCard>
       <Flex alignItems="center" justifyContent="space-between">
         <Text color="textSubtle" textTransform="uppercase" bold fontSize="12px">
@@ -84,5 +79,5 @@ export const StakingApy = memo(({ pool }: { pool: DeserializedPool }) => {
         </Flex>
       )}
     </LightGreyCard>
-  )*/
+  ) */
 })

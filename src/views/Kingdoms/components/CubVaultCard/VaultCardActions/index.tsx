@@ -1,13 +1,11 @@
 import BigNumber from 'bignumber.js'
+import React from 'react'
 
 import styled from 'styled-components'
 import { Flex, Text, Box } from '@pancakeswap-libs/uikit'
-import { useTranslation } from '@pancakeswap/localization'
-import { DeserializedPool } from 'state/types'
 import { BIG_ZERO } from 'utils/bigNumber'
 import VaultApprovalAction from './VaultApprovalAction'
 import VaultStakeActions from './VaultStakeActions'
-import { useCheckVaultApprovalStatus } from '../../../hooks/useApprove'
 
 const InlineText = styled(Text)`
   display: inline;
@@ -15,17 +13,15 @@ const InlineText = styled(Text)`
 
 const CakeVaultCardActions: React.FC<
   React.PropsWithChildren<{
-    pool: DeserializedPool
     accountHasSharesStaked: boolean
     isLoading: boolean
     performanceFee: number
   }>
-> = ({ pool, accountHasSharesStaked, isLoading, performanceFee }) => {
-  const { stakingToken, userData } = pool
-  const { t } = useTranslation()
-  const stakingTokenBalance = userData?.stakingTokenBalance ? new BigNumber(userData.stakingTokenBalance) : BIG_ZERO
+> = ({ accountHasSharesStaked, isLoading, performanceFee }) => {
+  // const { stakingToken, userData } = pool
+  // const stakingTokenBalance = userData?.stakingTokenBalance ? new BigNumber(userData.stakingTokenBalance) : BIG_ZERO
 
-  const { isVaultApproved, setLastUpdated } = useCheckVaultApprovalStatus(pool.vaultKey)
+    return null;
 
   return (
     <Flex flexDirection="column">
@@ -37,7 +33,7 @@ const CakeVaultCardActions: React.FC<
             bold
             fontSize="12px"
           >
-            {accountHasSharesStaked ? stakingToken.symbol : t('Stake')}{' '}
+            {/* accountHasSharesStaked ? stakingToken.symbol : 'Stake' */}{' '}
           </InlineText>
           <InlineText
             color={accountHasSharesStaked ? 'textSubtle' : 'secondary'}
@@ -45,10 +41,10 @@ const CakeVaultCardActions: React.FC<
             bold
             fontSize="12px"
           >
-            {accountHasSharesStaked ? t('Staked') : `${stakingToken.symbol}`}
+            {/* accountHasSharesStaked ? 'Staked' : `${stakingToken.symbol}` */}
           </InlineText>
         </Box>
-        {isVaultApproved ? (
+        {/* isVaultApproved ? (
           <VaultStakeActions
             pool={pool}
             stakingTokenBalance={stakingTokenBalance}
@@ -57,7 +53,7 @@ const CakeVaultCardActions: React.FC<
           />
         ) : (
           <VaultApprovalAction vaultKey={pool.vaultKey} isLoading={isLoading} setLastUpdated={setLastUpdated} />
-        )}
+        ) */}
       </Flex>
     </Flex>
   )

@@ -1,5 +1,5 @@
 import { Text, Flex, useTooltip } from '@pancakeswap-libs/uikit'
-import React from 'react'
+import React, {useEffect} from 'react'
 import KingdomLockedABI from 'config/abi/KingdomsLocked.json'
 import {useWeb3React} from "@web3-react/core";
 import {secondsToDay} from "./timeHelper";
@@ -55,17 +55,20 @@ const FeeSummary: ({
                        stakingTokenSymbol,
                        stakeAmount,
                        vaultKey
-                   }: { stakingTokenSymbol: any; stakeAmount: any; vaultKey: any }) => Promise<JSX.Element> = async ({
+                   }: { stakingTokenSymbol: any; stakeAmount: any; vaultKey: any }) => JSX.Element = ({
   stakingTokenSymbol,
   stakeAmount,
   vaultKey,
 }) => {
   const { account } = useWeb3React()
+    const [data, setData] = React.useState<any>(null);
 
-  const {
-    fees: { withdrawalFee, withdrawalFeePeriod },
-    userData: { lastDepositedTime },
-  } = await useVaultPoolByKey(account)
+  // this is terrible
+  useVaultPoolByKey(account).then((res) => {
+      setData(res);
+  });
+  const withdrawalFee = 2;
+  const withdrawalFeePeriod = 86400;
   const feeAsDecimal = withdrawalFee / 100
   const feeInCake = (parseFloat(stakeAmount) * (feeAsDecimal / 100)).toFixed(4)
   const withdrawalDayPeriod = withdrawalFeePeriod ? secondsToDay(withdrawalFeePeriod) : '-'
@@ -80,7 +83,7 @@ const FeeSummary: ({
     </>,
   )
 
-  const hasFeeToPay = lastDepositedTime && getHasWithdrawFee(parseInt(lastDepositedTime, 10), withdrawalFeePeriod)
+  const hasFeeToPay = data.userInfo ? data.userData.lastDepositedTime && getHasWithdrawFee(parseInt(data.userData.lastDepositedTime, 10), withdrawalFeePeriod) : false;
 
   return (
     <>
@@ -93,7 +96,6 @@ const FeeSummary: ({
           {stakeAmount && hasFeeToPay ? feeInCake : '-'} {stakingTokenSymbol}
         </Text>
       </Flex>
-      <UnstakingFeeCountdownRow vaultKey={vaultKey} />
     </>
   )
 }
