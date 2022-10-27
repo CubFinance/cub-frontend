@@ -30,6 +30,7 @@ import CardValue from './components/CardValue'
 import TotalStaked from './components/TotalStaked'
 import FarmTabButtons from './components/FarmTabButtons'
 import './Kingdoms.css'
+import LockedKingdom from "./LockedKingdom/components/LockedKingdom";
 
 const ControlContainer = styled.div`
   display: flex;
@@ -277,16 +278,20 @@ const Kingdoms: React.FC = () => {
       <div>
           <Route exact path={`${path}`}>
             {farmsStakedMemoized.map((farm) => (
-              <Kingdom key={farm.pid} farm={farm} cakePrice={cakePrice} account={account} removed={false} bakePrice={bakePrice} beltPrice={beltPrice} cubDen={cubDen} realCakePrice={realCakePrice} bnbDividends={bnbDividends} />
+                // todo: remove farm.isKingdomLocked.toString() when I fix the config farm pid
+                farm.isKingdomLocked ? <LockedKingdom  key={farm.pid + farm.isKingdomLocked.toString()} farm={farm} cakePrice={cakePrice} account={account} removed={false} bakePrice={bakePrice} beltPrice={beltPrice} cubDen={cubDen} realCakePrice={realCakePrice} bnbDividends={bnbDividends} /> :
+                    <Kingdom key={farm.pid} farm={farm} cakePrice={cakePrice} account={account} removed={false} bakePrice={bakePrice} beltPrice={beltPrice} cubDen={cubDen} realCakePrice={realCakePrice} bnbDividends={bnbDividends} />
             ))}
           </Route>
           <Route exact path={`${path}/history`}>
             {farmsStakedMemoized.map((farm) => (
+                farm.isKingdomLocked ? <LockedKingdom key={farm.pid} farm={farm} cakePrice={cakePrice} account={account} removed bakePrice={bakePrice} beltPrice={beltPrice} cubDen={cubDen} realCakePrice={realCakePrice} bnbDividends={bnbDividends} /> :
               <Kingdom key={farm.pid} farm={farm} cakePrice={cakePrice} account={account} removed bakePrice={bakePrice} beltPrice={beltPrice} cubDen={cubDen} realCakePrice={realCakePrice} bnbDividends={bnbDividends} />
             ))}
           </Route>
           <Route exact path={`${path}/archived`}>
             {farmsStakedMemoized.map((farm) => (
+                farm.isKingdomLocked ? <LockedKingdom key={farm.pid} farm={farm} cakePrice={cakePrice} account={account} removed bakePrice={bakePrice} beltPrice={beltPrice} cubDen={cubDen} realCakePrice={realCakePrice} bnbDividends={bnbDividends} /> :
               <Kingdom key={farm.pid} farm={farm} cakePrice={cakePrice} account={account} removed bakePrice={bakePrice} beltPrice={beltPrice} cubDen={cubDen} realCakePrice={realCakePrice} bnbDividends={bnbDividends} />
             ))}
           </Route>
@@ -396,7 +401,7 @@ const Kingdoms: React.FC = () => {
         </ControlContainer>
         <div id="kingdoms">
           {/* farmsStakedMemoized.map((farm) => (
-            <Kingdom key={farm.pid} farm={farm} cakePrice={cakePrice} account={account} removed={false} bakePrice={bakePrice} beltPrice={beltPrice} cubDen={cubDen} realCakePrice={realCakePrice} bnbDividends={bnbDividends} />
+            <LockedKingdom key={farm.pid} farm={farm} cakePrice={cakePrice} account={account} removed={false} bakePrice={bakePrice} beltPrice={beltPrice} cubDen={cubDen} realCakePrice={realCakePrice} bnbDividends={bnbDividends} />
           )) */}
           {renderContent()}
         </div>

@@ -11,7 +11,7 @@ export type TranslatableText =
       }
     }
 //
-// export interface Kingdom extends KingdomConfig {
+// export interface LockedKingdom extends KingdomConfig {
 //   tokenAmount?: BigNumber
 //   quoteTokenAmount?: BigNumber
 //   lpTotalInQuoteToken?: BigNumber

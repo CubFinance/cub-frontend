@@ -389,6 +389,23 @@ const farms: FarmConfig[] = [
 
   // KINGDOMS
   {
+    pid: 4, // TODO: needs to be changed to 34 in production (2 is an existing one but 34 is not setup yet)
+    altPid: 13,
+    compounding: 0,
+    isKingdom: true,
+    isKingdomToken: true,
+    isKingdomLocked: true,
+    farmType: "Cub DeFi",
+    lpSymbol: "CUB",
+    lpAddresses: {
+      97: '',
+      56: '0x0EF564D4F8D6C0ffE13348A32e21EFd55e508e84',
+    },
+    token: tokens.cub,
+    quoteToken: tokens.busd,
+    kingdomContract: '0x08bea2702d89abb8059853d654d0838c5e06fe0b'
+  },
+  {
     pid: 4,
     altPid: 12,
     compounding: 720,
