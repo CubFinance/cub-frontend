@@ -389,7 +389,7 @@ const farms: FarmConfig[] = [
 
   // KINGDOMS
   {
-    pid: 4, // TODO: needs to be changed to 34 in production (2 is an existing one but 34 is not setup yet)
+    pid: 1, // TODO: needs to be changed to 34 in production (1 is an existing one but 34 is not setup yet)
     altPid: 13,
     compounding: 0,
     isKingdom: true,
@@ -437,7 +437,7 @@ const farms: FarmConfig[] = [
     quoteToken: tokens.busd,
     kingdomContract: '0x77440f4dc7b4ef591e78d460374bd12d3d6bdad8',
   },
-  {
+  /* { TODO: reenable on deploy
     pid: 1,
     altPid: 252,
     compounding: 365,
@@ -451,7 +451,7 @@ const farms: FarmConfig[] = [
     token: tokens.wbnb,
     quoteToken: tokens.busd,
     kingdomContract: '0x701d4f8168b00abbd948d36e11added4e1cac742',
-  },
+  }, */
   {
     pid: 2,
     altPid: 261,

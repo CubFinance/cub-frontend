@@ -93,6 +93,12 @@ const LockedKingdom: React.FC<KingdomProps> = ({ farm, removed, cakePrice, accou
   const { apr, lpTotalInQuoteToken, lpSymbol, lpTokenBalancePCS = 0, lpTotalInQuoteTokenPCS = 0, quoteToken: { busdPrice: quoteTokenPriceUsd }, altPid, farmType, token: { busdPrice: tokenPriceString }, compounding } = farm
   const farmImage = lpSymbol.split(' ')[0].toLocaleLowerCase()
 
+    // TODO: calculate max apr/apy for locked (52 weeks)
+    // contract addy = farm.kingdomContract (0x08bea2702d89abb8059853d654d0838c5e06fe0b)
+    // deposit: call that contract => deposit (amount, lockDuration in seconds)
+
+    //  TODO: how do we get APR/APY for locked?
+    // pancake does it like so: https://github.com/pancakeswap/pancake-frontend/blob/f9a9dbfed49b0a22141a42e050bd0e621c613bf4/apps/web/src/hooks/useVaultApy.ts
   let aprApy = getKingdomAPRAPY(farm, realCakePrice, bakePrice, beltPrice, cubDen)
 
   const { dailyAPR, totalAPY, hostApr } = aprApy
@@ -129,7 +135,7 @@ const LockedKingdom: React.FC<KingdomProps> = ({ farm, removed, cakePrice, accou
           <div className="col"><KImage src={`/images/farms/${farmImage}.png`} alt={lpSymbol} width={64} height={64} /></div>
           <div className="col">
             <Flex justifyContent="flex-start" alignItems="center">
-              <Text className="token">{lpSymbol}</Text>
+              <Text className="token">{lpSymbol} (Locked)</Text>
             </Flex>
             <Text>Uses: {farmType}</Text>
             <Text>TVL {totalValueFormated}</Text>
