@@ -9,6 +9,7 @@ import { useMasterchef, useCake, useSousChef, useLottery, useKingdom } from './u
 
 // Approve a Farm
 export const useApprove = (lpContract: Contract, isKingdom?: boolean) => {
+  // todo: allow locked kingdoms contract as an option. (Also set up locked kingdoms as a contract with ABI)
   const dispatch = useAppDispatch()
   const { account } = useWeb3React()
   const masterChefContract = useMasterchef()

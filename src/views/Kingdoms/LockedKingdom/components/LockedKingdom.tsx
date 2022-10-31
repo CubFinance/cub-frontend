@@ -97,6 +97,8 @@ const LockedKingdom: React.FC<KingdomProps> = ({ farm, removed, cakePrice, accou
     // contract addy = farm.kingdomContract (0x08bea2702d89abb8059853d654d0838c5e06fe0b)
     // deposit: call that contract => deposit (amount, lockDuration in seconds)
 
+    // TODO: Change approval address to 0x08bea2702d89abb8059853d654d0838c5e06fe0b
+
     //  TODO: how do we get APR/APY for locked?
     // pancake does it like so: https://github.com/pancakeswap/pancake-frontend/blob/f9a9dbfed49b0a22141a42e050bd0e621c613bf4/apps/web/src/hooks/useVaultApy.ts
   let aprApy = getKingdomAPRAPY(farm, realCakePrice, bakePrice, beltPrice, cubDen)
