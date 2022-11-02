@@ -44,11 +44,41 @@ const getLockedApy = (flexibleApy: string, boostFactor: FixedNumber) =>
 const cakePoolPID = 0
 
 export default function useVaultApy({ duration = MAX_LOCK_DURATION }: { duration?: number } = {}) {
-    const {
+    // contract address 0x08bea2702d89abb8059853d654d0838c5e06fe0b
+    const contractAddy = "0x08bea2702d89abb8059853d654d0838c5e06fe0b";
+
+    const { data: {
         totalShares = BIG_ZERO,
         pricePerFullShare = BIG_ZERO,
-        fees: { performanceFeeAsDecimal } = { performanceFeeAsDecimal: DEFAULT_PERFORMANCE_FEE_DECIMALS },
-    } = useCakeVault()
+        fees: {performanceFeeAsDecimal} = {performanceFeeAsDecimal: DEFAULT_PERFORMANCE_FEE_DECIMALS},
+    }} = useSWRImmutable('use-vault-apy-locked-kingdom', async () => {
+        const callsInfo = [
+            {
+                address: contractAddy,
+                name: 'totalShares'
+            },
+            {
+                address: contractAddy,
+                name: "getPricePerFullShare"
+            },
+            {
+                address: contractAddy,
+                name: "performanceFee"
+            }
+        ];
+
+        const [totalSharesCt, pricePerFullShareCt, performanceFee] = await multicall(masterChefAbi, callsInfo)
+
+        const perfFeeDec = BigNumber.from(performanceFee).div(BigNumber.from('100')).toNumber();
+
+        return {
+            totalShares: totalSharesCt,
+            pricePerFullShare: pricePerFullShareCt,
+            fees: {
+                performanceFeeAsDecimal: perfFeeDec
+            },
+        }
+    });
 
     const totalSharesAsEtherBN = useMemo(() => FixedNumber.from(totalShares.toString()), [totalShares])
     const pricePerFullShareAsEtherBN = useMemo(() => FixedNumber.from(pricePerFullShare.toString()), [pricePerFullShare])
