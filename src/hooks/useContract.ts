@@ -22,7 +22,7 @@ import {
   getEasterNftContract,
   getErc721Contract,
   getCakeVaultContract,
-  getPredictionsContract,
+  getPredictionsContract, getLockedKingdomsContract,
 } from 'utils/contractHelpers'
 
 /**
@@ -90,6 +90,11 @@ export const useLotteryTicket = () => {
 export const useMasterchef = () => {
   const web3 = useWeb3()
   return useMemo(() => getMasterchefContract(web3), [web3])
+}
+
+export const useLockedKingdom = () => {
+  const web3 = useWeb3()
+  return useMemo(() => getLockedKingdomsContract(web3), [web3])
 }
 
 export const useKingdom = () => {

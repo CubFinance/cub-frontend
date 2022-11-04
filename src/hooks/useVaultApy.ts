@@ -3,14 +3,15 @@ import { WeiPerEther } from '@ethersproject/constants'
 import _toString from 'lodash/toString'
 import { BLOCKS_PER_YEAR } from 'config'
 import masterChefAbi from 'config/abi/masterchef.json'
+import lockedKingdomAbi from 'config/abi/lockedKingdom.json'
 import { useCallback, useMemo } from 'react'
 // todo: implement this or similar (as it doesn't exist in our version)
-import { useCakeVaultContract } from "./useContract";
 import useSWRImmutable from 'swr/immutable'
-import { getMasterChefAddress } from 'utils/addressHelpers'
+import {getLockedKingdomsAddress, getMasterChefAddress} from 'utils/addressHelpers'
 import { BIG_ZERO } from 'utils/bigNumber'
 // todo: these values can be hardcoded or fetched from the contract
 import { BOOST_WEIGHT, DURATION_FACTOR, MAX_LOCK_DURATION } from 'config/constants/pools'
+import { useCakeVaultContract } from "./useContract";
 import multicall from "../utils/multicall";
 
 const masterChefAddress = getMasterChefAddress()
@@ -44,32 +45,25 @@ const getLockedApy = (flexibleApy: string, boostFactor: FixedNumber) =>
 const cakePoolPID = 0
 
 export default function useVaultApy({ duration = MAX_LOCK_DURATION }: { duration?: number } = {}) {
-    // contract address 0x08bea2702d89abb8059853d654d0838c5e06fe0b
-    const contractAddy = "0x08bea2702d89abb8059853d654d0838c5e06fe0b";
-
-    const { data: {
-        totalShares = BIG_ZERO,
-        pricePerFullShare = BIG_ZERO,
-        fees: {performanceFeeAsDecimal} = {performanceFeeAsDecimal: DEFAULT_PERFORMANCE_FEE_DECIMALS},
-    }} = useSWRImmutable('use-vault-apy-locked-kingdom', async () => {
+    const { data } = useSWRImmutable('use-vault-apy-locked-kingdom', async () => {
         const callsInfo = [
             {
-                address: contractAddy,
+                address: getLockedKingdomsAddress(),
                 name: 'totalShares'
             },
             {
-                address: contractAddy,
+                address: getLockedKingdomsAddress(),
                 name: "getPricePerFullShare"
             },
             {
-                address: contractAddy,
+                address: getLockedKingdomsAddress(),
                 name: "performanceFee"
             }
         ];
 
-        const [totalSharesCt, pricePerFullShareCt, performanceFee] = await multicall(masterChefAbi, callsInfo)
+        const [[totalSharesCt], [pricePerFullShareCt], [performanceFee]] = await multicall(lockedKingdomAbi, callsInfo)
 
-        const perfFeeDec = BigNumber.from(performanceFee).div(BigNumber.from('100')).toNumber();
+        const perfFeeDec = BigNumber.from(performanceFee.toNumber()).div(BigNumber.from('100')).toNumber();
 
         return {
             totalShares: totalSharesCt,
@@ -79,6 +73,10 @@ export default function useVaultApy({ duration = MAX_LOCK_DURATION }: { duration
             },
         }
     });
+
+    const totalShares = data?.totalShares || BIG_ZERO;
+    const pricePerFullShare = data?.pricePerFullShare || BIG_ZERO;
+    const performanceFeeAsDecimal = data?.fees?.performanceFeeAsDecimal || DEFAULT_PERFORMANCE_FEE_DECIMALS;
 
     const totalSharesAsEtherBN = useMemo(() => FixedNumber.from(totalShares.toString()), [totalShares])
     const pricePerFullShareAsEtherBN = useMemo(() => FixedNumber.from(pricePerFullShare.toString()), [pricePerFullShare])

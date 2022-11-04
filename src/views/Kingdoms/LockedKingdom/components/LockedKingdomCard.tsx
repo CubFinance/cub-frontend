@@ -14,7 +14,7 @@ import useUnstake from 'hooks/useUnstake'
 import { useHarvest } from 'hooks/useHarvest'
 import { useApprove } from 'hooks/useApprove'
 import { useClaim} from 'hooks/useClaim'
-import { getBep20Contract } from 'utils/contractHelpers'
+import {getBep20Contract, getLockedKingdomsContract} from 'utils/contractHelpers'
 import { getAddress } from 'utils/addressHelpers'
 import useWeb3 from 'hooks/useWeb3'
 import { DEFAULT_TOKEN_DECIMAL } from 'config'
@@ -62,7 +62,7 @@ interface KingdomCardProps {
   bnbDividends?: any
 }
 
-const KingdomCard: React.FC<KingdomCardProps> = ({
+const LockedKingdomCard: React.FC<KingdomCardProps> = ({
   farm,
   walletBalance,
   depositBalance,
@@ -117,7 +117,7 @@ const KingdomCard: React.FC<KingdomCardProps> = ({
     return getBep20Contract(lpAddress, web3)
   }, [lpAddress, isTokenOnly, web3, tokenAddress, isKingdomToken])
 
-  const { onApprove } = useApprove(lpContract, isKingdom)
+  const { onApprove } = useApprove(getLockedKingdomsContract(web3), false, true)
 
   const handleApprove = useCallback(async () => {
     try {
@@ -246,4 +246,4 @@ const KingdomCard: React.FC<KingdomCardProps> = ({
   )
 }
 
-export default KingdomCard
+export default LockedKingdomCard

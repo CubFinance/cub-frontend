@@ -100,9 +100,9 @@ const LockedKingdom: React.FC<KingdomProps> = ({ farm, removed, cakePrice, accou
 
     // TODO: Change approval address to 0x08bea2702d89abb8059853d654d0838c5e06fe0b
 
-  let aprApy = useVaultApy() // todo: add duration into call
+  const aprApy = useVaultApy() // todo: add duration into call
 
-  const { flexibleApy, getLockedApy } = aprApy
+  const { lockedApy } = aprApy
   const { tokenBalance, stakedBalance, earnings } = farm.userData
 
   const rawTokenBalance = tokenBalance ? getBalanceNumber(new BigNumber(tokenBalance)) : 0
@@ -122,9 +122,9 @@ const LockedKingdom: React.FC<KingdomProps> = ({ farm, removed, cakePrice, accou
   const totalValueFormated = lpTotalInQuoteToken
     ? `$${Number(new BigNumber(lpTotalInQuoteToken).times(quoteTokenPriceUsd)).toLocaleString(undefined, { maximumFractionDigits: 0 })}`
     : '-'
-  const farmAPR = apr && apr.toLocaleString('en-US', { maximumFractionDigits: 2 })
+  // const farmAPR = lockedApy && Number(lockedApy).toLocaleString('en-US', { maximumFractionDigits: 2 })
 
-  aprApy = { ...aprApy, compounding, farmAPR, apr: altPid === 12 ? hostApr : apr, cakePrice, quoteTokenPriceUsd: Number(quoteTokenPriceUsd), lpTotalInQuoteToken }
+  // aprApy = { ...aprApy, compounding, farmAPR, apr: altPid === 12 ? hostApr : apr, cakePrice, quoteTokenPriceUsd: Number(quoteTokenPriceUsd), lpTotalInQuoteToken }
 
   return (
     <>
@@ -171,17 +171,18 @@ const LockedKingdom: React.FC<KingdomProps> = ({ farm, removed, cakePrice, accou
             />
             <Text>Rewards</Text>
           </div>
+            <Text color="warning">Up to</Text>
           <div className="col">
             <Balance
               fontSize="16px"
-              value={totalAPY.toString() !== 'NaN' ? totalAPY : 0}
+              value={!Number.isNaN(Number(lockedApy)) ? Number(lockedApy) : 0}
               decimals={2}
               unit="%"
               color="warning"
             />
             <Text color="warning">APY</Text>
           </div>
-          <div className="col">
+            {/* <div className="col">
             <Balance
               fontSize="16px"
               value={dailyAPR}
@@ -189,7 +190,7 @@ const LockedKingdom: React.FC<KingdomProps> = ({ farm, removed, cakePrice, accou
               unit="%"
             />
             <Text>Daily</Text>
-          </div>
+          </div> */}
         </KMain>
         <ExpandingWrapper expanded={showExpandableSection}>
           <Divider />

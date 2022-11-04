@@ -14,6 +14,9 @@ export const getCakeAddress = () => {
 export const getMasterChefAddress = () => {
   return getAddress(addresses.masterChef)
 }
+export const getLockedKingdomsAddress = () => {
+  return getAddress(addresses.lockedKingdoms);
+}
 export const getKingdomsAddress = () => {
   return getAddress(addresses.kingdoms)
 }

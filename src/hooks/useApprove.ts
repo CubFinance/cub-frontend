@@ -5,25 +5,35 @@ import { ethers } from 'ethers'
 import { useAppDispatch } from 'state'
 import { updateUserAllowance, fetchFarmUserDataAsync } from 'state/actions'
 import { approve } from 'utils/callHelpers'
-import { useMasterchef, useCake, useSousChef, useLottery, useKingdom } from './useContract'
+import {useMasterchef, useCake, useSousChef, useLottery, useKingdom, useLockedKingdom} from './useContract'
 
 // Approve a Farm
-export const useApprove = (lpContract: Contract, isKingdom?: boolean) => {
+export const useApprove = (lpContract: Contract, isKingdom?: boolean, isLockedKingdom?: boolean) => {
   // todo: allow locked kingdoms contract as an option. (Also set up locked kingdoms as a contract with ABI)
   const dispatch = useAppDispatch()
   const { account } = useWeb3React()
   const masterChefContract = useMasterchef()
   const kingdomContract = useKingdom()
+  const lockedKingdomsContract = useLockedKingdom()
+
 
   const handleApprove = useCallback(async () => {
     try {
-      const tx = await approve(lpContract, isKingdom ? kingdomContract : masterChefContract, account)
+      let contract = masterChefContract;
+
+      if (isKingdom) {
+        contract = kingdomContract;
+      } else if (isLockedKingdom) {
+        contract = lockedKingdomsContract;
+      }
+
+      const tx = await approve(lpContract, contract, account)
       dispatch(fetchFarmUserDataAsync(account))
       return tx
     } catch (e) {
       return false
     }
-  }, [account, dispatch, lpContract, masterChefContract, kingdomContract, isKingdom])
+  }, [account, dispatch, lpContract, masterChefContract, kingdomContract, lockedKingdomsContract, isLockedKingdom, isKingdom])
 
   return { onApprove: handleApprove }
 }
