@@ -389,7 +389,7 @@ const farms: FarmConfig[] = [
 
   // KINGDOMS
   {
-    pid: 1, // TODO: needs to be changed to 34 in production (1 is an existing one but 34 is not setup yet)
+    pid: 4, // TODO: needs to be changed to 34 in production (1 is an existing one but 34 is not setup yet)
     altPid: 13,
     compounding: 0,
     isKingdom: true,
@@ -405,6 +405,22 @@ const farms: FarmConfig[] = [
     quoteToken: tokens.busd,
     kingdomContract: '0x08bea2702d89abb8059853d654d0838c5e06fe0b'
   },
+  /* { TODO: re-enable at deployment
+    pid: 4,
+    altPid: 12,
+    compounding: 720,
+    isKingdom: true,
+    isKingdomToken: true,
+    farmType: 'Cub DeFi',
+    lpSymbol: 'CUB',
+    lpAddresses: {
+      97: '',
+      56: '0x0EF564D4F8D6C0ffE13348A32e21EFd55e508e84', // CUB-BUSD LP
+    },
+    token: tokens.cub,
+    quoteToken: tokens.busd,
+    kingdomContract: '0xc2adf5fc4d4e6c2cc97f8190acbdf808c689117c',
+  }, */
   {
     pid: 0,
     altPid: 0,
@@ -421,7 +437,7 @@ const farms: FarmConfig[] = [
     quoteToken: tokens.busd,
     kingdomContract: '0x77440f4dc7b4ef591e78d460374bd12d3d6bdad8',
   },
-  /* { TODO: reenable on deploy
+  {
     pid: 1,
     altPid: 252,
     compounding: 365,
@@ -435,7 +451,22 @@ const farms: FarmConfig[] = [
     token: tokens.wbnb,
     quoteToken: tokens.busd,
     kingdomContract: '0x701d4f8168b00abbd948d36e11added4e1cac742',
-  }, */
+  },
+  {
+    pid: 2,
+    altPid: 261,
+    compounding: 365,
+    isKingdom: true,
+    farmType: 'Pancake v2',
+    lpSymbol: 'ETH-BNB LP',
+    lpAddresses: {
+      97: '',
+      56: '0x74e4716e431f45807dcf19f284c7aa99f18a4fbc',
+    },
+    token: tokens.eth,
+    quoteToken: tokens.wbnb,
+    kingdomContract: '0x3582933accc5732484138a2dd61fcdd02d0a021c',
+  },
   {
     pid: 3,
     altPid: 255,
