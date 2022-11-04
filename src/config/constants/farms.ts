@@ -406,22 +406,6 @@ const farms: FarmConfig[] = [
     kingdomContract: '0x08bea2702d89abb8059853d654d0838c5e06fe0b'
   },
   {
-    pid: 4,
-    altPid: 12,
-    compounding: 720,
-    isKingdom: true,
-    isKingdomToken: true,
-    farmType: 'Cub DeFi',
-    lpSymbol: 'CUB',
-    lpAddresses: {
-      97: '',
-      56: '0x0EF564D4F8D6C0ffE13348A32e21EFd55e508e84', // CUB-BUSD LP
-    },
-    token: tokens.cub,
-    quoteToken: tokens.busd,
-    kingdomContract: '0xc2adf5fc4d4e6c2cc97f8190acbdf808c689117c',
-  },
-  {
     pid: 0,
     altPid: 0,
     compounding: 4200,
@@ -452,21 +436,6 @@ const farms: FarmConfig[] = [
     quoteToken: tokens.busd,
     kingdomContract: '0x701d4f8168b00abbd948d36e11added4e1cac742',
   }, */
-  {
-    pid: 2,
-    altPid: 261,
-    compounding: 365,
-    isKingdom: true,
-    farmType: 'Pancake v2',
-    lpSymbol: 'ETH-BNB LP',
-    lpAddresses: {
-      97: '',
-      56: '0x74e4716e431f45807dcf19f284c7aa99f18a4fbc',
-    },
-    token: tokens.eth,
-    quoteToken: tokens.wbnb,
-    kingdomContract: '0x3582933accc5732484138a2dd61fcdd02d0a021c',
-  },
   {
     pid: 3,
     altPid: 255,

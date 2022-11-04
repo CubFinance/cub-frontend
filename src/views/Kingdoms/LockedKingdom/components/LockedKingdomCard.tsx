@@ -117,7 +117,7 @@ const LockedKingdomCard: React.FC<KingdomCardProps> = ({
     return getBep20Contract(lpAddress, web3)
   }, [lpAddress, isTokenOnly, web3, tokenAddress, isKingdomToken])
 
-  const { onApprove } = useApprove(getLockedKingdomsContract(web3), false, true)
+  const { onApprove } = useApprove(lpContract, false, true)
 
   const handleApprove = useCallback(async () => {
     try {

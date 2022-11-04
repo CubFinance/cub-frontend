@@ -4,25 +4,33 @@ import erc20ABI from 'config/abi/erc20.json'
 import masterchefABI from 'config/abi/masterchef.json'
 import kingdomsABI from 'config/abi/kingdoms.json'
 import multicall from 'utils/multicall'
-import { getAddress, getMasterChefAddress, getKingdomsAddress } from 'utils/addressHelpers'
-import { FarmConfig } from 'config/constants/types'
+import {getAddress, getKingdomsAddress, getLockedKingdomsAddress, getMasterChefAddress} from 'utils/addressHelpers'
+import {FarmConfig} from 'config/constants/types'
 
 export const fetchFarmUserAllowances = async (account: string, farmsToFetch: FarmConfig[]) => {
   const masterChefAddress = getMasterChefAddress()
   const kingdomAddress = getKingdomsAddress()
+  const lockedKingdomAddress = getLockedKingdomsAddress();
 
   const calls = farmsToFetch.map((farm) => {
     // const lpContractAddress = getAddress(farm.lpAddresses)
     const lpContractAddress = farm.isTokenOnly || farm.isKingdomToken ? getAddress(farm.token.address) : getAddress(farm.lpAddresses)
-    const mainAddress = farm.isKingdom ? kingdomAddress : masterChefAddress
+
+    let mainAddress: string;
+    if (farm.isKingdomLocked) {
+      mainAddress = lockedKingdomAddress;
+    } else if (farm.isKingdom) {
+      mainAddress = kingdomAddress;
+    } else {
+      mainAddress = masterChefAddress;
+    }
     return { address: lpContractAddress, name: 'allowance', params: [account, mainAddress] }
   })
 
   const rawLpAllowances = await multicall(erc20ABI, calls)
-  const parsedLpAllowances = rawLpAllowances.map((lpBalance) => {
+  return rawLpAllowances.map((lpBalance) => {
     return new BigNumber(lpBalance).toJSON()
   })
-  return parsedLpAllowances
 }
 
 export const fetchFarmUserTokenBalances = async (account: string, farmsToFetch: FarmConfig[]) => {
