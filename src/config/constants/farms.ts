@@ -576,6 +576,6 @@ const farms: FarmConfig[] = [
     quoteToken: tokens.wbnb,
     kingdomContract: '0xbdc40a031f6908a8203fb1c75bb2b9c4abf59e2e',
   },
-]
+];
 
 export default farms

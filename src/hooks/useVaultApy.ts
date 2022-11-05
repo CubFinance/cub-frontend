@@ -1,7 +1,7 @@
 import { BigNumber, FixedNumber } from '@ethersproject/bignumber'
 import { WeiPerEther } from '@ethersproject/constants'
 import _toString from 'lodash/toString'
-import { BLOCKS_PER_YEAR } from 'config'
+import {BLOCKS_PER_YEAR, ETHERSBIGNUMBER_BLOCKS_PER_YEAR} from 'config'
 import masterChefAbi from 'config/abi/masterchef.json'
 import lockedKingdomAbi from 'config/abi/lockedKingdom.json'
 import { useCallback, useMemo } from 'react'
@@ -11,7 +11,6 @@ import {getLockedKingdomsAddress, getMasterChefAddress} from 'utils/addressHelpe
 import { BIG_ZERO } from 'utils/bigNumber'
 // todo: these values can be hardcoded or fetched from the contract
 import { BOOST_WEIGHT, DURATION_FACTOR, MAX_LOCK_DURATION } from 'config/constants/pools'
-import { useCakeVaultContract } from "./useContract";
 import multicall from "../utils/multicall";
 
 const masterChefAddress = getMasterChefAddress()
@@ -81,13 +80,11 @@ export default function useVaultApy({ duration = MAX_LOCK_DURATION }: { duration
     const totalSharesAsEtherBN = useMemo(() => FixedNumber.from(totalShares.toString()), [totalShares])
     const pricePerFullShareAsEtherBN = useMemo(() => FixedNumber.from(pricePerFullShare.toString()), [pricePerFullShare])
 
-    // TODO: Change this to work with cub data
     const { data: totalCakePoolEmissionPerYear } = useSWRImmutable('masterChef-total-cake-pool-emission', async () => {
         const calls = [
             {
                 address: masterChefAddress,
-                name: 'cakePerBlock',
-                params: [false],
+                name: 'cubPerBlock'
             },
             {
                 address: masterChefAddress,
@@ -96,17 +93,16 @@ export default function useVaultApy({ duration = MAX_LOCK_DURATION }: { duration
             },
             {
                 address: masterChefAddress,
-                name: 'totalSpecialAllocPoint',
+                name: 'totalAllocPoint',
             },
         ]
 
         const [[specialFarmsPerBlock], cakePoolInfo, [totalSpecialAllocPoint]] = await multicall(masterChefAbi, calls);
 
-        const cakePoolSharesInSpecialFarms = FixedNumber.from(cakePoolInfo.allocPoint).divUnsafe(
-            FixedNumber.from(totalSpecialAllocPoint),
-        )
+        const cakePoolSharesInSpecialFarms = FixedNumber.from(cakePoolInfo.allocPoint).divUnsafe(FixedNumber.from(totalSpecialAllocPoint))
+
         return FixedNumber.from(specialFarmsPerBlock)
-            .mulUnsafe(FixedNumber.from(BLOCKS_PER_YEAR))
+            .mulUnsafe(FixedNumber.from(ETHERSBIGNUMBER_BLOCKS_PER_YEAR))
             .mulUnsafe(cakePoolSharesInSpecialFarms)
     })
 
