@@ -21,6 +21,16 @@ import { DEFAULT_TOKEN_DECIMAL } from 'config'
 
 import './KingdomCard.css'
 
+const Detail = styled.div`
+  /*display: inline;
+  margin-right: 1rem;*/
+  /*& div {
+    font-family: Arial;
+    font-size: 0.8rem;
+    padding: 2px;
+  }*/
+`
+
 const KCard = styled.div`
   align-self: baseline;
   /*background: ${(props) => props.theme.card.background};
@@ -142,83 +152,26 @@ const LockedKingdomCard: React.FC<KingdomCardProps> = ({
   const bnbRewards = bnbDividends && bnbDividends.amount ? new BigNumber(bnbDividends.amount).div(DEFAULT_TOKEN_DECIMAL).toNumber() : 0
   const bnbRewardsUSD = bnbRewards ? new BigNumber(bnbRewards).multipliedBy(bnbPrice).toNumber() : 0
 
-  let harvestSection = null
-  if (farm.lpSymbol === 'CUB') {
-    harvestSection = (
-      <>
-        <Text>BNB Dividends</Text>
-        <Values>
-          <Balance
-            fontSize="16px"
-            value={bnbRewards}
-            decimals={bnbRewards ? 3 : 2}
-            unit=""
-          />
-          &nbsp;<Brackets>(</Brackets><CardBusdValue value={bnbRewardsUSD} /><Brackets>)</Brackets>
-        </Values>
-        <Button
-          disabled={bnbRewards === 0 || pendingTxDivs || !isApproved}
-          onClick={async () => {
-            setPendingTxDivs(true)
-            await onClaim()
-            setPendingTxDivs(false)
-          }}
-        >
-          Claim
-        </Button>
-      </>
-    )
-  } else {
-    harvestSection = (
-      <>
-        <Text>CUB Rewards</Text>
-        <Values>
-          <Balance
-            fontSize="16px"
-            value={rewardBalance}
-            decimals={rewardBalance ? 3 : 2}
-            unit=""
-          />
-          &nbsp;<Brackets>(</Brackets><CardBusdValue value={earningsBusd} /><Brackets>)</Brackets>
-        </Values>
-        <Button
-          disabled={rewardBalance === 0 || pendingTx || !isApproved}
-          onClick={async () => {
-            setPendingTx(true)
-            await onReward()
-            setPendingTx(false)
-          }}
-        >
-          Harvest
-        </Button>
-      </>
-    )
-  }
-
-  return (
-    <KCard>
-      <div className="k-card">
-        <div className="flex-grid">
-          <div className="col">
+  return (<>
+          <Detail style={{flex: "40%"}} />
+          <Detail style={{flex: "40%"}}>
             <Flex justifyContent='space-between'>
               <Text>Balance (Wallet)</Text>
             </Flex>
             <Values>
               <Balance
-                fontSize="16px"
-                value={walletBalance}
-                decimals={walletBalance ? 3 : 2}
-                unit=""
+                  fontSize="16px"
+                  value={walletBalance}
+                  decimals={walletBalance ? 3 : 2}
+                  unit=""
               />
               &nbsp;<Brackets>(</Brackets><CardBusdValue value={walletBalanceQuoteValue} /><Brackets>)</Brackets>
             </Values>
             { isApproved ? (
-              <Button mt="8px" fullWidth onClick={onPresentDeposit}>Deposit</Button>
+                <Button mt="8px" fullWidth onClick={onPresentDeposit}>Deposit</Button>
             ) : (
-              approvedButton
+                approvedButton
             )}
-          </div>
-          <div className="col">
             <Flex justifyContent='space-between'>
               <Text>Deposit (Staked)</Text>
             </Flex>
@@ -236,14 +189,9 @@ const LockedKingdomCard: React.FC<KingdomCardProps> = ({
             ) : (
               approvedButton
             )}
-          </div>
-          <div className="col">
-            {harvestSection}
-          </div>
-        </div>
-      </div>
-    </KCard>
-  )
+          </Detail>
+          <div className="col" />
+  </>)
 }
 
 export default LockedKingdomCard

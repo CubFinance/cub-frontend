@@ -120,63 +120,34 @@ const KingdomDetail: React.FC<KingdomDetailProps> = ({
 
   return (
     <KDetail>
-      <LockedKingdomCard
-        farm={farm}
-        walletBalance={walletBalance}
-        depositBalance={depositBalance}
-        rewardBalance={rewardBalance}
-        walletBalanceQuoteValue={walletBalanceQuoteValue}
-        depositBalanceQuoteValue={depositBalanceQuoteValue}
-        addLiquidityUrl={addLiquidityUrl}
-        account={account}
-        cakePrice={cakePrice}
-        bnbDividends={bnbDividends}
-      />
       <Details className="k-details">
         <Detail>
-          <Flex justifyContent="space-between">
-            <Text>{lpSymbol}:</Text>
-            <Text>({tokenValueFormated})</Text>
-          </Flex>
           <Flex justifyContent="space-between">
             <Text>Multiplier:</Text>
             <Text>{displayMultiplier}</Text>
           </Flex>
           <Flex justifyContent="space-between">
-            <Text>Type:</Text>
-            <Text>Auto-compound</Text>
+            <Text>Performance Fee:</Text>
+            <Text>0~2%</Text>
           </Flex>
-          {altPid === 12 ? (
-            <CubKingdom>*CUB Kingdom multiplier coexists with CUB Den multiplier</CubKingdom>
-          ) : (
-            <Flex justifyContent="space-between">
-              <Text>Farm:</Text>
-              <Text>{farmName}</Text>
-            </Flex>
-          )}
-        </Detail>
-        <Detail>
-          <AprApy
-            aprApy={aprApy}
-            lpLabel={lpLabel}
-            addLiquidityUrl={addLiquidityUrl}
-          />
-        </Detail>
-        <Detail>
-          <StyledLinkExternal external href={farmContract}>Farm Contract</StyledLinkExternal>
-          <StyledLinkExternal external href={vaultContract}>Kingdom Contract</StyledLinkExternal>
-          {!removed && (
-            <>
-              <StyledLinkExternal external href={buyTokenUrl}>
-                {`Buy ${token.symbol}`}
-              </StyledLinkExternal>
-              <StyledLinkExternal external href={addLiquidityUrl}>
-                Add Liquidity
-              </StyledLinkExternal>
-            </>
-          )}
           <StyledLinkExternal external href={infoAddress}>See Token Info</StyledLinkExternal>
+          <StyledLinkExternal external href={vaultContract}>See Contract</StyledLinkExternal>
+          <StyledLinkExternal external href={buyTokenUrl}>
+            {`Buy ${token.symbol}`}
+          </StyledLinkExternal>
         </Detail>
+        <LockedKingdomCard
+            farm={farm}
+            walletBalance={walletBalance}
+            depositBalance={depositBalance}
+            rewardBalance={rewardBalance}
+            walletBalanceQuoteValue={walletBalanceQuoteValue}
+            depositBalanceQuoteValue={depositBalanceQuoteValue}
+            addLiquidityUrl={addLiquidityUrl}
+            account={account}
+            cakePrice={cakePrice}
+            bnbDividends={bnbDividends}
+        />
       </Details>
     </KDetail>
   )
