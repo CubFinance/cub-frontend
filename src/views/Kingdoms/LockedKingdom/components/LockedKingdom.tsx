@@ -102,7 +102,7 @@ const LockedKingdom: React.FC<KingdomProps> = ({ farm, removed, cakePrice, accou
 
   const aprApy = useVaultApy() // todo: add duration into call
 
-  const { lockedApy } = aprApy
+  const { lockedApy, flexibleApy, getLockedApy } = aprApy
   const { tokenBalance, stakedBalance, earnings } = farm.userData
 
   const rawTokenBalance = tokenBalance ? getBalanceNumber(new BigNumber(tokenBalance)) : 0
@@ -136,7 +136,7 @@ const LockedKingdom: React.FC<KingdomProps> = ({ farm, removed, cakePrice, accou
           <div className="col"><KImage src={`/images/farms/${farmImage}.png`} alt={lpSymbol} width={64} height={64} /></div>
           <div className="col">
             <Flex justifyContent="flex-start" alignItems="center">
-              <Text className="token">{lpSymbol} (Locked)</Text>
+              <Text className="token">{lpSymbol}</Text>
             </Flex>
             <Text>Uses: {farmType}</Text>
             <Text>TVL {totalValueFormated}</Text>
@@ -171,8 +171,8 @@ const LockedKingdom: React.FC<KingdomProps> = ({ farm, removed, cakePrice, accou
             />
             <Text>Rewards</Text>
           </div>
-            <Text color="warning">Up to</Text>
           <div className="col">
+              <Text color="warning">Up to</Text>
             <Balance
               fontSize="16px"
               value={!Number.isNaN(Number(lockedApy)) ? Number(lockedApy) : 0}
@@ -182,15 +182,16 @@ const LockedKingdom: React.FC<KingdomProps> = ({ farm, removed, cakePrice, accou
             />
             <Text color="warning">APY</Text>
           </div>
-            {/* <div className="col">
-            <Balance
+            <div className="col">
+            <Text>Flexible</Text>
+                <Balance
               fontSize="16px"
-              value={dailyAPR}
+              value={!Number.isNaN(Number(flexibleApy)) ? Number(flexibleApy) : 0}
               decimals={2}
               unit="%"
             />
-            <Text>Daily</Text>
-          </div> */}
+            <Text>APY</Text>
+          </div>
         </KMain>
         <ExpandingWrapper expanded={showExpandableSection}>
           <Divider />
