@@ -9,7 +9,7 @@ import CardBusdValue from 'views/Home/components/CardBusdValue'
 import { FarmWithStakedValue } from 'views/Farms/components/FarmCard/FarmCard'
 import DepositModal from 'views/Farms/components/DepositModal'
 import WithdrawModal from 'views/Farms/components/WithdrawModal'
-import useStake from 'hooks/useStake'
+import useStake, {useStakeLocked} from 'hooks/useStake'
 import useUnstake from 'hooks/useUnstake'
 import { useHarvest } from 'hooks/useHarvest'
 import { useApprove } from 'hooks/useApprove'
@@ -102,8 +102,8 @@ const LockedKingdomCard: React.FC<KingdomCardProps> = ({
 
   const web3 = useWeb3()
   // TODO: needs to be changed for the locked kingdoms contract
-  const { onStake } = useStake(pid, isKingdom)
-  const onStakeLocked = () => null; // TODO: add locked stake function
+  const { onStakeLocked } = useStakeLocked()
+  const onStake = (amount: string) => onStakeLocked(amount, 0);
   const { onUnstake } = useUnstake(pid, isKingdom)
   const { onReward } = useHarvest(pid, isKingdom)
   const { onClaim } = useClaim(bnbDividends || {})
@@ -192,20 +192,14 @@ const LockedKingdomCard: React.FC<KingdomCardProps> = ({
                 <Subtle>CUB</Subtle>
               </ActionTitles>
               <ActionContent style={{flexWrap: "wrap"}}>
-                { isApproved ? (
-                    <Button mt="8px" fullWidth onClick={onPresentDeposit}>Flexible</Button>
-                ) : (
-                    approveButton
-                )}
-                <div style={{width: "10%"}} />
-                { isApproved ? (
-                    <Button mt="8px" fullWidth onClick={onPresentDepositLocked}>Locked</Button>
-                ) : (
-                    approveButton
-                )}
-                <div style={{width: "100%", flex: "100% 0 0"}}>
+                {isApproved ? <>
+                  <Button mt="8px" fullWidth onClick={onPresentDeposit}>Flexible</Button>
+                  <div style={{width: "10%"}} />
+                  <Button mt="8px" fullWidth onClick={onPresentDepositLocked}>Locked</Button>
+                </> : approveButton}
+                {isApproved ? <div style={{width: "100%", flex: "100% 0 0"}}>
                   <Text><abbr title="Flexible staking offers flexibility for staking/unstaking whenever you want. Locked staking offers higher APY as well as other benefits.">What&apos;s the difference?</abbr></Text>
-                </div>
+                </div> : null}
               </ActionContent>
             </ActionContainer>
           </Detail>

@@ -2,6 +2,7 @@ import BigNumber from 'bignumber.js'
 import { DEFAULT_TOKEN_DECIMAL } from 'config'
 import { ethers } from 'ethers'
 import { BIG_TEN, BIG_ZERO } from './bigNumber'
+import {useLockedKingdom} from "../hooks/useContract";
 
 export const approve = async (lpContract, masterChefContract, account) => {
   return lpContract.methods
@@ -16,6 +17,15 @@ export const stake = async (masterChefContract, pid, amount, account) => {
     .on('transactionHash', (tx) => {
       return tx.transactionHash
     })
+}
+
+export const stakeLocked = async (lockedKingdomContract, amount, account, lockDuration = 0) => {
+    return lockedKingdomContract.methods
+        .deposit(new BigNumber(amount).times(DEFAULT_TOKEN_DECIMAL).toString(), lockDuration)
+        .send({ from: account })
+        .on('transactionHash', (tx) => {
+            return tx.transactionHash
+        })
 }
 
 export const sousStake = async (sousChefContract, amount, decimals = 18, account) => {

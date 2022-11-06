@@ -9,7 +9,7 @@ import useVaultApy from "../../../hooks/useVaultApy";
 
 interface DepositModalProps {
   max: BigNumber
-  onConfirm: (amount: string, weeks: number) => void
+  onConfirm: (amount: string, lockDuration: number) => void
   onDismiss?: () => void
   tokenName?: string
   addLiquidityUrl?: string
@@ -81,7 +81,7 @@ const DepositModalLocked: React.FC<DepositModalProps> = ({ max, onConfirm, onDis
           disabled={pendingTx || !valNumber.isFinite() || valNumber.eq(0) || valNumber.gt(fullBalanceNumber)}
           onClick={async () => {
             setPendingTx(true)
-            await onConfirm(val, duration)
+            await onConfirm(val, new BigNumber(duration).multipliedBy(86400).toNumber())
             setPendingTx(false)
             onDismiss()
           }}
