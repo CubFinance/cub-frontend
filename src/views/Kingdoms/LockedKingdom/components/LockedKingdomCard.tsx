@@ -20,6 +20,17 @@ import useWeb3 from 'hooks/useWeb3'
 import { DEFAULT_TOKEN_DECIMAL } from 'config'
 
 import './KingdomCard.css'
+import {useCountUp} from "react-countup";
+import {
+  ActionContainer,
+  ActionContent,
+  ActionTitles,
+  Earned,
+  Staked,
+  Subtle,
+  Title
+} from "../../../Farms/components/FarmTable/Actions/styles";
+import DepositModalLocked from "../../../Farms/components/DepositModalLocked";
 
 const Detail = styled.div`
   /*display: inline;
@@ -29,20 +40,6 @@ const Detail = styled.div`
     font-size: 0.8rem;
     padding: 2px;
   }*/
-`
-
-const KCard = styled.div`
-  align-self: baseline;
-  /*background: ${(props) => props.theme.card.background};
-  border-radius: 8px;
-  box-shadow: 0 3px 4px -3px rgba(0,0,0,0.1),0 4px 6px -2px rgba(0,0,0,0.05);*/
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  /*padding: 6px 12px;*/
-  position: relative;
-  margin-top: 0.5rem;
-  margin-bottom: 1rem;
 `
 
 const Button = styled(UiButton)`
@@ -104,7 +101,9 @@ const LockedKingdomCard: React.FC<KingdomCardProps> = ({
   const earningsBusd = rewardBalance ? new BigNumber(rewardBalance).multipliedBy(cakePrice).toNumber() : 0
 
   const web3 = useWeb3()
+  // TODO: needs to be changed for the locked kingdoms contract
   const { onStake } = useStake(pid, isKingdom)
+  const onStakeLocked = () => null; // TODO: add locked stake function
   const { onUnstake } = useUnstake(pid, isKingdom)
   const { onReward } = useHarvest(pid, isKingdom)
   const { onClaim } = useClaim(bnbDividends || {})
@@ -113,6 +112,9 @@ const LockedKingdomCard: React.FC<KingdomCardProps> = ({
 
   const [onPresentDeposit] = useModal(
     <DepositModal max={tokenBalance} onConfirm={onStake} tokenName={tokenName} addLiquidityUrl={addLiquidityUrl} isTokenOnly={isTokenOnly} isKingdomToken={isKingdomToken} />,
+  )
+  const [onPresentDepositLocked] = useModal(
+      <DepositModalLocked max={tokenBalance} onConfirm={onStakeLocked} tokenName={tokenName} addLiquidityUrl={addLiquidityUrl} isTokenOnly={isTokenOnly} isKingdomToken={isKingdomToken} />,
   )
   const [onPresentWithdraw] = useModal(
     <WithdrawModal max={stakedBalance} onConfirm={onUnstake} tokenName={tokenName} isTokenOnly={isTokenOnly} isKingdomToken={isKingdomToken} />,
@@ -139,9 +141,10 @@ const LockedKingdomCard: React.FC<KingdomCardProps> = ({
     }
   }, [onApprove])
 
-  const approvedButton = (
+  const approveButton = (
     <Button
       mt="8px"
+      fullWidth
       disabled={requestedApproval || location.pathname.includes('archived')}
       onClick={handleApprove}
     >
@@ -149,46 +152,62 @@ const LockedKingdomCard: React.FC<KingdomCardProps> = ({
     </Button>
   )
 
-  const bnbRewards = bnbDividends && bnbDividends.amount ? new BigNumber(bnbDividends.amount).div(DEFAULT_TOKEN_DECIMAL).toNumber() : 0
-  const bnbRewardsUSD = bnbRewards ? new BigNumber(bnbRewards).multipliedBy(bnbPrice).toNumber() : 0
+  const { countUp } = useCountUp({
+    start: 0,
+    end: earningsBusd,
+    duration: 1,
+    separator: ',',
+    decimals: 3,
+  })
 
   return (<>
-          <Detail style={{flex: "40%"}} />
           <Detail style={{flex: "40%"}}>
-            <Flex justifyContent='space-between'>
-              <Text>Balance (Wallet)</Text>
-            </Flex>
-            <Values>
-              <Balance
-                  fontSize="16px"
-                  value={walletBalance}
-                  decimals={walletBalance ? 3 : 2}
-                  unit=""
-              />
-              &nbsp;<Brackets>(</Brackets><CardBusdValue value={walletBalanceQuoteValue} /><Brackets>)</Brackets>
-            </Values>
-            { isApproved ? (
-                <Button mt="8px" fullWidth onClick={onPresentDeposit}>Deposit</Button>
-            ) : (
-                approvedButton
-            )}
-            <Flex justifyContent='space-between'>
-              <Text>Deposit (Staked)</Text>
-            </Flex>
-            <Values>
-              <Balance
-                fontSize="16px"
-                value={depositBalance}
-                decimals={depositBalance ? 3 : 2}
-                unit=""
-              />
-              &nbsp;<Brackets>(</Brackets><CardBusdValue value={depositBalanceQuoteValue} /><Brackets>)</Brackets>
-            </Values>
-            { isApproved ? (
-              <Button mt="8px" fullWidth onClick={onPresentWithdraw}>Withdraw</Button>
-            ) : (
-              approvedButton
-            )}
+            <ActionContainer>
+              <ActionTitles>
+                <Title>RECENT CUB PROFIT</Title>
+              </ActionTitles>
+              <ActionContent>
+                <div style={{width: "50%", flex: "50% 0 0"}}>
+                  <Earned>0</Earned>
+                  <Staked>{countUp}USD</Staked>
+                </div>
+                {isApproved ? <Button
+                    disabled={pendingTx}
+                    onClick={async () => {
+                      setPendingTx(true)
+                      // await onReward()
+                      setPendingTx(false)
+                    }}
+                    ml="4px"
+                >
+                  Harvest
+                </Button> : <Text>0.1% unstaking fee if withdrawn within 72h</Text>}
+              </ActionContent>
+            </ActionContainer>
+          </Detail>
+          <Detail style={{flex: "40%"}}>
+            <ActionContainer style={{maxHeight: "150px", marginBottom: "10px"}}>
+              <ActionTitles>
+                <Title>STAKE </Title>
+                <Subtle>CUB</Subtle>
+              </ActionTitles>
+              <ActionContent style={{flexWrap: "wrap"}}>
+                { isApproved ? (
+                    <Button mt="8px" fullWidth onClick={onPresentDeposit}>Flexible</Button>
+                ) : (
+                    approveButton
+                )}
+                <div style={{width: "10%"}} />
+                { isApproved ? (
+                    <Button mt="8px" fullWidth onClick={onPresentDepositLocked}>Locked</Button>
+                ) : (
+                    approveButton
+                )}
+                <div style={{width: "100%", flex: "100% 0 0"}}>
+                  <Text><abbr title="Flexible staking offers flexibility for staking/unstaking whenever you want. Locked staking offers higher APY as well as other benefits.">What&apos;s the difference?</abbr></Text>
+                </div>
+              </ActionContent>
+            </ActionContainer>
           </Detail>
           <div className="col" />
   </>)
