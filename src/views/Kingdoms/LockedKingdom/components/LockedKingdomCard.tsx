@@ -1,26 +1,24 @@
-import React, { useState, useCallback, useMemo } from 'react'
-import { useLocation } from 'react-router-dom'
+import React, {useCallback, useMemo, useState} from 'react'
+import {useLocation} from 'react-router-dom'
 import styled from 'styled-components'
 import BigNumber from 'bignumber.js'
-import { useBusdPriceFromLpSymbol } from 'state/hooks'
-import { Flex, Text, Button as UiButton, useModal } from '@pancakeswap-libs/uikit'
-import Balance from 'components/Balance'
-import CardBusdValue from 'views/Home/components/CardBusdValue'
-import { FarmWithStakedValue } from 'views/Farms/components/FarmCard/FarmCard'
+import {useBusdPriceFromLpSymbol} from 'state/hooks'
+import {Button as UiButton, Text, useModal} from '@pancakeswap-libs/uikit'
+import {FarmWithStakedValue} from 'views/Farms/components/FarmCard/FarmCard'
 import DepositModal from 'views/Farms/components/DepositModal'
 import WithdrawModal from 'views/Farms/components/WithdrawModal'
-import useStake, {useStakeLocked} from 'hooks/useStake'
+import {useStakeLocked} from 'hooks/useStake'
 import useUnstake from 'hooks/useUnstake'
-import { useHarvest } from 'hooks/useHarvest'
-import { useApprove } from 'hooks/useApprove'
-import { useClaim} from 'hooks/useClaim'
+import {useHarvest} from 'hooks/useHarvest'
+import {useApprove} from 'hooks/useApprove'
+import {useClaim} from 'hooks/useClaim'
 import {getBep20Contract, getLockedKingdomsContract} from 'utils/contractHelpers'
-import { getAddress } from 'utils/addressHelpers'
+import {getAddress} from 'utils/addressHelpers'
 import useWeb3 from 'hooks/useWeb3'
-import { DEFAULT_TOKEN_DECIMAL } from 'config'
 
 import './KingdomCard.css'
 import {useCountUp} from "react-countup";
+import useSWRImmutable from "swr/immutable";
 import {
   ActionContainer,
   ActionContent,
@@ -31,6 +29,8 @@ import {
   Title
 } from "../../../Farms/components/FarmTable/Actions/styles";
 import DepositModalLocked from "../../../Farms/components/DepositModalLocked";
+import {getCakeVaultEarnings} from "../helpers";
+import {useSWRImmutableFetchPoolVaultData} from "../poolHelpers";
 
 const Detail = styled.div`
   /*display: inline;
@@ -88,6 +88,8 @@ const LockedKingdomCard: React.FC<KingdomCardProps> = ({
   const [pendingTxDivs, setPendingTxDivs] = useState(false)
   const { pid, isTokenOnly, isKingdom, isKingdomToken, lpSymbol, lpAddresses, token: { address } } = farm
 
+  const {data: poolVaultData} = useSWRImmutableFetchPoolVaultData(account);
+
   const tokenName = lpSymbol.toUpperCase()
   const {
     allowance: allowanceAsString = 0,
@@ -97,8 +99,14 @@ const LockedKingdomCard: React.FC<KingdomCardProps> = ({
   const allowance = new BigNumber(allowanceAsString)
   const tokenBalance = new BigNumber(tokenBalanceAsString)
   const stakedBalance = new BigNumber(stakedBalanceAsString)
-  // const cakePrice = usePriceCakeBusd()
-  const earningsBusd = rewardBalance ? new BigNumber(rewardBalance).multipliedBy(cakePrice).toNumber() : 0
+
+  // useswrimmutable to getCakeVaultEarnings from chain data called "chain-balance-locked-cub"
+  const { data } = useSWRImmutable("chain-balance-locked-cub", async () => {
+    return {earnings: poolVaultData ? getCakeVaultEarnings(account, poolVaultData.userData.tokenAtLastUserAction, poolVaultData.userData.shares, poolVaultData.pricePerFullShare, cakePrice.toNumber(), poolVaultData.fees.performanceFee) : null, user: poolVaultData?.userData};
+  });
+
+  const autoCakeToDisplay = data?.earnings?.autoCakeToDisplay || 0;
+  const autoUsdToDisplay = data?.earnings?.autoUsdToDisplay || 0;
 
   const web3 = useWeb3()
   // TODO: needs to be changed for the locked kingdoms contract
@@ -154,11 +162,19 @@ const LockedKingdomCard: React.FC<KingdomCardProps> = ({
 
   const { countUp } = useCountUp({
     start: 0,
-    end: earningsBusd,
+    end: autoUsdToDisplay,
     duration: 1,
     separator: ',',
     decimals: 3,
   })
+
+  const { countUp: countUp2 } = useCountUp({
+    start: 0,
+    end: autoCakeToDisplay,
+    duration: 1,
+    separator: ',',
+    decimals: 3,
+  });
 
   return (<>
           <Detail style={{flex: "40%"}}>
@@ -168,7 +184,7 @@ const LockedKingdomCard: React.FC<KingdomCardProps> = ({
               </ActionTitles>
               <ActionContent>
                 <div style={{width: "50%", flex: "50% 0 0"}}>
-                  <Earned>0</Earned>
+                  <Earned>{countUp2}CUB</Earned>
                   <Staked>{countUp}USD</Staked>
                 </div>
                 {isApproved ? <Button

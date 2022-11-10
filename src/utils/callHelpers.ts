@@ -3,6 +3,7 @@ import { DEFAULT_TOKEN_DECIMAL } from 'config'
 import { ethers } from 'ethers'
 import { BIG_TEN, BIG_ZERO } from './bigNumber'
 import {useLockedKingdom} from "../hooks/useContract";
+import useGetVaultUserInfo from "../hooks/cakeVault/useGetVaultUserInfo";
 
 export const approve = async (lpContract, masterChefContract, account) => {
   return lpContract.methods
