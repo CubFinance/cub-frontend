@@ -31,6 +31,8 @@ import {
 import DepositModalLocked from "../../../Farms/components/DepositModalLocked";
 import {getCakeVaultEarnings} from "../helpers";
 import {useSWRImmutableFetchPoolVaultData} from "../poolHelpers";
+import {DEFAULT_TOKEN_DECIMAL} from "../../../../config";
+import {BIG_TEN} from "../../../../utils/bigNumber";
 
 const Detail = styled.div`
   /*display: inline;
@@ -94,11 +96,22 @@ const LockedKingdomCard: React.FC<KingdomCardProps> = ({
   const {
     allowance: allowanceAsString = 0,
     tokenBalance: tokenBalanceAsString = 0,
-    stakedBalance: stakedBalanceAsString = 0,
   } = farm.userData || {}
   const allowance = new BigNumber(allowanceAsString)
   const tokenBalance = new BigNumber(tokenBalanceAsString)
+
+  // gets staked balance
+  const stakedBalanceAsString = poolVaultData?.userData?.tokenAtLastUserAction.div(BIG_TEN.pow(DEFAULT_TOKEN_DECIMAL)) || 0;
   const stakedBalance = new BigNumber(stakedBalanceAsString)
+
+  // stake is active?
+  const isStakeActive = poolVaultData?.userData?.shares.gt(0) || false;
+
+  // stake is locked?
+  const isStakeLocked = poolVaultData?.userData?.lockEndTime.lte(new Date().getTime() / 1000) || false;
+
+  // stake was originally locked? (used for determining if it will decay over time)
+  const wasStakeLocked = poolVaultData?.userData?.lockEndTime.gt(0) || false;
 
   // useswrimmutable to getCakeVaultEarnings from chain data called "chain-balance-locked-cub"
   const { data } = useSWRImmutable("chain-balance-locked-cub", async () => {
@@ -176,47 +189,74 @@ const LockedKingdomCard: React.FC<KingdomCardProps> = ({
     decimals: 3,
   });
 
+  function renderRightInnerPanelContent() {
+    if (isApproved) {
+      if (isStakeActive) {
+        if (isStakeLocked) {
+          // state is locked and it is currently locked
+
+        } else if (wasStakeLocked) {
+          // state was locked but now it is unlocked
+
+        }
+
+        // stake is flexible and active
+      }
+
+      return <>
+        <ActionTitles>
+          <Title>STAKE </Title>
+          <Subtle>CUB</Subtle>
+        </ActionTitles>
+        <ActionContent style={{flexWrap: "wrap"}}>
+          <Button mt="8px" fullWidth onClick={onPresentDeposit}>Flexible</Button>
+          <div style={{width: "10%"}} />
+          <Button mt="8px" fullWidth onClick={onPresentDepositLocked}>Locked</Button>
+          <div style={{width: "100%", flex: "100% 0 0"}}>
+            <Text><abbr title="Flexible staking offers flexibility for staking/unstaking whenever you want. Locked staking offers higher APY as well as other benefits.">What&apos;s the difference?</abbr></Text>
+          </div>
+        </ActionContent>
+      </>;
+    }
+
+    return <>
+      <ActionTitles>
+        <Title>ENABLE </Title>
+        <Subtle> POOL</Subtle>
+      </ActionTitles>
+      <ActionContent>
+        {approveButton}
+      </ActionContent>
+    </>;
+  }
+
+  function renderLeftInnerPanelContent() {
+
+    return <>
+      <ActionTitles>
+        <Title>RECENT CUB PROFIT</Title>
+      </ActionTitles>
+      <ActionContent style={{flexWrap: "wrap"}}>
+        <div style={{width: "50%", flex: "50% 0 0"}}>
+          <Earned>{countUp2}CUB</Earned>
+          <Staked>{countUp}USD</Staked>
+        </div>
+        <div style={{width: "50%", flex: "50% 0 0"}}>
+          <Text>0.1% unstaking fee if withdrawn within 72h</Text>
+        </div>
+      </ActionContent>
+    </>
+  }
+
   return (<>
           <Detail style={{flex: "40%"}}>
             <ActionContainer>
-              <ActionTitles>
-                <Title>RECENT CUB PROFIT</Title>
-              </ActionTitles>
-              <ActionContent>
-                <div style={{width: "50%", flex: "50% 0 0"}}>
-                  <Earned>{countUp2}CUB</Earned>
-                  <Staked>{countUp}USD</Staked>
-                </div>
-                {isApproved ? <Button
-                    disabled={pendingTx}
-                    onClick={async () => {
-                      setPendingTx(true)
-                      // await onReward()
-                      setPendingTx(false)
-                    }}
-                    ml="4px"
-                >
-                  Harvest
-                </Button> : <Text>0.1% unstaking fee if withdrawn within 72h</Text>}
-              </ActionContent>
+              {renderLeftInnerPanelContent()}
             </ActionContainer>
           </Detail>
           <Detail style={{flex: "40%"}}>
             <ActionContainer style={{maxHeight: "150px", marginBottom: "10px"}}>
-              <ActionTitles>
-                <Title>STAKE </Title>
-                <Subtle>CUB</Subtle>
-              </ActionTitles>
-              <ActionContent style={{flexWrap: "wrap"}}>
-                {isApproved ? <>
-                  <Button mt="8px" fullWidth onClick={onPresentDeposit}>Flexible</Button>
-                  <div style={{width: "10%"}} />
-                  <Button mt="8px" fullWidth onClick={onPresentDepositLocked}>Locked</Button>
-                </> : approveButton}
-                {isApproved ? <div style={{width: "100%", flex: "100% 0 0"}}>
-                  <Text><abbr title="Flexible staking offers flexibility for staking/unstaking whenever you want. Locked staking offers higher APY as well as other benefits.">What&apos;s the difference?</abbr></Text>
-                </div> : null}
-              </ActionContent>
+              {renderRightInnerPanelContent()}
             </ActionContainer>
           </Detail>
           <div className="col" />
