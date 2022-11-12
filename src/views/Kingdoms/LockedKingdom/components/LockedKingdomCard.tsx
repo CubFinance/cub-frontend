@@ -3,7 +3,7 @@ import {useLocation} from 'react-router-dom'
 import styled from 'styled-components'
 import BigNumber from 'bignumber.js'
 import {useBusdPriceFromLpSymbol} from 'state/hooks'
-import {Button as UiButton, Heading, Text, useModal} from '@pancakeswap-libs/uikit'
+import {Button as UiButton, Flex, Heading, Text, useModal} from '@pancakeswap-libs/uikit'
 import {FarmWithStakedValue} from 'views/Farms/components/FarmCard/FarmCard'
 import DepositModal from 'views/Farms/components/DepositModal'
 import WithdrawModal from 'views/Farms/components/WithdrawModal'
@@ -37,6 +37,7 @@ import {BIG_TEN} from "../../../../utils/bigNumber";
 import WithdrawalFeeTimer from "./WithdrawalFeeTimer";
 import useVaultApy from "../../../../hooks/useVaultApy";
 import BurningCountDown from "../BurningCountdown";
+import Message from "./Message";
 
 const Detail = styled.div`
   /*display: inline;
@@ -111,13 +112,13 @@ const LockedKingdomCard: React.FC<KingdomCardProps> = ({
   const stakedBalanceUSD = stakedBalance.multipliedBy(cakePrice);
 
   // stake is active?
-  let isStakeActive = poolVaultData?.userData?.shares.gt(0) || false;
+  const isStakeActive = poolVaultData?.userData?.shares?.gt(0) || false;
 
   // stake is locked?
-  const isStakeLocked = poolVaultData?.userData?.lockEndTime.lte(new Date().getTime() / 1000) || false;
+  const isStakeLocked = poolVaultData?.userData?.lockEndTime?.lte(new Date().getTime() / 1000) || false;
 
   // stake was originally locked? (used for determining if it will decay over time)
-  let wasStakeLocked = poolVaultData?.userData?.lockEndTime.gt(0) || false;
+  const wasStakeLocked = poolVaultData?.userData?.lockEndTime?.gt(0) || false;
 
   // useswrimmutable to getCakeVaultEarnings from chain data called "chain-balance-locked-cub"
   const { data } = useSWRImmutable("chain-balance-locked-cub", async () => {
@@ -135,7 +136,7 @@ const LockedKingdomCard: React.FC<KingdomCardProps> = ({
   const { onReward } = useHarvest(pid, isKingdom)
   const { onClaim } = useClaim(bnbDividends || {})
 
-  let isApproved = account && allowance && allowance.isGreaterThan(0)
+  const isApproved = account && allowance && allowance.isGreaterThan(0)
 
   const [onPresentDeposit] = useModal(
     <DepositModal max={tokenBalance} onConfirm={onStake} tokenName={tokenName} addLiquidityUrl={addLiquidityUrl} isTokenOnly={isTokenOnly} isKingdomToken={isKingdomToken} />,
@@ -402,16 +403,10 @@ const LockedKingdomCard: React.FC<KingdomCardProps> = ({
     }
 
   const durationSeconds = (poolVaultData?.userData?.lockEndTime?.toNumber() || 0) - (poolVaultData?.userData?.lockStartTime?.toNumber() || 0);
-  const { boostFactor } = useVaultApy({duration: durationSeconds});
+  const { boostFactor, getLockedApy } = useVaultApy({duration: durationSeconds});
   const numWeeks = Math.floor(durationSeconds / 604800);
 
   function renderLeftInnerPanelContent() {
-    if (!isStakeLocked) {
-      isApproved = true;
-      isStakeActive = true;
-      wasStakeLocked = true;
-    }
-
     if (isStakeLocked || wasStakeLocked) {
 
       return <>
@@ -465,6 +460,57 @@ const LockedKingdomCard: React.FC<KingdomCardProps> = ({
     </>
   }
 
+  function renderBottomPanelContent() {
+    if (wasStakeLocked) {
+      return <Message
+          variant="warning"
+          action={
+            <Flex mt='8px' flexGrow={1} ml='80px'>
+              {/* todo: add button action functions here */}
+              <Button
+                  variant="primary"
+                  onClick={onPresentWithdraw}
+                  disabled={location.pathname.includes('archived')}
+              >Renew
+              </Button>
+              <Button
+                  variant="secondary"
+                  onClick={onPresentWithdraw}
+                  disabled={location.pathname.includes('archived')}
+              >Convert To Flexible
+              </Button>
+            </Flex>
+          }
+      >
+        <Text>
+          Lock staking users are earning up to {getLockedApy(31449600)}% APY.
+        </Text>
+      </Message>;
+    }
+
+    if (isStakeActive) {
+      return <Message
+          variant="warning"
+          action={
+            <Flex mt='8px' flexGrow={1} ml='80px'>
+              <Button
+                variant="secondary"
+                onClick={onPresentWithdraw}
+                disabled={location.pathname.includes('archived')}
+              >Convert to Lock
+              </Button>
+            </Flex>
+          }
+      >
+        <Text>
+          Lock staking users are earning up to {getLockedApy(31449600)}% APY.
+        </Text>
+      </Message>;
+    }
+
+    return null;
+  }
+
   return (<>
           <Detail style={{flex: "40%"}}>
             <ActionContainer>
@@ -477,6 +523,7 @@ const LockedKingdomCard: React.FC<KingdomCardProps> = ({
             </ActionContainer>
           </Detail>
           <div className="col" />
+    {renderBottomPanelContent() /* todo: fix the layout of this */}
   </>)
 }
 
