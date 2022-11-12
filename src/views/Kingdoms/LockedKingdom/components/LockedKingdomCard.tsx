@@ -152,7 +152,7 @@ const LockedKingdomCard: React.FC<KingdomCardProps> = ({
     // end time + 1 week
     const time = new Date((poolVaultData?.userData?.lockEndTime.multipliedBy(1000).toNumber() || 0) + 604800000);
 
-    const isAfterBurning = time.getTime() > new Date().getTime();
+    const isAfterBurning = time.getTime() < new Date().getTime();
 
     return {time, isAfterBurning};
   }
@@ -302,7 +302,7 @@ const LockedKingdomCard: React.FC<KingdomCardProps> = ({
                 <ActionTitles>
                   <Subtle style={{color: "lightgray"}}>UNLOCKS IN</Subtle>
                 </ActionTitles>
-                <Heading color="warning" size="md" mb="8px">
+                <Heading color="warning" size="md">
                   Unlocked&nbsp;
                   <abbr title={`After Burning starts at ${format(new Date(((poolVaultData?.userData?.lockEndTime?.toNumber() || 0) * 1000) + 604800000), 'MMM dd yyyy, HH:mm')}. You need to renew your fix-term position, to initiate a new lock or convert your staking position to flexible before it starts. Otherwise all the rewards will be burned within the next 90 days.`}>?</abbr>
                 </Heading>

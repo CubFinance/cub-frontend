@@ -17,6 +17,8 @@ const BurningCountDown: React.FC<React.PropsWithChildren<PropsType>> = ({ lockEn
     let interval;
 
     useEffect(() => {
+        updateRemainingSeconds();
+
         return () => {
             clearInterval(interval);
         }
