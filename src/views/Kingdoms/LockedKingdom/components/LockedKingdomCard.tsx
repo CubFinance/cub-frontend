@@ -36,6 +36,7 @@ import {DEFAULT_TOKEN_DECIMAL} from "../../../../config";
 import {BIG_TEN} from "../../../../utils/bigNumber";
 import WithdrawalFeeTimer from "./WithdrawalFeeTimer";
 import useVaultApy from "../../../../hooks/useVaultApy";
+import BurningCountDown from "../BurningCountdown";
 
 const Detail = styled.div`
   /*display: inline;
@@ -113,10 +114,10 @@ const LockedKingdomCard: React.FC<KingdomCardProps> = ({
   let isStakeActive = poolVaultData?.userData?.shares.gt(0) || false;
 
   // stake is locked?
-  let isStakeLocked = poolVaultData?.userData?.lockEndTime.lte(new Date().getTime() / 1000) || false;
+  const isStakeLocked = poolVaultData?.userData?.lockEndTime.lte(new Date().getTime() / 1000) || false;
 
   // stake was originally locked? (used for determining if it will decay over time)
-  const wasStakeLocked = poolVaultData?.userData?.lockEndTime.gt(0) || false;
+  let wasStakeLocked = poolVaultData?.userData?.lockEndTime.gt(0) || false;
 
   // useswrimmutable to getCakeVaultEarnings from chain data called "chain-balance-locked-cub"
   const { data } = useSWRImmutable("chain-balance-locked-cub", async () => {
@@ -145,6 +146,18 @@ const LockedKingdomCard: React.FC<KingdomCardProps> = ({
   const [onPresentWithdraw] = useModal(
     <WithdrawModal max={stakedBalance} onConfirm={onUnstake} tokenName={tokenName} isTokenOnly={isTokenOnly} isKingdomToken={isKingdomToken} />,
   )
+
+  // returns {time: Date, isAfterBurning: boolean)
+  function getAfterBurnTimeAndDate() {
+    // end time + 1 week
+    const time = new Date((poolVaultData?.userData?.lockEndTime.multipliedBy(1000).toNumber() || 0) + 604800000);
+
+    const isAfterBurning = time.getTime() > new Date().getTime();
+
+    return {time, isAfterBurning};
+  }
+
+  const afterBurnData = getAfterBurnTimeAndDate();
 
   const lpAddress = getAddress(lpAddresses)
   const tokenAddress = getAddress(address)
@@ -273,9 +286,46 @@ const LockedKingdomCard: React.FC<KingdomCardProps> = ({
 
         if (wasStakeLocked) {
           // stake was locked but now it is unlocked
-          // TODO: don't know what this screen looks like until 4:30pm today
           return <>
-
+            <ActionContent style={{flexWrap: "wrap"}}>
+              <ActionContent style={{flexDirection: "column", alignItems: "flex-start"}}>
+                <ActionTitles>
+                  <Title>CUB </Title>
+                  <Subtle>LOCKED</Subtle>
+                </ActionTitles>
+                <ActionContent style={{display: "block"}}>
+                  <Heading color="text" size="md">{stakedAmountCountUp}</Heading>
+                  <Text fontSize="12px" color="textSubtle">~{stakedAmountUSDCountUp} USD</Text>
+                </ActionContent>
+              </ActionContent>
+              <ActionContent style={{flexDirection: "column", alignItems: "flex-end"}}>
+                <ActionTitles>
+                  <Subtle style={{color: "lightgray"}}>UNLOCKS IN</Subtle>
+                </ActionTitles>
+                <Heading color="warning" size="md" mb="8px">
+                  Unlocked&nbsp;
+                  <abbr title={`After Burning starts at ${format(new Date(((poolVaultData?.userData?.lockEndTime?.toNumber() || 0) * 1000) + 604800000), 'MMM dd yyyy, HH:mm')}. You need to renew your fix-term position, to initiate a new lock or convert your staking position to flexible before it starts. Otherwise all the rewards will be burned within the next 90 days.`}>?</abbr>
+                </Heading>
+                {/* show the date in <Text size 12px */}
+                <Text fontSize="12px" color="textSubtle">On {format(new Date((poolVaultData?.userData?.lockEndTime?.toNumber() || 0) * 1000), 'MMM dd yyyy, HH:mm')}</Text>
+              </ActionContent>
+              {afterBurnData.isAfterBurning ? <ActionContent style={{flexDirection: "column", alignItems: "flex-end"}}>
+                    <ActionTitles>
+                      <Subtle style={{color: "lightgray"}}>AFTER BURNING</Subtle>
+                    </ActionTitles>
+                    <Text color="failure" bold>
+                      {poolVaultData?.userData?.overdueFee?.toNumber() > 0 ? `${poolVaultData?.userData?.overdueFee?.toNumber().toFixed(2)}%` : '-'}
+                    </Text>
+                  </ActionContent> :
+                  <ActionContent style={{flexDirection: "column", alignItems: "flex-end"}}>
+                <ActionTitles>
+                  <Subtle style={{color: "lightgray"}}>AFTER BURNING IN</Subtle>
+                </ActionTitles>
+                <Heading color="failure" size="md" mb="8px">
+                  <BurningCountDown lockEndTime={poolVaultData?.userData?.lockEndTime?.toString() || "0"} />
+                </Heading>
+              </ActionContent>}
+            </ActionContent>
           </>;
         }
 
@@ -359,7 +409,7 @@ const LockedKingdomCard: React.FC<KingdomCardProps> = ({
     if (!isStakeLocked) {
       isApproved = true;
       isStakeActive = true;
-      isStakeLocked = true;
+      wasStakeLocked = true;
     }
 
     if (isStakeLocked || wasStakeLocked) {

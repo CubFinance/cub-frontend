@@ -21,6 +21,7 @@ export interface InitialPoolVaultState {
         userBoostedShare: BigNumber
         locked: boolean
         lockedAmount: BigNumber
+        overdueFee: BigNumber
     }
 }
 
@@ -39,6 +40,7 @@ export const fetchPoolVaultData = async (account: string): Promise<InitialPoolVa
         withdrawalFee,
         withdrawalFeePeriod,
         userInfo,
+        userOverdueFee,
     ] = await Promise.all([
         contract.methods.totalShares().call(),
         contract.methods.totalLockedAmount().call(),
@@ -47,6 +49,7 @@ export const fetchPoolVaultData = async (account: string): Promise<InitialPoolVa
         contract.methods.withdrawalFee().call(),
         contract.methods.withdrawalFeePeriod().call(),
         contract.methods.userInfo(account).call(),
+        contract.methods.calculateOverdueFee(account).call(),
     ])
 
     return {
@@ -58,7 +61,7 @@ export const fetchPoolVaultData = async (account: string): Promise<InitialPoolVa
             withdrawalFee: new BigNumber(withdrawalFee),
             withdrawalFeePeriod: new BigNumber(withdrawalFeePeriod),
         },
-        userData: userInfo,
+        userData: {...userInfo, overdueFee: userOverdueFee},
     }
 
 }
