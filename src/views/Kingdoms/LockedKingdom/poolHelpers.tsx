@@ -1,6 +1,8 @@
 import BigNumber from "bignumber.js";
 import useSWRImmutable from "swr/immutable";
 import {getLockedKingdomsContract} from "../../../utils/contractHelpers";
+import {BIG_TEN} from "../../../utils/bigNumber";
+import {DEFAULT_TOKEN_DECIMAL} from "../../../config";
 
 export interface InitialPoolVaultState {
     totalShares: BigNumber
@@ -46,22 +48,33 @@ export const fetchPoolVaultData = async (account: string): Promise<InitialPoolVa
         contract.methods.totalLockedAmount().call(),
         contract.methods.getPricePerFullShare().call(),
         contract.methods.calculatePerformanceFee(account).call(),
-        contract.methods.withdrawalFee().call(),
-        contract.methods.withdrawalFeePeriod().call(),
+        contract.methods.withdrawFee().call(),
+        contract.methods.withdrawFeePeriod().call(),
         contract.methods.userInfo(account).call(),
         contract.methods.calculateOverdueFee(account).call(),
     ])
 
     return {
         totalShares: new BigNumber(totalShares),
-        totalLockedAmount: new BigNumber(totalLockedAmount),
-        pricePerFullShare: new BigNumber(pricePerFullShare),
+        totalLockedAmount: new BigNumber(totalLockedAmount).div(BIG_TEN.pow(DEFAULT_TOKEN_DECIMAL)),
+        pricePerFullShare: new BigNumber(pricePerFullShare).div(BIG_TEN.pow(DEFAULT_TOKEN_DECIMAL)),
         fees: {
             performanceFee: new BigNumber(performanceFee),
             withdrawalFee: new BigNumber(withdrawalFee),
             withdrawalFeePeriod: new BigNumber(withdrawalFeePeriod),
         },
-        userData: {...userInfo, overdueFee: userOverdueFee},
+        userData: {
+            shares: userInfo.shares,
+            lastDepositedTime: userInfo.lastDepositedTime,
+            tokenAtLastUserAction: new BigNumber(userInfo.tokenAtLastUserAction).div(BIG_TEN.pow(DEFAULT_TOKEN_DECIMAL)),
+            lastUserActionTime: userInfo.lastUserActionTime,
+            lockStartTime: userInfo.lockStartTime,
+            lockEndTime: userInfo.lockEndTime,
+            userBoostedShare: userInfo.userBoostedShare,
+            locked: userInfo.locked,
+            lockedAmount: new BigNumber(userInfo.lockedAmount).div(BIG_TEN.pow(DEFAULT_TOKEN_DECIMAL)),
+            overdueFee: new BigNumber(userOverdueFee).div(BIG_TEN.pow(DEFAULT_TOKEN_DECIMAL)),
+        },
     }
 
 }

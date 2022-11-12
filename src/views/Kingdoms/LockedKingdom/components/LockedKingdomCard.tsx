@@ -105,7 +105,7 @@ const LockedKingdomCard: React.FC<KingdomCardProps> = ({
   const tokenBalance = new BigNumber(tokenBalanceAsString)
 
   // gets staked balance
-  const stakedBalanceAsString = poolVaultData?.userData?.tokenAtLastUserAction.div(BIG_TEN.pow(DEFAULT_TOKEN_DECIMAL)) || 0;
+  const stakedBalanceAsString = poolVaultData?.userData?.tokenAtLastUserAction || 0;
   const stakedBalance = new BigNumber(stakedBalanceAsString)
 
   const stakedBalanceUSD = stakedBalance.multipliedBy(cakePrice);
