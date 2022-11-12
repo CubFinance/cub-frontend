@@ -34,6 +34,8 @@ import {getCakeVaultEarnings} from "../helpers";
 import {useSWRImmutableFetchPoolVaultData} from "../poolHelpers";
 import {DEFAULT_TOKEN_DECIMAL} from "../../../../config";
 import {BIG_TEN} from "../../../../utils/bigNumber";
+import WithdrawalFeeTimer from "./WithdrawalFeeTimer";
+import useVaultApy from "../../../../hooks/useVaultApy";
 
 const Detail = styled.div`
   /*display: inline;
@@ -111,7 +113,7 @@ const LockedKingdomCard: React.FC<KingdomCardProps> = ({
   let isStakeActive = poolVaultData?.userData?.shares.gt(0) || false;
 
   // stake is locked?
-  const isStakeLocked = poolVaultData?.userData?.lockEndTime.lte(new Date().getTime() / 1000) || false;
+  let isStakeLocked = poolVaultData?.userData?.lockEndTime.lte(new Date().getTime() / 1000) || false;
 
   // stake was originally locked? (used for determining if it will decay over time)
   const wasStakeLocked = poolVaultData?.userData?.lockEndTime.gt(0) || false;
@@ -208,12 +210,20 @@ const LockedKingdomCard: React.FC<KingdomCardProps> = ({
     decimals: 3,
   });
 
-  function renderRightInnerPanelContent() {
-    if (!isStakeLocked) {
-      isApproved = true;
-      isStakeActive = true;
+  function getSecondsUntilFlexUnstakeIsFree() {
+    // userdata.lastDepositedTime is the last deposit time in seconds
+    // fees.withdrawalFeePeriod is the time in seconds that the user must wait before they can unstake without the 0.1% fee
+    // return number of seconds until the user can unstake without the 0.1% fee, if it is less than 0, return 0
+
+    if (poolVaultData?.userData?.lastDepositedTime) {
+        const secondsUntilFree = poolVaultData?.userData?.lastDepositedTime.plus(poolVaultData?.fees?.withdrawalFeePeriod || 0).minus(Math.floor(new Date().getTime() / 1000));
+        return secondsUntilFree.toNumber() > 0 ? secondsUntilFree.toNumber() : 0;
     }
 
+    return 0;
+  }
+
+  function renderRightInnerPanelContent() {
     if (isApproved) {
       if (isStakeActive) {
         if (isStakeLocked) {
@@ -341,7 +351,49 @@ const LockedKingdomCard: React.FC<KingdomCardProps> = ({
       </>;
     }
 
+  const durationSeconds = (poolVaultData?.userData?.lockEndTime?.toNumber() || 0) - (poolVaultData?.userData?.lockStartTime?.toNumber() || 0);
+  const { boostFactor } = useVaultApy({duration: durationSeconds});
+  const numWeeks = Math.floor(durationSeconds / 604800);
+
   function renderLeftInnerPanelContent() {
+    if (!isStakeLocked) {
+      isApproved = true;
+      isStakeActive = true;
+      isStakeLocked = true;
+    }
+
+    if (isStakeLocked || wasStakeLocked) {
+
+      return <>
+        <ActionContent style={{flexWrap: "wrap"}}>
+          <ActionContent style={{flex: "50%"}}>
+            <div>
+          <ActionTitles>
+            <Title>RECENT CUB PROFIT</Title>
+          </ActionTitles>
+             <Earned>{countUp2}CUB</Earned>
+            <Staked>~{countUp}USD</Staked>
+            </div>
+          </ActionContent>
+          <ActionContent style={{flex: "50%"}}>
+              <div>
+                <ActionTitles>
+                    <Title>YIELD BOOST</Title>
+                </ActionTitles>
+                <ActionContent>
+                  <div>
+                    <Heading color="text" size="md">{boostFactor.toString() || "0"}x</Heading>
+                    <Text fontSize="12px" color="textSubtle">Lock for {numWeeks} week{numWeeks !== 1 ? "s" : ""}</Text>
+                  </div>
+                </ActionContent>
+              </div>
+          </ActionContent>
+        </ActionContent>
+      </>;
+    }
+
+
+    const unstakeFreeSeconds = getSecondsUntilFlexUnstakeIsFree();
 
     return <>
       <ActionTitles>
@@ -350,10 +402,14 @@ const LockedKingdomCard: React.FC<KingdomCardProps> = ({
       <ActionContent style={{flexWrap: "wrap"}}>
         <div style={{width: "50%", flex: "50% 0 0"}}>
           <Earned>{countUp2}CUB</Earned>
-          <Staked>{countUp}USD</Staked>
+          <Staked>~{countUp}USD</Staked>
         </div>
         <div style={{width: "50%", flex: "50% 0 0"}}>
-          <Text>0.1% unstaking fee if withdrawn within 72h</Text>
+          {unstakeFreeSeconds === 0 && isStakeActive ? <Text>No unstaking fee</Text> :
+          <>
+            <Text>0.1% unstaking fee {!isStakeActive ? "if withdrawn within 72h" : "before"}</Text>
+            {isStakeActive ? <WithdrawalFeeTimer secondsRemaining={unstakeFreeSeconds} /> : null}
+          </>}
         </div>
       </ActionContent>
     </>
