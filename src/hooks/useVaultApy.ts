@@ -5,11 +5,9 @@ import {BLOCKS_PER_YEAR, ETHERSBIGNUMBER_BLOCKS_PER_YEAR} from 'config'
 import masterChefAbi from 'config/abi/masterchef.json'
 import lockedKingdomAbi from 'config/abi/lockedKingdom.json'
 import { useCallback, useMemo } from 'react'
-// todo: implement this or similar (as it doesn't exist in our version)
 import useSWRImmutable from 'swr/immutable'
 import {getLockedKingdomsAddress, getMasterChefAddress} from 'utils/addressHelpers'
 import { BIG_ZERO } from 'utils/bigNumber'
-// todo: these values can be hardcoded or fetched from the contract
 import { BOOST_WEIGHT, DURATION_FACTOR, MAX_LOCK_DURATION } from 'config/constants/pools'
 import multicall from "../utils/multicall";
 

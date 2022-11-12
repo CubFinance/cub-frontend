@@ -94,12 +94,6 @@ const LockedKingdom: React.FC<KingdomProps> = ({ farm, removed, cakePrice, accou
   const { apr, lpTotalInQuoteToken, lpSymbol, lpTokenBalancePCS = 0, lpTotalInQuoteTokenPCS = 0, quoteToken: { busdPrice: quoteTokenPriceUsd }, altPid, farmType, token: { busdPrice: tokenPriceString }, compounding } = farm
   const farmImage = lpSymbol.split(' ')[0].toLocaleLowerCase()
 
-    // TODO: calculate max apr/apy for locked (52 weeks)
-    // contract addy = farm.kingdomContract (0x08bea2702d89abb8059853d654d0838c5e06fe0b)
-    // deposit: call that contract => deposit (amount, lockDuration in seconds)
-
-    // TODO: Change approval address to 0x08bea2702d89abb8059853d654d0838c5e06fe0b
-
   const aprApy = useVaultApy() // todo: add duration into call
 
   const { lockedApy, flexibleApy, getLockedApy } = aprApy

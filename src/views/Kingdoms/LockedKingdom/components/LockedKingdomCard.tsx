@@ -3,7 +3,7 @@ import {useLocation} from 'react-router-dom'
 import styled from 'styled-components'
 import BigNumber from 'bignumber.js'
 import {useBusdPriceFromLpSymbol} from 'state/hooks'
-import {Button as UiButton, Text, useModal} from '@pancakeswap-libs/uikit'
+import {Button as UiButton, Heading, Text, useModal} from '@pancakeswap-libs/uikit'
 import {FarmWithStakedValue} from 'views/Farms/components/FarmCard/FarmCard'
 import DepositModal from 'views/Farms/components/DepositModal'
 import WithdrawModal from 'views/Farms/components/WithdrawModal'
@@ -19,6 +19,7 @@ import useWeb3 from 'hooks/useWeb3'
 import './KingdomCard.css'
 import {useCountUp} from "react-countup";
 import useSWRImmutable from "swr/immutable";
+import {format, formatDistanceToNow} from "date-fns";
 import {
   ActionContainer,
   ActionContent,
@@ -104,8 +105,10 @@ const LockedKingdomCard: React.FC<KingdomCardProps> = ({
   const stakedBalanceAsString = poolVaultData?.userData?.tokenAtLastUserAction.div(BIG_TEN.pow(DEFAULT_TOKEN_DECIMAL)) || 0;
   const stakedBalance = new BigNumber(stakedBalanceAsString)
 
+  const stakedBalanceUSD = stakedBalance.multipliedBy(cakePrice);
+
   // stake is active?
-  const isStakeActive = poolVaultData?.userData?.shares.gt(0) || false;
+  let isStakeActive = poolVaultData?.userData?.shares.gt(0) || false;
 
   // stake is locked?
   const isStakeLocked = poolVaultData?.userData?.lockEndTime.lte(new Date().getTime() / 1000) || false;
@@ -129,7 +132,7 @@ const LockedKingdomCard: React.FC<KingdomCardProps> = ({
   const { onReward } = useHarvest(pid, isKingdom)
   const { onClaim } = useClaim(bnbDividends || {})
 
-  const isApproved = account && allowance && allowance.isGreaterThan(0)
+  let isApproved = account && allowance && allowance.isGreaterThan(0)
 
   const [onPresentDeposit] = useModal(
     <DepositModal max={tokenBalance} onConfirm={onStake} tokenName={tokenName} addLiquidityUrl={addLiquidityUrl} isTokenOnly={isTokenOnly} isKingdomToken={isKingdomToken} />,
@@ -189,20 +192,127 @@ const LockedKingdomCard: React.FC<KingdomCardProps> = ({
     decimals: 3,
   });
 
+  const { countUp: stakedAmountCountUp } = useCountUp({
+    start: 0,
+    end: stakedBalance.toNumber(),
+    duration: 1,
+    separator: ',',
+    decimals: 3,
+  });
+
+  const { countUp: stakedAmountUSDCountUp } = useCountUp({
+    start: 0,
+    end: stakedBalanceUSD.toNumber(),
+    duration: 1,
+    separator: ',',
+    decimals: 3,
+  });
+
   function renderRightInnerPanelContent() {
+    if (!isStakeLocked) {
+      isApproved = true;
+      isStakeActive = true;
+    }
+
     if (isApproved) {
       if (isStakeActive) {
         if (isStakeLocked) {
-          // state is locked and it is currently locked
+          // stake is locked and it is currently locked
+          return <>
+            <ActionContent style={{flexWrap: "wrap"}}>
+                <ActionContent style={{flexDirection: "column", alignItems: "flex-start"}}>
+                    <ActionTitles>
+                        <Title>CUB </Title>
+                        <Subtle>LOCKED</Subtle>
+                    </ActionTitles>
+                    <ActionContent style={{display: "block"}}>
+                          <Heading color="text" size="md">{stakedAmountCountUp}</Heading>
+                          <Text fontSize="12px" color="textSubtle">~{stakedAmountUSDCountUp} USD</Text>
+                      {/* button to extend lock duration */}
+                      <Button
+                          mt="8px"
+                          fullWidth
+                          style={{width: "100%"}}
+                          disabled={location.pathname.includes('archived')}
+                          onClick={() => null} /* TODO: add onclick function for extending lock */
+                      >Add CUB</Button>
+                    </ActionContent>
+                </ActionContent>
+              <ActionContent style={{flexDirection: "column", alignItems: "flex-end"}}>
+                  <ActionTitles>
+                    <Subtle style={{color: "lightgray"}}>UNLOCKS IN</Subtle>
+                  </ActionTitles>
+                  <Heading color="text" size="md" mb="8px">
+                      {formatDistanceToNow(new Date((poolVaultData?.userData?.lockEndTime?.toNumber() || 0) * 1000), { addSuffix: true })} {/* questionmark tooltip here */}
+                      <abbr title={`After Burning starts at ${format(new Date(((poolVaultData?.userData?.lockEndTime?.toNumber() || 0) * 1000) + 604800000), 'MMM dd yyyy, HH:mm')}. You need to renew your fix-term position, to initiate a new lock or convert your staking position to flexible before it starts. Otherwise all the rewards will be burned within the next 90 days.`}>?</abbr>
+                  </Heading>
+                {/* show the date in <Text size 12px */}
+                <Text fontSize="12px" color="textSubtle">On {format(new Date((poolVaultData?.userData?.lockEndTime?.toNumber() || 0) * 1000), 'MMM dd yyyy, HH:mm')}</Text>
 
-        } else if (wasStakeLocked) {
-          // state was locked but now it is unlocked
+                {/* button to extend lock duration */}
+                <Button
+                    mt="8px"
+                    fullWidth
+                    disabled={location.pathname.includes('archived')}
+                    onClick={() => null} /* TODO: add onclick function for extending lock */
+                >Extend</Button>
+              </ActionContent>
+            </ActionContent>
+            </>;
+        }
 
+        if (wasStakeLocked) {
+          // stake was locked but now it is unlocked
+          // TODO: don't know what this screen looks like until 4:30pm today
+          return <>
+
+          </>;
         }
 
         // stake is flexible and active
+
+        // left side:
+        // CUB STAKED heading
+        // CUB staked amount
+        // CUB staked amount in USD
+
+        // right side:
+        // + button to flex stake more
+        // - button to flex stake less
+
+        return <>
+            <ActionContent style={{flexWrap: "wrap"}}>
+                <ActionContent style={{flexDirection: "row", flexWrap: "wrap", alignItems: "flex-start"}}>
+                    <ActionTitles style={{flex: "100%"}}>
+                        <Title>CUB </Title>
+                        <Subtle>STAKED</Subtle>
+                    </ActionTitles>
+                    <ActionContent style={{display: "flex"}}>
+                      <div style={{display: "block"}}>
+                            <Heading color="text" size="md">{stakedAmountCountUp}</Heading>
+                            <Text fontSize="12px" color="textSubtle">~{stakedAmountUSDCountUp} USD</Text>
+                      </div>
+                    </ActionContent>
+                </ActionContent>
+              <ActionContent style={{alignSelf: "flex-end"}}>
+                <Button
+                    mt="8px"
+                    style={{backgroundColor: "transparent", border: "2px solid #F2F2F2"}}
+                    disabled={location.pathname.includes('archived')}
+                    onClick={() => null} /* TODO: add onclick function for flex stake less */
+                >-</Button>
+                <Button
+                    mt="8px"
+                    style={{backgroundColor: "transparent", border: "2px solid #F2F2F2", marginLeft: "10px"}}
+                    disabled={location.pathname.includes('archived')}
+                    onClick={() => null} /* TODO: add onclick function for flex stake more */
+                >+</Button>
+              </ActionContent>
+            </ActionContent>
+        </>;
       }
 
+      // stake is inactive
       return <>
         <ActionTitles>
           <Title>STAKE </Title>
@@ -219,16 +329,17 @@ const LockedKingdomCard: React.FC<KingdomCardProps> = ({
       </>;
     }
 
+    // isn't approved yet
     return <>
-      <ActionTitles>
-        <Title>ENABLE </Title>
-        <Subtle> POOL</Subtle>
-      </ActionTitles>
-      <ActionContent>
-        {approveButton}
-      </ActionContent>
-    </>;
-  }
+        <ActionTitles>
+          <Title>ENABLE </Title>
+          <Subtle> POOL</Subtle>
+        </ActionTitles>
+        <ActionContent>
+          {approveButton}
+        </ActionContent>
+      </>;
+    }
 
   function renderLeftInnerPanelContent() {
 
