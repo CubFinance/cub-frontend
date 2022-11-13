@@ -112,13 +112,13 @@ const LockedKingdomCard: React.FC<KingdomCardProps> = ({
   const stakedBalanceUSD = stakedBalance.multipliedBy(cakePrice);
 
   // stake is active?
-  const isStakeActive = poolVaultData?.userData?.shares?.gt(0) || false;
+  const isStakeActive = poolVaultData?.userData?.shares.gt(0) || false;
 
   // stake is locked?
-  const isStakeLocked = poolVaultData?.userData?.lockEndTime?.lte(new Date().getTime() / 1000) || false;
+  const isStakeLocked = poolVaultData?.userData?.lockEndTime.lte(new Date().getTime() / 1000) && (poolVaultData?.userData?.lockEndTime.toNumber() !== 0) || false;
 
   // stake was originally locked? (used for determining if it will decay over time)
-  const wasStakeLocked = poolVaultData?.userData?.lockEndTime?.gt(0) || false;
+  const wasStakeLocked = poolVaultData?.userData?.lockEndTime.gt(0) || false;
 
   // useswrimmutable to getCakeVaultEarnings from chain data called "chain-balance-locked-cub"
   const { data } = useSWRImmutable("chain-balance-locked-cub", async () => {
@@ -408,7 +408,6 @@ const LockedKingdomCard: React.FC<KingdomCardProps> = ({
 
   function renderLeftInnerPanelContent() {
     if (isStakeLocked || wasStakeLocked) {
-
       return <>
         <ActionContent style={{flexWrap: "wrap"}}>
           <ActionContent style={{flex: "50%"}}>
@@ -464,8 +463,9 @@ const LockedKingdomCard: React.FC<KingdomCardProps> = ({
     if (wasStakeLocked) {
       return <Message
           variant="warning"
+          actionInline
           action={
-            <Flex mt='8px' flexGrow={1} ml='80px'>
+            <Flex flexGrow={1} style={{justifyContent: "flex-end"}}>
               {/* todo: add button action functions here */}
               <Button
                   variant="primary"
@@ -475,6 +475,7 @@ const LockedKingdomCard: React.FC<KingdomCardProps> = ({
               </Button>
               <Button
                   variant="secondary"
+                  style={{marginLeft: "10px"}}
                   onClick={onPresentWithdraw}
                   disabled={location.pathname.includes('archived')}
               >Convert To Flexible
@@ -483,7 +484,7 @@ const LockedKingdomCard: React.FC<KingdomCardProps> = ({
           }
       >
         <Text>
-          Lock staking users are earning up to {getLockedApy(31449600)}% APY.
+          Renew your staking position to continue earning CUB rewards.
         </Text>
       </Message>;
     }
@@ -491,10 +492,11 @@ const LockedKingdomCard: React.FC<KingdomCardProps> = ({
     if (isStakeActive) {
       return <Message
           variant="warning"
+          actionInline
           action={
-            <Flex mt='8px' flexGrow={1} ml='80px'>
+            <Flex flexGrow={1} style={{justifyContent: "flex-end"}}>
               <Button
-                variant="secondary"
+                variant="primary"
                 onClick={onPresentWithdraw}
                 disabled={location.pathname.includes('archived')}
               >Convert to Lock

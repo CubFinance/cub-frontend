@@ -120,8 +120,8 @@ const KingdomDetail: React.FC<KingdomDetailProps> = ({
 
   return (
     <KDetail>
-      <Details className="k-details">
-        <Detail>
+      <Details className="k-details" style={{flexWrap: "wrap"}}>
+        <Detail style={{width: "20%"}}>
           <Flex justifyContent="space-between">
             <Text>Multiplier:</Text>
             <Text>{displayMultiplier}</Text>

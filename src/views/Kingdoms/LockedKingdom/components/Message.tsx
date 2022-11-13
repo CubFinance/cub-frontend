@@ -7,6 +7,7 @@ export interface MessageProps {
     variant: Variant;
     action?: React.ReactNode;
     actionInline?: boolean;
+    style?: React.CSSProperties;
 }
 
 export const variants = {
@@ -61,7 +62,7 @@ const Message: React.FC<React.PropsWithChildren<MessageProps>> = ({
                                                                   }) => {
     return (
         <MessageContext.Provider value={{ variant }}>
-            <MessageContainer variant={variant} {...props}>
+            <MessageContainer variant={variant} {...props} style={{width: "100%", flex: "100%", flexGrow: 1}}>
                 <Flex>
                     {children}
                     {actionInline && action}
