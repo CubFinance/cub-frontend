@@ -136,14 +136,28 @@ const LockedKingdomCard: React.FC<KingdomCardProps> = ({
   const { onReward } = useHarvest(pid, isKingdom)
   const { onClaim } = useClaim(bnbDividends || {})
 
+  const { lockedApy: maxLockedApy } = useVaultApy({duration: 52 * 7 * 24 * 60 * 60});
+
   const isApproved = account && allowance && allowance.isGreaterThan(0)
 
+  const [onPresentMoreDepositLocked] = useModal(
+      <DepositModalLocked isAddAdditional currentStartTime={poolVaultData?.userData?.lockStartTime?.toNumber() || 0} currentEndTime={poolVaultData?.userData?.lockEndTime?.toNumber() || 0} max={tokenBalance} onConfirm={onStakeLocked} tokenName={tokenName} addLiquidityUrl={addLiquidityUrl} isTokenOnly={isTokenOnly} isKingdomToken={isKingdomToken} />,
+  )
+
+  const onPresentConvertToLocked = () => null;
+
+  const [onPresentFlexAdd] = useModal(
+    <DepositModal max={tokenBalance} onConfirm={onStake}  tokenName={tokenName} addLiquidityUrl={addLiquidityUrl} isTokenOnly={isTokenOnly} isKingdomToken={isKingdomToken} onConvertToLocked={onPresentConvertToLocked} showConvertToLocked maxLockedApy={maxLockedApy} />
+  )
+
   const [onPresentDeposit] = useModal(
-    <DepositModal max={tokenBalance} onConfirm={onStake} tokenName={tokenName} addLiquidityUrl={addLiquidityUrl} isTokenOnly={isTokenOnly} isKingdomToken={isKingdomToken} />,
+    <DepositModal max={tokenBalance} onConfirm={onStake}  tokenName={tokenName} addLiquidityUrl={addLiquidityUrl} isTokenOnly={isTokenOnly} isKingdomToken={isKingdomToken} />,
   )
   const [onPresentDepositLocked] = useModal(
       <DepositModalLocked max={tokenBalance} onConfirm={onStakeLocked} tokenName={tokenName} addLiquidityUrl={addLiquidityUrl} isTokenOnly={isTokenOnly} isKingdomToken={isKingdomToken} />,
   )
+
+  // todo: look at this to see if it uses the locked kingdoms contract
   const [onPresentWithdraw] = useModal(
     <WithdrawModal max={stakedBalance} onConfirm={onUnstake} tokenName={tokenName} isTokenOnly={isTokenOnly} isKingdomToken={isKingdomToken} />,
   )
@@ -394,7 +408,7 @@ const LockedKingdomCard: React.FC<KingdomCardProps> = ({
     return <>
         <ActionTitles>
           <Title>ENABLE </Title>
-          <Subtle> POOL</Subtle>
+          <Subtle>POOL</Subtle>
         </ActionTitles>
         <ActionContent>
           {approveButton}

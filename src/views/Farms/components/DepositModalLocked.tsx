@@ -1,11 +1,12 @@
 import BigNumber from 'bignumber.js'
 import React, { useCallback, useMemo, useState } from 'react'
-import {Button, Modal, LinkExternal, Card, CardBody, Text} from '@pancakeswap-libs/uikit'
+import {Button, Modal, LinkExternal, Card, CardBody, Text, Checkbox, Flex} from '@pancakeswap-libs/uikit'
 import ModalActions from 'components/ModalActions'
 import ModalInput from 'components/ModalInput'
 import useI18n from 'hooks/useI18n'
 import { getFullDisplayBalance } from 'utils/formatBalance'
 import useVaultApy from "../../../hooks/useVaultApy";
+import Message from "../../Kingdoms/LockedKingdom/components/Message";
 
 interface DepositModalProps {
   max: BigNumber
@@ -15,12 +16,16 @@ interface DepositModalProps {
   addLiquidityUrl?: string
   isTokenOnly?: boolean
   isKingdomToken?: boolean
+  isAddAdditional?: boolean
+  currentStartTime?: number
+  currentEndTime?: number
 }
 
-const DepositModalLocked: React.FC<DepositModalProps> = ({ max, onConfirm, onDismiss, tokenName = '', addLiquidityUrl, isTokenOnly, isKingdomToken }) => {
+const DepositModalLocked: React.FC<DepositModalProps> = ({ max, onConfirm, onDismiss, tokenName = '', addLiquidityUrl, isTokenOnly, isKingdomToken, isAddAdditional, currentEndTime, currentStartTime }) => {
   const [val, setVal] = useState('')
-  const [duration, setDuration] = useState(1);
+  const [duration, setDuration] = useState(Math.floor((currentEndTime - currentStartTime) / 604800) || 1);
   const [pendingTx, setPendingTx] = useState(false)
+  const [extend, setExtend] = useState(false);
   const TranslateString = useI18n()
   const {lockedApy, getLockedApy} = useVaultApy();
   const fullBalance = useMemo(() => {
@@ -39,9 +44,36 @@ const DepositModalLocked: React.FC<DepositModalProps> = ({ max, onConfirm, onDis
     [setVal],
   )
 
+    let inferredWeeks = 0;
+
+  if (isAddAdditional) {
+    inferredWeeks = Math.floor((currentEndTime - currentStartTime) / 604800);
+  }
+
+
+    // takes a number of weeks and gets the date at that time in the format MMM DD, YYYY HH:mm (i.e. Jan 01, 2021 00:00)
+    function weeksToFutureDate(weeks = 0) {
+        const date = new Date();
+        date.setDate(date.getDate() + (weeks * 7));
+        return date.toLocaleString('en-US', {month: 'short', day: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit'});
+    }
+
+  function epochToFutureDate(epoch = 0) {
+    const date = new Date(epoch * 1000);
+    return date.toLocaleString('en-US', {month: 'short', day: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit'});
+  }
+
   const handleSelectMax = useCallback(() => {
     setVal(fullBalance)
   }, [fullBalance, setVal])
+
+  const secondsDuration = useMemo(() => Math.max(isAddAdditional && !extend ? currentEndTime - currentStartTime : duration * 604800, 0), [currentStartTime, currentEndTime, duration, extend, isAddAdditional]);
+  const actualWeeks = isAddAdditional && !extend ? inferredWeeks : duration;
+  const futureDate = isAddAdditional && !extend ? epochToFutureDate(currentEndTime) : weeksToFutureDate(actualWeeks);
+
+    const youWillEarn = useMemo(() => {
+        return new BigNumber(val).times(new BigNumber(getLockedApy(secondsDuration)).div(100)).toFixed(3)
+    }, [val, getLockedApy, secondsDuration]);
 
   return (
     <Modal title={TranslateString(1068, isTokenOnly || isKingdomToken ? 'Stake tokens' : 'Stake LP tokens')} onDismiss={onDismiss}>
@@ -56,12 +88,28 @@ const DepositModalLocked: React.FC<DepositModalProps> = ({ max, onConfirm, onDis
       />
         <div style={{marginBottom: "20px"}} />
         {/* add number of weeks input here */}
-        <ModalInput max="52" symbol="Weeks" onChange={(e) => e.currentTarget.validity.valid && setDuration(Number(e.currentTarget.value))} onSelectMax={() => setDuration(52)} value={duration.toString()} inputTitle="Stake for" showMaxInstead />
-        <div style={{marginBottom: "20px"}} />
+        {isAddAdditional ? null : <ModalInput max="52" symbol="Weeks" onChange={(e) => e.currentTarget.validity.valid && setDuration(Number(e.currentTarget.value))} onSelectMax={() => setDuration(52)} value={duration.toString()} inputTitle="Stake for" showMaxInstead />}
+        {/* extend checkbox */}
+        {isAddAdditional ? <>
+            <Message
+                style={{marginBottom: "10px", flexShrink: "1", display: "block", width: "auto"}}
+                variant="warning"
+                actionInline
+            >
+                <Text style={{wordWrap: "break-word", overflowWrap: "break-word", wordBreak: "break-word", maxWidth: "450px"}}>
+                    Adding more CUB will renew your lock, setting it to remaining duration. Due to shorter lock period, benefits decrease. To keep similar benefits, extend your lock.
+                </Text>
+            </Message>
+            <div style={{display: "flex", alignItems: "center", justifyContent: "space-between"}}>
+            <Checkbox key="extend" checked={extend} onChange={() => setExtend(!extend)} />
+            <Text fontSize="1.1em" style={{textAlign: "left", flexGrow: "1", marginLeft: "10px"}}>Renew and extend your lock to keep similar benefits.</Text>
+        </div></> : null}
         {/* Show APY information for currently selected weeks value */}
         <div style={{marginBottom: "20px"}} />
-        <Text>APR: {lockedApy ? getLockedApy(duration) : "0.00"}%</Text>
-        <Text>Duration: {duration} Weeks</Text>
+        <Text><strong>APY:</strong> {lockedApy ? getLockedApy(secondsDuration) : "0.00"}%</Text>
+        <Text><strong>You will earn:</strong> {youWillEarn && !Number.isNaN(Number(youWillEarn)) ? youWillEarn : "0.000"} CUB</Text>
+        <Text><strong>Duration:</strong> {actualWeeks} Week{actualWeeks === 1 ? "" : "s"}</Text>
+        <Text><strong>Unlocks at:</strong> {futureDate}</Text>
 
         {/* Locked warning */}
         <div style={{marginBottom: "20px"}} />
@@ -81,7 +129,7 @@ const DepositModalLocked: React.FC<DepositModalProps> = ({ max, onConfirm, onDis
           disabled={pendingTx || !valNumber.isFinite() || valNumber.eq(0) || valNumber.gt(fullBalanceNumber)}
           onClick={async () => {
             setPendingTx(true)
-            await onConfirm(val, new BigNumber(duration).multipliedBy(86400).toNumber())
+            await onConfirm(val, secondsDuration)
             setPendingTx(false)
             onDismiss()
           }}

@@ -62,7 +62,7 @@ const Message: React.FC<React.PropsWithChildren<MessageProps>> = ({
                                                                   }) => {
     return (
         <MessageContext.Provider value={{ variant }}>
-            <MessageContainer variant={variant} {...props} style={{width: "100%", flex: "100%", flexGrow: 1}}>
+            <MessageContainer variant={variant} style={{width: "100%", flex: "100%", flexGrow: 1}} {...props}>
                 <Flex>
                     {children}
                     {actionInline && action}
