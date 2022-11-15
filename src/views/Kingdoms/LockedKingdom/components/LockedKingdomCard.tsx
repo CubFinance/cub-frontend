@@ -38,6 +38,10 @@ import WithdrawalFeeTimer from "./WithdrawalFeeTimer";
 import useVaultApy from "../../../../hooks/useVaultApy";
 import BurningCountDown from "../BurningCountdown";
 import Message from "./Message";
+import ExtendModal from "./ExtendModal";
+import {convertLockedToFlexible, unstake} from "../../../../utils/callHelpers";
+import {fetchFarmUserDataAsync} from "../../../../state/farms";
+import {useAppDispatch} from "../../../../state";
 
 const Detail = styled.div`
   /*display: inline;
@@ -125,13 +129,14 @@ const LockedKingdomCard: React.FC<KingdomCardProps> = ({
     return {earnings: poolVaultData ? getCakeVaultEarnings(account, poolVaultData.userData.tokenAtLastUserAction, poolVaultData.userData.shares, poolVaultData.pricePerFullShare, cakePrice.toNumber(), poolVaultData.fees.performanceFee) : null, user: poolVaultData?.userData};
   });
 
+  const dispatch = useAppDispatch()
+
   const autoCakeToDisplay = data?.earnings?.autoCakeToDisplay || 0;
   const autoUsdToDisplay = data?.earnings?.autoUsdToDisplay || 0;
 
   const web3 = useWeb3()
   const { onStakeLocked } = useStakeLocked()
   const onStake = (amount: string) => onStakeLocked(amount, 0);
-  // TODO: needs to be changed
   const { onUnstake } = useLockedUnstake(poolVaultData?.userData?.shares.toString() || '0')
 
   const { lockedApy: maxLockedApy } = useVaultApy({duration: 52 * 7 * 24 * 60 * 60});
@@ -142,7 +147,26 @@ const LockedKingdomCard: React.FC<KingdomCardProps> = ({
       <DepositModalLocked isAddAdditional currentStartTime={poolVaultData?.userData?.lockStartTime?.toNumber() || 0} currentEndTime={poolVaultData?.userData?.lockEndTime?.toNumber() || 0} max={tokenBalance} onConfirm={onStakeLocked} tokenName={tokenName} addLiquidityUrl={addLiquidityUrl} isTokenOnly={isTokenOnly} isKingdomToken={isKingdomToken} />,
   )
 
-  const onPresentConvertToLocked = () => null; // todo: add this modal
+  const convertToFlexible = () => {
+      const lockedKingdomsContract = getLockedKingdomsContract(web3);
+
+      convertLockedToFlexible(lockedKingdomsContract, account).then((response) => {
+        dispatch(fetchFarmUserDataAsync(account))
+        console.info(response);
+      });
+  };
+
+  const [onPresentConvertToLocked] = useModal(
+      <ExtendModal amount={autoCakeToDisplay.toString()} onConfirm={onStakeLocked} tokenName="CUB" addLiquidityUrl={addLiquidityUrl} title="Convert to Lock" />
+  );
+
+  const [onPresentExtend] = useModal(
+      <ExtendModal amount={autoCakeToDisplay.toString()} onConfirm={onStakeLocked} tokenName="CUB" addLiquidityUrl={addLiquidityUrl} title="Extend" />
+  );
+
+  const [onPresentRenew] = useModal(
+      <ExtendModal amount={autoCakeToDisplay.toString()} onConfirm={onStakeLocked} tokenName="CUB" addLiquidityUrl={addLiquidityUrl} title="Renew" />
+  );
 
   const [onPresentFlexAdd] = useModal(
     <DepositModal max={tokenBalance} onConfirm={onStake}  tokenName={tokenName} addLiquidityUrl={addLiquidityUrl} isTokenOnly={isTokenOnly} isKingdomToken={isKingdomToken} onConvertToLocked={onPresentConvertToLocked} showConvertToLocked maxLockedApy={maxLockedApy} />
@@ -155,7 +179,6 @@ const LockedKingdomCard: React.FC<KingdomCardProps> = ({
       <DepositModalLocked max={tokenBalance} onConfirm={onStakeLocked} tokenName={tokenName} addLiquidityUrl={addLiquidityUrl} isTokenOnly={isTokenOnly} isKingdomToken={isKingdomToken} />,
   )
 
-  // todo: look at this to see if it uses the locked kingdoms contract
   const [onPresentWithdraw] = useModal(
     <WithdrawModal shares={poolVaultData?.userData?.shares} performanceFee={poolVaultData?.fees?.performanceFee} hasWithdrawFee={poolVaultData?.userData?.lastDepositedTime.lte(getEpochSecondsIn3Days())} pricePerFullShare={poolVaultData?.pricePerFullShare} onConfirm={onUnstake} tokenName={tokenName} isTokenOnly={isTokenOnly} isKingdomToken={isKingdomToken} />,
   )
@@ -268,13 +291,13 @@ const LockedKingdomCard: React.FC<KingdomCardProps> = ({
                     <ActionContent style={{display: "block"}}>
                           <Heading color="text" size="md">{stakedAmountCountUp}</Heading>
                           <Text fontSize="12px" color="textSubtle">~{stakedAmountUSDCountUp} USD</Text>
-                      {/* button to extend lock duration */}
+                      {/* button to add more locked deposit */}
                       <Button
                           mt="8px"
                           fullWidth
                           style={{width: "100%"}}
                           disabled={location.pathname.includes('archived')}
-                          onClick={() => null} /* TODO: add onclick function for extending lock */
+                          onClick={onPresentMoreDepositLocked}
                       >Add CUB</Button>
                     </ActionContent>
                 </ActionContent>
@@ -294,7 +317,7 @@ const LockedKingdomCard: React.FC<KingdomCardProps> = ({
                     mt="8px"
                     fullWidth
                     disabled={location.pathname.includes('archived')}
-                    onClick={() => null} /* TODO: add onclick function for extending lock */
+                    onClick={onPresentExtend}
                 >Extend</Button>
               </ActionContent>
             </ActionContent>
@@ -376,13 +399,13 @@ const LockedKingdomCard: React.FC<KingdomCardProps> = ({
                     mt="8px"
                     style={{backgroundColor: "transparent", border: "2px solid #F2F2F2"}}
                     disabled={location.pathname.includes('archived')}
-                    onClick={() => null} /* TODO: add onclick function for flex stake less */
+                    onClick={onPresentWithdraw}
                 >-</Button>
                 <Button
                     mt="8px"
                     style={{backgroundColor: "transparent", border: "2px solid #F2F2F2", marginLeft: "10px"}}
                     disabled={location.pathname.includes('archived')}
-                    onClick={() => null} /* TODO: add onclick function for flex stake more */
+                    onClick={onPresentFlexAdd}
                 >+</Button>
               </ActionContent>
             </ActionContent>
@@ -482,17 +505,16 @@ const LockedKingdomCard: React.FC<KingdomCardProps> = ({
           actionInline
           action={
             <Flex flexGrow={1} style={{justifyContent: "flex-end"}}>
-              {/* todo: add button action functions here */}
               <Button
                   variant="primary"
-                  onClick={onPresentWithdraw}
+                  onClick={onPresentRenew}
                   disabled={location.pathname.includes('archived')}
               >Renew
               </Button>
               <Button
                   variant="secondary"
                   style={{marginLeft: "10px"}}
-                  onClick={onPresentWithdraw}
+                  onClick={convertToFlexible}
                   disabled={location.pathname.includes('archived')}
               >Convert To Flexible
               </Button>
@@ -513,7 +535,7 @@ const LockedKingdomCard: React.FC<KingdomCardProps> = ({
             <Flex flexGrow={1} style={{justifyContent: "flex-end"}}>
               <Button
                 variant="primary"
-                onClick={onPresentWithdraw}
+                onClick={onPresentConvertToLocked}
                 disabled={location.pathname.includes('archived')}
               >Convert to Lock
               </Button>
@@ -541,7 +563,7 @@ const LockedKingdomCard: React.FC<KingdomCardProps> = ({
             </ActionContainer>
           </Detail>
           <div className="col" />
-    {renderBottomPanelContent() /* todo: fix the layout of this */}
+    {renderBottomPanelContent()}
   </>)
 }
 

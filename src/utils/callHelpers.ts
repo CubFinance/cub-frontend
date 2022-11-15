@@ -74,6 +74,15 @@ export const unstakeAllLocked = async (masterChefContract, account) => {
         })
 }
 
+export const convertLockedToFlexible = async (masterChefContract, account) => {
+    return masterChefContract.methods
+        .unlock()
+        .send({ from: account })
+        .on('transactionHash', (tx) => {
+            return tx.transactionHash
+        })
+}
+
 export const sousUnstake = async (sousChefContract, amount, decimals = 18, account) => {
   // shit code: hard fix for old CTK and BLK
   if (sousChefContract.options.address === '0x3B9B74f48E89Ebd8b45a53444327013a2308A9BC') {
