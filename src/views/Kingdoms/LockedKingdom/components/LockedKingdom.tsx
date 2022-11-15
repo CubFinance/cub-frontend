@@ -94,9 +94,9 @@ const LockedKingdom: React.FC<KingdomProps> = ({ farm, removed, cakePrice, accou
   const { apr, lpTotalInQuoteToken, lpSymbol, lpTokenBalancePCS = 0, lpTotalInQuoteTokenPCS = 0, quoteToken: { busdPrice: quoteTokenPriceUsd }, altPid, farmType, token: { busdPrice: tokenPriceString }, compounding } = farm
   const farmImage = lpSymbol.split(' ')[0].toLocaleLowerCase()
 
-  const aprApy = useVaultApy() // todo: add duration into call
+  const aprApy = useVaultApy({duration: 52 * 7 * 24 * 60 * 60})
 
-  const { lockedApy, flexibleApy, getLockedApy } = aprApy
+  const { lockedApy, flexibleApy } = aprApy
   const { tokenBalance, stakedBalance, earnings } = farm.userData
 
   const rawTokenBalance = tokenBalance ? getBalanceNumber(new BigNumber(tokenBalance)) : 0

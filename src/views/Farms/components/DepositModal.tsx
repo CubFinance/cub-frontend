@@ -62,7 +62,6 @@ const DepositModal: React.FC<DepositModalProps> = ({ max, onConfirm, onDismiss, 
           actionInline
           action={
               <Flex style={{justifyContent: "flex-end", marginLeft: "10px"}}>
-                  {/* todo: add button action functions here */}
                   <Button
                       variant="primary"
                       onClick={() => {onDismiss(); onConvertToLocked()}}

@@ -278,8 +278,7 @@ const Kingdoms: React.FC = () => {
       <div>
           <Route exact path={`${path}`}>
             {farmsStakedMemoized.map((farm) => (
-                // todo: remove farm.isKingdomLocked.toString() when I fix the config farm pid
-                farm.isKingdomLocked ? <LockedKingdom  key={farm.pid + farm.isKingdomLocked.toString()} farm={farm} cakePrice={cakePrice} account={account} removed={false} bakePrice={bakePrice} beltPrice={beltPrice} cubDen={cubDen} realCakePrice={realCakePrice} bnbDividends={bnbDividends} /> :
+                farm.isKingdomLocked ? <LockedKingdom  key={farm.pid} farm={farm} cakePrice={cakePrice} account={account} removed={false} bakePrice={bakePrice} beltPrice={beltPrice} cubDen={cubDen} realCakePrice={realCakePrice} bnbDividends={bnbDividends} /> :
                     <Kingdom key={farm.pid} farm={farm} cakePrice={cakePrice} account={account} removed={false} bakePrice={bakePrice} beltPrice={beltPrice} cubDen={cubDen} realCakePrice={realCakePrice} bnbDividends={bnbDividends} />
             ))}
           </Route>

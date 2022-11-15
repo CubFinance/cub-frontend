@@ -6,9 +6,8 @@ import {useBusdPriceFromLpSymbol} from 'state/hooks'
 import {Button as UiButton, Flex, Heading, Text, useModal} from '@pancakeswap-libs/uikit'
 import {FarmWithStakedValue} from 'views/Farms/components/FarmCard/FarmCard'
 import DepositModal from 'views/Farms/components/DepositModal'
-import WithdrawModal from 'views/Farms/components/WithdrawModal'
 import {useStakeLocked} from 'hooks/useStake'
-import useUnstake from 'hooks/useUnstake'
+import useUnstake, {useLockedUnstake} from 'hooks/useUnstake'
 import {useHarvest} from 'hooks/useHarvest'
 import {useApprove} from 'hooks/useApprove'
 import {useClaim} from 'hooks/useClaim'
@@ -20,6 +19,7 @@ import './KingdomCard.css'
 import {useCountUp} from "react-countup";
 import useSWRImmutable from "swr/immutable";
 import {format, formatDistanceToNow} from "date-fns";
+import WithdrawModal from './WithdrawModal'
 import {
   ActionContainer,
   ActionContent,
@@ -129,12 +129,10 @@ const LockedKingdomCard: React.FC<KingdomCardProps> = ({
   const autoUsdToDisplay = data?.earnings?.autoUsdToDisplay || 0;
 
   const web3 = useWeb3()
-  // TODO: needs to be changed for the locked kingdoms contract
   const { onStakeLocked } = useStakeLocked()
   const onStake = (amount: string) => onStakeLocked(amount, 0);
-  const { onUnstake } = useUnstake(pid, isKingdom)
-  const { onReward } = useHarvest(pid, isKingdom)
-  const { onClaim } = useClaim(bnbDividends || {})
+  // TODO: needs to be changed
+  const { onUnstake } = useLockedUnstake(poolVaultData?.userData?.shares.toString() || '0')
 
   const { lockedApy: maxLockedApy } = useVaultApy({duration: 52 * 7 * 24 * 60 * 60});
 
@@ -144,7 +142,7 @@ const LockedKingdomCard: React.FC<KingdomCardProps> = ({
       <DepositModalLocked isAddAdditional currentStartTime={poolVaultData?.userData?.lockStartTime?.toNumber() || 0} currentEndTime={poolVaultData?.userData?.lockEndTime?.toNumber() || 0} max={tokenBalance} onConfirm={onStakeLocked} tokenName={tokenName} addLiquidityUrl={addLiquidityUrl} isTokenOnly={isTokenOnly} isKingdomToken={isKingdomToken} />,
   )
 
-  const onPresentConvertToLocked = () => null;
+  const onPresentConvertToLocked = () => null; // todo: add this modal
 
   const [onPresentFlexAdd] = useModal(
     <DepositModal max={tokenBalance} onConfirm={onStake}  tokenName={tokenName} addLiquidityUrl={addLiquidityUrl} isTokenOnly={isTokenOnly} isKingdomToken={isKingdomToken} onConvertToLocked={onPresentConvertToLocked} showConvertToLocked maxLockedApy={maxLockedApy} />
@@ -159,8 +157,12 @@ const LockedKingdomCard: React.FC<KingdomCardProps> = ({
 
   // todo: look at this to see if it uses the locked kingdoms contract
   const [onPresentWithdraw] = useModal(
-    <WithdrawModal max={stakedBalance} onConfirm={onUnstake} tokenName={tokenName} isTokenOnly={isTokenOnly} isKingdomToken={isKingdomToken} />,
+    <WithdrawModal shares={poolVaultData?.userData?.shares} performanceFee={poolVaultData?.fees?.performanceFee} hasWithdrawFee={poolVaultData?.userData?.lastDepositedTime.lte(getEpochSecondsIn3Days())} pricePerFullShare={poolVaultData?.pricePerFullShare} onConfirm={onUnstake} tokenName={tokenName} isTokenOnly={isTokenOnly} isKingdomToken={isKingdomToken} />,
   )
+
+  function getEpochSecondsIn3Days() {
+    return Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 3;
+  }
 
   // returns {time: Date, isAfterBurning: boolean)
   function getAfterBurnTimeAndDate() {
