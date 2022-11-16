@@ -1,4 +1,4 @@
-import React, {useCallback, useMemo, useState} from 'react'
+import React, {useCallback, useEffect, useMemo, useState} from 'react'
 import {useLocation} from 'react-router-dom'
 import styled from 'styled-components'
 import BigNumber from 'bignumber.js'
@@ -12,7 +12,7 @@ import {useHarvest} from 'hooks/useHarvest'
 import {useApprove} from 'hooks/useApprove'
 import {useClaim} from 'hooks/useClaim'
 import {getBep20Contract, getLockedKingdomsContract} from 'utils/contractHelpers'
-import {getAddress} from 'utils/addressHelpers'
+import {getAddress, getLockedKingdomsAddress} from 'utils/addressHelpers'
 import useWeb3 from 'hooks/useWeb3'
 
 import './KingdomCard.css'
@@ -96,18 +96,40 @@ const LockedKingdomCard: React.FC<KingdomCardProps> = ({
   const bnbPrice = useBusdPriceFromLpSymbol('BNB-BUSD LP')
   const [requestedApproval, setRequestedApproval] = useState(false)
   const [pendingTx, setPendingTx] = useState(false)
+  const [alternateAllowance, setAlternateAllowance] = useState(0);
   const [pendingTxDivs, setPendingTxDivs] = useState(false)
   const { pid, isTokenOnly, isKingdom, isKingdomToken, lpSymbol, lpAddresses, token: { address } } = farm
+
+  const web3 = useWeb3()
 
   const {data: poolVaultData} = useSWRImmutableFetchPoolVaultData(account);
 
   const tokenName = lpSymbol.toUpperCase()
   const {
-    allowance: allowanceAsString = 0,
     tokenBalance: tokenBalanceAsString = 0,
   } = farm.userData || {}
-  const allowance = new BigNumber(allowanceAsString)
   const tokenBalance = new BigNumber(tokenBalanceAsString)
+
+  const getAllowance = useCallback((addr) => getBep20Contract(getAddress(address), web3).methods.allowance(addr, getLockedKingdomsAddress()).call(), [web3, address]);
+
+  useEffect(() => {
+    (async () => {
+      if (account) {
+        const allowance = await getAllowance(account);
+
+        setAlternateAllowance(allowance);
+      } else {
+        setAlternateAllowance(0);
+      }
+    })();
+  }, [account, getAllowance]);
+
+  let allowanceAsString = 0;
+  if (alternateAllowance) {
+    allowanceAsString = new BigNumber(alternateAllowance).toNumber()
+  }
+
+  const allowance = new BigNumber(allowanceAsString)
 
   // gets staked balance
   const stakedBalanceAsString = poolVaultData?.userData?.tokenAtLastUserAction || 0;
@@ -134,7 +156,6 @@ const LockedKingdomCard: React.FC<KingdomCardProps> = ({
   const autoCakeToDisplay = data?.earnings?.autoCakeToDisplay || 0;
   const autoUsdToDisplay = data?.earnings?.autoUsdToDisplay || 0;
 
-  const web3 = useWeb3()
   const { onStakeLocked } = useStakeLocked()
   const onStake = (amount: string) => onStakeLocked(amount, 0);
   const { onUnstake } = useLockedUnstake(poolVaultData?.userData?.shares.toString() || '0')
