@@ -68,6 +68,7 @@ const DepositModalLocked: React.FC<DepositModalProps> = ({ max, onConfirm, onDis
   }, [fullBalance, setVal])
 
   const secondsDuration = useMemo(() => Math.max(isAddAdditional && !extend ? currentEndTime - currentStartTime : duration * 604800, 0), [currentStartTime, currentEndTime, duration, extend, isAddAdditional]);
+  const secondsDurationForContract = useMemo(() => Math.max(isAddAdditional && !extend ? 0 : duration * 604800, 0), [duration, extend, isAddAdditional]);
   const actualWeeks = isAddAdditional && !extend ? inferredWeeks : duration;
   const futureDate = isAddAdditional && !extend ? epochToFutureDate(currentEndTime) : weeksToFutureDate(actualWeeks);
 
@@ -129,7 +130,7 @@ const DepositModalLocked: React.FC<DepositModalProps> = ({ max, onConfirm, onDis
           disabled={pendingTx || !valNumber.isFinite() || valNumber.eq(0) || valNumber.gt(fullBalanceNumber)}
           onClick={async () => {
             setPendingTx(true)
-            await onConfirm(val, secondsDuration)
+            await onConfirm(val, secondsDurationForContract)
             setPendingTx(false)
             onDismiss()
           }}

@@ -160,7 +160,7 @@ const LockedKingdomCard: React.FC<KingdomCardProps> = ({
   const onStake = (amount: string) => onStakeLocked(amount, 0);
   const { onUnstake } = useLockedUnstake(poolVaultData?.userData?.shares.toString() || '0')
 
-  const { lockedApy: maxLockedApy } = useVaultApy({duration: 52 * 7 * 24 * 60 * 60});
+  const { lockedApy: maxLockedApy } = useVaultApy({duration: 31536000});
 
   const isApproved = account && allowance && allowance.isGreaterThan(0)
 

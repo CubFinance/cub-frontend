@@ -3,7 +3,10 @@ import { useWeb3React } from '@web3-react/core'
 import { useAppDispatch } from 'state'
 import { fetchFarmUserDataAsync, updateUserStakedBalance, updateUserBalance } from 'state/actions'
 import {stake, sousStake, sousStakeBnb, stakeLocked} from 'utils/callHelpers'
+import BigNumber from "bignumber.js";
 import {useMasterchef, useSousChef, useKingdom, useLockedKingdom} from './useContract'
+import {BIG_TEN} from "../utils/bigNumber";
+import {DEFAULT_TOKEN_DECIMAL} from "../config";
 
 const useStake = (pid: number, isKingdom?: boolean) => {
   const dispatch = useAppDispatch()
