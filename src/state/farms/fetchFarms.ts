@@ -275,15 +275,17 @@ const fetchFarms = async (farmsToFetch: FarmConfig[]) => {
         throw new Error(`multicall nontoken: ${error}`)
       })
 
-      if (farmConfig.isKingdom) {
+      if (farmConfig.isKingdom && !farmConfig.isKingdomLocked) {
+        const address = farmConfig.isKingdomLocked ? getMasterChefAddress() : getKingdomsAddress();
+
         const kCalls = [
           {
-            address: getKingdomsAddress(),
+            address,
             name: 'poolInfo',
             params: [farmConfig.pid],
           },
           {
-            address: getKingdomsAddress(),
+            address,
             name: 'totalAllocPoint',
           },
         ]

@@ -113,7 +113,8 @@ const LockedKingdom: React.FC<KingdomProps> = ({ farm, removed, cakePrice, accou
 
   const depositBalanceQuoteValue = stakedBalance ? new BigNumber(stakedBalance).times(oneTokenQuoteValue).toNumber() : 0
 
-  const totalValueFormated = lpTotalInQuoteToken
+  // @ts-ignore
+    const totalValueFormated = lpTotalInQuoteToken && lpTotalInQuoteToken !== "NaN"
     ? `$${Number(new BigNumber(lpTotalInQuoteToken).times(quoteTokenPriceUsd)).toLocaleString(undefined, { maximumFractionDigits: 0 })}`
     : '-'
   // const farmAPR = lockedApy && Number(lockedApy).toLocaleString('en-US', { maximumFractionDigits: 2 })
