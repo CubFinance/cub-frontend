@@ -3,9 +3,12 @@ import BigNumber from 'bignumber.js'
 import erc20ABI from 'config/abi/erc20.json'
 import masterchefABI from 'config/abi/masterchef.json'
 import kingdomsABI from 'config/abi/kingdoms.json'
+import lockedKingdomsABI from 'config/abi/lockedKingdom.json'
 import multicall from 'utils/multicall'
 import {getAddress, getKingdomsAddress, getLockedKingdomsAddress, getMasterChefAddress} from 'utils/addressHelpers'
 import {FarmConfig} from 'config/constants/types'
+import {getCakeVaultEarnings} from "../../views/Kingdoms/LockedKingdom/helpers";
+import {fetchPoolVaultData, useSWRImmutableFetchPoolVaultData} from "../../views/Kingdoms/LockedKingdom/poolHelpers";
 
 export const fetchFarmUserAllowances = async (account: string, farmsToFetch: FarmConfig[]) => {
   const masterChefAddress = getMasterChefAddress()
@@ -52,11 +55,14 @@ export const fetchFarmUserTokenBalances = async (account: string, farmsToFetch: 
 }
 
 export const fetchFarmUserStakedBalances = async (account: string, farmsToFetch: FarmConfig[]) => {
+  // todo: fix this for locked kingdoms
   const masterChefAddress = getMasterChefAddress()
   const kingdomAddress = getKingdomsAddress()
+  const lockedKingdomsAddress = getLockedKingdomsAddress();
 
   const nonKingdomFarms = farmsToFetch.filter(farm => !farm.isKingdom)
-  const kingdomFarms = farmsToFetch.filter(farm => farm.isKingdom)
+  const kingdomFarms = farmsToFetch.filter(farm => farm.isKingdom && !farm.isKingdomLocked)
+  const lockedKingdomFarms = farmsToFetch.filter(farm => farm.isKingdomLocked)
 
   const callsMC = nonKingdomFarms.map((farm) => ({
     address: masterChefAddress,
@@ -70,14 +76,38 @@ export const fetchFarmUserStakedBalances = async (account: string, farmsToFetch:
     params: [farm.pid, account],
   }))
 
+  const callsLK = lockedKingdomFarms.map(() => ({
+    address: lockedKingdomsAddress,
+    name: 'userInfo',
+    params: [account],
+  }));
+
+  /* const fullBalance = useMemo(() => {
+    return new BigNumber(shares?.minus(performanceFee).multipliedBy(pricePerFullShare).dividedBy(new BigNumber(10).pow(18)).toFixed(18)) || new BigNumber(0);
+  }, [shares, performanceFee, pricePerFullShare]); */
+
   const rawStakedBalancesMC = await multicall(masterchefABI, callsMC)
   const rawStakedBalancesK = await multicall(kingdomsABI, callsK)
+  const rawStakedBalancesLK = await multicall(lockedKingdomsABI, callsLK)
 
-  const rawStakedBalances = [...rawStakedBalancesMC, ...rawStakedBalancesK]
-  const parsedStakedBalances = rawStakedBalances.map((stakedBalance) => {
+  const rawStakedBalances = [...rawStakedBalancesMC, ...rawStakedBalancesK, ...rawStakedBalancesLK]
+  // parse them to their numeric forms
+  // todo: might need to change this for locked to get right number of d.p.
+  return rawStakedBalances.map((stakedBalance) => {
+    if (Object.hasOwn(stakedBalance, 'tokenAtLastUserAction')) {
+      return new BigNumber(stakedBalance.tokenAtLastUserAction).toJSON()
+    }
     return new BigNumber(stakedBalance[0]._hex).toJSON()
   })
-  return parsedStakedBalances
+}
+
+async function getLockedKingdomsUserEarnings(account: string) {
+  const poolVaultData = await fetchPoolVaultData(account);
+
+  // get cub price
+
+
+  return {earnings: poolVaultData ? getCakeVaultEarnings(account, poolVaultData.userData.tokenAtLastUserAction, poolVaultData.userData.shares, poolVaultData.pricePerFullShare, 0, poolVaultData.fees.performanceFee) : null, user: poolVaultData?.userData};
 }
 
 export const fetchFarmUserEarnings = async (account: string, farmsToFetch: FarmConfig[]) => {
@@ -85,7 +115,7 @@ export const fetchFarmUserEarnings = async (account: string, farmsToFetch: FarmC
   const kingdomAddress = getKingdomsAddress()
 
   const nonKingdomFarms = farmsToFetch.filter(farm => !farm.isKingdom)
-  const kingdomFarms = farmsToFetch.filter(farm => farm.isKingdom)
+  const kingdomFarms = farmsToFetch.filter(farm => farm.isKingdom && !farm.isKingdomLocked)
 
   const callsMC = nonKingdomFarms.map((farm) => ({
     address: masterChefAddress,
@@ -99,11 +129,18 @@ export const fetchFarmUserEarnings = async (account: string, farmsToFetch: FarmC
     params: [farm.pid, account],
   }))
 
+  const callsLK = getLockedKingdomsUserEarnings(account);
+
   const rawEarningsMasterChef = await multicall(masterchefABI, callsMC)
   const rawEarningsKingdoms = await multicall(kingdomsABI, callsK)
+  const rawEarningsLockedKingdoms = await callsLK;
 
-  const rawEarnings = [...rawEarningsMasterChef, ...rawEarningsKingdoms]
+  const rawEarnings = [...rawEarningsMasterChef, ...rawEarningsKingdoms, rawEarningsLockedKingdoms]
   const parsedEarnings = rawEarnings.map((earnings) => {
+    if (Object.hasOwn(earnings, 'autoCakeToDisplay')) {
+        return new BigNumber(earnings.autoCakeToDisplay).toJSON()
+    }
+
     return new BigNumber(earnings).toJSON()
   })
 

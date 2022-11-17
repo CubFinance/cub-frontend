@@ -39,6 +39,7 @@ export const farmsSlice = createSlice({
       })
     },
     setFarmUserData: (state, action) => {
+      // todo: seems useful too
       const { arrayOfUserDataObjects } = action.payload
       arrayOfUserDataObjects.forEach((userDataEl) => {
         const { pid, isKingdom, lpSymbol } = userDataEl
@@ -85,26 +86,43 @@ export const fetchFarmsPublicDataAsync = () => async (dispatch, getState) => {
   dispatch(setFarmsPublicData(newFarms))
 }
 export const fetchFarmUserDataAsync = (account: string) => async (dispatch, getState) => {
-  const fetchArchived = getState().farms.loadArchivedFarmsData
-  const farmsToFetch = fetchArchived ? farmsConfig : nonArchivedFarms
-  const userFarmAllowances = await fetchFarmUserAllowances(account, farmsToFetch)
-  const userFarmTokenBalances = await fetchFarmUserTokenBalances(account, farmsToFetch)
-  const userStakedBalances = await fetchFarmUserStakedBalances(account, farmsToFetch)
-  const userFarmEarnings = await fetchFarmUserEarnings(account, farmsToFetch)
+  // todo: leaving a note here so I can find this later
+  try {
+    const fetchArchived = getState().farms.loadArchivedFarmsData
+    const farmsToFetch = fetchArchived ? farmsConfig : nonArchivedFarms
+    const userFarmAllowances = await fetchFarmUserAllowances(account, farmsToFetch)
+    const userFarmTokenBalances = await fetchFarmUserTokenBalances(account, farmsToFetch)
+    const userStakedBalances = await fetchFarmUserStakedBalances(account, farmsToFetch)
+    const userFarmEarnings = await fetchFarmUserEarnings(account, farmsToFetch)
 
-  const arrayOfUserDataObjects = userFarmAllowances.map((farmAllowance, index) => {
-    return {
-      pid: farmsToFetch[index].pid,
-      allowance: userFarmAllowances[index],
-      tokenBalance: userFarmTokenBalances[index],
-      stakedBalance: userStakedBalances[index],
-      earnings: userFarmEarnings[index],
-      isKingdom: farmsToFetch[index].isKingdom,
-      lpSymbol: farmsToFetch[index].lpSymbol,
-    }
-  })
+    const arrayOfUserDataObjects = userFarmAllowances.map((farmAllowance, index) => {
+      if (farmsToFetch[index].isKingdomLocked) {
+        return {
+          pid: farmsToFetch[index].pid,
+          allowance: userFarmAllowances[index],
+          tokenBalance: 0,
+          stakedBalance: 0,
+          earnings: 0,
+          isKingdom: true,
+          lpSymbol: "CUB",
+        }
+      }
 
-  dispatch(setFarmUserData({ arrayOfUserDataObjects }))
+      return {
+        pid: farmsToFetch[index].pid,
+        allowance: userFarmAllowances[index],
+        tokenBalance: userFarmTokenBalances[index],
+        stakedBalance: userStakedBalances[index],
+        earnings: userFarmEarnings[index],
+        isKingdom: farmsToFetch[index].isKingdom,
+        lpSymbol: farmsToFetch[index].lpSymbol,
+      }
+    })
+
+    dispatch(setFarmUserData({arrayOfUserDataObjects}))
+  } catch (error) {
+    console.error(error)
+  }
 }
 
 export default farmsSlice.reducer
