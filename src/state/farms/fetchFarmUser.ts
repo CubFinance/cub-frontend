@@ -9,6 +9,7 @@ import {getAddress, getKingdomsAddress, getLockedKingdomsAddress, getMasterChefA
 import {FarmConfig} from 'config/constants/types'
 import {getCakeVaultEarnings} from "../../views/Kingdoms/LockedKingdom/helpers";
 import {fetchPoolVaultData, useSWRImmutableFetchPoolVaultData} from "../../views/Kingdoms/LockedKingdom/poolHelpers";
+import {DEFAULT_TOKEN_DECIMAL} from "../../config";
 
 export const fetchFarmUserAllowances = async (account: string, farmsToFetch: FarmConfig[]) => {
   const masterChefAddress = getMasterChefAddress()
@@ -51,6 +52,7 @@ export const fetchFarmUserTokenBalances = async (account: string, farmsToFetch: 
   const parsedTokenBalances = rawTokenBalances.map((tokenBalance) => {
     return new BigNumber(tokenBalance).toJSON()
   })
+
   return parsedTokenBalances
 }
 
@@ -90,12 +92,12 @@ export const fetchFarmUserStakedBalances = async (account: string, farmsToFetch:
   const rawStakedBalancesK = await multicall(kingdomsABI, callsK)
   const rawStakedBalancesLK = await multicall(lockedKingdomsABI, callsLK)
 
-  const rawStakedBalances = [...rawStakedBalancesMC, ...rawStakedBalancesK, ...rawStakedBalancesLK]
+  const rawStakedBalances = [...rawStakedBalancesMC, ...rawStakedBalancesLK, ...rawStakedBalancesK]
   // parse them to their numeric forms
   // todo: might need to change this for locked to get right number of d.p.
   return rawStakedBalances.map((stakedBalance) => {
     if (Object.hasOwn(stakedBalance, 'tokenAtLastUserAction')) {
-      return new BigNumber(stakedBalance.tokenAtLastUserAction).toJSON()
+      return new BigNumber(stakedBalance.tokenAtLastUserAction._hex).div(DEFAULT_TOKEN_DECIMAL).toJSON()
     }
     return new BigNumber(stakedBalance[0]._hex).toJSON()
   })
@@ -104,10 +106,7 @@ export const fetchFarmUserStakedBalances = async (account: string, farmsToFetch:
 async function getLockedKingdomsUserEarnings(account: string) {
   const poolVaultData = await fetchPoolVaultData(account);
 
-  // get cub price
-
-
-  return {earnings: poolVaultData ? getCakeVaultEarnings(account, poolVaultData.userData.tokenAtLastUserAction, poolVaultData.userData.shares, poolVaultData.pricePerFullShare, 0, poolVaultData.fees.performanceFee) : null, user: poolVaultData?.userData};
+  return getCakeVaultEarnings(account, poolVaultData.userData.tokenAtLastUserAction, poolVaultData.userData.shares, poolVaultData.pricePerFullShare, 0, poolVaultData.fees.performanceFee).autoCakeToDisplay;
 }
 
 export const fetchFarmUserEarnings = async (account: string, farmsToFetch: FarmConfig[]) => {
@@ -135,10 +134,10 @@ export const fetchFarmUserEarnings = async (account: string, farmsToFetch: FarmC
   const rawEarningsKingdoms = await multicall(kingdomsABI, callsK)
   const rawEarningsLockedKingdoms = await callsLK;
 
-  const rawEarnings = [...rawEarningsMasterChef, ...rawEarningsKingdoms, rawEarningsLockedKingdoms]
+  const rawEarnings = [...rawEarningsMasterChef, rawEarningsLockedKingdoms, ...rawEarningsKingdoms]
   const parsedEarnings = rawEarnings.map((earnings) => {
-    if (Object.hasOwn(earnings, 'autoCakeToDisplay')) {
-        return new BigNumber(earnings.autoCakeToDisplay).toJSON()
+    if (earnings === "NaN") {
+      return new BigNumber(0).toJSON()
     }
 
     return new BigNumber(earnings).toJSON()

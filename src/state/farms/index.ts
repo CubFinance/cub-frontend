@@ -96,18 +96,6 @@ export const fetchFarmUserDataAsync = (account: string) => async (dispatch, getS
     const userFarmEarnings = await fetchFarmUserEarnings(account, farmsToFetch)
 
     const arrayOfUserDataObjects = userFarmAllowances.map((farmAllowance, index) => {
-      if (farmsToFetch[index].isKingdomLocked) {
-        return {
-          pid: farmsToFetch[index].pid,
-          allowance: userFarmAllowances[index],
-          tokenBalance: 0,
-          stakedBalance: 0,
-          earnings: 0,
-          isKingdom: true,
-          lpSymbol: "CUB",
-        }
-      }
-
       return {
         pid: farmsToFetch[index].pid,
         allowance: userFarmAllowances[index],
