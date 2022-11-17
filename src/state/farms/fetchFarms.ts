@@ -31,6 +31,7 @@ import {
   getBTCBNBAmount,
   getSPSBNBAmount,
 } from 'utils/kingdomScripts'
+import {fetchLockedKingdomTotalStaked} from "../../views/Kingdoms/LockedKingdom/poolHelpers";
 
 const fetchFarms = async (farmsToFetch: FarmConfig[]) => {
   const beltData = await getBeltAPR()
@@ -176,6 +177,9 @@ const fetchFarms = async (farmsToFetch: FarmConfig[]) => {
             break
           case 10:
             kingdomSupply = await getSPSBNBAmount()
+            break
+          case 34:
+            kingdomSupply = await fetchLockedKingdomTotalStaked();
             break
           default:
             break

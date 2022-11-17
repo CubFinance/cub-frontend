@@ -78,3 +78,9 @@ export const fetchLockedKingdomUserData = async (account: string) => {
         overdueFee: new BigNumber(userOverdueFee).div(DEFAULT_TOKEN_DECIMAL).toString(),
     }
 }
+
+export const fetchLockedKingdomTotalStaked = async () => {
+    const contract = getLockedKingdomsContract();
+    const totalStaked = await contract.methods.totalLockedAmount().call();
+    return new BigNumber(totalStaked).toString();
+}
