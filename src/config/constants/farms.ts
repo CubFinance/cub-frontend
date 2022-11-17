@@ -389,7 +389,7 @@ const farms: FarmConfig[] = [
 
   // KINGDOMS
   {
-    pid: 34,
+    pid: 4,
     altPid: 13,
     compounding: 0,
     isKingdom: true,
@@ -405,7 +405,7 @@ const farms: FarmConfig[] = [
     quoteToken: tokens.busd,
     kingdomContract: '0x08bea2702d89abb8059853d654d0838c5e06fe0b'
   },
-  {
+  /* { TODO: re-enable after testing
     pid: 4,
     altPid: 12,
     compounding: 720,
@@ -420,7 +420,7 @@ const farms: FarmConfig[] = [
     token: tokens.cub,
     quoteToken: tokens.busd,
     kingdomContract: '0xc2adf5fc4d4e6c2cc97f8190acbdf808c689117c',
-  },
+  }, */
   {
     pid: 0,
     altPid: 0,
