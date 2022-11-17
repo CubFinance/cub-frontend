@@ -91,7 +91,7 @@ interface KingdomProps {
 const LockedKingdom: React.FC<KingdomProps> = ({ farm, removed, cakePrice, account, bakePrice, beltPrice, cubDen, realCakePrice, bnbDividends }) => {
   const [showExpandableSection, setShowExpandableSection] = useState(false)
 
-  const { apr, lpTotalInQuoteToken, lpSymbol, lpTokenBalancePCS = 0, lpTotalInQuoteTokenPCS = 0, quoteToken: { busdPrice: quoteTokenPriceUsd }, altPid, farmType, token: { busdPrice: tokenPriceString }, compounding } = farm
+  const { lpTotalInQuoteToken, lpSymbol, lpTokenBalancePCS = 0, lpTotalInQuoteTokenPCS = 0, quoteToken: { busdPrice: quoteTokenPriceUsd }, farmType, token: { busdPrice: tokenPriceString } } = farm
   const farmImage = lpSymbol.split(' ')[0].toLocaleLowerCase()
 
   const aprApy = useVaultApy({duration: 52 * 7 * 24 * 60 * 60})

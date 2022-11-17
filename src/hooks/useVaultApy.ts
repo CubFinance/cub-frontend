@@ -39,7 +39,7 @@ const _getBoostFactor = (boostWeight: BigNumber, duration: number, durationFacto
 const getLockedApy = (flexibleApy: string, boostFactor: FixedNumber) =>
     FixedNumber.from(flexibleApy).mulUnsafe(boostFactor.addUnsafe(FixedNumber.from('1')))
 
-const cakePoolPID = 0
+const cakePoolPID = 34
 
 export default function useVaultApy({ duration = MAX_LOCK_DURATION }: { duration?: number } = {}) {
     const { data } = useSWRImmutable('use-vault-apy-locked-kingdom', async () => {
