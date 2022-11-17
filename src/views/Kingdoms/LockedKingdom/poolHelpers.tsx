@@ -13,18 +13,6 @@ export interface InitialPoolVaultState {
         withdrawalFee: BigNumber
         withdrawalFeePeriod: BigNumber
     }
-    userData: {
-        shares: BigNumber
-        lastDepositedTime: BigNumber
-        tokenAtLastUserAction: BigNumber
-        lastUserActionTime: BigNumber
-        lockStartTime: BigNumber
-        lockEndTime: BigNumber
-        userBoostedShare: BigNumber
-        locked: boolean
-        lockedAmount: BigNumber
-        overdueFee: BigNumber
-    }
 }
 
 export const useSWRImmutableFetchPoolVaultData = (account: string) => {
@@ -41,8 +29,6 @@ export const fetchPoolVaultData = async (account: string): Promise<InitialPoolVa
         performanceFee,
         withdrawalFee,
         withdrawalFeePeriod,
-        userInfo,
-        userOverdueFee,
     ] = await Promise.all([
         contract.methods.totalShares().call(),
         contract.methods.totalLockedAmount().call(),
@@ -50,8 +36,6 @@ export const fetchPoolVaultData = async (account: string): Promise<InitialPoolVa
         contract.methods.calculatePerformanceFee(account).call(),
         contract.methods.withdrawFee().call(),
         contract.methods.withdrawFeePeriod().call(),
-        contract.methods.userInfo(account).call(),
-        contract.methods.calculateOverdueFee(account).call(),
     ])
 
     return {
@@ -63,18 +47,34 @@ export const fetchPoolVaultData = async (account: string): Promise<InitialPoolVa
             withdrawalFee: new BigNumber(withdrawalFee),
             withdrawalFeePeriod: new BigNumber(withdrawalFeePeriod),
         },
-        userData: {
-            shares: new BigNumber(userInfo.shares),
-            lastDepositedTime: new BigNumber(userInfo.lastDepositedTime),
-            tokenAtLastUserAction: new BigNumber(userInfo.tokenAtLastUserAction).div(BIG_TEN.pow(DEFAULT_TOKEN_DECIMAL)),
-            lastUserActionTime: new BigNumber(userInfo.lastUserActionTime),
-            lockStartTime: new BigNumber(userInfo.lockStartTime),
-            lockEndTime: new BigNumber(userInfo.lockEndTime),
-            userBoostedShare: new BigNumber(userInfo.userBoostedShare),
-            locked: userInfo.locked,
-            lockedAmount: new BigNumber(userInfo.lockedAmount).div(BIG_TEN.pow(DEFAULT_TOKEN_DECIMAL)),
-            overdueFee: new BigNumber(userOverdueFee).div(BIG_TEN.pow(DEFAULT_TOKEN_DECIMAL)),
-        },
+    }
+}
+
+export const fetchLockedKingdomUserData = async (account: string) => {
+    if (!account) {
+        return null
     }
 
+    const contract = getLockedKingdomsContract();
+
+    const [
+        userInfo,
+        userOverdueFee,
+    ] = await Promise.all([
+        contract.methods.userInfo(account).call(),
+        contract.methods.calculateOverdueFee(account).call(),
+    ])
+
+    return {
+        shares: new BigNumber(userInfo.shares),
+        lastDepositedTime: new BigNumber(userInfo.lastDepositedTime),
+        tokenAtLastUserAction: new BigNumber(userInfo.tokenAtLastUserAction).div(BIG_TEN.pow(DEFAULT_TOKEN_DECIMAL)),
+        lastUserActionTime: new BigNumber(userInfo.lastUserActionTime),
+        lockStartTime: new BigNumber(userInfo.lockStartTime),
+        lockEndTime: new BigNumber(userInfo.lockEndTime),
+        userBoostedShare: new BigNumber(userInfo.userBoostedShare),
+        locked: userInfo.locked,
+        lockedAmount: new BigNumber(userInfo.lockedAmount).div(BIG_TEN.pow(DEFAULT_TOKEN_DECIMAL)),
+        overdueFee: new BigNumber(userOverdueFee).div(BIG_TEN.pow(DEFAULT_TOKEN_DECIMAL)),
+    }
 }

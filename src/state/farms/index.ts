@@ -12,6 +12,7 @@ import {
   fetchFarmUserStakedBalances,
 } from './fetchFarmUser'
 import { FarmsState, Farm } from '../types'
+import {fetchLockedKingdomUserData} from "../../views/Kingdoms/LockedKingdom/poolHelpers";
 
 const nonArchivedFarms = farmsConfig.filter(({ pid }) => !isArchivedPid(pid))
 
@@ -87,15 +88,31 @@ export const fetchFarmsPublicDataAsync = () => async (dispatch, getState) => {
 }
 export const fetchFarmUserDataAsync = (account: string) => async (dispatch, getState) => {
   // todo: leaving a note here so I can find this later
+  // todo: load pools user data here
   try {
     const fetchArchived = getState().farms.loadArchivedFarmsData
     const farmsToFetch = fetchArchived ? farmsConfig : nonArchivedFarms
+    const asyncLockedKingdomUserData = fetchLockedKingdomUserData(account);
     const userFarmAllowances = await fetchFarmUserAllowances(account, farmsToFetch)
     const userFarmTokenBalances = await fetchFarmUserTokenBalances(account, farmsToFetch)
     const userStakedBalances = await fetchFarmUserStakedBalances(account, farmsToFetch)
     const userFarmEarnings = await fetchFarmUserEarnings(account, farmsToFetch)
+    const lockedKingdomUserData = await asyncLockedKingdomUserData;
 
     const arrayOfUserDataObjects = userFarmAllowances.map((farmAllowance, index) => {
+      if (farmsToFetch[index].isKingdomLocked) {
+        return {
+          pid: farmsToFetch[index].pid,
+          allowance: userFarmAllowances[index],
+          tokenBalance: userFarmTokenBalances[index],
+          stakedBalance: userStakedBalances[index],
+          earnings: userFarmEarnings[index],
+          isKingdom: farmsToFetch[index].isKingdom,
+          lpSymbol: farmsToFetch[index].lpSymbol,
+          lockedKingdomUserData,
+        }
+      }
+
       return {
         pid: farmsToFetch[index].pid,
         allowance: userFarmAllowances[index],

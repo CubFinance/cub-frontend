@@ -8,7 +8,10 @@ import multicall from 'utils/multicall'
 import {getAddress, getKingdomsAddress, getLockedKingdomsAddress, getMasterChefAddress} from 'utils/addressHelpers'
 import {FarmConfig} from 'config/constants/types'
 import {getCakeVaultEarnings} from "../../views/Kingdoms/LockedKingdom/helpers";
-import {fetchPoolVaultData, useSWRImmutableFetchPoolVaultData} from "../../views/Kingdoms/LockedKingdom/poolHelpers";
+import {
+  fetchLockedKingdomUserData,
+  fetchPoolVaultData,
+} from "../../views/Kingdoms/LockedKingdom/poolHelpers";
 import {DEFAULT_TOKEN_DECIMAL} from "../../config";
 
 export const fetchFarmUserAllowances = async (account: string, farmsToFetch: FarmConfig[]) => {
@@ -27,10 +30,6 @@ export const fetchFarmUserAllowances = async (account: string, farmsToFetch: Far
       mainAddress = kingdomAddress;
     } else {
       mainAddress = masterChefAddress;
-    }
-
-    if (farm.isKingdomLocked) {
-      console.log(mainAddress, lpContractAddress, account);
     }
 
     return { address: lpContractAddress, name: 'allowance', params: [account, mainAddress] }
@@ -110,8 +109,9 @@ export const fetchFarmUserStakedBalances = async (account: string, farmsToFetch:
 
 async function getLockedKingdomsUserEarnings(account: string) {
   const poolVaultData = await fetchPoolVaultData(account);
+  const poolVaultUserData = await fetchLockedKingdomUserData(account);
 
-  return getCakeVaultEarnings(account, poolVaultData.userData.tokenAtLastUserAction, poolVaultData.userData.shares, poolVaultData.pricePerFullShare, 0, poolVaultData.fees.performanceFee).autoCakeToDisplay;
+  return getCakeVaultEarnings(account, poolVaultUserData.tokenAtLastUserAction, poolVaultUserData.shares, poolVaultData.pricePerFullShare, 0, poolVaultData.fees.performanceFee).autoCakeToDisplay;
 }
 
 export const fetchFarmUserEarnings = async (account: string, farmsToFetch: FarmConfig[]) => {

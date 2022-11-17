@@ -115,23 +115,23 @@ const LockedKingdomCard: React.FC<KingdomCardProps> = ({
   const allowance = new BigNumber(allowanceAsString)
 
   // gets staked balance
-  const stakedBalanceAsString = poolVaultData?.userData?.tokenAtLastUserAction || 0;
+  const stakedBalanceAsString = farm?.userData?.lockedKingdomUserData?.tokenAtLastUserAction || 0;
   const stakedBalance = new BigNumber(stakedBalanceAsString)
 
   const stakedBalanceUSD = stakedBalance.multipliedBy(cakePrice);
 
   // stake is active?
-  const isStakeActive = poolVaultData?.userData?.shares.gt(0) || false;
+  const isStakeActive = farm?.userData?.lockedKingdomUserData?.shares.gt(0) || false;
 
   // stake is locked?
-  const isStakeLocked = poolVaultData?.userData?.lockEndTime.gte(new Date().getTime() / 1000) && (poolVaultData?.userData?.lockEndTime.toNumber() !== 0) || false;
+  const isStakeLocked = farm?.userData?.lockedKingdomUserData?.lockEndTime.gte(new Date().getTime() / 1000) && (farm?.userData?.lockedKingdomUserData?.lockEndTime.toNumber() !== 0) || false;
 
   // stake was originally locked? (used for determining if it will decay over time)
-  const wasStakeLocked = poolVaultData?.userData?.lockEndTime.gt(0) || false;
+  const wasStakeLocked = farm?.userData?.lockedKingdomUserData?.lockEndTime.gt(0) || false;
 
   // useswrimmutable to getCakeVaultEarnings from chain data called "chain-balance-locked-cub"
   const { data } = useSWRImmutable("chain-balance-locked-cub", async () => {
-    return {earnings: poolVaultData ? getCakeVaultEarnings(account, poolVaultData.userData.tokenAtLastUserAction, poolVaultData.userData.shares, poolVaultData.pricePerFullShare, cakePrice.toNumber(), poolVaultData.fees.performanceFee) : null, user: poolVaultData?.userData};
+    return {earnings: farm?.userData?.lockedKingdomUserData ? getCakeVaultEarnings(account, farm?.userData?.lockedKingdomUserData?.tokenAtLastUserAction, farm?.userData?.lockedKingdomUserData?.shares, poolVaultData.pricePerFullShare, cakePrice.toNumber(), poolVaultData.fees.performanceFee) : null, user: farm?.userData?.lockedKingdomUserData};
   });
 
   const dispatch = useAppDispatch()
@@ -141,14 +141,14 @@ const LockedKingdomCard: React.FC<KingdomCardProps> = ({
 
   const { onStakeLocked } = useStakeLocked()
   const onStake = (amount: string) => onStakeLocked(amount, 0);
-  const { onUnstake } = useLockedUnstake(poolVaultData?.userData?.shares.toString() || '0')
+  const { onUnstake } = useLockedUnstake(farm?.userData?.lockedKingdomUserData?.shares.toString() || '0')
 
   const { lockedApy: maxLockedApy } = useVaultApy({duration: 31536000});
 
   const isApproved = account && allowance && allowance.isGreaterThan(0)
 
   const [onPresentMoreDepositLocked] = useModal(
-      <DepositModalLocked isAddAdditional currentStartTime={poolVaultData?.userData?.lockStartTime?.toNumber() || 0} currentEndTime={poolVaultData?.userData?.lockEndTime?.toNumber() || 0} max={tokenBalance} onConfirm={onStakeLocked} tokenName={tokenName} addLiquidityUrl={addLiquidityUrl} isTokenOnly={isTokenOnly} isKingdomToken={isKingdomToken} />,
+      <DepositModalLocked isAddAdditional currentStartTime={farm?.userData?.lockedKingdomUserData?.lockStartTime?.toNumber() || 0} currentEndTime={farm?.userData?.lockedKingdomUserData?.lockEndTime?.toNumber() || 0} max={tokenBalance} onConfirm={onStakeLocked} tokenName={tokenName} addLiquidityUrl={addLiquidityUrl} isTokenOnly={isTokenOnly} isKingdomToken={isKingdomToken} />,
   )
 
   const convertToFlexible = () => {
@@ -184,7 +184,7 @@ const LockedKingdomCard: React.FC<KingdomCardProps> = ({
   )
 
   const [onPresentWithdraw] = useModal(
-    <WithdrawModal shares={poolVaultData?.userData?.shares} performanceFee={poolVaultData?.fees?.performanceFee} hasWithdrawFee={poolVaultData?.userData?.lastDepositedTime.lte(getEpochSecondsIn3Days())} pricePerFullShare={poolVaultData?.pricePerFullShare} onConfirm={onUnstake} tokenName={tokenName} isTokenOnly={isTokenOnly} isKingdomToken={isKingdomToken} />,
+    <WithdrawModal shares={farm?.userData?.lockedKingdomUserData?.shares} performanceFee={poolVaultData?.fees?.performanceFee} hasWithdrawFee={farm?.userData?.lockedKingdomUserData?.lastDepositedTime.lte(getEpochSecondsIn3Days())} pricePerFullShare={poolVaultData?.pricePerFullShare} onConfirm={onUnstake} tokenName={tokenName} isTokenOnly={isTokenOnly} isKingdomToken={isKingdomToken} />,
   )
 
   function getEpochSecondsIn3Days() {
@@ -194,7 +194,7 @@ const LockedKingdomCard: React.FC<KingdomCardProps> = ({
   // returns {time: Date, isAfterBurning: boolean)
   function getAfterBurnTimeAndDate() {
     // end time + 1 week
-    const time = new Date((poolVaultData?.userData?.lockEndTime.multipliedBy(1000).toNumber() || 0) + 604800000);
+    const time = new Date((farm?.userData?.lockedKingdomUserData?.lockEndTime.multipliedBy(1000).toNumber() || 0) + 604800000);
 
     const isAfterBurning = time.getTime() < new Date().getTime();
 
@@ -272,8 +272,8 @@ const LockedKingdomCard: React.FC<KingdomCardProps> = ({
     // fees.withdrawalFeePeriod is the time in seconds that the user must wait before they can unstake without the 0.1% fee
     // return number of seconds until the user can unstake without the 0.1% fee, if it is less than 0, return 0
 
-    if (poolVaultData?.userData?.lastDepositedTime) {
-        const secondsUntilFree = poolVaultData?.userData?.lastDepositedTime.plus(poolVaultData?.fees?.withdrawalFeePeriod || 0).minus(Math.floor(new Date().getTime() / 1000));
+    if (farm?.userData?.lockedKingdomUserData?.lastDepositedTime) {
+        const secondsUntilFree = farm?.userData?.lockedKingdomUserData?.lastDepositedTime.plus(poolVaultData?.fees?.withdrawalFeePeriod || 0).minus(Math.floor(new Date().getTime() / 1000));
         return secondsUntilFree.toNumber() > 0 ? secondsUntilFree.toNumber() : 0;
     }
 
@@ -310,11 +310,11 @@ const LockedKingdomCard: React.FC<KingdomCardProps> = ({
                     <Subtle style={{color: "lightgray"}}>UNLOCKS IN</Subtle>
                   </ActionTitles>
                   <Heading color="text" size="md" mb="8px">
-                      {formatDistanceToNow(new Date((poolVaultData?.userData?.lockEndTime?.toNumber() || 0) * 1000), { addSuffix: true }).replace(/^in /, "")} {/* questionmark tooltip here */}
-                      <abbr title={`After Burning starts at ${format(new Date(((poolVaultData?.userData?.lockEndTime?.toNumber() || 0) * 1000) + 604800000), 'MMM dd yyyy, HH:mm')}. You need to renew your fix-term position, to initiate a new lock or convert your staking position to flexible before it starts. Otherwise all the rewards will be burned within the next 90 days.`}>?</abbr>
+                      {formatDistanceToNow(new Date((farm?.userData?.lockedKingdomUserData?.lockEndTime?.toNumber() || 0) * 1000), { addSuffix: true }).replace(/^in /, "")} {/* questionmark tooltip here */}
+                      <abbr title={`After Burning starts at ${format(new Date(((farm?.userData?.lockedKingdomUserData?.lockEndTime?.toNumber() || 0) * 1000) + 604800000), 'MMM dd yyyy, HH:mm')}. You need to renew your fix-term position, to initiate a new lock or convert your staking position to flexible before it starts. Otherwise all the rewards will be burned within the next 90 days.`}>?</abbr>
                   </Heading>
                 {/* show the date in <Text size 12px */}
-                <Text fontSize="12px" color="textSubtle">On {format(new Date((poolVaultData?.userData?.lockEndTime?.toNumber() || 0) * 1000), 'MMM dd yyyy, HH:mm')}</Text>
+                <Text fontSize="12px" color="textSubtle">On {format(new Date((farm?.userData?.lockedKingdomUserData?.lockEndTime?.toNumber() || 0) * 1000), 'MMM dd yyyy, HH:mm')}</Text>
 
                 {/* button to extend lock duration */}
                 <Button
@@ -348,17 +348,17 @@ const LockedKingdomCard: React.FC<KingdomCardProps> = ({
                 </ActionTitles>
                 <Heading color="warning" size="md">
                   Unlocked&nbsp;
-                  <abbr title={`After Burning starts at ${format(new Date(((poolVaultData?.userData?.lockEndTime?.toNumber() || 0) * 1000) + 604800000), 'MMM dd yyyy, HH:mm')}. You need to renew your fix-term position, to initiate a new lock or convert your staking position to flexible before it starts. Otherwise all the rewards will be burned within the next 90 days.`}>?</abbr>
+                  <abbr title={`After Burning starts at ${format(new Date(((farm?.userData?.lockedKingdomUserData?.lockEndTime?.toNumber() || 0) * 1000) + 604800000), 'MMM dd yyyy, HH:mm')}. You need to renew your fix-term position, to initiate a new lock or convert your staking position to flexible before it starts. Otherwise all the rewards will be burned within the next 90 days.`}>?</abbr>
                 </Heading>
                 {/* show the date in <Text size 12px */}
-                <Text fontSize="12px" color="textSubtle">On {format(new Date((poolVaultData?.userData?.lockEndTime?.toNumber() || 0) * 1000), 'MMM dd yyyy, HH:mm')}</Text>
+                <Text fontSize="12px" color="textSubtle">On {format(new Date((farm?.userData?.lockedKingdomUserData?.lockEndTime?.toNumber() || 0) * 1000), 'MMM dd yyyy, HH:mm')}</Text>
               </ActionContent>
               {afterBurnData.isAfterBurning ? <ActionContent style={{flexDirection: "column", alignItems: "flex-end"}}>
                     <ActionTitles>
                       <Subtle style={{color: "lightgray"}}>AFTER BURNING</Subtle>
                     </ActionTitles>
                     <Text color="failure" bold>
-                      {poolVaultData?.userData?.overdueFee?.toNumber() > 0 ? `${poolVaultData?.userData?.overdueFee?.toNumber().toFixed(2)}%` : '-'}
+                      {farm?.userData?.lockedKingdomUserData?.overdueFee?.toNumber() > 0 ? `${farm?.userData?.lockedKingdomUserData?.overdueFee?.toNumber().toFixed(2)}%` : '-'}
                     </Text>
                   </ActionContent> :
                   <ActionContent style={{flexDirection: "column", alignItems: "flex-end"}}>
@@ -366,7 +366,7 @@ const LockedKingdomCard: React.FC<KingdomCardProps> = ({
                   <Subtle style={{color: "lightgray"}}>AFTER BURNING IN</Subtle>
                 </ActionTitles>
                 <Heading color="failure" size="md" mb="8px">
-                  <BurningCountDown lockEndTime={poolVaultData?.userData?.lockEndTime?.toString() || "0"} />
+                  <BurningCountDown lockEndTime={farm?.userData?.lockedKingdomUserData?.lockEndTime?.toString() || "0"} />
                 </Heading>
               </ActionContent>}
             </ActionContent>
@@ -445,7 +445,7 @@ const LockedKingdomCard: React.FC<KingdomCardProps> = ({
       </>;
     }
 
-  const durationSeconds = (poolVaultData?.userData?.lockEndTime?.toNumber() || 0) - (poolVaultData?.userData?.lockStartTime?.toNumber() || 0);
+  const durationSeconds = (farm?.userData?.lockedKingdomUserData?.lockEndTime?.toNumber() || 0) - (farm?.userData?.lockedKingdomUserData?.lockStartTime?.toNumber() || 0);
   const { boostFactor, getLockedApy } = useVaultApy({duration: durationSeconds});
   const numWeeks = Math.floor(durationSeconds / 604800);
 

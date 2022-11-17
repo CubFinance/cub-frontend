@@ -40,6 +40,18 @@ export interface Farm extends FarmConfig {
     stakedBalance: string
     earnings: string
     bnbDividends?: any
+    lockedKingdomUserData?: {
+      shares: BigNumber
+      lastDepositedTime: BigNumber
+      tokenAtLastUserAction: BigNumber
+      lastUserActionTime: BigNumber
+      lockStartTime: BigNumber
+      lockEndTime: BigNumber
+      userBoostedShare: BigNumber
+      locked: boolean
+      lockedAmount: BigNumber
+      overdueFee: BigNumber
+    }
   }
 }
 
