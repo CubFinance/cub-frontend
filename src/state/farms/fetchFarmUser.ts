@@ -101,7 +101,7 @@ export const fetchFarmUserStakedBalances = async (account: string, farmsToFetch:
   // todo: might need to change this for locked to get right number of d.p.
   return rawStakedBalances.map((stakedBalance) => {
     if (Object.hasOwn(stakedBalance, 'tokenAtLastUserAction')) {
-      return new BigNumber(stakedBalance.tokenAtLastUserAction._hex).div(DEFAULT_TOKEN_DECIMAL).toJSON()
+      return new BigNumber(stakedBalance.tokenAtLastUserAction._hex).toJSON()
     }
     return new BigNumber(stakedBalance[0]._hex).toJSON()
   })

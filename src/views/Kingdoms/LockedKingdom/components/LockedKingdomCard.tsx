@@ -133,7 +133,7 @@ const LockedKingdomCard: React.FC<KingdomCardProps> = ({
   }, [farm.userData.lockedKingdomUserData]);
 
   // gets staked balance
-  const stakedBalanceAsString = userDataAsBigNumbers?.tokenAtLastUserAction || 0;
+  const stakedBalanceAsString = farm?.userData?.lockedKingdomUserData?.tokenAtLastUserAction;
   const stakedBalance = new BigNumber(stakedBalanceAsString)
 
   const stakedBalanceUSD = stakedBalance.multipliedBy(cakePrice);

@@ -68,13 +68,13 @@ export const fetchLockedKingdomUserData = async (account: string) => {
     return {
         shares: new BigNumber(userInfo.shares).toString(),
         lastDepositedTime: new BigNumber(userInfo.lastDepositedTime).toString(),
-        tokenAtLastUserAction: new BigNumber(userInfo.tokenAtLastUserAction).div(BIG_TEN.pow(DEFAULT_TOKEN_DECIMAL)).toString(),
+        tokenAtLastUserAction: new BigNumber(userInfo.tokenAtLastUserAction).div(DEFAULT_TOKEN_DECIMAL).toString(),
         lastUserActionTime: new BigNumber(userInfo.lastUserActionTime).toString(),
         lockStartTime: new BigNumber(userInfo.lockStartTime).toString(),
         lockEndTime: new BigNumber(userInfo.lockEndTime).toString(),
         userBoostedShare: new BigNumber(userInfo.userBoostedShare).toString(),
         locked: userInfo.locked,
-        lockedAmount: new BigNumber(userInfo.lockedAmount).div(BIG_TEN.pow(DEFAULT_TOKEN_DECIMAL)).toString(),
-        overdueFee: new BigNumber(userOverdueFee).div(BIG_TEN.pow(DEFAULT_TOKEN_DECIMAL)).toString(),
+        lockedAmount: new BigNumber(userInfo.lockedAmount).div(DEFAULT_TOKEN_DECIMAL).toString(),
+        overdueFee: new BigNumber(userOverdueFee).div(DEFAULT_TOKEN_DECIMAL).toString(),
     }
 }

@@ -92,12 +92,11 @@ export const fetchFarmUserDataAsync = (account: string) => async (dispatch, getS
   try {
     const fetchArchived = getState().farms.loadArchivedFarmsData
     const farmsToFetch = fetchArchived ? farmsConfig : nonArchivedFarms
-    const asyncLockedKingdomUserData = fetchLockedKingdomUserData(account);
+    const lockedKingdomUserData = await fetchLockedKingdomUserData(account);
     const userFarmAllowances = await fetchFarmUserAllowances(account, farmsToFetch)
     const userFarmTokenBalances = await fetchFarmUserTokenBalances(account, farmsToFetch)
     const userStakedBalances = await fetchFarmUserStakedBalances(account, farmsToFetch)
     const userFarmEarnings = await fetchFarmUserEarnings(account, farmsToFetch)
-    const lockedKingdomUserData = await asyncLockedKingdomUserData;
 
     const arrayOfUserDataObjects = userFarmAllowances.map((farmAllowance, index) => {
       if (farmsToFetch[index].isKingdomLocked) {
