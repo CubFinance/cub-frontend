@@ -107,27 +107,10 @@ const LockedKingdomCard: React.FC<KingdomCardProps> = ({
   const tokenName = lpSymbol.toUpperCase()
   const {
     tokenBalance: tokenBalanceAsString = 0,
+    allowance: allowanceAsString = 0,
   } = farm.userData || {}
+
   const tokenBalance = new BigNumber(tokenBalanceAsString)
-
-  const getAllowance = useCallback((addr) => getBep20Contract(getAddress(address), web3).methods.allowance(addr, getLockedKingdomsAddress()).call(), [web3, address]);
-
-  useEffect(() => {
-    (async () => {
-      if (account) {
-        const allowance = await getAllowance(account);
-
-        setAlternateAllowance(allowance);
-      } else {
-        setAlternateAllowance(0);
-      }
-    })();
-  }, [account, getAllowance]);
-
-  let allowanceAsString = 0;
-  if (alternateAllowance) {
-    allowanceAsString = new BigNumber(alternateAllowance).toNumber()
-  }
 
   const allowance = new BigNumber(allowanceAsString)
 
@@ -141,7 +124,7 @@ const LockedKingdomCard: React.FC<KingdomCardProps> = ({
   const isStakeActive = poolVaultData?.userData?.shares.gt(0) || false;
 
   // stake is locked?
-  const isStakeLocked = poolVaultData?.userData?.lockEndTime.lte(new Date().getTime() / 1000) && (poolVaultData?.userData?.lockEndTime.toNumber() !== 0) || false;
+  const isStakeLocked = poolVaultData?.userData?.lockEndTime.gte(new Date().getTime() / 1000) && (poolVaultData?.userData?.lockEndTime.toNumber() !== 0) || false;
 
   // stake was originally locked? (used for determining if it will decay over time)
   const wasStakeLocked = poolVaultData?.userData?.lockEndTime.gt(0) || false;
@@ -327,7 +310,7 @@ const LockedKingdomCard: React.FC<KingdomCardProps> = ({
                     <Subtle style={{color: "lightgray"}}>UNLOCKS IN</Subtle>
                   </ActionTitles>
                   <Heading color="text" size="md" mb="8px">
-                      {formatDistanceToNow(new Date((poolVaultData?.userData?.lockEndTime?.toNumber() || 0) * 1000), { addSuffix: true })} {/* questionmark tooltip here */}
+                      {formatDistanceToNow(new Date((poolVaultData?.userData?.lockEndTime?.toNumber() || 0) * 1000), { addSuffix: true }).replace(/^in /, "")} {/* questionmark tooltip here */}
                       <abbr title={`After Burning starts at ${format(new Date(((poolVaultData?.userData?.lockEndTime?.toNumber() || 0) * 1000) + 604800000), 'MMM dd yyyy, HH:mm')}. You need to renew your fix-term position, to initiate a new lock or convert your staking position to flexible before it starts. Otherwise all the rewards will be burned within the next 90 days.`}>?</abbr>
                   </Heading>
                 {/* show the date in <Text size 12px */}
@@ -486,7 +469,7 @@ const LockedKingdomCard: React.FC<KingdomCardProps> = ({
                 </ActionTitles>
                 <ActionContent>
                   <div>
-                    <Heading color="text" size="md">{boostFactor.toString() || "0"}x</Heading>
+                    <Heading color="text" size="md">{new BigNumber(boostFactor.toString()).toFixed(3) || "0"}x</Heading>
                     <Text fontSize="12px" color="textSubtle">Lock for {numWeeks} week{numWeeks !== 1 ? "s" : ""}</Text>
                   </div>
                 </ActionContent>
@@ -520,7 +503,7 @@ const LockedKingdomCard: React.FC<KingdomCardProps> = ({
   }
 
   function renderBottomPanelContent() {
-    if (wasStakeLocked) {
+    if (wasStakeLocked && !isStakeLocked) {
       return <Message
           variant="warning"
           actionInline
@@ -548,7 +531,7 @@ const LockedKingdomCard: React.FC<KingdomCardProps> = ({
       </Message>;
     }
 
-    if (isStakeActive) {
+    if (isStakeActive && !isStakeLocked) {
       return <Message
           variant="warning"
           actionInline

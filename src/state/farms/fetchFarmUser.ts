@@ -28,6 +28,11 @@ export const fetchFarmUserAllowances = async (account: string, farmsToFetch: Far
     } else {
       mainAddress = masterChefAddress;
     }
+
+    if (farm.isKingdomLocked) {
+      console.log(mainAddress, lpContractAddress, account);
+    }
+
     return { address: lpContractAddress, name: 'allowance', params: [account, mainAddress] }
   })
 
