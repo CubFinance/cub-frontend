@@ -41,7 +41,7 @@ export const fetchPoolVaultData = async (account: string): Promise<InitialPoolVa
     return {
         totalShares: new BigNumber(totalShares),
         totalLockedAmount: new BigNumber(totalLockedAmount).div(BIG_TEN.pow(DEFAULT_TOKEN_DECIMAL)),
-        pricePerFullShare: new BigNumber(pricePerFullShare).div(BIG_TEN.pow(DEFAULT_TOKEN_DECIMAL)),
+        pricePerFullShare: new BigNumber(pricePerFullShare),
         fees: {
             performanceFee: new BigNumber(performanceFee),
             withdrawalFee: new BigNumber(withdrawalFee),

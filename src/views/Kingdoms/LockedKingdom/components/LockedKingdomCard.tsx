@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useMemo, useState} from 'react'
+import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react'
 import {useLocation} from 'react-router-dom'
 import styled from 'styled-components'
 import BigNumber from 'bignumber.js'
@@ -134,7 +134,7 @@ const LockedKingdomCard: React.FC<KingdomCardProps> = ({
 
   // gets staked balance
   const stakedBalanceAsString = farm?.userData?.lockedKingdomUserData?.tokenAtLastUserAction;
-  const stakedBalance = new BigNumber(stakedBalanceAsString)
+  const stakedBalance = useMemo(() => new BigNumber(stakedBalanceAsString), [stakedBalanceAsString]);
 
   const stakedBalanceUSD = stakedBalance.multipliedBy(cakePrice);
 
@@ -162,7 +162,7 @@ const LockedKingdomCard: React.FC<KingdomCardProps> = ({
   const { onUnstake } = useLockedUnstake(userDataAsBigNumbers?.shares.toString() || '0')
 
   const { lockedApy: maxLockedApy } = useVaultApy({duration: 31536000});
-
+  
   const isApproved = account && allowance && allowance.isGreaterThan(0)
 
   const [onPresentMoreDepositLocked] = useModal(
@@ -253,37 +253,31 @@ const LockedKingdomCard: React.FC<KingdomCardProps> = ({
     </Button>
   )
 
-  const { countUp } = useCountUp({
-    start: 0,
-    end: autoUsdToDisplay,
-    duration: 1,
-    separator: ',',
-    decimals: 3,
-  })
+  function CounterUpper({value}) {
+    const { countUp: cUp, update: uD } = useCountUp({
+        start: 0,
+        end: value,
+        duration: 1,
+        separator: ',',
+        decimals: 3,
+    });
 
-  const { countUp: countUp2 } = useCountUp({
-    start: 0,
-    end: autoCakeToDisplay,
-    duration: 1,
-    separator: ',',
-    decimals: 3,
-  });
+    const updateValue = useRef(uD);
 
-  const { countUp: stakedAmountCountUp } = useCountUp({
-    start: 0,
-    end: stakedBalance.toNumber(),
-    duration: 1,
-    separator: ',',
-    decimals: 3,
-  });
+    useEffect(() => {
+        updateValue.current(value);
+    });
 
-  const { countUp: stakedAmountUSDCountUp } = useCountUp({
-    start: 0,
-    end: stakedBalanceUSD.toNumber(),
-    duration: 1,
-    separator: ',',
-    decimals: 3,
-  });
+    return <>{cUp}</>;
+  }
+
+  const countUp = <CounterUpper value={autoCakeToDisplay} />
+
+  const countUp2 = <CounterUpper value={autoUsdToDisplay} />
+
+  const stakedAmountCountUp = <CounterUpper value={stakedBalance.toNumber()} />
+
+  const stakedAmountUSDCountUp = <CounterUpper value={stakedBalanceUSD.toNumber()} />
 
   function getSecondsUntilFlexUnstakeIsFree() {
     // userdata.lastDepositedTime is the last deposit time in seconds
@@ -565,7 +559,7 @@ const LockedKingdomCard: React.FC<KingdomCardProps> = ({
           }
       >
         <Text>
-          Lock staking users are earning up to {getLockedApy(31449600)}% APY.
+          Lock staking users are earning up to {new BigNumber(getLockedApy(31449600)).toFixed(2)}% APY.
         </Text>
       </Message>;
     }
