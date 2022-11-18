@@ -162,7 +162,7 @@ const LockedKingdomCard: React.FC<KingdomCardProps> = ({
   const { onUnstake } = useLockedUnstake(userDataAsBigNumbers?.shares.toString() || '0')
 
   const { lockedApy: maxLockedApy } = useVaultApy({duration: 31536000});
-  
+
   const isApproved = account && allowance && allowance.isGreaterThan(0)
 
   const [onPresentMoreDepositLocked] = useModal(
@@ -252,24 +252,6 @@ const LockedKingdomCard: React.FC<KingdomCardProps> = ({
       Approve Contract
     </Button>
   )
-
-  function CounterUpper({value}) {
-    const { countUp: cUp, update: uD } = useCountUp({
-        start: 0,
-        end: value,
-        duration: 1,
-        separator: ',',
-        decimals: 3,
-    });
-
-    const updateValue = useRef(uD);
-
-    useEffect(() => {
-        updateValue.current(value);
-    });
-
-    return <>{cUp}</>;
-  }
 
   const countUp = <CounterUpper value={autoCakeToDisplay} />
 
@@ -581,6 +563,24 @@ const LockedKingdomCard: React.FC<KingdomCardProps> = ({
           <div className="col" />
     {renderBottomPanelContent()}
   </>)
+}
+
+function CounterUpper({value}) {
+  const { countUp: cUp, update: uD } = useCountUp({
+    start: 0,
+    end: value,
+    duration: 1,
+    separator: ',',
+    decimals: 3,
+  });
+
+  const updateValue = useRef(uD);
+
+  useEffect(() => {
+    updateValue.current(value);
+  });
+
+  return <>{cUp}</>;
 }
 
 export default LockedKingdomCard
