@@ -20,7 +20,7 @@ const useFarmsWithBalance = () => {
 
   useEffect(() => {
     const nonKingdomFarms = farmsConfig.filter(farm => !farm.isKingdom)
-    const kingdomFarms = farmsConfig.filter(farm => farm.isKingdom)
+    const kingdomFarms = farmsConfig.filter(farm => farm.isKingdom && !farm.isKingdomLocked)
     const fetchBalances = async () => {
       const calls = nonKingdomFarms.map((farm) => ({
         address: getMasterChefAddress(),
@@ -40,7 +40,9 @@ const useFarmsWithBalance = () => {
       const rawResultsK = await multicall(kingdomsABI, callsK)
       const resultsK = kingdomFarms.map((farm, index) => ({ ...farm, balance: new BigNumber(rawResultsK[index]) }))
 
-      setFarmsWithBalances([...results, ...resultsK])
+      const resultsLK = farmsConfig.filter(farm => farm.isKingdomLocked).map(farm => ({ ...farm, balance: new BigNumber(0) }))
+
+      setFarmsWithBalances([...results, ...resultsLK, ...resultsK])
     }
 
     if (account) {

@@ -5,6 +5,7 @@ import { getMasterChefAddress, getKingdomsAddress } from 'utils/addressHelpers'
 import masterChefABI from 'config/abi/masterchef.json'
 import kingdomsABI from 'config/abi/kingdoms.json'
 import { farmsConfig } from 'config/constants'
+import {BigNumber} from "@ethersproject/bignumber";
 import useRefresh from './useRefresh'
 
 const useAllEarnings = () => {
@@ -14,7 +15,7 @@ const useAllEarnings = () => {
 
   useEffect(() => {
     const nonKingdomFarms = farmsConfig.filter(farm => !farm.isKingdom)
-    const kingdomFarms = farmsConfig.filter(farm => farm.isKingdom)
+    const kingdomFarms = farmsConfig.filter(farm => farm.isKingdom && !farm.isKingdomLocked)
     const fetchAllBalances = async () => {
       const calls = nonKingdomFarms.map((farm) => ({
         address: getMasterChefAddress(),
@@ -32,7 +33,10 @@ const useAllEarnings = () => {
 
       const resK = await multicall(kingdomsABI, callsK)
 
-      setBalance([...res, ...resK])
+
+      const resLK = farmsConfig.filter(farm => farm.isKingdomLocked).map(() => BigNumber.from(0))
+
+      setBalance([...res, ...resLK, ...resK])
     }
 
     if (account) {
