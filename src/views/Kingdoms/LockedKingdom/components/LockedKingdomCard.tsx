@@ -7,12 +7,10 @@ import {Button as UiButton, Flex, Heading, Text, useModal} from '@pancakeswap-li
 import {FarmWithStakedValue} from 'views/Farms/components/FarmCard/FarmCard'
 import DepositModal from 'views/Farms/components/DepositModal'
 import {useStakeLocked} from 'hooks/useStake'
-import useUnstake, {useLockedUnstake} from 'hooks/useUnstake'
-import {useHarvest} from 'hooks/useHarvest'
+import {useLockedUnstake} from 'hooks/useUnstake'
 import {useApprove} from 'hooks/useApprove'
-import {useClaim} from 'hooks/useClaim'
 import {getBep20Contract, getLockedKingdomsContract} from 'utils/contractHelpers'
-import {getAddress, getLockedKingdomsAddress} from 'utils/addressHelpers'
+import {getAddress} from 'utils/addressHelpers'
 import useWeb3 from 'hooks/useWeb3'
 
 import './KingdomCard.css'
@@ -32,14 +30,12 @@ import {
 import DepositModalLocked from "../../../Farms/components/DepositModalLocked";
 import {getCakeVaultEarnings} from "../helpers";
 import {useSWRImmutableFetchPoolVaultData} from "../poolHelpers";
-import {DEFAULT_TOKEN_DECIMAL} from "../../../../config";
-import {BIG_TEN} from "../../../../utils/bigNumber";
 import WithdrawalFeeTimer from "./WithdrawalFeeTimer";
 import useVaultApy from "../../../../hooks/useVaultApy";
 import BurningCountDown from "../BurningCountdown";
 import Message from "./Message";
 import ExtendModal from "./ExtendModal";
-import {convertLockedToFlexible, unstake} from "../../../../utils/callHelpers";
+import {convertLockedToFlexible} from "../../../../utils/callHelpers";
 import {fetchFarmUserDataAsync} from "../../../../state/farms";
 import {useAppDispatch} from "../../../../state";
 
@@ -59,16 +55,8 @@ const Button = styled(UiButton)`
   display: block;
 `
 
-const Values = styled.div`
-  display: flex;
-`
-
-const Brackets = styled.span`
-  color: ${(props) => props.theme.colors.text};
-`
-
 interface KingdomCardProps {
-  farm?: FarmWithStakedValue
+  farm: FarmWithStakedValue
   walletBalance: number
   depositBalance: number
   rewardBalance: number
@@ -82,23 +70,13 @@ interface KingdomCardProps {
 
 const LockedKingdomCard: React.FC<KingdomCardProps> = ({
   farm,
-  walletBalance,
-  depositBalance,
-  rewardBalance,
-  walletBalanceQuoteValue,
-  depositBalanceQuoteValue ,
   addLiquidityUrl,
   account,
   cakePrice,
-  bnbDividends,
 }) => {
   const location = useLocation()
-  const bnbPrice = useBusdPriceFromLpSymbol('BNB-BUSD LP')
   const [requestedApproval, setRequestedApproval] = useState(false)
-  const [pendingTx, setPendingTx] = useState(false)
-  const [alternateAllowance, setAlternateAllowance] = useState(0);
-  const [pendingTxDivs, setPendingTxDivs] = useState(false)
-  const { pid, isTokenOnly, isKingdom, isKingdomToken, lpSymbol, lpAddresses, token: { address } } = farm
+  const {isTokenOnly, isKingdomToken, lpSymbol, lpAddresses, token: { address } } = farm
 
   const web3 = useWeb3()
 
@@ -260,19 +238,6 @@ const LockedKingdomCard: React.FC<KingdomCardProps> = ({
   const stakedAmountCountUp = <CounterUpper value={stakedBalance.toNumber()} />
 
   const stakedAmountUSDCountUp = <CounterUpper value={stakedBalanceUSD.toNumber()} />
-
-  function getSecondsUntilFlexUnstakeIsFree() {
-    // userdata.lastDepositedTime is the last deposit time in seconds
-    // fees.withdrawalFeePeriod is the time in seconds that the user must wait before they can unstake without the 0.1% fee
-    // return number of seconds until the user can unstake without the 0.1% fee, if it is less than 0, return 0
-
-    if (userDataAsBigNumbers?.lastDepositedTime) {
-        const secondsUntilFree = userDataAsBigNumbers?.lastDepositedTime.plus(poolVaultData?.fees?.withdrawalFeePeriod || 0).minus(Math.floor(new Date().getTime() / 1000));
-        return secondsUntilFree.toNumber() > 0 ? secondsUntilFree.toNumber() : 0;
-    }
-
-    return 0;
-  }
 
   function renderRightInnerPanelContent() {
     if (isApproved) {
@@ -443,6 +408,8 @@ const LockedKingdomCard: React.FC<KingdomCardProps> = ({
   const { boostFactor, getLockedApy } = useVaultApy({duration: durationSeconds});
   const numWeeks = Math.floor(durationSeconds / 604800);
 
+  const unstakeFreeSeconds = useMemo(() => getSecondsUntilFlexUnstakeIsFree(userDataAsBigNumbers, poolVaultData), [poolVaultData, userDataAsBigNumbers]);
+
   function renderLeftInnerPanelContent() {
     if (isStakeLocked || wasStakeLocked) {
       return <>
@@ -472,9 +439,6 @@ const LockedKingdomCard: React.FC<KingdomCardProps> = ({
         </ActionContent>
       </>;
     }
-
-
-    const unstakeFreeSeconds = getSecondsUntilFlexUnstakeIsFree();
 
     return <>
       <ActionTitles>
@@ -581,6 +545,19 @@ function CounterUpper({value}) {
   });
 
   return <>{cUp}</>;
+}
+
+function getSecondsUntilFlexUnstakeIsFree(userDataBigNumber, poolVaultData) {
+  // userdata.lastDepositedTime is the last deposit time in seconds
+  // fees.withdrawalFeePeriod is the time in seconds that the user must wait before they can unstake without the 0.1% fee
+  // return number of seconds until the user can unstake without the 0.1% fee, if it is less than 0, return 0
+
+  if (userDataBigNumber?.lastDepositedTime) {
+    const secondsUntilFree = userDataBigNumber?.lastDepositedTime.plus(poolVaultData?.fees?.withdrawalFeePeriod || 0).minus(Math.floor(new Date().getTime() / 1000));
+    return secondsUntilFree.toNumber() > 0 ? secondsUntilFree.toNumber() : 0;
+  }
+
+  return 0;
 }
 
 export default LockedKingdomCard
