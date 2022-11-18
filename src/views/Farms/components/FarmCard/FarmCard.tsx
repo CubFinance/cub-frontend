@@ -27,6 +27,16 @@ export interface FarmWithStakedValue extends Farm {
   kingdomSupply?: string
   quoteTokenPriceUsd?: number
   beltAPR?:string
+  lockedKingdomData?: {
+      totalShares: string
+      totalLockedAmount: string
+      pricePerFullShare: string
+      fees: {
+          performanceFee: string
+          withdrawalFee: string
+          withdrawalFeePeriod: string
+      }
+  }
   beltRate?:string
 }
 

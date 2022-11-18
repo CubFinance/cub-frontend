@@ -1,10 +1,11 @@
 import BigNumber from 'bignumber.js'
 import React, { useCallback, useMemo, useState } from 'react'
-import { Button, Modal, LinkExternal } from '@pancakeswap-libs/uikit'
+import {Button, Modal, LinkExternal, Flex, Text} from '@pancakeswap-libs/uikit'
 import ModalActions from 'components/ModalActions'
 import ModalInput from 'components/ModalInput'
 import useI18n from 'hooks/useI18n'
 import { getFullDisplayBalance } from 'utils/formatBalance'
+import Message from "../../Kingdoms/LockedKingdom/components/Message";
 
 interface DepositModalProps {
   max: BigNumber
@@ -14,9 +15,12 @@ interface DepositModalProps {
   addLiquidityUrl?: string
   isTokenOnly?: boolean
   isKingdomToken?: boolean
+  showConvertToLocked?: boolean
+  onConvertToLocked?: () => void
+  maxLockedApy?: string
 }
 
-const DepositModal: React.FC<DepositModalProps> = ({ max, onConfirm, onDismiss, tokenName = '', addLiquidityUrl, isTokenOnly, isKingdomToken }) => {
+const DepositModal: React.FC<DepositModalProps> = ({ max, onConfirm, onDismiss, tokenName = '', addLiquidityUrl, isTokenOnly, isKingdomToken, showConvertToLocked, onConvertToLocked, maxLockedApy }) => {
   const [val, setVal] = useState('')
   const [pendingTx, setPendingTx] = useState(false)
   const TranslateString = useI18n()
@@ -51,6 +55,26 @@ const DepositModal: React.FC<DepositModalProps> = ({ max, onConfirm, onDismiss, 
         addLiquidityUrl={addLiquidityUrl}
         inputTitle={TranslateString(1070, 'Stake')}
       />
+      {showConvertToLocked ? <>
+          <Message
+          style={{marginTop: "10px", flexShrink: "1", display: "block", width: "auto"}}
+          variant="warning"
+          actionInline
+          action={
+              <Flex style={{justifyContent: "flex-end", marginLeft: "10px"}}>
+                  <Button
+                      variant="primary"
+                      onClick={() => {onDismiss(); onConvertToLocked()}}
+                  >Convert to Locked
+                  </Button>
+              </Flex>
+          }
+      >
+          <Text style={{wordWrap: "break-word", overflowWrap: "break-word", wordBreak: "break-word", maxWidth: "250px"}}>
+              Locked staking users are earning up to {maxLockedApy}% APY.
+          </Text>
+      </Message>
+      </> : null}
       <ModalActions>
         <Button variant="secondary" onClick={onDismiss} width="100%" disabled={pendingTx}>
           {TranslateString(462, 'Cancel')}

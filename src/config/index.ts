@@ -1,4 +1,5 @@
 import BigNumber from 'bignumber.js/bignumber'
+import { BigNumber as EthersBigNumber } from '@ethersproject/bignumber'
 import { BIG_TEN } from 'utils/bigNumber'
 
 BigNumber.config({
@@ -18,6 +19,7 @@ export const BSC_BLOCK_TIME = 3
 
 export const CAKE_PER_BLOCK = new BigNumber(1)
 export const BLOCKS_PER_YEAR = new BigNumber(10512000)
+export const ETHERSBIGNUMBER_BLOCKS_PER_YEAR = EthersBigNumber.from(BLOCKS_PER_YEAR.toNumber())
 export const PCSCAKE_PER_BLOCK = new BigNumber(40)
 export const PCSBLOCKS_PER_YEAR = new BigNumber((60 / BSC_BLOCK_TIME) * 60 * 24 * 365) // 10512000
 export const PCSCAKE_PER_YEAR = PCSCAKE_PER_BLOCK.times(PCSBLOCKS_PER_YEAR)

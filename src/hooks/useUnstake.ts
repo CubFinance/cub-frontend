@@ -7,8 +7,9 @@ import {
   updateUserBalance,
   updateUserPendingReward,
 } from 'state/actions'
-import { unstake, sousUnstake, sousEmergencyUnstake } from 'utils/callHelpers'
-import { useMasterchef, useSousChef, useKingdom } from './useContract'
+import {unstake, sousUnstake, sousEmergencyUnstake, unstakeAllLocked, unstakeLocked} from 'utils/callHelpers'
+import BigNumber from "bignumber.js";
+import {useMasterchef, useSousChef, useKingdom, useLockedKingdom} from './useContract'
 
 const useUnstake = (pid: number, isKingdom?: boolean) => {
   const dispatch = useAppDispatch()
@@ -26,6 +27,29 @@ const useUnstake = (pid: number, isKingdom?: boolean) => {
   )
 
   return { onUnstake: handleUnstake }
+}
+
+export const useLockedUnstake = (maxShares: string) => {
+    const dispatch = useAppDispatch()
+    const { account } = useWeb3React()
+    const lockedKingdomContract = useLockedKingdom();
+
+    const handleUnstake = useCallback(
+        async (amount: string) => {
+            if (new BigNumber(amount).gte(new BigNumber(maxShares))) {
+                const txHash = await unstakeAllLocked(lockedKingdomContract, account)
+                dispatch(fetchFarmUserDataAsync(account))
+                console.info(txHash)
+            } else {
+                const txHash = await unstakeLocked(lockedKingdomContract, amount, account)
+                dispatch(fetchFarmUserDataAsync(account))
+                console.info(txHash)
+            }
+        },
+        [account, dispatch, lockedKingdomContract, maxShares],
+    )
+
+    return { onUnstake: handleUnstake }
 }
 
 const SYRUPIDS = [5, 6, 3, 1, 22, 23, 78]

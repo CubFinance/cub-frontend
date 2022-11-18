@@ -11,7 +11,7 @@ export type TranslatableText =
       }
     }
 //
-// export interface Kingdom extends KingdomConfig {
+// export interface LockedKingdom extends KingdomConfig {
 //   tokenAmount?: BigNumber
 //   quoteTokenAmount?: BigNumber
 //   lpTotalInQuoteToken?: BigNumber
@@ -40,6 +40,19 @@ export interface Farm extends FarmConfig {
     stakedBalance: string
     earnings: string
     bnbDividends?: any
+    lockedKingdomUserData?: {
+      shares: BigNumber
+      lastDepositedTime: BigNumber
+      tokenAtLastUserAction: BigNumber
+      lastUserActionTime: BigNumber
+      lockStartTime: BigNumber
+      lockEndTime: BigNumber
+      userBoostedShare: BigNumber
+      locked: boolean
+      lockedAmount: BigNumber
+      overdueFee: BigNumber
+      performanceFee: BigNumber
+    }
   }
 }
 

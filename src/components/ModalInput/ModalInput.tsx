@@ -12,6 +12,7 @@ interface ModalInputProps {
   value: string
   addLiquidityUrl?: string
   inputTitle?: string
+  showMaxInstead?: boolean
 }
 
 const getBoxShadow = ({ isWarning = false, theme }) => {
@@ -64,6 +65,7 @@ const ModalInput: React.FC<ModalInputProps> = ({
   value,
   addLiquidityUrl,
   inputTitle,
+  showMaxInstead,
 }) => {
   const TranslateString = useI18n()
   const isBalanceZero = max === '0' || !max
@@ -85,7 +87,7 @@ const ModalInput: React.FC<ModalInputProps> = ({
         <Flex justifyContent="space-between" pl="16px">
           <Text fontSize="14px">{inputTitle}</Text>
           <Text fontSize="14px">
-            {TranslateString(1120, 'Balance')}: {displayBalance(max)}
+            {showMaxInstead ? 'Max' : 'Balance'}: {displayBalance(max)}
           </Text>
         </Flex>
         <Flex alignItems="flex-end" justifyContent="space-around">
