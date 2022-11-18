@@ -33,8 +33,7 @@ const useAllEarnings = () => {
 
       const resK = await multicall(kingdomsABI, callsK)
 
-
-      const resLK = farmsConfig.filter(farm => farm.isKingdomLocked).map(() => BigNumber.from(0))
+      const resLK = farmsConfig.filter(farm => farm.isKingdomLocked).map(() => [BigNumber.from(0)])
 
       setBalance([...res, ...resLK, ...resK])
     }

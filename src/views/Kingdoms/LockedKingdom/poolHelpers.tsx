@@ -80,6 +80,6 @@ export const fetchLockedKingdomUserData = async (account: string) => {
 
 export const fetchLockedKingdomTotalStaked = async () => {
     const contract = getLockedKingdomsContract();
-    const totalStaked = await contract.methods.totalLockedAmount().call();
+    const totalStaked = await contract.methods.balanceOf().call();
     return new BigNumber(totalStaked).toString();
 }
