@@ -5,47 +5,43 @@ import {BIG_TEN} from "../../../utils/bigNumber";
 import {DEFAULT_TOKEN_DECIMAL} from "../../../config";
 
 export interface InitialPoolVaultState {
-    totalShares: BigNumber
-    totalLockedAmount: BigNumber
-    pricePerFullShare: BigNumber
+    totalShares: string
+    totalLockedAmount: string
+    pricePerFullShare: string
     fees: {
-        performanceFee: BigNumber
-        withdrawalFee: BigNumber
-        withdrawalFeePeriod: BigNumber
+        performanceFee: string
+        withdrawalFee: string
+        withdrawalFeePeriod: string
     }
 }
 
-export const useSWRImmutableFetchPoolVaultData = (account: string) => {
-    return useSWRImmutable("chain-balance-locked-cub-better", () => fetchPoolVaultData(account))
-}
-
 // call LockedKingdoms ABI and convert into the above format
-export const fetchPoolVaultData = async (account: string): Promise<InitialPoolVaultState> => {
+export const fetchPoolVaultData = async (): Promise<InitialPoolVaultState> => {
     const contract = getLockedKingdomsContract()
     const [
         totalShares,
         totalLockedAmount,
         pricePerFullShare,
-        performanceFee,
         withdrawalFee,
         withdrawalFeePeriod,
+        performanceFee,
     ] = await Promise.all([
         contract.methods.totalShares().call(),
         contract.methods.totalLockedAmount().call(),
         contract.methods.getPricePerFullShare().call(),
-        contract.methods.calculatePerformanceFee(account).call(),
         contract.methods.withdrawFee().call(),
         contract.methods.withdrawFeePeriod().call(),
+        contract.methods.performanceFee().call(),
     ])
 
     return {
-        totalShares: new BigNumber(totalShares),
-        totalLockedAmount: new BigNumber(totalLockedAmount).div(BIG_TEN.pow(DEFAULT_TOKEN_DECIMAL)),
-        pricePerFullShare: new BigNumber(pricePerFullShare),
+        totalShares: new BigNumber(totalShares).toString(),
+        totalLockedAmount: new BigNumber(totalLockedAmount).div(BIG_TEN.pow(DEFAULT_TOKEN_DECIMAL)).toString(),
+        pricePerFullShare: new BigNumber(pricePerFullShare).toString(),
         fees: {
-            performanceFee: new BigNumber(performanceFee),
-            withdrawalFee: new BigNumber(withdrawalFee),
-            withdrawalFeePeriod: new BigNumber(withdrawalFeePeriod),
+            performanceFee: new BigNumber(performanceFee).toString(),
+            withdrawalFee: new BigNumber(withdrawalFee).toString(),
+            withdrawalFeePeriod: new BigNumber(withdrawalFeePeriod).toString(),
         },
     }
 }
@@ -60,9 +56,11 @@ export const fetchLockedKingdomUserData = async (account: string) => {
     const [
         userInfo,
         userOverdueFee,
+        userPerformanceFee,
     ] = await Promise.all([
         contract.methods.userInfo(account).call(),
         contract.methods.calculateOverdueFee(account).call(),
+        contract.methods.calculatePerformanceFee(account).call(),
     ])
 
     return {
@@ -75,7 +73,8 @@ export const fetchLockedKingdomUserData = async (account: string) => {
         userBoostedShare: new BigNumber(userInfo.userBoostedShare).toString(),
         locked: userInfo.locked,
         lockedAmount: new BigNumber(userInfo.lockedAmount).div(DEFAULT_TOKEN_DECIMAL).toString(),
-        overdueFee: new BigNumber(userOverdueFee).div(DEFAULT_TOKEN_DECIMAL).toString(),
+        overdueFee: new BigNumber(userOverdueFee).toString(),
+        performanceFee: new BigNumber(userPerformanceFee).toString(),
     }
 }
 

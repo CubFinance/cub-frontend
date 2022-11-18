@@ -108,10 +108,10 @@ export const fetchFarmUserStakedBalances = async (account: string, farmsToFetch:
 }
 
 async function getLockedKingdomsUserEarnings(account: string) {
-  const poolVaultData = await fetchPoolVaultData(account);
+  const poolVaultData = await fetchPoolVaultData();
   const poolVaultUserData = await fetchLockedKingdomUserData(account);
 
-  return getCakeVaultEarnings(account, new BigNumber(poolVaultUserData.tokenAtLastUserAction), new BigNumber(poolVaultUserData.shares), poolVaultData.pricePerFullShare, 0, poolVaultData.fees.performanceFee).autoCakeToDisplay;
+  return getCakeVaultEarnings(account, new BigNumber(poolVaultUserData.tokenAtLastUserAction), new BigNumber(poolVaultUserData.shares), new BigNumber(poolVaultData.pricePerFullShare), 0, new BigNumber(poolVaultData.fees.performanceFee)).autoCakeToDisplay;
 }
 
 export const fetchFarmUserEarnings = async (account: string, farmsToFetch: FarmConfig[]) => {

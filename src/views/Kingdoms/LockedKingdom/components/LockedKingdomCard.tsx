@@ -29,7 +29,6 @@ import {
 } from "../../../Farms/components/FarmTable/Actions/styles";
 import DepositModalLocked from "../../../Farms/components/DepositModalLocked";
 import {getCakeVaultEarnings} from "../helpers";
-import {useSWRImmutableFetchPoolVaultData} from "../poolHelpers";
 import WithdrawalFeeTimer from "./WithdrawalFeeTimer";
 import useVaultApy from "../../../../hooks/useVaultApy";
 import BurningCountDown from "../BurningCountdown";
@@ -80,7 +79,21 @@ const LockedKingdomCard: React.FC<KingdomCardProps> = ({
 
   const web3 = useWeb3()
 
-  const {data: poolVaultData} = useSWRImmutableFetchPoolVaultData(account);
+  const poolVaultData = useMemo(() => {
+    if (farm.lockedKingdomData) {
+      return {
+        totalShares: new BigNumber(farm.lockedKingdomData.totalShares),
+        totalLockedAmount: new BigNumber(farm.lockedKingdomData.totalLockedAmount),
+        pricePerFullShare: new BigNumber(farm.lockedKingdomData.pricePerFullShare),
+        fees: {
+            withdrawalFee: new BigNumber(farm.lockedKingdomData.fees.withdrawalFee),
+            withdrawalFeePeriod: new BigNumber(farm.lockedKingdomData.fees.withdrawalFeePeriod),
+            performanceFee: new BigNumber(farm.lockedKingdomData.fees.performanceFee),
+        }
+      }
+    }
+    return null;
+  }, [farm.lockedKingdomData])
 
   const tokenName = lpSymbol.toUpperCase()
   const {
@@ -105,6 +118,7 @@ const LockedKingdomCard: React.FC<KingdomCardProps> = ({
             userBoostedShare: new BigNumber(farm.userData.lockedKingdomUserData.userBoostedShare),
             locked: farm.userData.lockedKingdomUserData.locked,
             overdueFee: new BigNumber(farm.userData.lockedKingdomUserData.overdueFee),
+            performanceFee: new BigNumber(farm.userData.lockedKingdomUserData.performanceFee),
         }
     }
     return null
@@ -180,7 +194,7 @@ const LockedKingdomCard: React.FC<KingdomCardProps> = ({
   )
 
   const [onPresentWithdraw] = useModal(
-    <WithdrawModal shares={userDataAsBigNumbers?.shares} performanceFee={poolVaultData?.fees?.performanceFee} hasWithdrawFee={userDataAsBigNumbers?.lastDepositedTime.lte(getEpochSecondsIn3Days())} pricePerFullShare={poolVaultData?.pricePerFullShare} onConfirm={onUnstake} tokenName={tokenName} isTokenOnly={isTokenOnly} isKingdomToken={isKingdomToken} />,
+    <WithdrawModal shares={userDataAsBigNumbers?.shares} performanceFee={userDataAsBigNumbers?.performanceFee} hasWithdrawFee={userDataAsBigNumbers?.lastDepositedTime.lte(getEpochSecondsIn3Days())} pricePerFullShare={poolVaultData?.pricePerFullShare} onConfirm={onUnstake} tokenName={tokenName} isTokenOnly={isTokenOnly} isKingdomToken={isKingdomToken} />,
   )
 
   function getEpochSecondsIn3Days() {
@@ -463,6 +477,7 @@ const LockedKingdomCard: React.FC<KingdomCardProps> = ({
   function renderBottomPanelContent() {
     if (wasStakeLocked && !isStakeLocked) {
       return <Message
+          style={{marginTop: "10px", flex: "100% 1 1"}}
           variant="warning"
           actionInline
           action={
@@ -491,6 +506,7 @@ const LockedKingdomCard: React.FC<KingdomCardProps> = ({
 
     if (isStakeActive && !isStakeLocked) {
       return <Message
+          style={{marginTop: "10px", flex: "100% 1 1"}}
           variant="warning"
           actionInline
           action={

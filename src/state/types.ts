@@ -51,6 +51,7 @@ export interface Farm extends FarmConfig {
       locked: boolean
       lockedAmount: BigNumber
       overdueFee: BigNumber
+      performanceFee: BigNumber
     }
   }
 }
