@@ -6,6 +6,7 @@ import ModalInput from 'components/ModalInput'
 import useI18n from 'hooks/useI18n'
 import { getFullDisplayBalance } from 'utils/formatBalance'
 import Message from "../../Kingdoms/LockedKingdom/components/Message";
+import {updatePoolsUserData} from "../../../state/pools";
 
 interface DepositModalProps {
   max: BigNumber
@@ -71,7 +72,7 @@ const DepositModal: React.FC<DepositModalProps> = ({ max, onConfirm, onDismiss, 
           }
       >
           <Text style={{wordWrap: "break-word", overflowWrap: "break-word", wordBreak: "break-word", maxWidth: "250px"}}>
-              Locked staking users are earning up to {maxLockedApy}% APY.
+              Locked staking users are earning up to {new BigNumber(maxLockedApy).toFixed(2)}% APY.
           </Text>
       </Message>
       </> : null}

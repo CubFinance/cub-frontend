@@ -41,8 +41,8 @@ const getLockedApy = (flexibleApy: string, boostFactor: FixedNumber) =>
 
 const cakePoolPID = 34
 
-export default function useVaultApy({ duration = MAX_LOCK_DURATION }: { duration?: number } = {}) {
-    const { data } = useSWRImmutable('use-vault-apy-locked-kingdom', async () => {
+export default function useVaultApy({ duration = MAX_LOCK_DURATION, tvl = "" }: { duration?: number, tvl?: string } = {}) {
+    const { data } = useSWRImmutable(`use-vault-apy-locked-kingdom-${tvl}`, async () => {
         const callsInfo = [
             {
                 address: getLockedKingdomsAddress(),
@@ -78,7 +78,7 @@ export default function useVaultApy({ duration = MAX_LOCK_DURATION }: { duration
     const totalSharesAsEtherBN = useMemo(() => FixedNumber.from(totalShares.toString()), [totalShares])
     const pricePerFullShareAsEtherBN = useMemo(() => FixedNumber.from(pricePerFullShare.toString()), [pricePerFullShare])
 
-    const { data: totalCakePoolEmissionPerYear } = useSWRImmutable('masterChef-total-cake-pool-emission', async () => {
+    const { data: totalCakePoolEmissionPerYear } = useSWRImmutable(`masterChef-total-cake-pool-emission-${tvl}`, async () => {
         const calls = [
             {
                 address: masterChefAddress,

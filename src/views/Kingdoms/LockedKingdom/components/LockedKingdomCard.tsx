@@ -37,6 +37,7 @@ import ExtendModal from "./ExtendModal";
 import {convertLockedToFlexible} from "../../../../utils/callHelpers";
 import {fetchFarmUserDataAsync} from "../../../../state/farms";
 import {useAppDispatch} from "../../../../state";
+import {DEFAULT_TOKEN_DECIMAL} from "../../../../config";
 
 const Detail = styled.div`
   /*display: inline;
@@ -64,6 +65,7 @@ interface KingdomCardProps {
   addLiquidityUrl: string
   account?: string
   cakePrice?: BigNumber
+  aprApy?: any
   bnbDividends?: any
 }
 
@@ -72,9 +74,11 @@ const LockedKingdomCard: React.FC<KingdomCardProps> = ({
   addLiquidityUrl,
   account,
   cakePrice,
+    aprApy,
 }) => {
   const location = useLocation()
   const [requestedApproval, setRequestedApproval] = useState(false)
+  const [cakeVaultEarnings, setCakeVaultEarnings] = useState(null)
   const {isTokenOnly, isKingdomToken, lpSymbol, lpAddresses, token: { address } } = farm
 
   const web3 = useWeb3()
@@ -140,20 +144,24 @@ const LockedKingdomCard: React.FC<KingdomCardProps> = ({
   const wasStakeLocked = userDataAsBigNumbers?.lockEndTime.gt(0) || false;
 
   // useswrimmutable to getCakeVaultEarnings from chain data called "chain-balance-locked-cub"
-  const { data } = useSWRImmutable("chain-balance-locked-cub", async () => {
-    return {earnings: farm?.userData?.lockedKingdomUserData ? getCakeVaultEarnings(account, userDataAsBigNumbers?.tokenAtLastUserAction, userDataAsBigNumbers?.shares, poolVaultData.pricePerFullShare, cakePrice.toNumber(), poolVaultData.fees.performanceFee) : null, user: farm?.userData?.lockedKingdomUserData};
-  });
+  useEffect(() => {
+    if (farm?.userData?.lockedKingdomUserData) {
+      setCakeVaultEarnings(getCakeVaultEarnings(account, userDataAsBigNumbers?.tokenAtLastUserAction.times(DEFAULT_TOKEN_DECIMAL), userDataAsBigNumbers?.shares, poolVaultData.pricePerFullShare, cakePrice.toNumber(), userDataAsBigNumbers?.performanceFee.plus(userDataAsBigNumbers?.overdueFee).plus(userDataAsBigNumbers?.userBoostedShare)))
+    }
+  }, [farm?.userData?.lockedKingdomUserData, account, cakePrice, poolVaultData?.fees?.performanceFee, poolVaultData?.pricePerFullShare, userDataAsBigNumbers?.shares, userDataAsBigNumbers?.tokenAtLastUserAction, userDataAsBigNumbers?.overdueFee, userDataAsBigNumbers?.userBoostedShare, userDataAsBigNumbers?.performanceFee])
 
   const dispatch = useAppDispatch()
 
-  const autoCakeToDisplay = data?.earnings?.autoCakeToDisplay || 0;
-  const autoUsdToDisplay = data?.earnings?.autoUsdToDisplay || 0;
+  const autoCakeToDisplay = cakeVaultEarnings?.autoCakeToDisplay || 0;
+  const autoUsdToDisplay = cakeVaultEarnings?.autoUsdToDisplay || 0;
+
+  console.log(cakeVaultEarnings);
 
   const { onStakeLocked } = useStakeLocked()
   const onStake = (amount: string) => onStakeLocked(amount, 0);
   const { onUnstake } = useLockedUnstake(userDataAsBigNumbers?.shares.toString() || '0')
 
-  const { lockedApy: maxLockedApy } = useVaultApy({duration: 31536000});
+  const { lockedApy: maxLockedApy, getBoostFactor } = aprApy;
 
   const isApproved = account && allowance && allowance.isGreaterThan(0)
 
@@ -419,7 +427,7 @@ const LockedKingdomCard: React.FC<KingdomCardProps> = ({
     }
 
   const durationSeconds = (userDataAsBigNumbers?.lockEndTime?.toNumber() || 0) - (userDataAsBigNumbers?.lockStartTime?.toNumber() || 0);
-  const { boostFactor, getLockedApy } = useVaultApy({duration: durationSeconds});
+  const boostFactor = getBoostFactor(durationSeconds);
   const numWeeks = Math.floor(durationSeconds / 604800);
 
   const unstakeFreeSeconds = useMemo(() => getSecondsUntilFlexUnstakeIsFree(userDataAsBigNumbers, poolVaultData), [poolVaultData, userDataAsBigNumbers]);
@@ -521,7 +529,7 @@ const LockedKingdomCard: React.FC<KingdomCardProps> = ({
           }
       >
         <Text>
-          Lock staking users are earning up to {new BigNumber(getLockedApy(31449600)).toFixed(2)}% APY.
+          Lock staking users are earning up to {new BigNumber(maxLockedApy).toFixed(2)}% APY.
         </Text>
       </Message>;
     }
