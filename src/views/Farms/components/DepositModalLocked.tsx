@@ -107,7 +107,7 @@ const DepositModalLocked: React.FC<DepositModalProps> = ({ max, onConfirm, onDis
         </div></> : null}
         {/* Show APY information for currently selected weeks value */}
         <div style={{marginBottom: "20px"}} />
-        <Text><strong>APY:</strong> {lockedApy ? getLockedApy(secondsDuration) : "0.00"}%</Text>
+        <Text><strong>APY:</strong> {lockedApy ? new BigNumber(getLockedApy(secondsDuration)).toFixed(2) : "0.00"}%</Text>
         <Text><strong>You will earn:</strong> {youWillEarn && !Number.isNaN(Number(youWillEarn)) ? youWillEarn : "0.000"} CUB</Text>
         <Text><strong>Duration:</strong> {actualWeeks} Week{actualWeeks === 1 ? "" : "s"}</Text>
         <Text><strong>Unlocks at:</strong> {futureDate}</Text>

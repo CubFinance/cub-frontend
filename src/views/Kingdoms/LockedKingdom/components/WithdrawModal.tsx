@@ -5,6 +5,7 @@ import ModalActions from 'components/ModalActions'
 import ModalInput from 'components/ModalInput'
 import useI18n from 'hooks/useI18n'
 import { getFullDisplayBalance } from 'utils/formatBalance'
+import {DEFAULT_TOKEN_DECIMAL} from "../../../../config";
 
 interface WithdrawModalProps {
   onConfirm: (shares: string) => void
@@ -24,12 +25,12 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({ onConfirm, onDismiss, tok
   const TranslateString = useI18n()
 
   const fullBalance = useMemo(() => {
-    return new BigNumber(shares?.minus(performanceFee).multipliedBy(pricePerFullShare).dividedBy(new BigNumber(10).pow(18)).toFixed(18)) || new BigNumber(0);
+    return new BigNumber(shares?.minus(performanceFee).multipliedBy(pricePerFullShare.div(DEFAULT_TOKEN_DECIMAL)).dividedBy(DEFAULT_TOKEN_DECIMAL).toFixed(18)) || new BigNumber(0);
   }, [shares, performanceFee, pricePerFullShare]);
 
   function balanceToShares(balance: string) {
         const balanceBigNumber = new BigNumber(balance);
-        const sharesToWithdraw = balanceBigNumber.multipliedBy(new BigNumber(10).pow(18)).dividedBy(pricePerFullShare);
+        const sharesToWithdraw = balanceBigNumber.multipliedBy(DEFAULT_TOKEN_DECIMAL).dividedBy(pricePerFullShare).multipliedBy(DEFAULT_TOKEN_DECIMAL);
         const sharesToWithdrawWithFee = sharesToWithdraw.plus(performanceFee.times(balanceBigNumber.div(fullBalance)));
 
         if (sharesToWithdrawWithFee.isGreaterThan(shares.times(0.999))) {

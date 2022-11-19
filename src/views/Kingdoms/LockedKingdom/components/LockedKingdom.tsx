@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, {useEffect, useMemo, useState} from 'react'
 import { Text, Image, Flex } from '@pancakeswap-libs/uikit'
 import BigNumber from 'bignumber.js'
 import styled, { keyframes } from 'styled-components'
@@ -94,16 +94,13 @@ const LockedKingdom: React.FC<KingdomProps> = ({ farm, removed, cakePrice, accou
   const { lpTotalInQuoteToken, lpSymbol, lpTokenBalancePCS = 0, lpTotalInQuoteTokenPCS = 0, quoteToken: { busdPrice: quoteTokenPriceUsd }, farmType, token: { busdPrice: tokenPriceString } } = farm
   const farmImage = lpSymbol.split(' ')[0].toLocaleLowerCase()
 
-  const aprApy = useVaultApy({duration: 52 * 7 * 24 * 60 * 60})
-
-  const { lockedApy, flexibleApy } = aprApy
   const { tokenBalance, stakedBalance, earnings } = farm.userData
 
   const rawTokenBalance = tokenBalance ? getBalanceNumber(new BigNumber(tokenBalance)) : 0
   const rawStakedBalance = stakedBalance ? getBalanceNumber(new BigNumber(stakedBalance)) : 0
   const rawEarningsBalance = earnings ? getBalanceNumber(new BigNumber(earnings)) : 0
   const tokenPrice = new BigNumber(tokenPriceString);
-  let oneTokenQuoteValue = new BigNumber(0)
+  let oneTokenQuoteValue: BigNumber;
 
   if (!farm.isKingdomToken)
     oneTokenQuoteValue = lpTotalInQuoteTokenPCS ? new BigNumber(lpTotalInQuoteTokenPCS).div(new BigNumber(lpTokenBalancePCS)).times(quoteTokenPriceUsd).div(DEFAULT_TOKEN_DECIMAL) : new BigNumber(0)
@@ -117,9 +114,9 @@ const LockedKingdom: React.FC<KingdomProps> = ({ farm, removed, cakePrice, accou
     const totalValueFormated = lpTotalInQuoteToken && lpTotalInQuoteToken !== "NaN"
     ? `$${Number(new BigNumber(lpTotalInQuoteToken).times(quoteTokenPriceUsd)).toLocaleString(undefined, { maximumFractionDigits: 0 })}`
     : '-'
-  // const farmAPR = lockedApy && Number(lockedApy).toLocaleString('en-US', { maximumFractionDigits: 2 })
 
-  // aprApy = { ...aprApy, compounding, farmAPR, apr: altPid === 12 ? hostApr : apr, cakePrice, quoteTokenPriceUsd: Number(quoteTokenPriceUsd), lpTotalInQuoteToken }
+    const aprApy = useVaultApy({duration: 31449600, tvl: totalValueFormated});
+    const { flexibleApy, lockedApy } = aprApy;
 
   return (
     <>

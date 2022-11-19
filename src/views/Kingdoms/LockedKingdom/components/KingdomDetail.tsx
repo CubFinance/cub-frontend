@@ -138,6 +138,7 @@ const KingdomDetail: React.FC<KingdomDetailProps> = ({
         </Detail>
         <LockedKingdomCard
             farm={farm}
+            aprApy={aprApy}
             walletBalance={walletBalance}
             depositBalance={depositBalance}
             rewardBalance={rewardBalance}
