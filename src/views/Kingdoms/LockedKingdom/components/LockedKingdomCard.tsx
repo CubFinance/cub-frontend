@@ -155,8 +155,6 @@ const LockedKingdomCard: React.FC<KingdomCardProps> = ({
   const autoCakeToDisplay = cakeVaultEarnings?.autoCakeToDisplay || 0;
   const autoUsdToDisplay = cakeVaultEarnings?.autoUsdToDisplay || 0;
 
-  console.log(cakeVaultEarnings);
-
   const { onStakeLocked } = useStakeLocked()
   const onStake = (amount: string) => onStakeLocked(amount, 0);
   const { onUnstake } = useLockedUnstake(userDataAsBigNumbers?.shares.toString() || '0')
