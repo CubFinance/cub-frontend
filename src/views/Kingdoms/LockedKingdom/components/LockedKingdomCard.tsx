@@ -67,6 +67,7 @@ interface KingdomCardProps {
   cakePrice?: BigNumber
   aprApy?: any
   bnbDividends?: any
+  cakeVaultEarnings?: any
 }
 
 const LockedKingdomCard: React.FC<KingdomCardProps> = ({
@@ -75,10 +76,10 @@ const LockedKingdomCard: React.FC<KingdomCardProps> = ({
   account,
   cakePrice,
     aprApy,
+    cakeVaultEarnings,
 }) => {
   const location = useLocation()
   const [requestedApproval, setRequestedApproval] = useState(false)
-  const [cakeVaultEarnings, setCakeVaultEarnings] = useState(null)
   const {isTokenOnly, isKingdomToken, lpSymbol, lpAddresses, token: { address } } = farm
 
   const web3 = useWeb3()
@@ -97,7 +98,7 @@ const LockedKingdomCard: React.FC<KingdomCardProps> = ({
       }
     }
     return null;
-  }, [farm.lockedKingdomData])
+  }, [farm?.lockedKingdomData])
 
   const tokenName = lpSymbol.toUpperCase()
   const {
@@ -142,13 +143,6 @@ const LockedKingdomCard: React.FC<KingdomCardProps> = ({
 
   // stake was originally locked? (used for determining if it will decay over time)
   const wasStakeLocked = userDataAsBigNumbers?.lockEndTime.gt(0) || false;
-
-  // useswrimmutable to getCakeVaultEarnings from chain data called "chain-balance-locked-cub"
-  useEffect(() => {
-    if (farm?.userData?.lockedKingdomUserData) {
-      setCakeVaultEarnings(getCakeVaultEarnings(account, userDataAsBigNumbers?.tokenAtLastUserAction.times(DEFAULT_TOKEN_DECIMAL), userDataAsBigNumbers?.shares, poolVaultData.pricePerFullShare, cakePrice.toNumber(), userDataAsBigNumbers?.performanceFee.plus(userDataAsBigNumbers?.overdueFee).plus(userDataAsBigNumbers?.userBoostedShare)))
-    }
-  }, [farm?.userData?.lockedKingdomUserData, account, cakePrice, poolVaultData?.fees?.performanceFee, poolVaultData?.pricePerFullShare, userDataAsBigNumbers?.shares, userDataAsBigNumbers?.tokenAtLastUserAction, userDataAsBigNumbers?.overdueFee, userDataAsBigNumbers?.userBoostedShare, userDataAsBigNumbers?.performanceFee])
 
   const dispatch = useAppDispatch()
 
@@ -200,7 +194,7 @@ const LockedKingdomCard: React.FC<KingdomCardProps> = ({
   )
 
   const [onPresentWithdraw] = useModal(
-    <WithdrawModal shares={userDataAsBigNumbers?.shares} performanceFee={userDataAsBigNumbers?.performanceFee} hasWithdrawFee={userDataAsBigNumbers?.lastDepositedTime.lte(getEpochSecondsIn3Days())} pricePerFullShare={poolVaultData?.pricePerFullShare} onConfirm={onUnstake} tokenName={tokenName} isTokenOnly={isTokenOnly} isKingdomToken={isKingdomToken} />,
+    <WithdrawModal shares={userDataAsBigNumbers?.shares} performanceFee={userDataAsBigNumbers?.performanceFee.plus(userDataAsBigNumbers?.overdueFee).plus(userDataAsBigNumbers?.userBoostedShare)} hasWithdrawFee={userDataAsBigNumbers?.lastDepositedTime.lte(getEpochSecondsIn3Days())} pricePerFullShare={poolVaultData?.pricePerFullShare} onConfirm={onUnstake} tokenName={tokenName} isTokenOnly={isTokenOnly} isKingdomToken={isKingdomToken} />,
   )
 
   function getEpochSecondsIn3Days() {
@@ -439,8 +433,8 @@ const LockedKingdomCard: React.FC<KingdomCardProps> = ({
           <ActionTitles>
             <Title>RECENT CUB PROFIT</Title>
           </ActionTitles>
-             <Earned>{countUp2}CUB</Earned>
-            <Staked>~{countUp}USD</Staked>
+             <Earned>{countUp}CUB</Earned>
+            <Staked>~{countUp2}USD</Staked>
             </div>
           </ActionContent>
           <ActionContent style={{flex: "50%"}}>
@@ -466,8 +460,8 @@ const LockedKingdomCard: React.FC<KingdomCardProps> = ({
       </ActionTitles>
       <ActionContent style={{flexWrap: "wrap"}}>
         <div style={{width: "50%", flex: "50% 0 0"}}>
-          <Earned>{countUp2}CUB</Earned>
-          <Staked>~{countUp}USD</Staked>
+          <Earned>{countUp}CUB</Earned>
+          <Staked>~{countUp2}USD</Staked>
         </div>
         <div style={{width: "50%", flex: "50% 0 0"}}>
           {unstakeFreeSeconds === 0 && isStakeActive ? <Text>No unstaking fee</Text> :

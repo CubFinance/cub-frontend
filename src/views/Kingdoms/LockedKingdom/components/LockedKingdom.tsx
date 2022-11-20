@@ -11,6 +11,7 @@ import KingdomDetail from './KingdomDetail'
 import Divider from './DividerBlue'
 import Spacer from './Spacer'
 import useVaultApy from "../../../../hooks/useVaultApy";
+import {getCakeVaultEarnings} from "../helpers";
 
 const ExpandingWrapper = styled.div<{ expanded: boolean }>`
   height: ${(props) => (props.expanded ? '100%' : '0px')};
@@ -90,15 +91,25 @@ interface KingdomProps {
 
 const LockedKingdom: React.FC<KingdomProps> = ({ farm, removed, cakePrice, account, bakePrice, beltPrice, cubDen, realCakePrice, bnbDividends }) => {
   const [showExpandableSection, setShowExpandableSection] = useState(false)
+    const [cakeVaultEarnings, setCakeVaultEarnings] = useState(null)
+
+    // useswrimmutable to getCakeVaultEarnings from chain data called "chain-balance-locked-cub"
+    useEffect(() => {
+        if (farm?.userData?.lockedKingdomUserData) {
+            setCakeVaultEarnings(getCakeVaultEarnings(account, new BigNumber(farm?.userData?.lockedKingdomUserData?.tokenAtLastUserAction).times(DEFAULT_TOKEN_DECIMAL), new BigNumber(farm?.userData?.lockedKingdomUserData?.shares), new BigNumber(farm?.lockedKingdomData.pricePerFullShare), cakePrice.toNumber(), new BigNumber(farm?.userData?.lockedKingdomUserData?.performanceFee).plus(new BigNumber(farm?.userData?.lockedKingdomUserData?.overdueFee)).plus(new BigNumber(farm?.userData?.lockedKingdomUserData?.userBoostedShare))))
+        }
+    }, [account, cakePrice, farm?.lockedKingdomData?.pricePerFullShare, farm?.userData?.lockedKingdomUserData])
 
   const { lpTotalInQuoteToken, lpSymbol, lpTokenBalancePCS = 0, lpTotalInQuoteTokenPCS = 0, quoteToken: { busdPrice: quoteTokenPriceUsd }, farmType, token: { busdPrice: tokenPriceString } } = farm
   const farmImage = lpSymbol.split(' ')[0].toLocaleLowerCase()
 
   const { tokenBalance, stakedBalance, earnings } = farm.userData
 
+
+
   const rawTokenBalance = tokenBalance ? getBalanceNumber(new BigNumber(tokenBalance)) : 0
   const rawStakedBalance = stakedBalance ? getBalanceNumber(new BigNumber(stakedBalance)) : 0
-  const rawEarningsBalance = earnings ? getBalanceNumber(new BigNumber(earnings)) : 0
+  const rawEarningsBalance = cakeVaultEarnings?.autoCakeToDisplay ? getBalanceNumber(new BigNumber(cakeVaultEarnings?.autoCakeToDisplay).times(DEFAULT_TOKEN_DECIMAL)) : 0
   const tokenPrice = new BigNumber(tokenPriceString);
   let oneTokenQuoteValue: BigNumber;
 
@@ -191,6 +202,7 @@ const LockedKingdom: React.FC<KingdomProps> = ({ farm, removed, cakePrice, accou
             farm={farm}
             walletBalance={rawTokenBalance}
             depositBalance={rawStakedBalance}
+            cakeVaultEarnings={cakeVaultEarnings}
             rewardBalance={rawEarningsBalance}
             walletBalanceQuoteValue={walletBalanceQuoteValue}
             depositBalanceQuoteValue={depositBalanceQuoteValue}
