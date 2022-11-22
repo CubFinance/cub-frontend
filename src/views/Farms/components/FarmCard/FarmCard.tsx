@@ -31,6 +31,7 @@ export interface FarmWithStakedValue extends Farm {
       totalShares: string
       totalLockedAmount: string
       pricePerFullShare: string
+      totalBalance: string
       fees: {
           performanceFee: string
           withdrawalFee: string

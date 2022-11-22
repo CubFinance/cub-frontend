@@ -1,13 +1,15 @@
 import BigNumber from "bignumber.js";
 import useSWRImmutable from "swr/immutable";
-import {getLockedKingdomsContract} from "../../../utils/contractHelpers";
+import {getCakeContract, getLockedKingdomsContract} from "../../../utils/contractHelpers";
 import {BIG_TEN} from "../../../utils/bigNumber";
 import {DEFAULT_TOKEN_DECIMAL} from "../../../config";
+import {getLockedKingdomsAddress} from "../../../utils/addressHelpers";
 
 export interface InitialPoolVaultState {
     totalShares: string
     totalLockedAmount: string
     pricePerFullShare: string
+    totalBalance: string
     fees: {
         performanceFee: string
         withdrawalFee: string
@@ -18,6 +20,9 @@ export interface InitialPoolVaultState {
 // call LockedKingdoms ABI and convert into the above format
 export const fetchPoolVaultData = async (): Promise<InitialPoolVaultState> => {
     const contract = getLockedKingdomsContract()
+    const cubContract = getCakeContract();
+    const lockedKingdomsAddress = getLockedKingdomsAddress();
+
     const [
         totalShares,
         totalLockedAmount,
@@ -25,6 +30,7 @@ export const fetchPoolVaultData = async (): Promise<InitialPoolVaultState> => {
         withdrawalFee,
         withdrawalFeePeriod,
         performanceFee,
+        totalBalance
     ] = await Promise.all([
         contract.methods.totalShares().call(),
         contract.methods.totalLockedAmount().call(),
@@ -32,12 +38,14 @@ export const fetchPoolVaultData = async (): Promise<InitialPoolVaultState> => {
         contract.methods.withdrawFee().call(),
         contract.methods.withdrawFeePeriod().call(),
         contract.methods.performanceFee().call(),
+        cubContract.methods.balanceOf(lockedKingdomsAddress).call(),
     ])
 
     return {
         totalShares: new BigNumber(totalShares).toString(),
-        totalLockedAmount: new BigNumber(totalLockedAmount).div(BIG_TEN.pow(DEFAULT_TOKEN_DECIMAL)).toString(),
+        totalLockedAmount: new BigNumber(totalLockedAmount).div(DEFAULT_TOKEN_DECIMAL).toString(),
         pricePerFullShare: new BigNumber(pricePerFullShare).toString(),
+        totalBalance: new BigNumber(totalBalance).div(DEFAULT_TOKEN_DECIMAL).toString(),
         fees: {
             performanceFee: new BigNumber(performanceFee).toString(),
             withdrawalFee: new BigNumber(withdrawalFee).toString(),
