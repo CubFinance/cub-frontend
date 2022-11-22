@@ -13,15 +13,18 @@ interface DepositModalProps {
     onConfirm: (amount: string, lockDuration: number) => void
     onDismiss?: () => void
     tokenName?: string
+    existingStakeDuration?: number
     addLiquidityUrl?: string
     title?: string
 }
 
-const ExtendModal: React.FC<DepositModalProps> = ({ amount, onConfirm, onDismiss, tokenName = '', addLiquidityUrl, title }) => {
+const ExtendModal: React.FC<DepositModalProps> = ({ amount, onConfirm, onDismiss, tokenName = '', addLiquidityUrl, title, existingStakeDuration }) => {
     const [duration, setDuration] = useState(1);
     const [pendingTx, setPendingTx] = useState(false)
     const TranslateString = useI18n()
     const {lockedApy, getLockedApy} = useVaultApy();
+
+    const alreadyStakingDuration = Number((existingStakeDuration || 0).toFixed(0));
 
     let warningMessage = '';
 
@@ -43,11 +46,23 @@ const ExtendModal: React.FC<DepositModalProps> = ({ amount, onConfirm, onDismiss
         return new BigNumber(amount).times(new BigNumber(getLockedApy(secondsDuration)).div(100)).toFixed(3)
     }, [amount, getLockedApy, secondsDuration]);
 
+    let modalInputText = "Stake for";
+
+    if (title === "Extend" || title === "Renew") {
+        modalInputText = "Extend for";
+    }
+
+    const maxAddWeeks = (52 - alreadyStakingDuration).toString();
+
+    if (maxAddWeeks === "0") {
+        warningMessage = "You have reached the maximum locked staking time, please convert your stake to flex and then extend it in order to continue earning locked rewards."
+    }
+
     return (
         <Modal title={title} onDismiss={onDismiss}>
             <Text>Amount: {amount} CUB</Text>
             <div style={{marginBottom: "20px"}} />
-            <ModalInput max="52" symbol="Weeks" onChange={(e) => e.currentTarget.validity.valid && setDuration(Number(e.currentTarget.value))} onSelectMax={() => setDuration(52)} value={duration.toString()} inputTitle="Stake for" showMaxInstead />
+            <ModalInput max={maxAddWeeks} symbol="Weeks" onChange={(e) => e.currentTarget.validity.valid && setDuration(Number(e.currentTarget.value))} onSelectMax={() => setDuration(Number(maxAddWeeks))} value={duration.toString()} inputTitle={modalInputText} showMaxInstead />
             {/* extend checkbox */}
             {warningMessage !== "" ? <>
                 <Message

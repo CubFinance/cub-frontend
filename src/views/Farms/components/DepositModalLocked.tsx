@@ -67,8 +67,8 @@ const DepositModalLocked: React.FC<DepositModalProps> = ({ max, onConfirm, onDis
     setVal(fullBalance)
   }, [fullBalance, setVal])
 
-  const secondsDuration = useMemo(() => Math.max(isAddAdditional && !extend ? currentEndTime - currentStartTime : duration * 604800, 0), [currentStartTime, currentEndTime, duration, extend, isAddAdditional]);
-  const secondsDurationForContract = useMemo(() => Math.max(isAddAdditional && !extend ? 0 : duration * 604800, 0), [duration, extend, isAddAdditional]);
+  const secondsDuration = useMemo(() => Math.max(isAddAdditional && !extend ? 0 : duration * 604800 - currentStartTime + currentEndTime, 0), [currentStartTime, currentEndTime, duration, extend, isAddAdditional]);
+  const secondsDurationForContract = useMemo(() => Math.max(isAddAdditional && !extend ? 0 : (new BigNumber(duration * 604800).minus(currentEndTime || 0).plus(currentStartTime || 0).toNumber()), 0), [duration, extend, isAddAdditional, currentEndTime, currentStartTime]);
   const actualWeeks = isAddAdditional && !extend ? inferredWeeks : duration;
   const futureDate = isAddAdditional && !extend ? epochToFutureDate(currentEndTime) : weeksToFutureDate(actualWeeks);
 

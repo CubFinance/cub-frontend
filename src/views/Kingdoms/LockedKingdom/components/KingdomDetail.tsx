@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useMemo} from 'react'
 import BigNumber from 'bignumber.js'
 import styled from 'styled-components'
 import { Link, Flex, Text } from '@pancakeswap-libs/uikit'
@@ -7,6 +7,8 @@ import { FarmWithStakedValue } from 'views/Farms/components/FarmCard/FarmCard'
 import getLiquidityUrlPathParts from 'utils/getLiquidityUrlPathParts'
 import LockedKingdomCard from './LockedKingdomCard'
 import AprApy from './AprApy'
+import useAvgLockDuration from "./useAvgLockDuration";
+import Balance from "../../../../components/Balance";
 
 const Details = styled.div`
   margin-top: 1rem;
@@ -101,6 +103,9 @@ const KingdomDetail: React.FC<KingdomDetailProps> = ({
   const vaultContract = `https://bscscan.com/address/${kingdomContract}`
   let infoAddress = `https://pancakeswap.info/pair/${isTokenOnly ? tokenAddress : lpAddress}`
 
+  const avgLockDuration = useAvgLockDuration(new BigNumber(farm?.lockedKingdomData?.totalLockedAmount || 0), new BigNumber(farm?.lockedKingdomData?.totalShares || 0), new BigNumber(farm?.lockedKingdomData?.totalBalance || 0), new BigNumber(farm?.lockedKingdomData?.pricePerFullShare || 0));
+  const totalLocked = useMemo(() => farm?.lockedKingdomData?.totalLockedAmount ? new BigNumber(farm?.lockedKingdomData?.totalLockedAmount).toFixed(0) : 0, [farm?.lockedKingdomData?.totalLockedAmount]);
+
   let exchangeUrl = PCS_ADD_LIQUIDITY_URL
   let buyTokenUrl = `${PCS_EXCHANGE_URL}/swap/${token.address['56']}`
   let addLiquidityUrl = `${exchangeUrl}/${liquidityUrlPathParts}`
@@ -124,6 +129,14 @@ const KingdomDetail: React.FC<KingdomDetailProps> = ({
     <KDetail>
       <Details className="k-details" style={{flexWrap: "wrap"}}>
         <Detail style={{width: "20%"}}>
+          <Flex justifyContent="space-between">
+            <Text>Total locked:</Text>
+            <Text><Balance value={Number(totalLocked)} fontSize="md" decimals={0} unit=" CUB" /></Text>
+          </Flex>
+          <Flex justifyContent="space-between">
+            <Text><abbr title="The average lock duration of all the locked staking positions of other users">Avg. Lock Duration:</abbr></Text>
+            <Text>{avgLockDuration.avgLockDurationsInWeeks}</Text>
+          </Flex>
           <Flex justifyContent="space-between">
             <Text>Multiplier:</Text>
             <Text>{displayMultiplier}</Text>

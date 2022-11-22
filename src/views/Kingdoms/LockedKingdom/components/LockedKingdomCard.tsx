@@ -38,6 +38,7 @@ import {convertLockedToFlexible} from "../../../../utils/callHelpers";
 import {fetchFarmUserDataAsync} from "../../../../state/farms";
 import {useAppDispatch} from "../../../../state";
 import {DEFAULT_TOKEN_DECIMAL} from "../../../../config";
+import useAvgLockDuration from "./useAvgLockDuration";
 
 const Detail = styled.div`
   /*display: inline;
@@ -90,6 +91,7 @@ const LockedKingdomCard: React.FC<KingdomCardProps> = ({
         totalShares: new BigNumber(farm.lockedKingdomData.totalShares),
         totalLockedAmount: new BigNumber(farm.lockedKingdomData.totalLockedAmount),
         pricePerFullShare: new BigNumber(farm.lockedKingdomData.pricePerFullShare),
+        totalBalance: new BigNumber(farm.lockedKingdomData.totalBalance),
         fees: {
             withdrawalFee: new BigNumber(farm.lockedKingdomData.fees.withdrawalFee),
             withdrawalFeePeriod: new BigNumber(farm.lockedKingdomData.fees.withdrawalFeePeriod),
@@ -170,16 +172,18 @@ const LockedKingdomCard: React.FC<KingdomCardProps> = ({
       });
   };
 
+  const existingStakeDuration = userDataAsBigNumbers?.lockEndTime?.minus(userDataAsBigNumbers?.lockStartTime).div(604800).toNumber() || 0;
+
   const [onPresentConvertToLocked] = useModal(
-      <ExtendModal amount={autoCakeToDisplay.toString()} onConfirm={onStakeLocked} tokenName="CUB" addLiquidityUrl={addLiquidityUrl} title="Convert to Lock" />
+      <ExtendModal amount={stakedBalance.toString()} onConfirm={onStakeLocked} tokenName="CUB" addLiquidityUrl={addLiquidityUrl} title="Convert to Lock" />
   );
 
   const [onPresentExtend] = useModal(
-      <ExtendModal amount={autoCakeToDisplay.toString()} onConfirm={onStakeLocked} tokenName="CUB" addLiquidityUrl={addLiquidityUrl} title="Extend" />
+      <ExtendModal amount={stakedBalance.toString()} existingStakeDuration={existingStakeDuration} onConfirm={onStakeLocked} tokenName="CUB" addLiquidityUrl={addLiquidityUrl} title="Extend" />
   );
 
   const [onPresentRenew] = useModal(
-      <ExtendModal amount={autoCakeToDisplay.toString()} onConfirm={onStakeLocked} tokenName="CUB" addLiquidityUrl={addLiquidityUrl} title="Renew" />
+      <ExtendModal amount={autoCakeToDisplay.toString()} existingStakeDuration={existingStakeDuration} onConfirm={onStakeLocked} tokenName="CUB" addLiquidityUrl={addLiquidityUrl} title="Renew" />
   );
 
   const [onPresentFlexAdd] = useModal(
