@@ -173,13 +173,14 @@ const LockedKingdomCard: React.FC<KingdomCardProps> = ({
   };
 
   const existingStakeDuration = userDataAsBigNumbers?.lockEndTime?.minus(userDataAsBigNumbers?.lockStartTime).div(604800).toNumber() || 0;
+  const existingStakeSecondsRemain = Math.max(userDataAsBigNumbers?.lockEndTime?.minus(new Date().getTime() / 1000).toNumber() || 0, 0);
 
   const [onPresentConvertToLocked] = useModal(
       <ExtendModal amount={stakedBalance.toString()} onConfirm={onStakeLocked} tokenName="CUB" addLiquidityUrl={addLiquidityUrl} title="Convert to Lock" />
   );
 
   const [onPresentExtend] = useModal(
-      <ExtendModal amount={stakedBalance.toString()} existingStakeDuration={existingStakeDuration} onConfirm={onStakeLocked} tokenName="CUB" addLiquidityUrl={addLiquidityUrl} title="Extend" />
+      <ExtendModal amount={stakedBalance.toString()} existingStakeDuration={existingStakeDuration} existingStakeSecondsRemain={existingStakeSecondsRemain} onConfirm={onStakeLocked} tokenName="CUB" addLiquidityUrl={addLiquidityUrl} title="Extend" />
   );
 
   const [onPresentRenew] = useModal(

@@ -14,17 +14,18 @@ interface DepositModalProps {
     onDismiss?: () => void
     tokenName?: string
     existingStakeDuration?: number
+    existingStakeSecondsRemain?: number
     addLiquidityUrl?: string
     title?: string
 }
 
-const ExtendModal: React.FC<DepositModalProps> = ({ amount, onConfirm, onDismiss, tokenName = '', addLiquidityUrl, title, existingStakeDuration }) => {
+const ExtendModal: React.FC<DepositModalProps> = ({ amount, onConfirm, onDismiss, tokenName = '', addLiquidityUrl, title, existingStakeDuration , existingStakeSecondsRemain}) => {
     const [duration, setDuration] = useState(1);
     const [pendingTx, setPendingTx] = useState(false)
     const TranslateString = useI18n()
     const {lockedApy, getLockedApy} = useVaultApy();
 
-    const alreadyStakingDuration = Number((existingStakeDuration || 0).toFixed(0));
+    const alreadyStakingDuration = Math.round(existingStakeDuration || 0);
 
     let warningMessage = '';
 
@@ -33,14 +34,14 @@ const ExtendModal: React.FC<DepositModalProps> = ({ amount, onConfirm, onDismiss
     }
 
     // takes a number of weeks and gets the date at that time in the format MMM DD, YYYY HH:mm (i.e. Jan 01, 2021 00:00)
-    function weeksToFutureDate(weeks = 0) {
+    function secondsToFutureDate(seconds = 0) {
         const date = new Date();
-        date.setDate(date.getDate() + (weeks * 7));
+        date.setSeconds(date.getSeconds() + seconds);
         return date.toLocaleString('en-US', {month: 'short', day: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit'});
     }
 
     const secondsDuration = duration * 604800;
-    const futureDate = weeksToFutureDate(duration + alreadyStakingDuration);
+    const futureDate = secondsToFutureDate(new BigNumber(duration).times(604800).toNumber() + Math.max(existingStakeSecondsRemain || 0, 0));
 
     const youWillEarn = useMemo(() => {
         return new BigNumber(amount).times(new BigNumber(getLockedApy(secondsDuration)).div(100)).toFixed(3)
@@ -60,7 +61,7 @@ const ExtendModal: React.FC<DepositModalProps> = ({ amount, onConfirm, onDismiss
 
     return (
         <Modal title={title} onDismiss={onDismiss}>
-            <Text>Amount: {amount} CUB</Text>
+            <Text>Amount: {Number(amount).toFixed(3)} CUB</Text>
             <div style={{marginBottom: "20px"}} />
             <ModalInput max={maxAddWeeks} symbol="Weeks" onChange={(e) => e.currentTarget.validity.valid && setDuration(Number(e.currentTarget.value))} onSelectMax={() => setDuration(Number(maxAddWeeks))} value={duration.toString()} inputTitle={modalInputText} showMaxInstead />
             {/* extend checkbox */}
