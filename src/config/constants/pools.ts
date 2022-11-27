@@ -1507,7 +1507,7 @@ const pools: PoolConfig[] = [
 
 export default pools
 
-export const BOOST_WEIGHT = BigNumber.from('1000000000000');
+export const BOOST_WEIGHT = BigNumber.from('10000000000000');
 export const DURATION_FACTOR = BigNumber.from('31536000');
 export const MAX_LOCK_DURATION = 31536000;
 export const UNLOCK_FREE_DURATION = 604800;

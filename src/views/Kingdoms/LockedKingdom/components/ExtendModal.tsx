@@ -40,7 +40,7 @@ const ExtendModal: React.FC<DepositModalProps> = ({ amount, onConfirm, onDismiss
     }
 
     const secondsDuration = duration * 604800;
-    const futureDate = weeksToFutureDate(duration);
+    const futureDate = weeksToFutureDate(duration + alreadyStakingDuration);
 
     const youWillEarn = useMemo(() => {
         return new BigNumber(amount).times(new BigNumber(getLockedApy(secondsDuration)).div(100)).toFixed(3)
