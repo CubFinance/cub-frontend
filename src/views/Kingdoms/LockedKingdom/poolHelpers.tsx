@@ -87,7 +87,8 @@ export const fetchLockedKingdomUserData = async (account: string) => {
 }
 
 export const fetchLockedKingdomTotalStaked = async () => {
-    const contract = getLockedKingdomsContract();
-    const totalStaked = await contract.methods.balanceOf().call();
+    const contract = getCakeContract();
+    const lockedKingdomsAddress = getLockedKingdomsAddress();
+    const totalStaked = await contract.methods.balanceOf(lockedKingdomsAddress).call();
     return new BigNumber(totalStaked).toString();
 }
