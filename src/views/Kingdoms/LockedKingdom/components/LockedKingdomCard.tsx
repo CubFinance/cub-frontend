@@ -336,7 +336,7 @@ const LockedKingdomCard: React.FC<KingdomCardProps> = ({
                       <Subtle style={{color: "lightgray"}}>AFTER BURNING</Subtle>
                     </ActionTitles>
                     <Text color="failure" bold>
-                      {userDataAsBigNumbers?.overdueFee?.toNumber() > 0 ? `${userDataAsBigNumbers?.overdueFee?.toNumber().toFixed(2)}%` : '-'}
+                      {userDataAsBigNumbers?.overdueFee?.toNumber() > 0 && cakeVaultEarnings?.autoCakeToDisplay > 0 ? `${userDataAsBigNumbers?.overdueFee?.div(DEFAULT_TOKEN_DECIMAL)?.toNumber().toFixed(3)} CUB Burned` : '-'}
                     </Text>
                   </ActionContent> :
                   <ActionContent style={{flexDirection: "column", alignItems: "flex-end"}}>
