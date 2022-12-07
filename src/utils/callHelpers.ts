@@ -76,7 +76,7 @@ export const unstakeAllLocked = async (masterChefContract, account) => {
 
 export const convertLockedToFlexible = async (masterChefContract, account) => {
     return masterChefContract.methods
-        .unlock()
+        .unlock(account)
         .send({ from: account })
         .on('transactionHash', (tx) => {
             return tx.transactionHash
