@@ -305,9 +305,9 @@ const fetchFarms = async (farmsToFetch: FarmConfig[]) => {
           const allocPoint = new BigNumber(kInfo.allocPoint._hex)
           const kingdomTotalAlloc = new BigNumber(1350)
 
-          const kingdomCorrectAlloc = allocPoint.times(new BigNumber(kingdomTotalAlloc)).div(new BigNumber(kTotalAllocPoint))
+          let kingdomCorrectAlloc = allocPoint.times(new BigNumber(kingdomTotalAlloc)).div(new BigNumber(kTotalAllocPoint))
 
-          const kingdomPoolWeight = kingdomCorrectAlloc.div(new BigNumber(totalAllocPoint))
+          let kingdomPoolWeight = kingdomCorrectAlloc.div(new BigNumber(totalAllocPoint))
 
           let poolWeightPCS = new BigNumber(0)
           if (farmConfig.altPid || farmConfig.altPid === 0) {
@@ -371,6 +371,14 @@ const fetchFarms = async (farmsToFetch: FarmConfig[]) => {
             const [pricePerFullShare] = await multicall(multiStratABI, bCalls)
             tokenValuePerOrigin = new BigNumber(pricePerFullShare).div(DEFAULT_TOKEN_DECIMAL)
             // totalSupplyBelt = new BigNumber(tSupply).div(DEFAULT_TOKEN_DECIMAL)
+          }
+
+          if (kingdomPoolWeight.toString() === 'NaN') {
+            kingdomPoolWeight = BIG_ZERO
+          }
+
+          if (kingdomCorrectAlloc.toString() === 'NaN') {
+            kingdomCorrectAlloc = BIG_ZERO
           }
 
           return {

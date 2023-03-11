@@ -92,6 +92,7 @@ export const fetchFarmUserDataAsync = (account: string) => async (dispatch, getS
   try {
     const fetchArchived = getState().farms.loadArchivedFarmsData
     const farmsToFetch = fetchArchived ? farmsConfig : nonArchivedFarms
+
     const lockedKingdomUserData = await fetchLockedKingdomUserData(account);
     const userFarmAllowances = await fetchFarmUserAllowances(account, farmsToFetch)
     const userFarmTokenBalances = await fetchFarmUserTokenBalances(account, farmsToFetch)
