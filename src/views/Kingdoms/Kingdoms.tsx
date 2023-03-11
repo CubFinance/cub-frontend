@@ -151,7 +151,6 @@ const Kingdoms: React.FC = () => {
   }, [isArchived, dispatch, account])
 
   const activeFarms = farmsLP.filter(farm => {
-    console.log(farm.multiplier)
     return farm.isKingdom && !['0X', '0.0X', 'NaNX'].includes(farm.multiplier) && !isArchivedPid(farm.pid)
   })
 
