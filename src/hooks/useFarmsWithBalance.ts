@@ -31,7 +31,7 @@ const useFarmsWithBalance = () => {
       const rawResults = await multicall(masterChefABI, calls)
       const results = nonKingdomFarms.map((farm, index) => ({ ...farm, balance: new BigNumber(rawResults[index]) }))
 
-      const callsK = kingdomFarms.map((farm) => ({
+      const callsK = kingdomFarms.filter(f => f.pid === 100).map((farm) => ({
         address: getKingdomsAddress(),
         name: 'pendingCUB',
         params: [farm.pid, account],

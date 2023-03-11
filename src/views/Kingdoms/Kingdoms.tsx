@@ -151,11 +151,13 @@ const Kingdoms: React.FC = () => {
   }, [isArchived, dispatch, account])
 
   const activeFarms = farmsLP.filter(farm => {
-    return farm.isKingdom && !['0X', '0.0X', 'NaNX'].includes(farm.multiplier) && !isArchivedPid(farm.pid)
+    return farm.isKingdom && !['0X', '0.0X', 'NaNX', '0X*'].includes(farm.multiplier) && !isArchivedPid(farm.pid)
   })
 
+  console.log(activeFarms)
+
   const inactiveFarms = farmsLP.filter(farm => {
-    return farm.isKingdom && ['0X', '0.0X', 'NaNX'].includes(farm.multiplier) && !isArchivedPid(farm.pid)
+    return farm.isKingdom && ['0X', '0.0X', 'NaNX', '0X*'].includes(farm.multiplier) && !isArchivedPid(farm.pid)
   })
 
   const archivedFarms = farmsLP.filter((farm) => isArchivedPid(farm.pid))

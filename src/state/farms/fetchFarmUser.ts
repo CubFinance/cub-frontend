@@ -127,11 +127,11 @@ export const fetchFarmUserEarnings = async (account: string, farmsToFetch: FarmC
     params: [farm.pid, account],
   }))
 
-  const callsK = kingdomFarms.map((farm) => (['0X', '0.0X'].includes(farm.multiplier) ? {
+  const callsK = kingdomFarms.filter(farm => farm.pid === 100).map((farm) => ({
     address: kingdomAddress,
     name: 'pendingCUB',
     params: [farm.pid, account],
-  } : null)).filter(call => call !== null)
+  }))
 
   const callsLK = getLockedKingdomsUserEarnings(account);
 

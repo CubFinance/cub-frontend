@@ -7,6 +7,7 @@ import kingdomsABI from 'config/abi/kingdoms.json'
 import { farmsConfig } from 'config/constants'
 import {BigNumber} from "@ethersproject/bignumber";
 import useRefresh from './useRefresh'
+import isArchivedPid from "../utils/farmHelpers";
 
 const useAllEarnings = () => {
   const [balances, setBalance] = useState([])
@@ -14,9 +15,10 @@ const useAllEarnings = () => {
   const { fastRefresh } = useRefresh()
 
   useEffect(() => {
-    const nonKingdomFarms = farmsConfig.filter(farm => !farm.isKingdom)
-    const kingdomFarms = farmsConfig.filter(farm => farm.isKingdom && !farm.isKingdomLocked)
     const fetchAllBalances = async () => {
+      const nonKingdomFarms = farmsConfig.filter(farm => !farm.isKingdom)
+      const kingdomFarms = farmsConfig.filter(farm => farm.isKingdom && !farm.isKingdomLocked)
+
       const calls = nonKingdomFarms.map((farm) => ({
         address: getMasterChefAddress(),
         name: 'pendingCub',
@@ -25,7 +27,7 @@ const useAllEarnings = () => {
 
       const res = await multicall(masterChefABI, calls)
 
-      const callsK = kingdomFarms.map((farm) => ({
+      const callsK = kingdomFarms.filter(farm => farm.pid === 100).map((farm) => ({
         address: getKingdomsAddress(),
         name: 'pendingCUB',
         params: [farm.pid, account],
