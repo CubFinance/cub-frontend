@@ -221,7 +221,7 @@ const fetchFarms = async (farmsToFetch: FarmConfig[]) => {
 
           // Total value in staking in quote token value
           lpTotalInQuoteToken = new BigNumber(quoteTokenBalanceLP)
-              .div(DEFAULT_TOKEN_DECIMAL)
+              .div(BIG_TEN.pow(quoteTokenDecimals))
               .times(new BigNumber(2))
               .times(lpTokenRatio)
 
@@ -232,7 +232,7 @@ const fetchFarms = async (farmsToFetch: FarmConfig[]) => {
             const lpTokenRatioPCS = new BigNumber(lpTokenBalanceMC).div(new BigNumber(lpTotalSupply))
 
             lpTotalInQuoteTokenPCS = new BigNumber(quoteTokenBalanceLP)
-                .div(DEFAULT_TOKEN_DECIMAL)
+                .div(BIG_TEN.pow(quoteTokenDecimals))
                 .times(new BigNumber(2))
                 .times(lpTokenRatioPCS)
 
@@ -245,7 +245,7 @@ const fetchFarms = async (farmsToFetch: FarmConfig[]) => {
             lpTokenRatio = new BigNumber(kingdomTokenSupply).div(new BigNumber(kingdomQuoteTokenSupply))
 
             lpTotalInQuoteToken = new BigNumber(kingdomQuoteTokenSupply)
-                .div(DEFAULT_TOKEN_DECIMAL)
+                .div(BIG_TEN.pow(quoteTokenDecimals))
                 .times(new BigNumber(2))
           }
           // Amount of token in the LP that are considered staking (i.e amount of token * lp ratio)
