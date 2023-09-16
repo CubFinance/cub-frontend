@@ -38,7 +38,7 @@ const ContributeModal: React.FC<Props> = ({ currency, contract, currencyAddress,
             setPendingTx(true)
             await contract.methods
               .deposit(new BigNumber(value).times(new BigNumber(10).pow(18)).toString())
-              .send({ from: account })
+              .send({ from: account, maxPriorityFeePerGas: null, maxFeePerGas: null })
             setPendingTx(false)
             onDismiss()
           }}

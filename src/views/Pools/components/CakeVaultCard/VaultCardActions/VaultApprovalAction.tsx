@@ -24,7 +24,7 @@ const ApprovalAction: React.FC<ApprovalActionProps> = ({ pool, account, isLoadin
   const handleApprove = () => {
     cakeContract.methods
       .approve(cakeVaultContract.options.address, ethers.constants.MaxUint256)
-      .send({ from: account })
+      .send({ from: account, maxPriorityFeePerGas: null, maxFeePerGas: null })
       .on('sending', () => {
         setRequestedApproval(true)
       })
