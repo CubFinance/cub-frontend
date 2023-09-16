@@ -299,6 +299,72 @@ const farms: FarmConfig[] = [
     quoteToken: tokens.bhbd,
   },
   {
+    pid: 36,
+    pcsVersion: 2,
+    lpSymbol: 'bHIVE-BTCB',
+    lpAddresses: {
+      97: '',
+      56: '0x47327a6ba129babfde961ad7a321caa820eaa681'
+    },
+    token: tokens.bhive,
+    quoteToken: tokens.btcb,
+  },
+  {
+    pid: 37,
+    pcsVersion: 2,
+    lpSymbol: 'bHIVE-ETH',
+    lpAddresses: {
+      97: '',
+      56: '0x071d870e149aaaecfa4585ce47c9332babaf2c48'
+    },
+    token: tokens.bhive,
+    quoteToken: tokens.eth,
+  },
+  {
+    pid: 35,
+    pcsVersion: 2,
+    lpSymbol: 'bHIVE-BNB',
+    lpAddresses: {
+      97: '',
+      56: '0x43f0b2278c7d1207935839c223db35120d24a22a'
+    },
+    token: tokens.bhive,
+    quoteToken: tokens.wbnb,
+  },
+  {
+    pid: 31,
+    pcsVersion: 2,
+    lpSymbol: 'bHIVE-CUB',
+    lpAddresses: {
+      97: '',
+      56: '0xbb98f40a60bfcc5a12b529c860fcdcd03830c8be',
+    },
+    token: tokens.bhive,
+    quoteToken: tokens.cub,
+  },
+  {
+    pid: 38,
+    pcsVersion: 2,
+    lpSymbol: 'bHIVE-bLEO',
+    lpAddresses: {
+      97: '',
+      56: '0xeb5fd341f7c54b143aea589b158d0375bd00c08c'
+    },
+    token: tokens.bhive,
+    quoteToken: tokens.bleo,
+  },
+  {
+    pid: 28,
+    pcsVersion: 2,
+    lpSymbol: 'bLEO-BNB LP (v2)',
+    lpAddresses: {
+      97: '',
+      56: '0x0Bca6e9B2C6C83Ebd457fB0D12fa5763114A8920',
+    },
+    token: tokens.bleo,
+    quoteToken: tokens.wbnb,
+  },
+  {
     pid: 30,
     pcsVersion: 2,
     lpSymbol: 'bHBD-BUSD',
@@ -321,17 +387,6 @@ const farms: FarmConfig[] = [
     quoteToken: tokens.cub,
   },
   {
-    pid: 31,
-    pcsVersion: 2,
-    lpSymbol: 'bHIVE-CUB',
-    lpAddresses: {
-      97: '',
-      56: '0xbb98f40a60bfcc5a12b529c860fcdcd03830c8be',
-    },
-    token: tokens.bhive,
-    quoteToken: tokens.cub,
-  },
-  {
     pid: 29,
     pcsVersion: 2,
     lpSymbol: 'BUSD-CUB LP (v2)',
@@ -351,17 +406,6 @@ const farms: FarmConfig[] = [
       56: '0x7BaE0d7D2760E681559fbb502b43fFA26561bA24',
     },
     token: tokens.cub,
-    quoteToken: tokens.wbnb,
-  },
-  {
-    pid: 28,
-    pcsVersion: 2,
-    lpSymbol: 'BLEO-BNB LP (v2)',
-    lpAddresses: {
-      97: '',
-      56: '0x0Bca6e9B2C6C83Ebd457fB0D12fa5763114A8920',
-    },
-    token: tokens.bleo,
     quoteToken: tokens.wbnb,
   },
   {
