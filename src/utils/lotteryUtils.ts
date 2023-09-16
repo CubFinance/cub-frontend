@@ -36,7 +36,7 @@ export const multiBuy = async (lotteryContract, price, numbersList, account) => 
   try {
     return lotteryContract.methods
       .multiBuy(new BigNumber(price).times(DEFAULT_TOKEN_DECIMAL).toString(), numbersList)
-      .send({ from: account })
+      .send({ from: account, maxPriorityFeePerGas: null, maxFeePerGas: null })
       .on('transactionHash', (tx) => {
         return tx.transactionHash
       })
@@ -113,7 +113,7 @@ export const multiClaim = async (lotteryContract, ticketsContract, account) => {
   try {
     return lotteryContract.methods
       .multiClaim(finalTokenIds)
-      .send({ from: account })
+      .send({ from: account, maxPriorityFeePerGas: null, maxFeePerGas: null })
       .on('transactionHash', (tx) => {
         return tx.transactionHash
       })

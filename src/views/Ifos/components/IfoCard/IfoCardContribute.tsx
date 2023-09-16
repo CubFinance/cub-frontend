@@ -62,7 +62,7 @@ const IfoCardContribute: React.FC<Props> = ({
 
   const claim = async () => {
     setPendingTx(true)
-    await contract.methods.harvest().send({ from: account })
+    await contract.methods.harvest().send({ from: account, maxPriorityFeePerGas: null, maxFeePerGas: null })
     setPendingTx(false)
   }
   const isFinished = status === 'finished'

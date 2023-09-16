@@ -81,7 +81,7 @@ const VaultStakeModal: React.FC<VaultStakeModalProps> = ({
     if (isWithdrawingAll) {
       cakeVaultContract.methods
         .withdrawAll()
-        .send({ from: account })
+        .send({ from: account, maxPriorityFeePerGas: null, maxFeePerGas: null })
         .on('sending', () => {
           setPendingTx(true)
         })
@@ -105,7 +105,7 @@ const VaultStakeModal: React.FC<VaultStakeModalProps> = ({
         .withdraw(shareStakeToWithdraw.sharesAsBigNumber.toString())
         // .toString() being called to fix a BigNumber error in prod
         // as suggested here https://github.com/ChainSafe/web3.js/issues/2077
-        .send({ from: account })
+        .send({ from: account, maxPriorityFeePerGas: null, maxFeePerGas: null })
         .on('sending', () => {
           setPendingTx(true)
         })
@@ -132,7 +132,7 @@ const VaultStakeModal: React.FC<VaultStakeModalProps> = ({
       .deposit(convertedStakeAmount.toString())
       // .toString() being called to fix a BigNumber error in prod
       // as suggested here https://github.com/ChainSafe/web3.js/issues/2077
-      .send({ from: account })
+      .send({ from: account, maxPriorityFeePerGas: null, maxFeePerGas: null })
       .on('sending', () => {
         setPendingTx(true)
       })
